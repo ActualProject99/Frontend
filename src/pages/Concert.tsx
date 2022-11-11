@@ -1,3 +1,5 @@
+import Comment from "../components/Comment";
+
 const Concert = () => {
   const concert = {
     posterUrl:
@@ -13,7 +15,12 @@ const Concert = () => {
         "https://ticket.melon.com/performance/index.htm?prodId=207476#skip_nav",
     },
   };
-  return <div>Concert</div>;
+  return (
+    <div>
+      Concert
+      <Comment />
+    </div>
+  );
 };
 
 export default Concert;
