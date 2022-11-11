@@ -6,7 +6,12 @@ module.exports = {
     "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#A81DE4",
+        secondary: "#CDF71F",
+      },
+    },
   },
   plugins: [require("tw-elements/dist/plugin"), require("@tailwindcss/forms")],
 };
