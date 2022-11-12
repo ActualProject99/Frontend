@@ -64,7 +64,7 @@ const Room = ({
   }, [startPosition]);
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0" ref={ref}>
+      <div className="absolute z-10 top-0 left-0" ref={ref}>
         <div
           className="w-32 h-12 bg-lime-400"
           onMouseDown={handleMouseDown}
