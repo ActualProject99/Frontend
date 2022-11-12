@@ -1,3 +1,4 @@
+import Chat from "../components/Chat";
 import Comment from "../components/Comment";
 
 const Concert = () => {
@@ -19,6 +20,7 @@ const Concert = () => {
     <div>
       Concert
       <Comment />
+      <Chat />
     </div>
   );
 };
