@@ -1,6 +1,6 @@
 import Chat from "../components/Chat";
 import Comment from "../components/Comment";
-import MiniCalendar from "../components/MiniCalendar";
+import MiniCalendar from "../components/miniCalendar/MiniCalendar";
 import { NaverMap } from "../components/NaverMap";
 
 const Concert = () => {
