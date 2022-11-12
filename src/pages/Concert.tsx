@@ -1,3 +1,4 @@
+import Comment from "../components/Comment";
 import MiniCalendar from "../components/MiniCalendar";
 import { NaverMap } from "../components/NaverMap";
 
@@ -23,6 +24,7 @@ const Concert = () => {
       Concert
       <MiniCalendar />
       <NaverMap concert={concert} />
+      <Comment />
     </div>
   );
 };
