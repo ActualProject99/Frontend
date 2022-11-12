@@ -77,7 +77,7 @@ export const NaverMap = ({
   return (
     <React.Fragment>
       <h1>지도 나왔다!</h1>
-      <div id="map" style={mapStyle}></div>
+      <div id="map" className="relative z-0" style={mapStyle}></div>
     </React.Fragment>
   );
 };
