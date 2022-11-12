@@ -1,0 +1,68 @@
+{
+  "comments": [
+  {
+    "id": 0,
+    "postId": 1,
+    "comment": "1번째 Hi"
+  },
+  {
+    "id": 1,
+    "postId": 1,
+    "comment": "2번째 Hello"
+  },
+  {
+    "id": 2,
+    "postId": 3,
+    "comment": "arrrrrrrr"
+  },
+  {
+    "id": 3,
+    "postId": 4,
+    "comment": "brrrrrrrrr"
+  },
+  {
+    "id": 4,
+    "postId": 1,
+    "comment": "3번째 안녕"
+  },
+  {
+    "id": 5,
+    "postId": 1,
+    "comment": "4번째 안녕"
+  },
+  {
+    "id": 6,
+    "postId": 1,
+    "comment": "5번째 안녕"
+  },
+  {
+    "id": 7,
+    "postId": 1,
+    "comment": "6번째 안녕"
+  },
+  {
+    "id": 8,
+    "postId": 1,
+    "comment": "7번째 안녕"
+  },
+  {
+    "id": 9,
+    "postId": 1,
+    "comment": "8번째 안녕"
+  },
+  {
+    "id": 10,
+    "postId": 1,
+    "comment": "9번째안녕"
+  },
+  {
+    "id": 11,
+    "postId": 2,
+    "comment": "안녕안녕"
+  },
+  {
+    "id": 12,
+    "postId": 1,
+    "comment": "10번째 안녕"
+  }
+]}

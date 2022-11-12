@@ -6,6 +6,7 @@ import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 
+
 function App() {
   return (
     <Routes>
@@ -18,6 +19,7 @@ function App() {
         <Route path="mypage" element={<user.Mypage />} />
       </Route>
       <Route path="mock-ticketing" element={<MockTicketing />} />
+      
     </Routes>
   );
 }
