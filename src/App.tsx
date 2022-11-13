@@ -12,7 +12,8 @@ function App() {
     <Layout>
       <Routes>
         <Route index element={<Main />} />
-        <Route path="concerts" element={<Concerts />}>
+        <Route path="concerts">
+          <Route index element={<Concerts />} />
           <Route path=":id" element={<Concert />} />
         </Route>
         <Route path="user">

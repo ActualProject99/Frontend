@@ -50,7 +50,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Nav />
-      <div className="w-[1200px] mx-auto h-screen border">{children}</div>
+      <div className="w-[1200px] mx-auto h-screen border py-4">{children}</div>
       <Footer />
     </>
   );
