@@ -4,7 +4,7 @@ import icons from "./icons";
 const Nav = () => {
   const pages = [
     { name: "홈", path: "" },
-    { name: "캘린더", path: "calender" },
+    { name: "콘서트", path: "concerts" },
     { name: "장소", path: "" },
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
