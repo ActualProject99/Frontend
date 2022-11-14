@@ -1,16 +1,7 @@
 import Example from "../components/Calendar";
 import { useState } from "react";
 import { cls } from "../utils";
-
-interface Body {
-  postId: number;
-  comment: string;
-}
-
-const body: Body = {
-  postId: 12,
-  comment: "afasdfasdf",
-};
+import useTaps from "../hooks/useTaps";
 
 const concerts = [
   {
@@ -74,8 +65,14 @@ const Concerts = () => {
   const handleClick = (i: number) => () => {
     setSelect(i);
   };
+  const { Taps, Viewer } = useTaps(
+    ["tap1", <div>hi1</div>],
+    ["tap2", <div>hi2</div>]
+  );
   return (
     <>
+      <Taps />
+      <Viewer />
       <ul className="flex justify-center gap-3">
         {groups.map((group, i) => (
           <li
