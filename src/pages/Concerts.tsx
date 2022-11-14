@@ -2,6 +2,16 @@ import Example from "../components/Calendar";
 import { useState } from "react";
 import { cls } from "../utils";
 
+interface Body {
+  postId: number;
+  comment: string;
+}
+
+const body: Body = {
+  postId: 12,
+  comment: "afasdfasdf",
+};
+
 const concerts = [
   {
     id: 1,
