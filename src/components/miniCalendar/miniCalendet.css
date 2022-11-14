@@ -6,8 +6,8 @@
   border: 5px solid #efccfd;
   border-radius: 0.3rem;
   display: inline-block;
-  position: relative;
-  width: 100%;
+  position: absolute;
+  width: 17rem;
 }
 
 .react-datepicker__header {

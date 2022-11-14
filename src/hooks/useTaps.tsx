@@ -20,7 +20,7 @@ const useTaps = (...taps: Tap[]) => {
   };
   const Taps = () => {
     return (
-      <div>
+      <div className="flex justify-center items-center h-10 gap-x-28 border border-x-0 border-solid">
         {taps.map((tap, i) => (
           <Selector key={i} onClick={handleClick(i)} name={tap[0]} />
         ))}
