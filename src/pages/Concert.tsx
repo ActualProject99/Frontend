@@ -1,8 +1,9 @@
 import Chat from "../components/Chat";
 import Comment from "../components/Comment";
 import ConcertInfo from "../components/ConcertInfo";
-import MiniCalendar from "../components/miniCalendar/MiniCalendar";
 import { NaverMap } from "../components/NaverMap";
+import useTaps from "../hooks/useTaps";
+import MoreInfo from "../components/MoreInfo";
 
 const Concert = () => {
   const concert = {
@@ -23,15 +24,19 @@ const Concert = () => {
         "https://ticket.melon.com/performance/index.htm?prodId=207476#skip_nav",
     },
   };
+
+  const { Taps, Viewer } = useTaps(
+    ["상세정보", <MoreInfo />],
+    ["공연장정보", <NaverMap concert={concert} />],
+    ["기대평", <Comment />]
+  );
   return (
-    <div>
-      Concert
+    <>
       <ConcertInfo concert={concert} />
-      <MiniCalendar concert={concert} />
-      <NaverMap concert={concert} />
-      <Comment />
+      <Taps />
+      <Viewer />
       <Chat />
-    </div>
+    </>
   );
 };
 

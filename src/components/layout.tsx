@@ -13,7 +13,7 @@ const Nav = () => {
     <nav className="h-40 flex items-center">
       <div className="w-[1200px] mx-auto flex justify-between items-center">
         <div className="h-32 flex items-center gap-24">
-          <div className="w-[140px] h-10 bg-secondary-main rounded">
+          <div className="w-[140px] h-10 bg-primary-main rounded">
             <Link className="w-full h-full block" to=""></Link>
           </div>
           <ul className="flex gap-10">
@@ -50,7 +50,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Nav />
-      <div className="w-[1200px] mx-auto h-screen border py-4">{children}</div>
+      <div className="w-[1200px] mx-auto min-h-screen border py-4">
+        {children}
+      </div>
       <Footer />
     </>
   );

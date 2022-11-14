@@ -7,9 +7,10 @@ import {
   TwitterShareButton,
 } from "react-share";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { useScript } from "./hooks/KaKaoShare";
+import { useScript } from "../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../image/kakaoShareIcon.webp";
+import MiniCalendar from "./miniCalendar/MiniCalendar";
 
 const ConcertInfo = ({
   concert,
@@ -53,7 +54,7 @@ const ConcertInfo = ({
     });
   };
   return (
-    <div className="flex justify-between gap-10 m-auto w-full px-10">
+    <div className="flex justify-between gap-10 m-auto w-full px-10 pt-5">
       <div className=" flex  gap-8">
         <div>
           <img className="w-72 h-96" alt="poster" src={concert.posterUrl} />
@@ -72,7 +73,7 @@ const ConcertInfo = ({
               <button
                 className="w-12 h-12 text-white rounded-3xl border-none font-extrabold text-base cursor-pointer bg-primary-400"
                 onClick={() => {
-                  window.alert("URL이 저장되었습니다!");
+                  window.alert("클립보드에 복사되었습니다!");
                 }}
               >
                 URL
@@ -93,7 +94,10 @@ const ConcertInfo = ({
           </div>
           <div>
             <div className="flex flex-wrap flex-col gap-y-4">
-              <p>티켓팅기간 &nbsp; {concert.showTimes}</p>
+              <div className="flex items-center">
+                티켓팅기간 &nbsp; {concert.showTimes}&nbsp;
+                <MiniCalendar concert={concert} />
+              </div>
               <p>관람시간 &nbsp; {concert.runningTime}</p>
               <p>장르 &nbsp; {concert.genre}</p>
               <p>관람등급 &nbsp; {concert.viewableGrade}</p>
@@ -106,7 +110,7 @@ const ConcertInfo = ({
         <button
           className="w-[140px] h-10 mr-10 bg-secondary-main flex  justify-center items-center rounded-2xl"
           onClick={() => {
-            window.location.href = ticketUrl;
+            window.open(ticketUrl);
           }}
         >
           멜론티켓
