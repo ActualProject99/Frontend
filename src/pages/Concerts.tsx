@@ -72,7 +72,7 @@ const Concerts = () => {
             key={group}
             className={cls(
               "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold ",
-              i === select && "bg-primary text-white"
+              i === select && "bg-primary-main text-white"
             )}
             onClick={handleClick(i)}
           >

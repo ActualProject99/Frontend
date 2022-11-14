@@ -98,7 +98,7 @@ const Example = ({ concerts }: any) => {
                       isEqual(day, selectedDay) && "text-white",
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
-                        "text-primary",
+                        "text-primary-main",
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
@@ -107,7 +107,9 @@ const Example = ({ concerts }: any) => {
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         "text-gray-400",
-                      isEqual(day, selectedDay) && isToday(day) && "bg-primary",
+                      isEqual(day, selectedDay) &&
+                        isToday(day) &&
+                        "bg-primary-main",
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         "bg-gray-900",

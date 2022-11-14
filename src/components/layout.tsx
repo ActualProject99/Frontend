@@ -13,7 +13,7 @@ const Nav = () => {
     <nav className="h-40 flex items-center">
       <div className="w-[1200px] mx-auto flex justify-between items-center">
         <div className="h-32 flex items-center gap-24">
-          <div className="w-[140px] h-10 bg-secondary rounded">
+          <div className="w-[140px] h-10 bg-secondary-main rounded">
             <Link className="w-full h-full block" to=""></Link>
           </div>
           <ul className="flex gap-10">
@@ -26,7 +26,7 @@ const Nav = () => {
         </div>
         <div className="w-32 h-32 flex items-center justify-between">
           <icons.Search />
-          <div className="w-[140px] h-10 bg-secondary flex justify-center items-center rounded-2xl">
+          <div className="w-[140px] h-10 bg-secondary-main flex justify-center items-center rounded-2xl">
             <Link
               className="w-full h-full flex justify-center items-center"
               to="/user/login"
