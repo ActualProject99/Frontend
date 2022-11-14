@@ -1,9 +1,9 @@
-import Chat from "../components/Chat";
-import Comment from "../components/Comment";
-import ConcertInfo from "../components/ConcertInfo";
-import { NaverMap } from "../components/NaverMap";
+import Comment from "../components/concertDetail/comment/Comment";
+import ConcertInfo from "../components/concertDetail/ConcertInfo";
+import MoreInfo from "../components/concertDetail/MoreInfo";
+import { NaverMap } from "../components/concertDetail/NaverMap";
 import useTaps from "../hooks/useTaps";
-import MoreInfo from "../components/MoreInfo";
+import Chat from "../components/concertDetail/Chat";
 
 const Concert = () => {
   const concert = {
