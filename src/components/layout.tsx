@@ -41,7 +41,7 @@ const Nav = () => {
 };
 const Footer = () => {
   return (
-    <div className="bg-slate-200 h-40 flex items-center">
+    <div className="bg-slate-200 h-96 flex items-center">
       <div className="bg-slate-400 w-[1200px] mx-auto ">footer</div>
     </div>
   );
@@ -50,7 +50,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Nav />
-      <div className="w-[1200px] mx-auto h-screen border py-4">{children}</div>
+      <div className="w-[1200px] mx-auto min-h-screen border py-4">
+        {children}
+      </div>
       <Footer />
     </>
   );
