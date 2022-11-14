@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
-import Calendar from "./pages/Calendar";
+import Concerts from "./pages/Concerts";
 import Concert from "./pages/Concert";
 import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
@@ -12,8 +12,10 @@ function App() {
     <Layout>
       <Routes>
         <Route index element={<Main />} />
-        <Route path="concert/:id" element={<Concert />} />
-        <Route path="calender" element={<Calendar />} />
+        <Route path="concerts">
+          <Route index element={<Concerts />} />
+          <Route path=":id" element={<Concert />} />
+        </Route>
         <Route path="user">
           <Route path="login" element={<user.Login />} />
           <Route path="signup" element={<user.Signup />} />
