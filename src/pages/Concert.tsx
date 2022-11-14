@@ -1,4 +1,4 @@
-import Comment from "../components/Comment";
+import Comment from "../components/CommentList";
 
 const Concert = () => {
   const concert = {
