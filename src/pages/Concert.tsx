@@ -1,5 +1,6 @@
 import Chat from "../components/Chat";
 import Comment from "../components/Comment";
+import ConcertInfo from "../components/ConcertInfo";
 import MiniCalendar from "../components/miniCalendar/MiniCalendar";
 import { NaverMap } from "../components/NaverMap";
 
@@ -15,6 +16,8 @@ const Concert = () => {
     genre: "콘서트",
     latitude: 37.5484648,
     longitude: 126.92011,
+    hour: 20,
+    minute: 0,
     ticketingUrl: {
       melon:
         "https://ticket.melon.com/performance/index.htm?prodId=207476#skip_nav",
@@ -23,7 +26,8 @@ const Concert = () => {
   return (
     <div>
       Concert
-      <MiniCalendar />
+      <ConcertInfo concert={concert} />
+      <MiniCalendar concert={concert} />
       <NaverMap concert={concert} />
       <Comment />
       <Chat />

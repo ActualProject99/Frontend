@@ -10,11 +10,29 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./miniCalendet.css";
 import icons from "../icons";
 
-const MiniCalendar = () => {
+const MiniCalendar = ({
+  concert,
+}: {
+  concert: {
+    posterUrl: string;
+    title: string;
+    showTimes: string[];
+    location: string;
+    runningTime: string;
+    viewableGrade: string;
+    genre: string;
+    latitude: number;
+    longitude: number;
+    hour: number;
+    minute: number;
+    ticketingUrl: {
+      melon: string;
+    };
+  };
+}) => {
   const [startDate, setStartDate] = useState(
-    setHours(setMinutes(new Date(), 0), 20)
+    setHours(setMinutes(new Date(`2022 11 13`), concert.minute), concert.hour)
   );
-
   console.log("date", Date());
   return (
     <DatePicker
