@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
+import { useRecoilState } from "recoil";
 const Nav = () => {
   const pages = [
     { name: "홈", path: "" },
@@ -9,6 +11,10 @@ const Nav = () => {
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
   ];
+  const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
+  const handleClick = () => {
+    setUser(initUser);
+  };
   return (
     <nav className="h-40 flex items-center">
       <div className="w-[1200px] mx-auto flex justify-between items-center">
@@ -27,12 +33,21 @@ const Nav = () => {
         <div className="w-32 h-32 flex items-center justify-between">
           <icons.Search />
           <div className="w-[140px] h-10 bg-secondary flex justify-center items-center rounded-2xl">
-            <Link
-              className="w-full h-full flex justify-center items-center"
-              to="/user/login"
-            >
-              로그인
-            </Link>
+            {isLoggedin ? (
+              <div
+                className="w-full h-full flex justify-center items-center"
+                onClick={handleClick}
+              >
+                로그아웃
+              </div>
+            ) : (
+              <Link
+                className="w-full h-full flex justify-center items-center cursor-pointer"
+                to="/user/login"
+              >
+                로그인
+              </Link>
+            )}
           </div>
         </div>
       </div>
