@@ -8,7 +8,7 @@ import getMonth from "date-fns/getMonth";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import "./miniCalendet.css";
-import icons from "../icons";
+import icons from "../../icons";
 
 const MiniCalendar = ({
   concert,

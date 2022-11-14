@@ -1,5 +1,5 @@
-import Badge from "./Badge";
-import icons from "./icons";
+import Badge from "../Badge";
+import icons from "../icons";
 import { useState, useRef, useEffect } from "react";
 
 type JoinState = "before" | "opened" | "closed";

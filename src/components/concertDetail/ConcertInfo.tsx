@@ -7,9 +7,9 @@ import {
   TwitterShareButton,
 } from "react-share";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { useScript } from "../hooks/KaKaoShare";
+import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
-import kakaoShareIcon from "../image/kakaoShareIcon.webp";
+import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
 import MiniCalendar from "./miniCalendar/MiniCalendar";
 
 const ConcertInfo = ({
