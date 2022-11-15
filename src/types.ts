@@ -1,10 +1,3 @@
-export interface IgetComment { 
-  id: number;
-  postId?: number;
-  comment: string;
-};
-
-
 import { RegisterOptions } from "react-hook-form";
 export type Option<T> = [keyof T, RegisterOptions];
 export type SubOptionCreator<T> = (customOpts?: RegisterOptions) => Option<T>;
@@ -13,3 +6,9 @@ export interface LoginForm {
   email: string;
   password: string;
 }
+
+export interface IgetComment { 
+  id: number;
+  postId?: number;
+  comment: string;
+};

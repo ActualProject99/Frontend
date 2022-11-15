@@ -13,8 +13,6 @@ import { useForm } from "react-hook-form";
 import { IgetComment } from "../../../types";
 import Commentfix from './Commentfix';
 
-
-
 export interface IComments {
   comment: IgetComment;
 }
@@ -29,13 +27,7 @@ const CommentList = () => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch
-  } = useForm();
+  const { register,handleSubmit,formState: { errors },reset } = useForm();
 
   const [currentPage, setCurrentPage] = useState(1);
   const maxPage = 5;
@@ -51,16 +43,16 @@ const CommentList = () => {
   /* 다음 페이지를 누르기 전에 다음 페이지 내용을 미리 불러옴. 
   딜레이 체감 없애기 */
 
-  const { isLoading, isError, data, refetch } = useQuery<IgetComment[]>(
+  const { isLoading, isError, data } = useQuery<IgetComment[]>(
     ["allComments", currentPage],
     () => readComments(currentPage),
     { staleTime: 2000, keepPreviousData: true, refetchOnWindowFocus: false }
   );
   if (isLoading) {
-    return <h3>Loading...</h3>;
+    return <h3 className='p-4'>Loading...</h3>;
   }
   if (isError) {
-    return <h3>지금은 댓글을 불러올 수 없어요!</h3>;
+    return <h3 className='p-4'>지금은 댓글을 불러올 수 없어요!</h3>;
   }
 
   const onValid = (data: any) => {
@@ -70,25 +62,26 @@ const CommentList = () => {
 
   return (
     <div>
-      <h1 className="p-4 pl-4">Comments</h1>
+      <h1 className="p-4">Comments</h1>
       <form
         className="pl-4 grid grid-cols-[1fr_500px]"
         onSubmit={handleSubmit(onValid)}
       >
-        <input
-          className="block bg-gray-200  border 1px w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none"
+        <textarea 
+          className="block bg-gray-200 outline-transparent w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none resize-none"
           {...register("comment", {
             maxLength: {
-              value: 30,
-              message: "30자를 초과할 수 없습니다.",
+              value: 300,
+              message: "300자를 초과할 수 없습니다.",
             },
             minLength: {
               value: 3,
               message: "최소 3자 이상을 입력해야 합니다.",
             },
           })}
-          maxLength={30}
-          placeholder="최소 3자 최대 30자 이내로 댓글을 입력해주세요"
+          maxLength={300}
+          placeholder="최소 3자 최대 300자 이내로 댓글을 입력해주세요"
+          
         />
         <button className="border 1px w-28 h-28  hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
           등록
@@ -96,11 +89,11 @@ const CommentList = () => {
         <span></span>
       </form>
 
-      <ul className="pt-4 pl-4 pr-4 w-full max-h-[40rem] overflow-y-auto">
+      <ul className="p-4 w-full max-h-[40rem] overflow-y-auto">
         {data
           ?.filter((concert) => concert.postId == id)
           .map((comment) => (
-            <Commentfix key={comment.id} comment={comment} watch={watch}/>
+            <Commentfix key={comment.id} comment={comment}/>
           ))}
       </ul>
 
