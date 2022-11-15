@@ -43,9 +43,6 @@ const Calendar = ({ concerts, ...rest }: any) => {
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
 
-  let dateChosenConcerts = concerts.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), dateChosen)
-  );
   return (
     <div className="md:px-14 " {...rest}>
       <div className="flex items-center">
@@ -92,7 +89,9 @@ const Calendar = ({ concerts, ...rest }: any) => {
               onClick={() => setDateChosen(day)}
               className={cls(
                 isEqual(day, dateChosen) && "text-white",
-                !isEqual(day, dateChosen) && isToday(day) && "text-primary",
+                !isEqual(day, dateChosen) &&
+                  isToday(day) &&
+                  "text-primary-main",
                 !isEqual(day, dateChosen) &&
                   !isToday(day) &&
                   isSameMonth(day, firstDayCurrentMonth) &&
@@ -101,7 +100,7 @@ const Calendar = ({ concerts, ...rest }: any) => {
                   !isToday(day) &&
                   !isSameMonth(day, firstDayCurrentMonth) &&
                   "text-gray-400",
-                isEqual(day, dateChosen) && isToday(day) && "bg-primary",
+                isEqual(day, dateChosen) && isToday(day) && "bg-primary-main",
                 isEqual(day, dateChosen) && !isToday(day) && "bg-gray-900",
                 !isEqual(day, dateChosen) && "hover:bg-gray-200",
                 (isEqual(day, dateChosen) || isToday(day)) && "font-semibold",

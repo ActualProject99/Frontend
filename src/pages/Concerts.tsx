@@ -215,7 +215,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
                         key={group}
                         className={cls(
                           "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                          i === select && "bg-primary text-white"
+                          i === select && "bg-primary-main text-white"
                         )}
                         onClick={handleClick(i)}
                       >
@@ -261,7 +261,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
                           key={group}
                           className={cls(
                             "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                            i === select && "bg-primary text-white"
+                            i === select && "bg-primary-main text-white"
                           )}
                           onClick={handleClick(i)}
                         >
