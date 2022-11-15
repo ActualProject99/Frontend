@@ -18,8 +18,6 @@ root.render(
     <BrowserRouter>
     <RecoilRoot>
       <App />
-      <RecoilRoot>
-        <App />
       </RecoilRoot>
     </BrowserRouter>
     <ReactQueryDevtools />

@@ -32,15 +32,12 @@ const Concert = () => {
     ["기대평", <Comment />]
   );
   return (
-    <div>
-      Concert
-      <CommentList />
-    </div>
     <>
       <ConcertInfo concert={concert} />
       <Taps />
       <Viewer />
       <Chat />
+      <CommentList />
     </>
   );
 };
