@@ -1,4 +1,4 @@
-import Comment from "../components/CommentList";
+import CommentList from "../components/CommentList";
 
 const Concert = () => {
   const concert = {
@@ -18,7 +18,7 @@ const Concert = () => {
   return (
     <div>
       Concert
-      <Comment />
+      <CommentList />
     </div>
   );
 };
