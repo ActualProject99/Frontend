@@ -1,10 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { deactivate, activate } from "./instance";
 
-interface DeletePayload {
-  id: number;
+interface Payload {
+  id?: number;
   postId?: number;
+  body? : {
+    postId: number;
+    comment:string;
+  }
 }
 
 export const readComments = async (pageNum: number) => {
@@ -12,17 +15,17 @@ export const readComments = async (pageNum: number) => {
   return data; // 코멘트를 페이지 당 10개씩 불러오게 지정
 };
 
-export const addComment = async (body: { postId: number, comment: string }) => {
-  const { data } = await activate.post("comments", body);
+export const addComment = async ( payload : Payload ) => {
+  const { data } = await activate.post("comments", payload);
   return data;
 };
 
-export const removeComment = async ( payload : DeletePayload ) => {
+export const removeComment = async ( payload : Payload ) => {
   const { data } = await activate.delete(`comments/${payload.id}`);
   return data;
 };
 
-export const editComment = async (id: number, body: {postId: number, comment: string}) => {
-  const { data } = await activate.patch(`comments/${id}`, body);
+export const editComment = async ( payload : Payload ) => {
+  const { data } = await activate.patch(`comments/${payload.id}`, payload.body );
   return data;
 };

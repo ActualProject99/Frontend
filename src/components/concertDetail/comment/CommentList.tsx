@@ -6,12 +6,14 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { readComments, addComment } from "../apis/commentApi";
+import { readComments, addComment  } from '../../../apis/commentApi';
 import { useState } from "react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IgetComment } from "../types";
-import Commentfix from "./Commentfix";
+import { IgetComment } from "../../../types";
+import Commentfix from './Commentfix';
+
+
 
 export interface IComments {
   comment: IgetComment;
@@ -22,8 +24,8 @@ const CommentList = () => {
 
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
-      queryClient.invalidateQueries("allComments")
-      window.alert("댓글을 추가했습니다.")
+      queryClient.invalidateQueries("allComments");
+      window.alert("댓글을 추가했습니다.");
     },
   });
 
@@ -32,6 +34,7 @@ const CommentList = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch
   } = useForm();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,13 +70,13 @@ const CommentList = () => {
 
   return (
     <div>
-      <h1 className="pl-4">Comments</h1>
+      <h1 className="p-4 pl-4">Comments</h1>
       <form
         className="pl-4 grid grid-cols-[1fr_500px]"
         onSubmit={handleSubmit(onValid)}
       >
         <input
-          className="block bg-gray-200 border 1px w-full h-28 placeholder: relative rounded-lg rounded-r-none rounded-br-none"
+          className="block bg-gray-200  border 1px w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none"
           {...register("comment", {
             maxLength: {
               value: 30,
@@ -85,18 +88,19 @@ const CommentList = () => {
             },
           })}
           maxLength={30}
-          placeholder="30자 이내로 댓글을 입력해주세요"
+          placeholder="최소 3자 최대 30자 이내로 댓글을 입력해주세요"
         />
         <button className="border 1px w-28 h-28  hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
           등록
         </button>
+        <span></span>
       </form>
 
-      <ul className="pt-4 pl-4 w-full max-h-[40rem] overflow-y-auto">
+      <ul className="pt-4 pl-4 pr-4 w-full max-h-[40rem] overflow-y-auto">
         {data
           ?.filter((concert) => concert.postId == id)
           .map((comment) => (
-            <Commentfix key={comment.id} comment={comment} refetch={refetch} />
+            <Commentfix key={comment.id} comment={comment} watch={watch}/>
           ))}
       </ul>
 
