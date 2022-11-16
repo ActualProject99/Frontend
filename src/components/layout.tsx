@@ -4,6 +4,8 @@ import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
+import { mainContent } from "../atoms/mainContent";
+
 const Nav = ({
   main,
   no1,
@@ -21,6 +23,7 @@ const Nav = ({
     { name: "마이페이지", path: "user/mypage" },
   ];
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
+  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
   const handleClick = () => {
     setUser(initUser);
   };
@@ -68,8 +71,20 @@ const Nav = ({
     </nav>
   ) : (
     <nav className="fixed left-1/2 -translate-x-1/2">
-      <div className="w-[1200px] mx-auto flex justify-between items-center">
+      <div
+        className={cls(
+          "w-[1200px] mx-auto flex justify-between items-center",
+          contentNo === 1 ? "text-white" : "text-black"
+        )}
+      >
         <div className="text-4xl font-extrabold py-2">Tgle</div>
+        <ul className="flex gap-10">
+          {pages.map((page, i) => (
+            <li key={i}>
+              <Link to={page.path}>{page.name}</Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );
