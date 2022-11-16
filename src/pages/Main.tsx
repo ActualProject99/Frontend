@@ -23,6 +23,7 @@ const Indicator = () => {
     <div className="fixed flex flex-col gap-6 top-1/2 -translate-y-1/2 left-10">
       {[1, 2, 3, 4, 5, 6].map((_, i) => (
         <div
+          key={i}
           className={cls(
             "w-2 h-2 transition-colors duration-300 rounded-full",
             contrastColorNos.includes(contentNo)
@@ -47,7 +48,9 @@ const Main = () => {
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
   const [_, setContentNo] = useRecoilState<number>(mainContent);
-
+  useEffect(() => {
+    setContentNo(0);
+  }, []);
   useEffect(() => {
     createScrollSnap(
       snapContainer.current as HTMLDivElement,

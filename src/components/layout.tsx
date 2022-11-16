@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
@@ -27,6 +27,7 @@ const Nav = ({
   const handleClick = () => {
     setUser(initUser);
   };
+  
   return no1 ? (
     <nav
       className={cls(
@@ -70,7 +71,7 @@ const Nav = ({
       </div>
     </nav>
   ) : (
-    <nav className="fixed left-1/2 -translate-x-1/2">
+    <nav className="fixed left-1/2 -translate-x-1/2 z-10">
       <div
         className={cls(
           "w-[1200px] mx-auto flex justify-between items-center",
