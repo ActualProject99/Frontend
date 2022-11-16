@@ -1,5 +1,14 @@
+import Seats from "../components/Seats";
+import useMock from "../hooks/useMock";
+
 const MockTicketing = () => {
-  return <div>MockTicketing</div>;
+  const { StartBtn } = useMock();
+  return (
+    <>
+      <StartBtn />
+      <Seats />
+    </>
+  );
 };
 
 export default MockTicketing;
