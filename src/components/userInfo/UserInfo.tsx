@@ -92,24 +92,33 @@ const UserInfo = (): JSX.Element => {
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
           <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
         </div>
-        <div className="flex items-center  ">
+        <div className="flex items-center ">
           {!isEdit ? (
-            <div className="flex items-center gap-x-2 h-12">
-              <p className="text-3xl ">{userData?.nickname}</p>
-              <icons.Pencil
-                className="cursor-pointer"
+            <div className="flex flex-col items-start gap-y-3 h-28 mt-2">
+              <p className="text-3xl mb-[0.15rem] mt-[-0.15rem] ">
+                {userData?.nickname}
+              </p>
+              <button
+                className="flex justify-center items-center w-28 h-10 border rounded-md"
                 onClick={() => setIsEdit((prev) => !prev)}
-              />
+              >
+                닉네임 수정
+              </button>
             </div>
           ) : (
-            <div className="flex items-center gap-x-2 ">
+            <div className="flex flex-col items-start gap-y-2 h-28">
               <input
-                className="text-3xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 focus:outline-none"
+                className="text-3xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 focus:border-purple-500 focus:ring-transparent"
                 type="text"
                 value={editNickname}
                 onChange={onChangeNickname}
               />
-              <icons.Done className="cursor-pointer" onClick={onNicknameEdit} />
+              <button
+                className="flex justify-center items-center w-28 h-10 border rounded-md"
+                onClick={onNicknameEdit}
+              >
+                변경 완료
+              </button>
             </div>
           )}
         </div>

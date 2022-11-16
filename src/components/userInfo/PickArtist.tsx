@@ -21,7 +21,7 @@ const PickArtist = (): JSX.Element => {
         </div>
         <div className=" flex items-center h-10 gap-x-1 border-b-2 border-purple-500 mr-1">
           <input
-            className="h-6 border-none w-[85%]"
+            className="h-6 border-none w-[85%] focus:border-none focus:ring-transparent"
             type="text"
             placeholder="아티스트 검색"
           />
