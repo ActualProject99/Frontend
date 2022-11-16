@@ -1,41 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import createScrollSnap from "scroll-snap";
+import Main1 from "../svg/main1";
 const Main = () => {
-  const ref1 = useRef<HTMLDivElement | null>(null);
-  const ref2 = useRef<HTMLDivElement | null>(null);
-  const ref3 = useRef<HTMLDivElement | null>(null);
-  const ref4 = useRef<HTMLDivElement | null>(null);
+  const snapContainer = useRef<HTMLDivElement | null>(null);
 
-  const [isScrolling, setIsScrolling] = useState(false);
-  const onClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-  const scrollTo = (top: number) => {
-    window.scrollTo({
-      top,
-      behavior: "smooth",
-    });
-  };
-  const snapScroll =
-    (...scrollPoints: number[]) =>
-    () => {
-      // console.log(window.scrollY);
-      // console.log(scrollPoints[0]);
-      console.log(isScrolling);
-      if (!isScrolling) {
-        scrollTo(scrollPoints[0]);
-        setTimeout(() => {
-          setIsScrolling(false);
-        }, 800);
-        setIsScrolling(true);
-      }
-    };
   useEffect(() => {
     createScrollSnap(
-      ref1.current as HTMLDivElement,
+      snapContainer.current as HTMLDivElement,
       {
         snapDestinationY: "100%",
       },
@@ -44,11 +15,22 @@ const Main = () => {
   }, []);
 
   return (
-    <div ref={ref1} className="h-screen overflow-y-scroll scrollbar-hide">
-      <div className="h-screen bg-secondary-100">Enter</div>
-      <div onClick={onClick} className="h-screen bg-secondary-200">
-        Enter
+    <div
+      ref={snapContainer}
+      className="h-screen overflow-y-scroll scrollbar-hide"
+    >
+      <div className="h-screen bg-secondary-100 flex justify-center items-center">
+        <div>
+          <p className="text-xl font-extrabold pt-40">
+            혼자만의 공연이 함께가 되는 곳
+          </p>
+          <p>너와 나의 티켓고리</p>
+        </div>
+        <div>
+          <Main1 />
+        </div>
       </div>
+      <div className="h-screen bg-secondary-200"></div>
       <div className="h-screen bg-secondary-300">Enter</div>
       <div className="h-screen bg-secondary-400">Enter</div>
     </div>

@@ -1,5 +1,4 @@
-import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
 import Concerts from "./pages/Concerts";
 import Concert from "./pages/Concert";

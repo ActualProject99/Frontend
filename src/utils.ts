@@ -43,3 +43,9 @@ export const regOptLogin = {
     },
   ]),
 };
+const scrollTo = (top: number) => {
+  window.scrollTo({
+    top,
+    behavior: "smooth",
+  });
+};
