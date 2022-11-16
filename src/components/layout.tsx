@@ -1,8 +1,9 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
+import { cls } from "../utils";
 const Nav = () => {
   const pages = [
     { name: "홈", path: "" },
@@ -62,13 +63,20 @@ const Footer = () => {
   );
 };
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { pathname } = useLocation();
   return (
     <>
-      <Nav />
-      <div className="w-[1200px] mx-auto min-h-screen border py-4">
-        {children}
-      </div>
-      <Footer />
+      {pathname === "/" ? (
+        <>{children}</>
+      ) : (
+        <>
+          <Nav />
+          <div className="w-[1200px] mx-auto min-h-screen border py-4">
+            {children}
+          </div>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
