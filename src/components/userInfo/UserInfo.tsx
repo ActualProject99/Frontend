@@ -1,12 +1,8 @@
 import React, { useState, useCallback, ChangeEvent } from "react";
-import { useRecoilState } from "recoil";
-import { userState, IUesrTypes } from "../../store/user";
 import { useQueryClient } from "@tanstack/react-query";
 
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import userDefault from "../../image/userDefault.png";
-import icons from "../icons";
 import CloudinaryUploadWidget from "./Cloudinary";
 
 const UserInfo = (): JSX.Element => {
@@ -15,7 +11,7 @@ const UserInfo = (): JSX.Element => {
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
 
   const queryClient = useQueryClient();
-  const [user, setUser] = useRecoilState<IUesrTypes>(userState);
+
   const [isEdit, setIsEdit] = useState(false);
   const [editNickname, setEditNickname] = useState(userData?.nickname);
 

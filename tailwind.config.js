@@ -37,5 +37,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tw-elements/dist/plugin"), require("@tailwindcss/forms")],
+  plugins: [
+    require("tw-elements/dist/plugin"),
+    require("@tailwindcss/forms"),
+    require("tailwind-scrollbar-hide"),
+  ],
 };
