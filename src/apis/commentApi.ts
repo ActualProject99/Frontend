@@ -4,8 +4,9 @@ import { deactivate, activate } from "./instance";
 interface IPayload {
   id?: number;
   postId?: number;
+  comment?:string;
   body? : {
-    postId: number;
+    postId?: number;
     comment:string;
   }
 }

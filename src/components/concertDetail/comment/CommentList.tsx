@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   isError,
   useMutation,
@@ -14,7 +13,7 @@ import { IgetComment } from "../../../types";
 import Commentfix from './Commentfix';
 
 export interface IComments {
-  comment: IgetComment;
+  comment?: IgetComment;
 }
 
 const CommentList = () => {
@@ -22,7 +21,7 @@ const CommentList = () => {
 
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
-      queryClient.invalidateQueries("allComments");
+      queryClient.invalidateQueries(["allComments"]);
       window.alert("댓글을 추가했습니다.");
     },
   });
@@ -62,9 +61,9 @@ const CommentList = () => {
 
   return (
     <div>
-      <h1 className="p-4">Comments</h1>
+      <h1 className="p-4 pl-5 font-bold">Comments</h1>
       <form
-        className="pl-4 grid grid-cols-[1fr_500px]"
+        className="pl-4 grid grid-cols-[1fr_165px]"
         onSubmit={handleSubmit(onValid)}
       >
         <textarea 
@@ -72,21 +71,20 @@ const CommentList = () => {
           {...register("comment", {
             maxLength: {
               value: 300,
-              message: "300자를 초과할 수 없습니다.",
+              message: "",
             },
             minLength: {
               value: 3,
-              message: "최소 3자 이상을 입력해야 합니다.",
+              message: "3자 미만으로 작성할 수 없습니다.",
             },
           })}
           maxLength={300}
-          placeholder="최소 3자 최대 300자 이내로 댓글을 입력해주세요"
-          
+          placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또은 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 댓글 입력)"
         />
-        <button className="border 1px w-28 h-28  hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
+        <button className="border 1px w-[9.3rem] h-28 hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
           등록
         </button>
-        <span></span>
+        {errors.comment && errors.comment?.type === "minLength" && <span className='font-bold text-sm text-red-600'>{`${errors.comment.message}`}</span>}
       </form>
 
       <ul className="p-4 w-full max-h-[40rem] overflow-y-auto">

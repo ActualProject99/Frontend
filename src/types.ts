@@ -8,7 +8,7 @@ export interface LoginForm {
 }
 
 export interface IgetComment { 
-  id: number;
+  id?: number;
   postId?: number;
   comment: string;
 };
