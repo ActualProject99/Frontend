@@ -77,7 +77,7 @@ const Commentfix = ({comment} : IComments) => {
               },
             })}
             maxLength={300}
-            placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또은 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 수정된 댓글 입력)"/>
+            placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 수정된 댓글 입력)"/>
             <button 
               className="border 1px w-[10.5rem] h-[7.1rem] hover:bg-secondary-main bg-secondary-300"
             >
