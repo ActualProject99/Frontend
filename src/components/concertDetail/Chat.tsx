@@ -15,6 +15,22 @@ const Room = ({
     y: number | null;
   }>({ x: null, y: null });
   const [isMoved, setIsMoved] = useState(false);
+  const [messages, setMessages] = useState(["hi", "hello", "bye!"]);
+  const [newMessage, setNewMessage] = useState("");
+  const roomRef = useRef<HTMLUListElement | null>(null);
+  const handleChange = ({ target }: any) => {
+    setNewMessage(target.value);
+  };
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setMessages((cur) => [...cur, newMessage]);
+    setNewMessage("");
+  };
+  useEffect(() => {
+    if (roomRef.current) {
+      roomRef.current.scrollTo({ top: roomRef.current.scrollHeight });
+    }
+  }, [newMessage]);
   const ref = useRef<HTMLDivElement | null>(null);
   const handleClick = () => {
     if (isMoved) return;
@@ -99,7 +115,19 @@ const Room = ({
           onClick={handleClick}
         ></div>
         {joinState === "opened" ? (
-          <div className="w-32 h-12 bg-lime-200" />
+          <>
+            <ul
+              ref={roomRef}
+              className="w-32 h-80 bg-lime-200 overflow-y-scroll"
+            >
+              {messages.map((message, i) => (
+                <li key={i}>{message}</li>
+              ))}
+            </ul>
+            <form onSubmit={handleSubmit}>
+              <input type="text" value={newMessage} onChange={handleChange} />
+            </form>
+          </>
         ) : null}
       </div>
     </div>
