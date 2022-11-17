@@ -66,7 +66,12 @@ const Main = () => {
           content5.current?.offsetTop,
           content6.current?.offsetTop,
         ].forEach((offsetTop, i) => {
-          if (offsetTop === snapContainer.current?.scrollTop) {
+          if (typeof offsetTop === "undefined" || !snapContainer.current)
+            return;
+          if (
+            offsetTop > snapContainer.current?.scrollTop - 10 &&
+            offsetTop < snapContainer.current?.scrollTop + 10
+          ) {
             setContentNo(i);
           }
         });
@@ -104,7 +109,7 @@ const Main = () => {
           </div>
           <div>
             <img
-              className="w-[520px] h-[800px] object-contain"
+              className="w-[400px] h-[700px] object-contain"
               src={main1}
               alt=""
             />
