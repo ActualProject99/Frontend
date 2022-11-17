@@ -13,7 +13,18 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
 
   const [user, setUser] = useRecoilState<User>(userState);
-  const onValid = (data) => {
+  const onValid = async (data) => {
+    // const res = await (
+    //   await fetch("http://3.39.224.92/users/login", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(data),
+    //   })
+    // ).json();
+    const res = await fetch("http://3.39.224.92", {
+      method: "GET",
+    });
+    console.log(res);
     setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     console.log(user);
   };
