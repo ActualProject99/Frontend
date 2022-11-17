@@ -7,10 +7,27 @@ export interface IGetArtist {
   artistId: number;
   artistImg: string;
   genre: string;
+  like: boolean;
+  artistConcerts: [
+    {
+      id: Number;
+      concertId: number;
+      posterUrl: string;
+      title: string;
+      showTimes: string;
+      location: string;
+      like: boolean;
+    }
+  ];
 }
 
 interface DeletePayload {
   id: number;
+}
+
+interface EditLike {
+  artistId: number;
+  like: boolean;
 }
 
 const GetArtist = () => {
@@ -31,9 +48,21 @@ const DeleteArtist = () => {
   });
 };
 
+const EditLikeArtist = () => {
+  return useMutation(async (payload: EditLike) => {
+    const { data } = await axios.patch(
+      `http://localhost:3001/artists/${payload.artistId}`,
+      payload
+    );
+    console.log("페이", data);
+    return data;
+  });
+};
+
 const ArtistApi = {
   GetArtist,
   DeleteArtist,
+  EditLikeArtist,
 };
 
 export default ArtistApi;

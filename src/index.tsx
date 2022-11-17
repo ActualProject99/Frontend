@@ -5,6 +5,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ScrollToTop from "./hooks/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <RecoilRoot>
+        <ScrollToTop />
         <App />
       </RecoilRoot>
     </BrowserRouter>

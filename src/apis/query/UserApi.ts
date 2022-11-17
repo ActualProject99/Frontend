@@ -13,13 +13,14 @@ interface EditNamePayload {
   nickname: string | undefined;
 }
 interface EditImgPayload {
-  userImg: string | undefined | FormData;
+  userImg: string | undefined | File | FormData;
 }
 
 //유저 좋아요 콘서트 Interface
 
 export interface IGetLikeConcert {
   id: number;
+  concertId: number;
   posterUrl: string;
   title: string;
   showTimes: string;
@@ -42,7 +43,6 @@ export interface IGetLikeConcert {
 const GetUserInfo = () => {
   return useQuery<IGetUser>(["userInfo"], async () => {
     const { data } = await axios.get<IGetUser>("http://localhost:3001/user");
-    // console.log("data", userInfo);
     return data;
   });
 };
@@ -56,7 +56,11 @@ const EditUserName = () => {
 
 const EditUserImg = () => {
   return useMutation(async (payload: EditImgPayload) => {
-    const { data } = await axios.patch("http://localhost:3001/user", payload);
+    const { data } = await axios.patch("http://localhost:3001/user", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return data;
   });
 };
@@ -68,7 +72,6 @@ const GetLikeConcert = () => {
     const { data } = await axios.get<IGetLikeConcert[]>(
       "http://localhost:3001/concerts"
     );
-    // console.log("data", userInfo);
     return data;
   });
 };

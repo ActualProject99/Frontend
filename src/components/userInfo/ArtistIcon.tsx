@@ -2,6 +2,7 @@ import React from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const ArtistIcon = ({
   artist,
@@ -16,6 +17,7 @@ const ArtistIcon = ({
 }) => {
   const { mutateAsync: DeleteArtist } = ArtistApi.DeleteArtist();
   const QueryClient = useQueryClient();
+  const navigate = useNavigate();
   const onDelete = () => {
     const payload = {
       id: artist.id,
@@ -37,6 +39,7 @@ const ArtistIcon = ({
             className="w-24 h-24 rounded-[50%] cursor-pointer mb-1 "
             alt="artist"
             src={artist.artistImg}
+            onClick={() => navigate(`/artist/${artist.artistId}`)}
           />
         </div>
         <p>{artist.artist}</p>
