@@ -6,19 +6,21 @@ import {
 } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { readComments, addComment  } from '../../../apis/commentApi';
-import { useState } from "react";
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IgetComment } from "../../../types";
 import Commentfix from './Commentfix';
+import ArrowLeft from '../../../svg/ArrowLeft';
+import ArrowRight from '../../../svg/ArrowRight';
+/* import CommentPagination from './CommentPagination'; */
 
 export interface IComments {
   comment?: IgetComment;
+  currentPage? : IgetComment;
 }
 
 const CommentList = () => {
   const { id } = useParams();
-
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
       queryClient.invalidateQueries(["allComments"]);
@@ -39,6 +41,7 @@ const CommentList = () => {
       );
     }
   }, [currentPage, queryClient]);
+
   /* 다음 페이지를 누르기 전에 다음 페이지 내용을 미리 불러옴. 
   딜레이 체감 없애기 */
 
@@ -54,6 +57,14 @@ const CommentList = () => {
     return <h3 className='p-4'>지금은 댓글을 불러올 수 없어요!</h3>;
   }
 
+  /* const { isLoading, isError, data } = useQuery<IgetComment[]>(["allComments"], readComments)
+  if (isLoading) {
+    return <h3 className='p-4'>Loading...</h3>;
+  }
+  if (isError) {
+    return <h3 className='p-4'>지금은 댓글을 불러올 수 없어요!</h3>;
+  } */
+
   const onValid = (data: any) => {
     addCommentFn({ postId: Number(id), comment: data.comment });
     reset();
@@ -67,7 +78,7 @@ const CommentList = () => {
         onSubmit={handleSubmit(onValid)}
       >
         <textarea 
-          className="block bg-gray-200 outline-transparent w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none resize-none"
+          className="block bg-gray-200 focus:border-white w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none resize-none"
           {...register("comment", {
             maxLength: {
               value: 300,
@@ -87,29 +98,28 @@ const CommentList = () => {
         {errors.comment && errors.comment?.type === "minLength" && <span className='font-bold text-sm text-red-600'>{`${errors.comment.message}`}</span>}
       </form>
 
-      <ul className="p-4 w-full max-h-[40rem] overflow-y-auto">
+      <ul className="p-4 w-full max-h-[65rem] overflow-y-auto">
         {data
           ?.filter((concert) => concert.postId == id)
           .map((comment) => (
-            <Commentfix key={comment.id} comment={comment}/>
+            <Commentfix key={comment.id} comment={comment} />
           ))}
       </ul>
-
+      <div className='flex w-full justify-around'>
       <button
-        className="pt-4 pl-4"
         disabled={currentPage <= 1}
         onClick={() => setCurrentPage((prev) => prev - 1)}
       >
-        이전
+        <ArrowLeft/>
       </button>
-      <span className="pt-4 pl-4">Page {currentPage}</span>
-      <button
-        className="pt-4 pl-4"
+      <span>{currentPage}</span>
+      <button 
         disabled={currentPage >= maxPage}
         onClick={() => setCurrentPage((prev) => prev + 1)}
       >
-        다음
-      </button>
+        <ArrowRight />
+      </button> 
+      </div>
     </div>
   );
 };

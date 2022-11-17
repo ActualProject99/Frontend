@@ -8,7 +8,6 @@ import { IComments } from './CommentList';
 
 const Commentfix = ({comment} : IComments) => {
   const [isedit, setIsEdit] = useState(false);
-
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const queryClient = useQueryClient();
   
@@ -62,7 +61,7 @@ const Commentfix = ({comment} : IComments) => {
   },[isedit])
   
   return (
-    <li className="mb-3 w-full m-auto mt-0  pb-3 border-b">
+    <li className="mb-3 w-full m-auto mt-0 pb-3 border-b">
         {isedit ? (
           <>
            <form onSubmit={handleSubmit(onEdit)} className="flex ">
