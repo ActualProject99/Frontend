@@ -1,7 +1,6 @@
 import Calendar from "../components/Calendar";
 import { useState } from "react";
 import { cls } from "../utils";
-import useTaps from "../hooks/useTaps";
 import Cards from "../components/Cards";
 import { dateSelected } from "../atoms/date";
 import { useRecoilState } from "recoil";

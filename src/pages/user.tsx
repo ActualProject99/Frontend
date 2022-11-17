@@ -1,4 +1,9 @@
 //@ts-nocheck
+import LikeConcert from "../components/userInfo/LikeConcert";
+import MyComments from "../components/userInfo/MyComments";
+import PickArtist from "../components/userInfo/PickArtist";
+import UserInfo from "../components/userInfo/UserInfo";
+import useTaps from "../hooks/useTaps";
 import { useForm } from "react-hook-form";
 import { User, userState } from "../atoms/user";
 import { regOptLogin } from "../utils";
@@ -56,7 +61,18 @@ const Signup = () => {
   );
 };
 const Mypage = () => {
-  return <div>Mypage</div>;
+  const { Taps, Viewer } = useTaps(
+    ["좋아요 공연", <LikeConcert />],
+    ["작성한 댓글", <MyComments />]
+  );
+  return (
+    <div>
+      <UserInfo />
+      <PickArtist />
+      <Taps />
+      <Viewer />
+    </div>
+  );
 };
 const user = {
   Login,
