@@ -10,9 +10,11 @@ const LikeConcerts = (): JSX.Element => {
     <div className="flex flex-col w-[95%] h-[40rem] p-7 border mx-auto my-5 gap-6 ">
       <div className="flex justify-center flex-wrap w-full h-full  gap-x-10 gap-y-14 overflow-y-scroll scrollbar-hide">
         {concerts &&
-          concerts.map((concert) => (
-            <LikeConcert key={concert.id} concert={concert} />
-          ))}
+          concerts.map((concert) =>
+            concert.like === true ? (
+              <LikeConcert key={concert.id} concert={concert} />
+            ) : null
+          )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import icons from "../icons";
 import { useNavigate } from "react-router-dom";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 interface IConcertProps {
   concert: IGetLikeConcert;

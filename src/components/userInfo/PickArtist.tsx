@@ -34,9 +34,11 @@ const PickArtist = (): JSX.Element => {
         </div>
         <div className="flex justify-around flex-wrap gap-x-8 gap-y-8 mb-5 mt-5 mx-3">
           {artists &&
-            artists?.map((artist: IGetArtist) => (
-              <ArtistIcon key={artist.id} artist={artist} />
-            ))}
+            artists?.map((artist: IGetArtist) =>
+              artist.like === true ? (
+                <ArtistIcon key={artist.id} artist={artist} />
+              ) : null
+            )}
         </div>
       </div>
     </>

@@ -1054,7 +1054,7 @@
     },
     {
       "id": 8,
-      "concertId": 9,
+      "concertId": 8,
       "posterUrl": "http://tkfile.yes24.com/upload2/PerfBlog/202209/20220930/20220930-43694.jpg",
       "title": "마룬파이브 내한공연 (Maroon 5 Live in Seoul)",
       "showTimes": "2022.11.30",
@@ -1067,7 +1067,7 @@
       "hour": 20,
       "minute": 0,
       "vendor": 0,
-      "like": false,
+      "like": true,
       "ticketingUrl": [
         {
           "url": "https://tickets.interpark.com/goods/22013202",
