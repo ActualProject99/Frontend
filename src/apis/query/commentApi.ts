@@ -1,14 +1,14 @@
 import axios from "axios";
-import { deactivate, activate } from "./instance";
+import { deactivate, activate } from "../instance";
 
 interface IPayload {
   id?: number;
   postId?: number;
-  comment?:string;
-  body? : {
+  comment?: string;
+  body?: {
     postId?: number;
-    comment:string;
-  }
+    comment: string;
+  };
 }
 
 export const readComments = async (pageNum: number) => {
@@ -16,17 +16,17 @@ export const readComments = async (pageNum: number) => {
   return data; // 페이지 당 코멘트 10개씩 불러오도록 지정
 };
 
-export const addComment = async ( payload : IPayload ) => {
+export const addComment = async (payload: IPayload) => {
   const { data } = await activate.post("comments", payload);
   return data;
 };
 
-export const removeComment = async ( payload : IPayload ) => {
+export const removeComment = async (payload: IPayload) => {
   const { data } = await activate.delete(`comments/${payload.id}`);
   return data;
 };
 
-export const editComment = async ( payload : IPayload ) => {
-  const { data } = await activate.patch(`comments/${payload.id}`, payload.body );
+export const editComment = async (payload: IPayload) => {
+  const { data } = await activate.patch(`comments/${payload.id}`, payload.body);
   return data;
 };
