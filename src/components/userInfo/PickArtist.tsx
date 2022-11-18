@@ -7,7 +7,6 @@ import { IGetArtist } from "../../apis/query/ArtistAPI";
 
 const PickArtist = (): JSX.Element => {
   const { data: artists } = ArtistApi.GetArtist();
-  console.log("data22", artists);
   return (
     <>
       <div className="flex justify-between py-5 mx-auto mt-10 mb-0 w-[95%]">
@@ -35,9 +34,11 @@ const PickArtist = (): JSX.Element => {
         </div>
         <div className="flex justify-around flex-wrap gap-x-8 gap-y-8 mb-5 mt-5 mx-3">
           {artists &&
-            artists?.map((artist: IGetArtist) => (
-              <ArtistIcon key={artist.id} artist={artist} />
-            ))}
+            artists?.map((artist: IGetArtist) =>
+              artist.like === true ? (
+                <ArtistIcon key={artist.id} artist={artist} />
+              ) : null
+            )}
         </div>
       </div>
     </>

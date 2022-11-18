@@ -1,5 +1,5 @@
 //@ts-nocheck
-import LikeConcert from "../components/userInfo/LikeConcert";
+import LikeConcerts from "../components/userInfo/LikeConcerts";
 import MyComments from "../components/userInfo/MyComments";
 import PickArtist from "../components/userInfo/PickArtist";
 import UserInfo from "../components/userInfo/UserInfo";
@@ -62,7 +62,7 @@ const Signup = () => {
 };
 const Mypage = () => {
   const { Taps, Viewer } = useTaps(
-    ["좋아요 공연", <LikeConcert />],
+    ["좋아요 공연", <LikeConcerts />],
     ["작성한 댓글", <MyComments />]
   );
   return (

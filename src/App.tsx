@@ -5,6 +5,7 @@ import Concert from "./pages/Concert";
 import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
+import Artist from "./pages/Artist";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="mypage" element={<user.Mypage />} />
         </Route>
         <Route path="mock-ticketing" element={<MockTicketing />} />
+        <Route path="artist/:id" element={<Artist />} />
       </Routes>
     </Layout>
   );
