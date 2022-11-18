@@ -6,3 +6,9 @@ export interface LoginForm {
   email: string;
   password: string;
 }
+
+export interface IgetComment { 
+  id?: number;
+  postId?: number;
+  comment: string;
+};

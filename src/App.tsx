@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
 import Concerts from "./pages/Concerts";
@@ -7,6 +6,7 @@ import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
+
 
 function App() {
   return (

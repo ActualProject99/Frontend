@@ -9,7 +9,7 @@ export interface IUesrTypes {
 }
 
 export const userState = atom<IUesrTypes>({
-  key: "user",
+  key: "userState",
   default: {
     id: 0,
     email: "",

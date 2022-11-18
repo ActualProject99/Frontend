@@ -15,10 +15,11 @@ import ConcertApi, { IGetConcert } from "../../apis/query/ConcertApi";
 import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
 import { NaverMap } from "./NaverMap";
-import Comment from "./comment/Comment";
+
 import useTaps from "../../hooks/useTaps";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
+import CommentList from "./comment/CommentList";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -69,7 +70,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const { Taps, Viewer } = useTaps(
     ["상세정보", <MoreInfo />],
     ["공연장정보", <NaverMap concert={concert} />],
-    ["기대평", <Comment />]
+    ["기대평", <CommentList />]
   );
   return (
     <>

@@ -1,9 +1,20 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
-const Nav = () => {
+import { cls } from "../utils";
+import { mainContent } from "../atoms/mainContent";
+
+const Nav = ({
+  main,
+  no1,
+  no2,
+}: {
+  main?: boolean;
+  no1?: boolean;
+  no2?: boolean;
+}) => {
   const pages = [
     { name: "홈", path: "" },
     { name: "콘서트", path: "concerts" },
@@ -12,11 +23,18 @@ const Nav = () => {
     { name: "마이페이지", path: "user/mypage" },
   ];
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
+  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
   const handleClick = () => {
     setUser(initUser);
   };
-  return (
-    <nav className="h-40 flex items-center">
+  
+  return no1 ? (
+    <nav
+      className={cls(
+        "h-40 flex items-center",
+        main && "fixed left-1/2 -translate-x-1/2"
+      )}
+    >
       <div className="w-[1200px] mx-auto flex justify-between items-center">
         <div className="h-32 flex items-center gap-24">
           <div className="w-[140px] h-10 bg-primary-main rounded">
@@ -52,6 +70,24 @@ const Nav = () => {
         </div>
       </div>
     </nav>
+  ) : (
+    <nav className="fixed left-1/2 -translate-x-1/2 z-10">
+      <div
+        className={cls(
+          "w-[1200px] mx-auto flex justify-between items-center",
+          contentNo === 1 ? "text-white" : "text-black"
+        )}
+      >
+        <div className="text-4xl font-extrabold py-2">Tgle</div>
+        <ul className="flex gap-10">
+          {pages.map((page, i) => (
+            <li key={i}>
+              <Link to={page.path}>{page.name}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   );
 };
 const Footer = () => {
@@ -62,13 +98,23 @@ const Footer = () => {
   );
 };
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { pathname } = useLocation();
   return (
     <>
-      <Nav />
-      <div className="w-[1200px] mx-auto min-h-screen border py-4">
-        {children}
-      </div>
-      <Footer />
+      {pathname === "/" ? (
+        <>
+          <Nav main no2 />
+          {children}
+        </>
+      ) : (
+        <>
+          <Nav no1 />
+          <div className="w-[1200px] mx-auto min-h-screen border py-4">
+            {children}
+          </div>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
