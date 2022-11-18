@@ -98,7 +98,7 @@ const CommentList = () => {
         {errors.comment && errors.comment?.type === "minLength" && <span className='font-bold text-sm text-red-600'>{`${errors.comment.message}`}</span>}
       </form>
 
-      <ul className="p-4 w-full max-h-[65rem] overflow-y-auto">
+      <ul className="p-4 w-full max-h-[65rem]">
         {data
           ?.filter((concert) => concert.postId == id)
           .map((comment) => (
