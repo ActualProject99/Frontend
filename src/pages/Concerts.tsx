@@ -234,7 +234,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
           <div className="flex gap-4 justify-center mt-12 flex-wrap">
             {dateChosenConcerts.length > 0 ? (
               dateChosenConcerts.map((consert, index) => (
-                <Cards key={index} concert data={consert} />
+                <Cards key={index} horizontal concert data={consert} />
               ))
             ) : (
               <p>No concerts for today.</p>
@@ -281,10 +281,19 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
                 </time>
               </h2> */}
 
-                  <div className="flex gap-4 justify-center mt-12 flex-wrap">
+                  <div className="hidden xl:flex gap-4 justify-center mt-12 flex-wrap">
                     {dateChosenConcerts.length > 0 ? (
                       dateChosenConcerts.map((consert, i) => (
-                        <Cards key={i} concert data={consert} />
+                        <Cards key={i} vertical concert data={consert} />
+                      ))
+                    ) : (
+                      <p>No concerts for today.</p>
+                    )}
+                  </div>
+                  <div className="flex xl:hidden gap-2 justify-center mt-12 flex-wrap">
+                    {dateChosenConcerts.length > 0 ? (
+                      dateChosenConcerts.map((consert, i) => (
+                        <Cards key={i} horizontal concert data={consert} />
                       ))
                     ) : (
                       <p>No concerts for today.</p>
