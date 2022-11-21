@@ -20,23 +20,51 @@ const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
   const contrastColorNos = [1];
   return (
-    <div className="fixed flex flex-col gap-6 top-1/2 -translate-y-1/2 left-10">
+    <div className="fixed flex flex-row bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-6 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
       {[1, 2, 3, 4, 5, 6].map((_, i) => (
         <div
           key={i}
           className={cls(
-            "w-2 h-2 transition-colors duration-300 rounded-full",
+            "w-9 sm:w-12 h-1.5 sm:h-2 lg:w-2 lg:h-2 transition-colors duration-300 rounded-full",
             contrastColorNos.includes(contentNo)
               ? contentNo === i
-                ? "bg-slate-200"
-                : "bg-slate-600"
+                ? "bg-slate-100 lg:bg-slate-200"
+                : "bg-slate-500 lg:bg-slate-600"
               : contentNo === i
-              ? "bg-slate-800"
-              : "bg-slate-400"
+              ? "bg-slate-400 lg:bg-slate-800"
+              : "bg-slate-200 lg:bg-slate-400"
           )}
         ></div>
       ))}
     </div>
+  );
+};
+const ContentCopy = ({
+  no,
+  main,
+  sub,
+}: {
+  no?: string;
+  main: ReactNode;
+  sub: ReactNode;
+}) => {
+  return (
+    <>
+      <div className="hidden md:block p-2">
+        <p className="mb-6 pl-1 font-bold">{no}</p>
+        <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-full">
+          {main}
+        </p>
+        <p className="text-base">{sub}</p>
+      </div>
+      <div className="md:hidden backdrop-blur-sm bg-white/60 p-2">
+        <p className="mb-6 pl-1 font-bold">{no}</p>
+        <p className="text-[36px] leading-[48px] font-extrabold mb-6 w-full">
+          {main}
+        </p>
+        <p className="text-sm">{sub}</p>
+      </div>
+    </>
   );
 };
 const Main = () => {
@@ -82,7 +110,7 @@ const Main = () => {
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
         <div
-          className="h-screen flex justify-between items-center w-[800px] mx-auto"
+          className="h-screen flex justify-center gap-3 items-center w-[600px] md:w-[760px] mx-auto relative"
           ref={ref}
         >
           {children}
@@ -101,7 +129,7 @@ const Main = () => {
           ref={content1}
           className="h-screen flex justify-center items-center gap-12"
         >
-          <div>
+          <div className="bg-white">
             <p className="text-[40px] leading-[48px] font-extrabold pt-40 mb-6 w-80">
               혼자만의 공연이 함께가 되는 곳
             </p>
@@ -129,73 +157,101 @@ const Main = () => {
           </div>
         </div>
         <Content ref={content3}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 01</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-72">
-              콘서트 일일이 찾아봐? <br />
-              Tgle엔 다 있어!
-            </p>
-            <p className="text-base">
-              콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
-              앞으론 그럴 필요 없습니다.
-              <br /> Tgle이 편리하게 당신을 도와줄겁니다.
-            </p>
-          </div>
-          <div>
+          <ContentCopy
+            no="01"
+            main={
+              <>
+                콘서트 일일이 찾아봐? <br />
+                Tgle엔 다 있어!
+              </>
+            }
+            sub={
+              <>
+                콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
+                앞으론 그럴 필요 없습니다.
+                <br /> Tgle이 편리하게 당신을 도와줄겁니다.
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
             <img
-              className="w-[330px] h-[375px] object-contain"
+              className="w-[400px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main3}
               alt=""
             />
           </div>
         </Content>
         <Content ref={content4}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 02</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              티켓팅 놓쳤다고 <br /> 울지마세요! <br />
-              앞으로는 Tgle과 함께!
-            </p>
-            <p className="text-base">
-              티켓팅 예매처 서버시간을 <br />
-              실시간으로 확인할 수 있습니다.
-            </p>
-          </div>
-          <div>
-            <img className="w-[218px] h-96 object-contain" src={main4} alt="" />
+          <ContentCopy
+            no="02"
+            main={
+              <>
+                티켓팅 놓쳤다고 <br /> 울지마세요! <br />
+                앞으로는 Tgle과 함께!
+              </>
+            }
+            sub={
+              <>
+                티켓팅 예매처 서버시간을 <br />
+                실시간으로 확인할 수 있습니다.
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+            <img
+              className="w-[420px] h-[600px] md:w-[218px] md:h-96 object-contain"
+              src={main4}
+              alt=""
+            />
           </div>
         </Content>
         <Content ref={content5}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 03</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              관심 설정해 놓은 <br /> 공연들을 <br />
-              Tgle이 알려드려요!
-            </p>
-            <p className="text-base">
-              보고싶은 콘서트
-              <br /> 티켓팅 일정을 <br /> 알림으로 받아보세요!
-            </p>
-          </div>
-          <div>
-            <img className="w-[330px] h-96 object-cover" src={main5} alt="" />
+          <ContentCopy
+            no="03"
+            main={
+              <>
+                관심 설정해 놓은 <br /> 공연들을 <br />
+                Tgle이 알려드려요!
+              </>
+            }
+            sub={
+              <>
+                보고싶은 콘서트
+                <br /> 티켓팅 일정을 <br /> 알림으로 받아보세요!
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+            <img
+              className="md:w-[330px] h-96 object-cover"
+              src={main5}
+              alt=""
+            />
           </div>
         </Content>
         <Content ref={content6}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 04</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              기다렸던 티켓팅에 <br />
-              실패하지 않도록 <br />
-              미리 워밍업 해보세요!
-            </p>
-            <p className="text-base">
-              예매할 때와 비슷한 환경으로 <br />
-              실패없는 티켓팅을 준비해보세요
-            </p>
-          </div>
-          <div>
-            <img className="w-[430px] h-96 object-cover" src={main6} alt="" />
+          <ContentCopy
+            no="04"
+            main={
+              <>
+                기다렸던 티켓팅에 <br />
+                실패하지 않도록 <br />
+                미리 워밍업 해보세요!
+              </>
+            }
+            sub={
+              <>
+                예매할 때와 비슷한 환경으로 <br />
+                실패없는 티켓팅을 준비해보세요
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+            <img
+              className="md:w-[380px] h-96 object-contain"
+              src={main6}
+              alt=""
+            />
           </div>
         </Content>
       </div>

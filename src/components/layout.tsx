@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
@@ -16,7 +16,6 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
-    { name: "홈", path: "" },
     { name: "콘서트", path: "concerts" },
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
@@ -30,16 +29,16 @@ const Nav = ({
   return no1 ? (
     <nav
       className={cls(
-        "h-40 flex items-center",
+        "h-24 flex items-center",
         main && "fixed left-1/2 -translate-x-1/2"
       )}
     >
-      <div className="w-[1200px] mx-auto flex justify-between items-center">
-        <div className="h-32 flex items-center gap-24">
+      <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
+        <div className="h-18 flex items-center gap-10 xl:gap-24">
           <div className="w-[140px] h-10 bg-primary-main rounded">
             <Link className="w-full h-full block" to=""></Link>
           </div>
-          <ul className="flex gap-10">
+          <ul className="flex gap-4 xl:gap-10">
             {pages.map((page, i) => (
               <li key={i}>
                 <Link to={page.path}>{page.name}</Link>
@@ -47,7 +46,7 @@ const Nav = ({
             ))}
           </ul>
         </div>
-        <div className="w-32 h-32 flex items-center justify-between">
+        <div className="w-32 h-18 flex items-center justify-between">
           <icons.Search />
           <div className="w-[140px] h-10 bg-secondary-main flex justify-center items-center rounded-2xl">
             {isLoggedin ? (
@@ -70,15 +69,15 @@ const Nav = ({
       </div>
     </nav>
   ) : (
-    <nav className="fixed left-1/2 -translate-x-1/2 z-10">
+    <nav className="fixed left-1/2 -translate-x-1/2 z-10 w-full">
       <div
         className={cls(
-          "w-[1200px] mx-auto flex justify-between items-center",
+          "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
           contentNo === 1 ? "text-white" : "text-black"
         )}
       >
         <div className="text-4xl font-extrabold py-2">Tgle</div>
-        <ul className="flex gap-10">
+        <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
           {pages.map((page, i) => (
             <li key={i}>
               <Link to={page.path}>{page.name}</Link>
@@ -92,7 +91,7 @@ const Nav = ({
 const Footer = () => {
   return (
     <div className="bg-slate-200 h-96 flex items-center">
-      <div className="bg-slate-400 w-[1200px] mx-auto ">footer</div>
+      <div className="bg-slate-400 xl:w-[1200px] mx-auto ">footer</div>
     </div>
   );
 };
@@ -108,7 +107,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       ) : (
         <>
           <Nav no1 />
-          <div className="w-[1200px] mx-auto min-h-screen border py-4">
+          <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto min-h-screen border py-4">
             {children}
           </div>
           <Footer />
