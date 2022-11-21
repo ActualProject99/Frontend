@@ -13,7 +13,7 @@ export const deactivate = axios.create({ // 로그인을 안한 상태
 export const activate = axios.create({ // 로그인을 한 상태
     baseURL,
     headers: {
-
+        
     },
 })
 

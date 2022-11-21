@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { IComments } from "./CommentList";
+import { regOptComment } from '../../../utils';
 
 const Commentfix = ({ comment }: IComments) => {
   const [isedit, setIsEdit] = useState(false);
@@ -73,16 +74,7 @@ const Commentfix = ({ comment }: IComments) => {
           <form onSubmit={handleSubmit(onEdit)} className="flex ">
             <textarea
               className="border 1px w-5/6 h-28 placeholder: pb-12 pl-4 rounded-lg rounded-r-none rounded-br-none resize-none"
-              {...register("editcomment", {
-                maxLength: {
-                  value: 300,
-                  message: "",
-                },
-                minLength: {
-                  value: 3,
-                  message: "3자 미만으로 작성할 수 없습니다.",
-                },
-              })}
+              {...register(...regOptComment.editcomment())}
               maxLength={300}
               placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 수정된 댓글 입력)"
             />
