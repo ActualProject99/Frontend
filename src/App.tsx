@@ -6,14 +6,13 @@ import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 
-
 function App() {
   return (
     <Layout>
       <Routes>
         <Route index element={<Main />} />
         <Route path="concerts">
-          <Route index element={<Concerts no1 />} />
+          <Route index element={<Concerts no2 />} />
           <Route path=":id" element={<Concert />} />
         </Route>
         <Route path="user">

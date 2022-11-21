@@ -5,7 +5,7 @@ import Cards from "../components/Cards";
 import { dateSelected } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import { format, isSameDay, parseISO } from "date-fns";
-import useFixoluteBox from "../hooks/fixsolute";
+import useFixoluteBox from "../hooks/useFixsolute";
 
 const concerts = [
   {

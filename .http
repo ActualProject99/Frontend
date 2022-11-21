@@ -1,0 +1,18 @@
+POST http://54.180.104.167/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email" : "kmdet1223@naver.com",
+    "password" : "1234"
+}
+###
+POST http://54.180.104.167/users/signup HTTP/1.1
+content-type: application/json
+
+{
+   "email" : "Developer1@test.com",
+   "profileImg": "groot",
+   "nickname":"",
+   "name": "minho",
+   "password" : "1234"
+}
