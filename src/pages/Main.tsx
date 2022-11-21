@@ -1,14 +1,9 @@
-import {
-  useRef,
-  useEffect,
-  ReactNode,
-  forwardRef,
-  LegacyRef,
-  useState,
-} from "react";
+import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
 import { mainContent } from "../atoms/mainContent";
+import { motion } from "framer-motion";
+import Portal from "../components/Portal";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
 import main3 from "../image/main3.png";
@@ -20,23 +15,25 @@ const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
   const contrastColorNos = [1];
   return (
-    <div className="fixed flex flex-row bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-6 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
-      {[1, 2, 3, 4, 5, 6].map((_, i) => (
-        <div
-          key={i}
-          className={cls(
-            "w-9 sm:w-12 h-1.5 sm:h-2 lg:w-2 lg:h-2 transition-colors duration-300 rounded-full",
-            contrastColorNos.includes(contentNo)
-              ? contentNo === i
-                ? "bg-slate-100 lg:bg-slate-200"
-                : "bg-slate-500 lg:bg-slate-600"
-              : contentNo === i
-              ? "bg-slate-400 lg:bg-slate-800"
-              : "bg-slate-200 lg:bg-slate-400"
-          )}
-        ></div>
-      ))}
-    </div>
+    <Portal>
+      <div className="h-6 lg:h-fit fixed flex flex-row items-end lg:items-start bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-2 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
+        {[1, 2, 3, 4, 5, 6].map((_, i) => (
+          <div
+            key={i}
+            className={cls(
+              "w-9 sm:w-16 transition-all duration-300 lg:h-12",
+              contrastColorNos.includes(contentNo)
+                ? contentNo === i
+                  ? "bg-slate-100 h-1 lg:w-1"
+                  : "bg-slate-500 h-0.5 lg:w-0.5"
+                : contentNo === i
+                ? "bg-slate-400 h-1 lg:w-1"
+                : "bg-slate-200 h-0.5 lg:w-0.5"
+            )}
+          ></div>
+        ))}
+      </div>
+    </Portal>
   );
 };
 const ContentCopy = ({
@@ -50,19 +47,19 @@ const ContentCopy = ({
 }) => {
   return (
     <>
-      <div className="hidden md:block p-2">
+      <div className="hidden lg:block p-2">
         <p className="mb-6 pl-1 font-bold">{no}</p>
         <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-full">
           {main}
         </p>
         <p className="text-base">{sub}</p>
       </div>
-      <div className="md:hidden backdrop-blur-sm bg-white/60 p-2">
+      <div className="lg:hidden min-w-[375px] translate-y-32 backdrop-blur-sm bg-white/60 p-2 rounded-2xl">
         <p className="mb-6 pl-1 font-bold">{no}</p>
-        <p className="text-[36px] leading-[48px] font-extrabold mb-6 w-full">
+        <p className="text-3xl leading-[48px] font-extrabold mb-6 w-full">
           {main}
         </p>
-        <p className="text-sm">{sub}</p>
+        <p className="text-xs font-bold">{sub}</p>
       </div>
     </>
   );
@@ -75,7 +72,7 @@ const Main = () => {
   const content4 = useRef<HTMLDivElement | null>(null);
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
-  const [_, setContentNo] = useRecoilState<number>(mainContent);
+  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
   useEffect(() => {
     setContentNo(0);
   }, []);
@@ -110,7 +107,7 @@ const Main = () => {
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
         <div
-          className="h-screen flex justify-center gap-3 items-center w-[600px] md:w-[760px] mx-auto relative"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative"
           ref={ref}
         >
           {children}
@@ -127,17 +124,38 @@ const Main = () => {
       >
         <div
           ref={content1}
-          className="h-screen flex justify-center items-center gap-12"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
         >
-          <div className="bg-white">
-            <p className="text-[40px] leading-[48px] font-extrabold pt-40 mb-6 w-80">
-              혼자만의 공연이 함께가 되는 곳
-            </p>
-            <p className="text-2xl">너와 나의 티켓고리</p>
+          <div className="w-[320px]">
+            {contentNo === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white/60 translate-y-20 py-3 rounded-3xl backdrop-blur-sm"
+              >
+                <motion.p
+                  className="text-[40px] leading-[48px] font-extrabold mb-6 w-80"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  혼자만의 공연이 함께가 되는 곳
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                  className="text-2xl"
+                >
+                  너와 나의 티켓고리
+                </motion.p>
+              </motion.div>
+            )}
           </div>
-          <div>
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="w-[520px] h-[640px] object-contain"
+              className="min-w-[340px] sm:min-w-[500px] h-[600px] md:min-w-[320px] md:w-[450px] md:h-[600px] object-contain"
               src={main1}
               alt=""
             />
@@ -145,9 +163,51 @@ const Main = () => {
         </div>
         <div ref={content2} className="h-screen">
           <div className="relative h-full">
-            <p className="text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-48 bottom-32">
-              나와 아티스트 / 콘서트 / 티켓을 연결하는
-              <span className="text-secondary-main">Tgle</span>
+            <div className="lg:hidden text-white text-3xl md:text-5xl font-extrabold mb-8 w-[540px] absolute left-[3%] top-[14%]">
+              {contentNo === 1 && (
+                <>
+                  {[
+                    "나와",
+                    "아티스트",
+                    "콘서트",
+                    "티켓을 연결하는",
+                    "Tgle",
+                  ].map((e, i) => (
+                    <motion.div
+                      key={e}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 * i }}
+                      className={cls(i === 4 && "text-secondary-main")}
+                    >
+                      {e}
+                    </motion.div>
+                  ))}
+                </>
+              )}
+            </div>
+            <p className="lg:block hidden text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-[12%] bottom-[5%]">
+              {contentNo === 1 && (
+                <>
+                  {[
+                    "나와",
+                    "아티스트",
+                    "콘서트",
+                    "티켓을 연결하는",
+                    "Tgle",
+                  ].map((e, i) => (
+                    <motion.div
+                      key={e}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 * i }}
+                      className={cls(i === 4 && "text-secondary-main")}
+                    >
+                      {e}
+                    </motion.div>
+                  ))}
+                </>
+              )}
             </p>
             <img
               className="w-full h-screen object-cover absolute top-0 left-0 -z-10"
@@ -173,9 +233,9 @@ const Main = () => {
               </>
             }
           />
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="w-[400px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main3}
               alt=""
             />
@@ -197,9 +257,9 @@ const Main = () => {
               </>
             }
           />
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="w-[420px] h-[600px] md:w-[218px] md:h-96 object-contain"
+              className="translate-x-[10%] min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[360px] md:h-[540px] object-contain"
               src={main4}
               alt=""
             />
@@ -221,9 +281,9 @@ const Main = () => {
               </>
             }
           />
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="md:w-[330px] h-96 object-cover"
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main5}
               alt=""
             />
@@ -246,9 +306,9 @@ const Main = () => {
               </>
             }
           />
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 md:static md:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="md:w-[380px] h-96 object-contain"
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main6}
               alt=""
             />
