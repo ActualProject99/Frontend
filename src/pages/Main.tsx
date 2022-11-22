@@ -144,10 +144,6 @@ const Main = () => {
       );
     }
   );
-  const handleClick = () => {
-    console.log("hi");
-    window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
-  };
   return (
     <>
       <Indicator />

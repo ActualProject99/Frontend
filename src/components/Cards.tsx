@@ -17,9 +17,6 @@ interface Props {
 }
 
 const Cards = ({ concert, data, horizontal, vertical, ...rest }: Props) => {
-  console.log("vertical", vertical);
-  console.log("concert", concert);
-  console.log(rest);
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`./${data.id}`);
