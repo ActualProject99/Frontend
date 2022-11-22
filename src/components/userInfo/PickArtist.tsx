@@ -1,13 +1,10 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import ArtistApi from "../../apis/query/ArtistAPI";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
+import ArtistApi from "../../apis/query/ArtistAPI";
+import { IGetArtist } from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistIcon from "./ArtistIcon";
-import { IGetArtist } from "../../apis/query/ArtistAPI";
-import axios from "axios";
-import useDebounce from "../../hooks/useDebounce";
-import Artist from "../../pages/Artist";
-import { useNavigate } from "react-router-dom";
 import { cls } from "../../utils";
 
 const PickArtist = (): JSX.Element => {
