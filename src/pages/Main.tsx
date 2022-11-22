@@ -2,7 +2,8 @@ import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
 import { mainContent } from "../atoms/mainContent";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import icons from "../components/icons";
 import Portal from "../components/Portal";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
@@ -10,14 +11,14 @@ import main3 from "../image/main3.png";
 import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
-import { cls } from "../utils";
+import { cls, scrollTo } from "../utils";
+const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-  const contrastColorNos = [1];
   return (
     <Portal>
       <div className="h-6 lg:h-fit fixed flex flex-row items-end lg:items-start bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-2 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
-        {[1, 2, 3, 4, 5, 6].map((_, i) => (
+        {[1, 2, 3, 4, 5, 6, 7].map((_, i) => (
           <div
             key={i}
             className={cls(
@@ -33,6 +34,27 @@ const Indicator = () => {
           ></div>
         ))}
       </div>
+    </Portal>
+  );
+};
+const ScrollTop = () => {
+  const [contentNo] = useRecoilState<number>(mainContent);
+
+  const handleClick = () => {
+    console.log("hi");
+    document
+      .getElementById("root")
+      ?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+  };
+  return (
+    <Portal>
+      <icons.ArrowTurnUp
+        onClick={handleClick}
+        className={cls(
+          "fixed right-3 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
+          contrastColorNos.includes(contentNo) ? "text-white" : "text-black"
+        )}
+      />
     </Portal>
   );
 };
@@ -72,6 +94,7 @@ const Main = () => {
   const content4 = useRef<HTMLDivElement | null>(null);
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
+  const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
   useEffect(() => {
     setContentNo(0);
@@ -90,6 +113,7 @@ const Main = () => {
           content4.current?.offsetTop,
           content5.current?.offsetTop,
           content6.current?.offsetTop,
+          content7.current?.offsetTop,
         ].forEach((offsetTop, i) => {
           if (typeof offsetTop !== "undefined" && snapContainer.current) {
             if (
@@ -115,9 +139,14 @@ const Main = () => {
       );
     }
   );
+  const handleClick = () => {
+    console.log("hi");
+    window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+  };
   return (
     <>
       <Indicator />
+      <ScrollTop />
       <div
         ref={snapContainer}
         className="h-screen overflow-y-scroll scrollbar-hide"
@@ -186,7 +215,7 @@ const Main = () => {
                 </>
               )}
             </div>
-            <p className="lg:block hidden text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-[12%] bottom-[5%]">
+            <div className="lg:block hidden text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-[12%] bottom-[5%]">
               {contentNo === 1 && (
                 <>
                   {[
@@ -208,7 +237,7 @@ const Main = () => {
                   ))}
                 </>
               )}
-            </p>
+            </div>
             <img
               className="w-full h-screen object-cover absolute top-0 left-0 -z-10"
               src={main2}
@@ -233,7 +262,7 @@ const Main = () => {
               </>
             }
           />
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+          <div className="cursor-pointer absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
               className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main3}
@@ -314,6 +343,283 @@ const Main = () => {
             />
           </div>
         </Content>
+        <div ref={content7}>
+          <div
+            className="flex justify-center items-center h-screen w-screen relative overflow-hidden"
+            style={{ perspective: 300 }}
+          >
+            <div
+              className="grid grid-rows-4 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
+              style={{ transform: "rotate3d(3,0,1,20deg)" }}
+            >
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+            </div>
+            <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
+            <AnimatePresence>
+              {contentNo === 6 && (
+                <>
+                  <motion.div
+                    initial={{ backdropFilter: "blur(0px)" }}
+                    animate={{ backdropFilter: "blur(5px)" }}
+                    transition={{ delay: 0.3 }}
+                    className="h-screen w-screen absolute flex justify-center items-center"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: 0 }}
+                    animate={{ opacity: 1, x: 200 }}
+                    transition={{ delay: 0.6 }}
+                    className="absolute z-50"
+                  >
+                    <p className="font-black text-7xl  text-gray-800 translate-y-40">
+                      티켓팅을 즐겁게
+                      <br />
+                      <span className="text-primary-main">Tgle</span>
+                    </p>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </>
   );
