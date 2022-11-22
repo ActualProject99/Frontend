@@ -73,7 +73,7 @@ export const regOptComment = {
   ]),
 };
 
-const scrollTo = (top: number) => {
+export const scrollTo = (top: number) => {
   window.scrollTo({
     top,
     behavior: "smooth",
