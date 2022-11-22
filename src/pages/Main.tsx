@@ -1,7 +1,7 @@
 import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
-import { mainContent } from "../atoms/mainContent";
+import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { AnimatePresence, motion } from "framer-motion";
 import icons from "../components/icons";
 import Portal from "../components/Portal";
@@ -11,7 +11,7 @@ import main3 from "../image/main3.png";
 import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
-import { cls, scrollTo } from "../utils";
+import { cls } from "../utils";
 const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
@@ -39,12 +39,10 @@ const Indicator = () => {
 };
 const ScrollTop = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<HTMLDivElement | null>(mainScrollRef);
   const handleClick = () => {
-    console.log("hi");
-    document
-      .getElementById("root")
-      ?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+    getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   };
   return (
     <Portal>
@@ -96,6 +94,8 @@ const Main = () => {
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<HTMLDivElement | null>(mainScrollRef);
   useEffect(() => {
     setContentNo(0);
   }, []);
@@ -126,6 +126,11 @@ const Main = () => {
         });
       }
     );
+  }, []);
+  useEffect(() => {
+    if (snapContainer.current) {
+      setMainScrollRef(snapContainer.current);
+    }
   }, []);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
