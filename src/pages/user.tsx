@@ -6,34 +6,44 @@ import UserInfo from "../components/userInfo/UserInfo";
 import useTaps from "../hooks/useTaps";
 import { useForm } from "react-hook-form";
 import { User, userState } from "../atoms/user";
-import { regOptLogin } from "../utils";
+import { cls, regOptLogin } from "../utils";
 import { useRecoilState } from "recoil";
+import { LoginForm } from "../types";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginForm>({ mode: "onChange" });
 
   const [user, setUser] = useRecoilState<User>(userState);
-  const onValid = (data) => {
+  const onValid = (data: LoginForm) => {
     setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     console.log(user);
   };
-
+  const onInValid = () => {
+    console.log("hi");
+  };
   return (
     <form
       className="w-60 mx-auto flex flex-col"
-      onSubmit={handleSubmit(onValid)}
+      onSubmit={handleSubmit(onValid, onInValid)}
     >
       <input
         type="text"
         autoComplete="auto"
         {...register(...regOptLogin.email())}
       />
+      <p>{errors.email?.message as string}</p>
       <input
         type="password"
         autoComplete="auto"
         {...register(...regOptLogin.password())}
       />
-      <button>submit</button>
+      <button className={cls(isValid ? "text-slate-800" : "text-slate-300")}>
+        로그인
+      </button>
       <p>로그인 되면 이메일 보임 : {user.isLoggedin && user.email}</p>
     </form>
   );
