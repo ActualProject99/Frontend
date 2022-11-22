@@ -72,6 +72,8 @@
       "artistImg": "https://cdnimg.melon.co.kr/cm2/artistcrop/images/018/65/556/1865556_20221028132435.jpg/melon/thumbnail/320x300",
       "genre": "R&B / Soul",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -127,6 +129,8 @@
       "artistImg": "https://res.cloudinary.com/dwlshjafv/image/upload/v1668536102/%EC%9A%B0%EB%A6%AC_%EC%95%84%EC%9D%B4%EC%9C%A0_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_045_udk5r8.jpg",
       "genre": "Ballad",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -182,6 +186,8 @@
       "artistImg": "https://blog.kakaocdn.net/dn/wfwtH/btrInIDvwkN/lj6Qf05GZWaLyOymVuykkK/img.jpg",
       "genre": "아이돌 여자",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -237,6 +243,8 @@
       "artistImg": "https://res.cloudinary.com/dwlshjafv/image/upload/v1668536435/20210520115813768pird_kcxsaw.jpg",
       "genre": "Ballad",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -292,6 +300,8 @@
       "artistImg": "https://res.cloudinary.com/dwlshjafv/image/upload/v1668536656/KJH-167164-1-740x1110_dvfyna.jpg",
       "genre": "R&B / Soul",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -347,6 +357,8 @@
       "artistImg": "https://blog.kakaocdn.net/dn/cuidlS/btrcSs6fld8/lKK9kdK5gIoKM2S97Ry04k/img.jpg",
       "genre": "R&B / Soul",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -402,6 +414,8 @@
       "artistImg": "https://pbs.twimg.com/media/EYh0-KEU8AUFT-J.jpg",
       "genre": "아이돌 여자",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -457,6 +471,8 @@
       "artistImg": "http://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/080/044/692/80044692_1664500054593_28_600x600.JPG",
       "genre": "Folk",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -512,6 +528,8 @@
       "artistImg": "https://i.pinimg.com/originals/ea/e8/67/eae867dcf367ead19884f971109d51c3.jpg",
       "genre": "R&B / Soul",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -567,6 +585,8 @@
       "artistImg": "https://i.discogs.com/FpZRP3FEtdTpe-iQ8lKHlwiH5gufCsHd0jrxT8yKh90/rs:fit/g:sm/q:90/h:598/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTc3NTI4/NjItMTY1OTI2MDk2/Mi04Nzk5LnBuZw.jpeg",
       "genre": "R&B / Soul",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -622,6 +642,8 @@
       "artistImg": "https://res.cloudinary.com/dwlshjafv/image/upload/v1668538364/250631535_299663858445158_3458003632682329426_n_eujz21.jpg",
       "genre": "아이돌 여자",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -677,6 +699,8 @@
       "artistImg": "https://yt3.ggpht.com/ytc/AMLnZu9-LgELbaGCR96t3I8DaYUOi2YPzwPcTkfooMWb3Q=s900-c-k-c0x00ffffff-no-rj",
       "genre": "Pop",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -732,6 +756,8 @@
       "artistImg": "https://cdnimg.melon.co.kr/cm2/artistcrop/images/001/07/721/107721_20210608170728_500.jpg?6bdf5a66a015aa9bf021134deb70e7c0/melon/resize/416/quality/80/optimize",
       "genre": "Pop",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -787,6 +813,8 @@
       "artistImg": "https://res.cloudinary.com/dwlshjafv/image/upload/v1668539135/%EB%B0%95%ED%9A%A8%EC%8B%A0_edwqyj.jpg",
       "genre": "Ballad",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -839,9 +867,11 @@
       "id": 15,
       "artist": "임영웅",
       "artistId": 15,
-      "artistImg": "https://scontent-gmp1-1.xx.fbcdn.net/v/t39.30808-6/279442272_507853250853808_7780700017630284551_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=174925&_nc_ohc=6lb69vbjtZkAX-Td9AN&_nc_ht=scontent-gmp1-1.xx&oh=00_AfAZCnbj14O-ajoWXdHgOQo7KGfj6TkJBH8ffNsni8hBxA&oe=6379610C",
+      "artistImg": "https://yt3.ggpht.com/ytc/AAUvwnjFFuLUXM5x1_ft1n2YT_ZwG_FcblyYDePSR08mAA=s800-c-k-c0x00ffffff-no-rj-mo",
       "genre": "성인가요",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -897,6 +927,8 @@
       "artistImg": "https://i.scdn.co/image/ab6761610000e5ebb5f9e28219c169fd4b9e8379",
       "genre": "Pop",
       "like": true,
+      "searchCnt": 0,
+      "target": false,
       "artistConcerts": [
         {
           "id": 1,
@@ -976,7 +1008,7 @@
       "concertId": 2,
       "posterUrl": "http://tkfile.yes24.com/upload2/PerfBlog/202210/20221026/20221026-43825.jpg",
       "title": "2022 임영웅 콘서트 [IM HERO] 앵콜 - 서울",
-      "showTimes": "2022.12.10 ~ 2022.12.11",
+      "showTimes": "2022년 12월 10일",
       "location": "고척스카이돔",
       "runningTime": "150분",
       "viewableGrade": "만 7세 이상 관람가",

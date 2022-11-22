@@ -53,7 +53,7 @@ const UserInfo = (): JSX.Element => {
       // formData.append("userImg", e.target.files[0]);
       // console.log("form", formData);
       const payload = {
-        userImg: e.target.files[0],
+        profileImg: e.target.files[0],
       };
       console.log("페이", payload);
       EditUserImg(payload).then(() => {

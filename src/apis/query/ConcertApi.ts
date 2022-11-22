@@ -30,6 +30,10 @@ interface EditLike {
   like: boolean;
 }
 
+interface PostSMS {
+  concertId: number;
+}
+
 //유저Info API
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
@@ -50,9 +54,26 @@ const EditLikeConcerts = () => {
   });
 };
 
+//공연 SMS 알림 API
+
+const PostConcertSMS = () => {
+  return useMutation(async (payload: PostSMS) => {
+    const { data } = await axios.post("url", payload);
+    return data;
+  });
+};
+const DeleteConcertSMS = () => {
+  return useMutation(async (payload: PostSMS) => {
+    const { data } = await axios.patch("url", payload);
+    return data;
+  });
+};
+
 const ConcertApi = {
   GetConcerts,
   EditLikeConcerts,
+  PostConcertSMS,
+  DeleteConcertSMS,
 };
 
 export default ConcertApi;

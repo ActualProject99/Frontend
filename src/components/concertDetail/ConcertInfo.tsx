@@ -20,6 +20,7 @@ import useTaps from "../../hooks/useTaps";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
+import Chatting from "./Chatting";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -74,8 +75,9 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   );
   return (
     <>
-      <div className="flex justify-between gap-10 m-auto w-full px-10 pt-5">
+      <div className="flex justify-between gap-10 m-auto w-full h-full px-10 p-5">
         <div className=" flex  gap-8">
+          <MiniCalendar concert={concert} />
           <div>
             <img className="w-72 h-96" alt="poster" src={concert.posterUrl} />
             <div className="flex gap-5 justify-center items-center my-4">
@@ -109,14 +111,15 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
             </div>
           </div>
           <div>
-            <div className="bg-slate-100 w-full h-8 mb-6">
-              <p className="text-2xl font-bold">{concert.title}</p>
+            <div className="w-[30rem] h-8 mb-3">
+              <p className="text-xl text-[#707070] font-bold">
+                {concert.title}
+              </p>
             </div>
             <div>
-              <div className="flex flex-wrap flex-col gap-y-4">
+              <div className="flex flex-wrap flex-col gap-y-4 text-[#707070]">
                 <div className="flex items-center">
                   티켓팅기간 &nbsp; {concert.showTimes}&nbsp;
-                  <MiniCalendar concert={concert} />
                 </div>
                 <p>관람시간 &nbsp; {concert.runningTime}</p>
                 <p>장르 &nbsp; {concert.genre}</p>
@@ -124,7 +127,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                 <p>공연장 &nbsp; {concert.location}</p>
                 {!like ? (
                   <button
-                    className="flex justify-center items-center border w-44 h-10 rounded-md gap-x-2"
+                    className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
                     onClick={onEditLike}
                   >
                     <span>관심 공연</span>
@@ -132,29 +135,31 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   </button>
                 ) : (
                   <button
-                    className="flex justify-center items-center border w-44 h-10 rounded-md gap-x-2"
+                    className="flex justify-center items-center border bg-[#7151A1] text-white w-44 h-10 rounded-md gap-x-2"
                     onClick={onEditLike}
                   >
                     <span>관심 공연</span>
                     <icons.FullHeart className="text-red-500 cursor-pointer " />
                   </button>
                 )}
+                {/* <Chatting /> */}
+                <div className=" flex flex-col gap-y-4 justify-center items-end">
+                  {ticketings &&
+                    ticketings.map((ticketing) => (
+                      <button
+                        key={ticketing.id}
+                        className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
+                        onClick={() => {
+                          window.open(ticketing.url);
+                        }}
+                      >
+                        {ticketing.title}
+                      </button>
+                    ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className=" flex flex-col gap-y-4 justify-center items-center">
-          {ticketings &&
-            ticketings.map((ticketing) => (
-              <button
-                className="w-[140px] h-10 mr-10 bg-secondary-main flex  justify-center items-center rounded-2xl"
-                onClick={() => {
-                  window.open(ticketing.url);
-                }}
-              >
-                {ticketing.title}
-              </button>
-            ))}
         </div>
       </div>
       <Taps />
