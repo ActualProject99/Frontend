@@ -57,10 +57,10 @@ const CommentList = () => {
   );
   if (isLoading) {
     return <h3 className="p-4">Loading...</h3>;
-  }
-  if (isError) {
+  } else if (isError) {
     return <h3 className="p-4">지금은 댓글을 불러올 수 없어요!</h3>;
   }
+  
 
   /* const { isLoading, isError, data } = useQuery<IgetComment[]>(["allComments"], readComments)
   if (isLoading) {
