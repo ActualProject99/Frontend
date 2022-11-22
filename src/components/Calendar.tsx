@@ -13,20 +13,22 @@ import {
   parseISO,
   startOfToday,
 } from "date-fns";
+import { ko } from "date-fns/locale";
 import { useState } from "react";
-import { Concert } from "../atoms/concert";
+import { useRecoilState } from "recoil";
+import { dateSelected } from "../atoms/date";
 import icons from "../components/icons";
 import { cls } from "../utils";
 
 interface Props {
-  checkedConcerts?: Concert[];
+  checkedDates?: Date[];
   className?: string;
   selectable?: boolean;
   selectedDate?: Date;
 }
 
 const Calendar = ({
-  checkedConcerts,
+  checkedDates,
   className,
   selectable,
   selectedDate,
@@ -35,6 +37,7 @@ const Calendar = ({
   let [dateChosen, setdateChosen] = useState(today);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const [getDateSelected, setDateSelected] = useRecoilState(dateSelected);
 
   let days = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -50,13 +53,19 @@ const Calendar = ({
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
-  const handleClickDate = (day: number) => {};
-
+  const handleClickDate = (day: Date) => () => {
+    setdateChosen(day);
+    setDateSelected(day);
+  };
+  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
+    locale: ko,
+  }).split(" ");
   return (
     <div className={className}>
-      <div className="flex items-center">
-        <h2 className="flex-auto font-semibold text-gray-900">
-          {format(firstDayCurrentMonth, "MMMM yyyy")}
+      <div className="flex items-center border-b-[4px] border-dotted pb-3">
+        <h2 className="flex-auto text-2xl font-black ">
+          <span className="text-gray-300">{year}&nbsp;</span>
+          <span className="text-gray-900">{month}</span>
         </h2>
         <button
           type="button"
@@ -76,15 +85,15 @@ const Calendar = ({
         </button>
       </div>
       <div className="grid grid-cols-7 mt-6 text-xs leading-6 text-center text-gray-500">
-        <div>S</div>
-        <div>M</div>
-        <div>T</div>
-        <div>W</div>
-        <div>T</div>
-        <div>F</div>
-        <div>S</div>
+        <div>일</div>
+        <div>월</div>
+        <div>화</div>
+        <div>수</div>
+        <div>목</div>
+        <div>금</div>
+        <div>토</div>
       </div>
-      <div className="grid grid-cols-7 mt-2 text-sm ">
+      <div className="grid grid-cols-7 mt-2 text-sm border-b-[4px] border-dotted pb-3">
         {days.map((day, dayIdx) => {
           return (
             <div
@@ -96,7 +105,7 @@ const Calendar = ({
             >
               <button
                 type="button"
-                onClick={() => setdateChosen(day)}
+                onClick={selectable ? handleClickDate(day) : () => {}}
                 className={
                   selectable
                     ? cls(
@@ -121,10 +130,10 @@ const Calendar = ({
                         !isEqual(day, dateChosen) && "hover:bg-gray-200",
                         (isEqual(day, dateChosen) || isToday(day)) &&
                           "font-semibold",
-                        "mx-auto flex h-8 w-8 items-center justify-center rounded-full"
+                        "mx-auto flex h-8 w-8 items-center justify-center rounded"
                       )
                     : cls(
-                        "mx-auto flex h-8 w-8 items-center justify-center rounded-full cursor-default",
+                        "mx-auto flex h-8 w-8 items-center justify-center rounded cursor-default",
                         selectedDate &&
                           isSameDay(day, selectedDate) &&
                           "bg-primary-100",
@@ -136,11 +145,10 @@ const Calendar = ({
                   {format(day, "d")}
                 </time>
               </button>
-
-              <div className="w-1 h-1 mx-auto mt-1">
-                {checkedConcerts?.some((concert) =>
-                  isSameDay(parseISO(concert.startDatetime), day)
-                ) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}
+              <div className="w-6 h-1 mx-auto mt-2">
+                {checkedDates?.some((date) => isSameDay(date, day)) && (
+                  <div className="w-6 h-1 rounded-full bg-secondary-500"></div>
+                )}
               </div>
             </div>
           );
