@@ -19,13 +19,9 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.3",
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
     "framer-motion": "^7.6.7",
 >>>>>>> parent of 7304d95 (.)
-=======
-    "framer-motion": "^7.6.7",
->>>>>>> parent of d8eb5ca (Revert "Merge branch 'dev' into 15-Comment")
     "global": "^4.4.0",
     "json-server": "^0.17.1",
     "react": "^18.2.0",

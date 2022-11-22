@@ -7,13 +7,14 @@ import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
 
+
 function App() {
   return (
     <Layout>
       <Routes>
         <Route index element={<Main />} />
         <Route path="concerts">
-          <Route index element={<Concerts no2 />} />
+          <Route index element={<Concerts no1 />} />
           <Route path=":id" element={<Concert />} />
         </Route>
         <Route path="user">

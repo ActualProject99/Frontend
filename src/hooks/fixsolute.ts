@@ -14,6 +14,7 @@ const useFixoluteBox = () => {
       };
   useEffect(() => {
     const changeState = () => {
+      console.log(limit.current?.scrollHeight, fixsolute.current?.scrollHeight);
       if (
         limit.current &&
         window.scrollY >
