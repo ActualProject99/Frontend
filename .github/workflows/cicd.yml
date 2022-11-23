@@ -19,7 +19,7 @@ jobs: # Job 설정
       - name: Build # React Build
         run: yarn build
 
-      - name: Deploy # Upload build file to S3
+      - name: Deploy # Upload build file to S3!
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.FRONT_S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.FRONT_S3_ACCESS_KEY }}
