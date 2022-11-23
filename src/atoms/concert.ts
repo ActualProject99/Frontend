@@ -177,10 +177,6 @@ export const allConcerts = atom<Concert[]>({
   key: "allConcerts",
   default: initConcerts,
 });
-export const calendarConcerts = atom<Concert[]>({
-  key: "calendarConcerts",
-  default: initConcerts,
-});
 export const showingConcerts = atom<Concert[]>({
   key: "showingConcerts",
   default: initConcerts,

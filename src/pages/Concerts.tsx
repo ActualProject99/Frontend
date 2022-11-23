@@ -1,4 +1,4 @@
-import Calendar from "../components/Calendar";
+import Calendar, { CalenderDrawer } from "../components/Calendar";
 import { useEffect, useState } from "react";
 import { cls } from "../utils";
 import Cards from "../components/Cards";
@@ -8,17 +8,13 @@ import {
   dateSelected,
 } from "../atoms/date";
 import { useRecoilState } from "recoil";
-import { format, isSameDay, parseISO } from "date-fns";
 import useFixoluteBox from "../hooks/useFixsolute";
-import {
-  allConcerts,
-  calendarConcerts,
-  Concert,
-  datedConcerts,
-  groupedConcerts,
-  initConcerts,
-  showingConcerts,
-} from "../atoms/concert";
+import { Concert, datedConcerts, showingConcerts } from "../atoms/concert";
+import useWindowSize from "../hooks/useWindowSize";
+import Modal from "../components/Modal";
+import useDrawer from "../hooks/useDrawer";
+import { AnimatePresence, motion } from "framer-motion";
+import Portal from "../components/Portal";
 
 const groups = [
   "전체",
@@ -39,7 +35,12 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox();
+  const { width, height, isMd } = useWindowSize();
   const [dateChosen] = useRecoilState<Date>(dateSelected);
+  const { handle, Content } = useDrawer({
+    component: <>hi</>,
+    side: "up",
+  });
   const handleClick = (i: number) => () => {
     setSelect(i);
     setdateAllConcerts(concertsDatesFiltered(i));
@@ -47,29 +48,79 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   };
   useEffect(() => {
     setShowingConcerts(datedConcerts(select, dateChosen.getDate()));
+    setIsVisible(false);
   }, [select, dateChosen]);
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <div className="pt-16 mb-8 min-h-[700px]">
       <div className="max-w-md px-4 mx-auto md:max-w-6xl h-full">
         <div className="md:grid md:grid-cols-3 md:divide-x md:divide-gray-200 h-full">
           <div className="relative h-full">
-            <div className="w-96" ref={fixsolute} style={fixoluteStyle}>
-              <Calendar selectable checkedDates={getdateAllConcerts} />
-              <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
-                {groups.map((group, i) => (
-                  <li
-                    key={group}
+            {isMd ? (
+              <div className="w-80" ref={fixsolute} style={fixoluteStyle}>
+                <Calendar selectable checkedDates={getdateAllConcerts} />
+                <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
+                  {groups.map((group, i) => (
+                    <li
+                      key={group}
+                      className={cls(
+                        "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
+                        i === select && "bg-primary-main text-white"
+                      )}
+                      onClick={handleClick(i)}
+                    >
+                      {group}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <>
+                <Portal>
+                  <button
                     className={cls(
-                      "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                      i === select && "bg-primary-main text-white"
+                      "fixed top-1/4 transition-all",
+                      isVisible ? "-left-16" : "left-0"
                     )}
-                    onClick={handleClick(i)}
+                    onClick={() => {
+                      setIsVisible((cur) => !cur);
+                    }}
                   >
-                    {group}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    <CalenderDrawer />
+                  </button>
+                </Portal>
+                <AnimatePresence>
+                  {isVisible ? (
+                    <Modal
+                      onClick={() => {
+                        setIsVisible((cur) => !cur);
+                      }}
+                    >
+                      <div className="fixed left-0 top-0">
+                        <Calendar
+                          selectable
+                          checkedDates={getdateAllConcerts}
+                        />
+                        <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
+                          {groups.map((group, i) => (
+                            <li
+                              key={group}
+                              className={cls(
+                                "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
+                                i === select && "bg-primary-main text-white"
+                              )}
+                              onClick={handleClick(i)}
+                            >
+                              {group}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Modal>
+                  ) : null}
+                </AnimatePresence>
+              </>
+            )}
           </div>
           <section
             ref={limit}

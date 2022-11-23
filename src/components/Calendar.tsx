@@ -14,11 +14,13 @@ import {
   startOfToday,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useState } from "react";
+import { useEffect } from "react";
+import { ReactNode, useState } from "react";
 import { useRecoilState } from "recoil";
 import { dateSelected } from "../atoms/date";
 import icons from "../components/icons";
 import { cls } from "../utils";
+import Portal from "./Portal";
 
 interface Props {
   checkedDates?: Date[];
@@ -26,7 +28,14 @@ interface Props {
   selectable?: boolean;
   selectedDate?: Date;
 }
-
+export const CalenderDrawer = () => {
+  return (
+    <icons.Calendar
+      className="w-16 transition-colors py-2 pr-2 h-14 flex justify-end items-center rounded-r-xl bg-primary-200 text-gray-900 group hover:bg-primary-600 hover:text-gray-100"
+      iconClassName="w-9 h-9"
+    />
+  );
+};
 const Calendar = ({
   checkedDates,
   className,
@@ -60,8 +69,9 @@ const Calendar = ({
   const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
     locale: ko,
   }).split(" ");
+  useEffect(() => {}, []);
   return (
-    <div className={className}>
+    <div className={cls(className)}>
       <div className="flex items-center border-b-[4px] border-dotted pb-3">
         <h2 className="flex-auto text-2xl font-black ">
           <span className="text-gray-300">{year}&nbsp;</span>
