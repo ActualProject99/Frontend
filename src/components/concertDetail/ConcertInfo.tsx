@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import {
   FacebookIcon,
   FacebookMessengerShareButton,
@@ -10,7 +10,6 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
-import MiniCalendar from "./miniCalendar/MiniCalendar";
 import ConcertApi, { IGetConcert } from "../../apis/query/ConcertApi";
 import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
@@ -21,6 +20,8 @@ import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
 import Chatting from "./Chatting";
+import Calendar from "../Calendar";
+import useDebounce from "../../hooks/useDebounce";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -32,8 +33,31 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   console.log("뭘까?", ticketings);
 
   const [like, setLike] = useState(concert.like);
+  const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
+  const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
+  const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
+  const debouncer = useDebounce(1000);
+  const PostDebounced = useRef(
+    debouncer(({ concertId }: { concertId: number }) => {
+      PostConcertSMS({ concertId });
+      setShow(!show);
+    })
+  ).current;
+  const PostSMS = () => {
+    PostDebounced(concert.concertId);
+  };
+
+  const DeleteDebounced = useRef(
+    debouncer(({ concertId }: { concertId: number }) => {
+      DeleteConcertSMS({ concertId });
+      setShow(!show);
+    })
+  ).current;
+  const DeleteSMS = () => {
+    DeleteDebounced(concert.concertId);
+  };
 
   const onEditLike = useCallback(() => {
     const payload = {
@@ -75,10 +99,44 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   );
   return (
     <>
-      <div className="flex justify-between gap-10 m-auto w-full h-full px-10 p-5">
-        <div className=" flex  gap-8">
-          <MiniCalendar concert={concert} />
-          <div>
+      <div className="flex justify-between m-auto w-full h-full p-5">
+        <div className=" flex gap-10 m-auto">
+          <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
+            <Calendar selectedDate={new Date(concert.showTimes)} />
+            <div className="flex flex-col gap-y-2">
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span>날짜</span>
+                <span>{concert.showTimes}</span>
+              </div>
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span>가수</span>
+                <span>임영웅</span>
+              </div>
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span>장소</span>
+                <span>{concert.location}</span>
+              </div>
+            </div>
+            {!show ? (
+              <button
+                className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
+                onClick={DeleteSMS}
+              >
+                <icons.Bell />
+                <span>공연 알림 설정하기</span>
+              </button>
+            ) : (
+              <button
+                className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold text-white bg-[#7151A1] gap-x-2"
+                onClick={PostSMS}
+              >
+                <icons.Bell />
+                <span>공연 알림 취소하기</span>
+              </button>
+            )}
+          </div>
+          {/* <MiniCalendar concert={concert} /> */}
+          <div className="flex flex-col gap-2 w-72">
             <img className="w-72 h-96" alt="poster" src={concert.posterUrl} />
             <div className="flex gap-5 justify-center items-center my-4">
               <FacebookMessengerShareButton url={currentUrl} appId={""}>
@@ -110,53 +168,51 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </span>
             </div>
           </div>
-          <div>
-            <div className="w-[30rem] h-8 mb-3">
+          <div className="w-[30rem]">
+            <div className="w-[100%] h-8 mb-3">
               <p className="text-xl text-[#707070] font-bold">
                 {concert.title}
               </p>
             </div>
-            <div>
-              <div className="flex flex-wrap flex-col gap-y-4 text-[#707070]">
-                <div className="flex items-center">
-                  티켓팅기간 &nbsp; {concert.showTimes}&nbsp;
-                </div>
-                <p>관람시간 &nbsp; {concert.runningTime}</p>
-                <p>장르 &nbsp; {concert.genre}</p>
-                <p>관람등급 &nbsp; {concert.viewableGrade}</p>
-                <p>공연장 &nbsp; {concert.location}</p>
-                {!like ? (
-                  <button
-                    className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
-                    onClick={onEditLike}
-                  >
-                    <span>관심 공연</span>
-                    <icons.EmptyHeart className="text-red-500 cursor-pointer " />
-                  </button>
-                ) : (
-                  <button
-                    className="flex justify-center items-center border bg-[#7151A1] text-white w-44 h-10 rounded-md gap-x-2"
-                    onClick={onEditLike}
-                  >
-                    <span>관심 공연</span>
-                    <icons.FullHeart className="text-red-500 cursor-pointer " />
-                  </button>
-                )}
-                {/* <Chatting /> */}
-                <div className=" flex flex-col gap-y-4 justify-center items-end">
-                  {ticketings &&
-                    ticketings.map((ticketing) => (
-                      <button
-                        key={ticketing.id}
-                        className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
-                        onClick={() => {
-                          window.open(ticketing.url);
-                        }}
-                      >
-                        {ticketing.title}
-                      </button>
-                    ))}
-                </div>
+            <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070]">
+              <div className="flex items-center">
+                티켓팅기간 &nbsp; {concert.showTimes}&nbsp;
+              </div>
+              <p>관람시간 &nbsp; {concert.runningTime}</p>
+              <p>장르 &nbsp; {concert.genre}</p>
+              <p>관람등급 &nbsp; {concert.viewableGrade}</p>
+              <p>공연장 &nbsp; {concert.location}</p>
+              {!like ? (
+                <button
+                  className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
+                  onClick={onEditLike}
+                >
+                  <span>관심 공연</span>
+                  <icons.EmptyHeart className="text-red-500 cursor-pointer " />
+                </button>
+              ) : (
+                <button
+                  className="flex justify-center items-center border bg-[#7151A1] text-white w-44 h-10 rounded-md gap-x-2"
+                  onClick={onEditLike}
+                >
+                  <span>관심 공연</span>
+                  <icons.FullHeart className="text-red-500 cursor-pointer " />
+                </button>
+              )}
+              {/* <Chatting /> */}
+              <div className=" flex flex-col gap-y-4 justify-center items-end">
+                {ticketings &&
+                  ticketings.map((ticketing) => (
+                    <button
+                      key={ticketing.id}
+                      className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
+                      onClick={() => {
+                        window.open(ticketing.url);
+                      }}
+                    >
+                      {ticketing.title}
+                    </button>
+                  ))}
               </div>
             </div>
           </div>

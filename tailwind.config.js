@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        "screen-scroll": "calc(100vw - 18px)",
+      },
       colors: {
         primary: {
           main: "#A81DE4",
