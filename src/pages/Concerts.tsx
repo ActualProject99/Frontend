@@ -1,5 +1,5 @@
 import Calendar from "../components/Calendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cls } from "../utils";
 import Cards from "../components/Cards";
 import {
@@ -14,6 +14,9 @@ import {
   allConcerts,
   calendarConcerts,
   Concert,
+  datedConcerts,
+  groupedConcerts,
+  initConcerts,
   showingConcerts,
 } from "../atoms/concert";
 
@@ -28,8 +31,6 @@ const groups = [
 ];
 const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   const [select, setSelect] = useState(0);
-  const [getConcerts] = useRecoilState<Concert[]>(allConcerts);
-  const [, setCalendarConcerts] = useRecoilState<Concert[]>(calendarConcerts);
   const [getShowingConcerts, setShowingConcerts] =
     useRecoilState<Concert[]>(showingConcerts);
   const [getdateAllConcerts, setdateAllConcerts] =
@@ -38,16 +39,15 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox();
+  const [dateChosen] = useRecoilState<Date>(dateSelected);
   const handleClick = (i: number) => () => {
     setSelect(i);
     setdateAllConcerts(concertsDatesFiltered(i));
+    setShowingConcerts(datedConcerts(i, dateChosen.getDate()));
   };
-  const [dateChosen] = useRecoilState<Date>(dateSelected);
-  const dateChosenConcerts = getConcerts.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), dateChosen)
-  );
-  const groupedConserts = (concerts: any[], select: number) =>
-    concerts.filter((concert) => !select || concert.group === select);
+  useEffect(() => {
+    setShowingConcerts(datedConcerts(select, dateChosen.getDate()));
+  }, [select, dateChosen]);
   return (
     <div className="pt-16 mb-8 min-h-[700px]">
       <div className="max-w-md px-4 mx-auto md:max-w-6xl h-full">
@@ -55,7 +55,6 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
           <div className="relative h-full">
             <div className="w-96" ref={fixsolute} style={fixoluteStyle}>
               <Calendar selectable checkedDates={getdateAllConcerts} />
-              {dateChosen.toString()}
               <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
                 {groups.map((group, i) => (
                   <li

@@ -1,3 +1,4 @@
+import { parseISO } from "date-fns";
 import { atom } from "recoil";
 
 export interface Concert {
@@ -162,6 +163,16 @@ export const initConcerts = [
   },
 ];
 
+export const groupedConcerts = (groupNo: number) => {
+  return initConcerts.filter(
+    (concert) => groupNo === 0 || concert.group === groupNo
+  );
+};
+export const datedConcerts = (groupNo: number, date: number) => {
+  return groupedConcerts(groupNo).filter(
+    (concert) => parseISO(concert.startDatetime).getDate() === date
+  );
+};
 export const allConcerts = atom<Concert[]>({
   key: "allConcerts",
   default: initConcerts,
