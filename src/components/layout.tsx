@@ -123,7 +123,7 @@ const Nav = ({
                   onClick={handleClickSearchOn}
                   className="w-14 md:w-36 h-10 border-4 border-secondary-main flex justify-center md:justify-between items-center p-2 px-4 rounded-full md:rounded-2xl cursor-pointer"
                 >
-                  <icons.Search />
+                  <icons.Search strokeWidth={3} />
                   <div className="hidden md:block text-sm font-semibold">
                     Ctrl Shift f
                   </div>

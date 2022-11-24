@@ -68,3 +68,24 @@ export const shuffle = (array: any[]) => {
 
   return array;
 };
+
+type baseArr = any[] | baseArr[];
+
+export const highDimArr = (Arr: baseArr, indexs: number[]) => {
+  const arrDim = (Arr: baseArr) => {
+    let i = 0;
+    while (Array.isArray(Arr[0])) {
+      Arr = Arr.flat();
+      i++;
+    }
+    return i + 1;
+  };
+  const itering = (Arr: baseArr, iter: IterableIterator<number>): any => {
+    const { value } = iter.next();
+    if (arrDim(Arr) !== 1) return itering(Arr[value], iter);
+    return Arr[value];
+  };
+  if (arrDim(Arr) !== indexs.length) return;
+  const iter = indexs[Symbol.iterator]();
+  return itering(Arr, iter);
+};

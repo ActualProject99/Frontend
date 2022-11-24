@@ -1,3 +1,4 @@
+import { ReactNode, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { HasBooked, hasBooked } from "../atoms/mockTicketing";
 import { shuffle } from "../utils";
@@ -15,8 +16,7 @@ const useMock = () => {
       )
     );
   };
-
-  const StartBtn = () => {
+  const StartBtn = ({ children }: { children: ReactNode }) => {
     const [getHasBooked] = useRecoilState<HasBooked>(hasBooked);
     const datas = [
       { isPlaced: true, rows: 3, cols: 6 },
@@ -59,11 +59,11 @@ const useMock = () => {
         if (!done) {
           bookASeat(...(value as [number, number, number]));
         }
-      }, 1);
+      }, 100);
     };
     return (
       <div className="cursor-pointer" onClick={handleClick}>
-        Enter
+        {children}
       </div>
     );
   };
