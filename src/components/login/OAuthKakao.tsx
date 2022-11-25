@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { OAuthAPI } from "../../apis/query/OAuthApi";
 
 const OAuthKakao = () => {
@@ -14,7 +13,7 @@ const OAuthKakao = () => {
       window.location.href = "/";
       return;
     }
-  }, []);
+  }, [kakaoToken]);
   return <></>;
 };
 

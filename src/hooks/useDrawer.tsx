@@ -1,6 +1,5 @@
-import { memo, ReactNode, useCallback, useState } from "react";
+import { ReactNode, useState } from "react";
 import { cls } from "../utils";
-import { AnimatePresence, motion } from "framer-motion";
 
 const useDrawer = ({
   component,

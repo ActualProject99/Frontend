@@ -11,9 +11,6 @@ import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
 import useWindowSize from "../hooks/window/useWindowSize";
 import Modal from "../components/Modal";
-import useDrawer from "../hooks/useDrawer";
-import { AnimatePresence, motion } from "framer-motion";
-
 import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
 import Portal from "../components/Portal";
@@ -37,12 +34,8 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox();
-  const { width, height, isMd } = useWindowSize();
+  const { isMd } = useWindowSize();
   const [dateChosen] = useRecoilState<Date>(dateSelected);
-  const { handle, Content } = useDrawer({
-    component: <>hi</>,
-    side: "up",
-  });
   const handleClick = (i: number) => () => {
     setSelect(i);
     setdateAllConcerts(concertsDatesFiltered(i));
@@ -51,7 +44,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   useEffect(() => {
     setShowingConcerts(datedConcerts(select, dateChosen.getDate()));
     setIsVisible(false);
-  }, [select, dateChosen]);
+  }, [select, dateChosen, setShowingConcerts]);
   const [isVisible, setIsVisible] = useState(false);
   return (
     <>

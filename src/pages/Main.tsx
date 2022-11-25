@@ -39,8 +39,9 @@ const Indicator = () => {
 };
 const ScrollTop = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<HTMLDivElement | null>(mainScrollRef);
+  const [getMainScrollRef] = useRecoilState<HTMLDivElement | null>(
+    mainScrollRef
+  );
   const handleClick = () => {
     getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   };
@@ -94,11 +95,12 @@ const Main = () => {
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<HTMLDivElement | null>(mainScrollRef);
+  const [, setMainScrollRef] = useRecoilState<HTMLDivElement | null>(
+    mainScrollRef
+  );
   useEffect(() => {
     setContentNo(0);
-  }, []);
+  }, [setContentNo]);
   useEffect(() => {
     createScrollSnap(
       snapContainer.current as HTMLDivElement,
@@ -126,12 +128,12 @@ const Main = () => {
         });
       }
     );
-  }, []);
+  }, [setContentNo]);
   useEffect(() => {
     if (snapContainer.current) {
       setMainScrollRef(snapContainer.current);
     }
-  }, []);
+  }, [setMainScrollRef]);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (

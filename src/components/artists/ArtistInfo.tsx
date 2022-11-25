@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import ArtistApi, { IGetArtist } from "../../apis/query/ArtistAPI";
-import ConcertApi from "../../apis/query/ConcertApi";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
 

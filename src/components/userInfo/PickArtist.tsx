@@ -11,7 +11,6 @@ const PickArtist = (): JSX.Element => {
   const { data: artists } = ArtistApi.GetArtist();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  console.log("아티스트", artists);
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -22,7 +21,7 @@ const PickArtist = (): JSX.Element => {
       "얍",
       artists?.filter((artist) => artist.artist.includes(inputValue))
     );
-  }, [inputValue]);
+  }, [inputValue, artists]);
 
   return (
     <>

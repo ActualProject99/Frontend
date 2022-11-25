@@ -1,10 +1,4 @@
-import {
-  KeyboardEvent,
-  KeyboardEventHandler,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
@@ -14,7 +8,6 @@ import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
-
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 
@@ -29,7 +22,7 @@ const Search = ({
   };
   useEffect(() => {
     setFocus("search");
-  }, []);
+  }, [setFocus]);
   useWindowKeyboard("Escape", viewer.off);
   return (
     <Modal onClick={viewer.off}>
@@ -78,7 +71,7 @@ const Nav = ({
   ];
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
-  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<number>(mainContent);
   const handleClick = () => {
     setUser(initUser);
   };

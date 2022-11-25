@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect } from "react";
+import { MouseEventHandler, useEffect, useMemo } from "react";
 import { cls, highDimArr } from "../utils";
 import { useRecoilState } from "recoil";
 import {
@@ -37,11 +37,9 @@ const Group = ({
   rows: number;
   cols: number;
 }) => {
-  const [getIsGameSuccess, setIsGameSuccess] =
-    useRecoilState<IsGameSuccess>(isGameSuccess);
+  const [, setIsGameSuccess] = useRecoilState<IsGameSuccess>(isGameSuccess);
   const [getHasBooked, setHasBooked] = useRecoilState<HasBooked>(hasBooked);
-  const [getUserSelected, setUserSelected] =
-    useRecoilState<UserSelected>(userSelected);
+  const [, setUserSelected] = useRecoilState<UserSelected>(userSelected);
   const handleClick = (index: number, i: number, j: number) => () => {
     setIsGameSuccess((cur) => [
       !highDimArr(getHasBooked, [index, i, j]),
@@ -77,16 +75,19 @@ const Group = ({
   );
 };
 const Seats = () => {
-  const [_, setMockBooked] = useRecoilState<HasBooked>(hasBooked);
-  const [__, setHasPlaced] = useRecoilState<HasPlaced>(hasPlaced);
-  const datas = [
-    { isPlaced: true, rows: 3, cols: 6 },
-    { isPlaced: false, rows: 0, cols: 0 },
-    { isPlaced: true, rows: 3, cols: 6 },
-    { isPlaced: true, rows: 3, cols: 10 },
-    { isPlaced: true, rows: 5, cols: 10 },
-    { isPlaced: true, rows: 3, cols: 10 },
-  ];
+  const [, setMockBooked] = useRecoilState<HasBooked>(hasBooked);
+  const [, setHasPlaced] = useRecoilState<HasPlaced>(hasPlaced);
+  const datas = useMemo(
+    () => [
+      { isPlaced: true, rows: 3, cols: 6 },
+      { isPlaced: false, rows: 0, cols: 0 },
+      { isPlaced: true, rows: 3, cols: 6 },
+      { isPlaced: true, rows: 3, cols: 10 },
+      { isPlaced: true, rows: 5, cols: 10 },
+      { isPlaced: true, rows: 3, cols: 10 },
+    ],
+    []
+  );
   useEffect(() => {
     const initBooked = datas.map((data) =>
       Array.from({ length: data.rows }).fill(
@@ -96,7 +97,7 @@ const Seats = () => {
     setMockBooked(initBooked as HasBooked);
     const initPlaced = datas.map((data) => data.isPlaced);
     setHasPlaced(initPlaced);
-  }, []);
+  }, [datas, setHasPlaced, setMockBooked]);
   return (
     <div className="grid grid-cols-3 grid-rows-2  w-1/2 gap-2">
       {datas.map(({ isPlaced, ...rest }, i) =>

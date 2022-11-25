@@ -2,7 +2,6 @@ import { addSeconds, format, getHours, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { IsRefreshedValid, isRefreshedValid } from "../atoms/mockTicketing";
-import useBeforeRefresh from "../hooks/window/useBeforRefresh";
 
 const Clock = ({
   start = true,
@@ -32,7 +31,7 @@ const Clock = ({
         );
       }, 1000);
     }
-  }, [start]);
+  }, [start, countDown]);
   useEffect(() => {
     const time =
       sessionStorage.getItem("countDownTime") &&
@@ -51,7 +50,7 @@ const Clock = ({
         setIsRefreshedValid(false);
       }
     }
-  }, []);
+  }, [setIsRefreshedValid]);
   return (
     <span className="text-4xl font-bold">{format(countDown, "hh:mm:ss")}</span>
   );
