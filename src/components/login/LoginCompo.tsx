@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -22,10 +22,14 @@ const LoginCompo = (): JSX.Element => {
 
   const onValid = async (data: LoginForm) => {
     try {
-      const response = await deactivate.post("/users/login");
-      setAccessToken(response.data.accessToken);
-      window.alert("로그인 성공");
+      const response = await deactivate.post("/users/login", data);
+      console.log("답", response);
+      setAccessToken(response.data.AccessToken);
+      const AccessToken = response.data.AccessToken;
+      localStorage.setItem("AccessToken", AccessToken);
+      console.log("jwt", AccessToken);
       navigate("/");
+      window.alert("로그인 성공");
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
       console.log(user);
     } catch (error) {
@@ -45,7 +49,7 @@ const LoginCompo = (): JSX.Element => {
       window.alert("이미 로그인 했어요!");
       navigate("/");
     }
-  }, [navigate, cookie]);
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">

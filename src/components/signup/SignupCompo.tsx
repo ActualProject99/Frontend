@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { deactivate } from "../../apis/instance";
@@ -15,9 +14,19 @@ const SignupCompo = (): JSX.Element => {
   const navigate = useNavigate();
   const password = watch("password");
 
-  const onValid = async (data: LoginForm) => {
+  const onValid = async ({
+    email,
+    password,
+    nickname,
+    phoneNumber,
+  }: LoginForm) => {
     try {
-      const response = await deactivate.post("/users/signup", data);
+      const response = await deactivate.post("/users/signup", {
+        email,
+        password,
+        nickname,
+        phoneNumber,
+      });
       if (response.status === 200) {
         window.alert("가입을 축하드려요!");
         navigate("/user/login");
@@ -108,10 +117,10 @@ const SignupCompo = (): JSX.Element => {
               className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
               autoComplete="auto"
               placeholder="한글, 숫자 조합 3-10자"
-              {...register(...regOptLogin.phone())}
+              {...register(...regOptLogin.phoneNumber())}
             />
             <p className="text-xs text-red-500 ">
-              {errors.phone?.message as string}
+              {errors.phoneNumber?.message as string}
             </p>
           </div>
           {isValid ? (

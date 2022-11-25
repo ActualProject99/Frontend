@@ -6,7 +6,7 @@ export interface LoginForm {
   email: string;
   password: string;
   nickname: string;
-  phone: string;
+  phoneNumber: string;
   comfirm: string;
 }
 

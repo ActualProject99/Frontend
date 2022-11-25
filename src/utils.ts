@@ -66,8 +66,8 @@ export const regOptLogin = {
       },
     },
   ]),
-  phone: optionCreator<LoginForm>([
-    "phone",
+  phoneNumber: optionCreator<LoginForm>([
+    "phoneNumber",
     {
       required: "연락처를 입력해주세요",
       pattern: {

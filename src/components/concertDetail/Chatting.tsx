@@ -1,54 +1,106 @@
-import React, { useState, useEffect } from "react";
+import classNames from "classnames";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { io } from "socket.io-client";
 
-// let interval = 3000;
-// const socket = io("");
-const Chatting = (): JSX.Element => {
-  //   const [chat, setChat] = useState<string[]>([]);
-  //   const [message, setMessage] = useState<string>("");
+const socket = io("http://localhost:4000/chat");
 
-  //   const sendMessageHandler = () => {
-  //     socket.emit("message", message);
-  //     setMessage("");
-  //   };
+interface IChat {
+  username: string;
+  message: string;
+}
 
-  //   useEffect(() => {
-  //     socket.on("message", (message) => {
-  //       setChat([...chat, message]);
-  //     });
-  //   }, []);
+const Chatting = () => {
+  const [chats, setChats] = useState<IChat[]>([]);
+  const [message, setMessage] = useState<string>("");
+  const chatContainerEl = useRef<HTMLDivElement>(null);
 
-  //   const onSocket = () => {
-  //     setInterval(() => {
-  //       socket.emit("good", "클라이언트 -> 서버");
-  //     }, interval);
+  // 채팅이 길어지면(chats.length) 스크롤이 생성되므로, 스크롤의 위치를 최근 메시지에 위치시키기 위함
+  useEffect(() => {
+    if (!chatContainerEl.current) return;
 
-  //     // socket.on("hi", (data) => console.log(data)); // 서버 -> 클라이언트
-  //   };
+    const chatContainer = chatContainerEl.current;
+    const { scrollHeight, clientHeight } = chatContainer;
+
+    if (scrollHeight > clientHeight) {
+      chatContainer.scrollTop = scrollHeight - clientHeight;
+    }
+  }, [chats.length]);
+
+  // message event listener
+  useEffect(() => {
+    const messageHandler = (chat: IChat) =>
+      setChats((prevChats) => [...prevChats, chat]);
+    socket.on("message", messageHandler);
+
+    return () => {
+      socket.off("message", messageHandler);
+    };
+  }, []);
+
+  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  }, []);
+
+  const onSendMessage = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!message) return alert("메시지를 입력해 주세요.");
+
+      socket.emit("message", message, (chat: IChat) => {
+        setChats((prevChats) => [...prevChats, chat]);
+        setMessage("");
+      });
+    },
+    [message]
+  );
+
   return (
-    <div>
-      {/* <div>
-        <h1>Messages</h1>
-        <ul>
-          {chat.map((data, idx) => {
-            return <li key={idx}>{data}</li>;
-          })}
-        </ul>
+    <>
+      <div className="flex flex-col m-auto w-1/2 h-[30rem] border rounded-lg">
+        <h1>WebSocket Chat</h1>
+        <div className="flex flex-col h-52 border p-4" ref={chatContainerEl}>
+          {chats.map((chat, index) => (
+            <div
+              key={index}
+              className={classNames({
+                my_message: socket.id === chat.username,
+                alarm: !chat.username,
+              })}
+            >
+              <span>
+                {chat.username
+                  ? socket.id === chat.username
+                    ? ""
+                    : chat.username
+                  : ""}
+              </span>
+              <span className="mb-2 bg-[#fff] w-fit p-3 rounded-lg ">
+                {chat.message}
+              </span>
+            </div>
+          ))}
+        </div>
+        <form
+          className="flex justify-items-center items-center mt-6"
+          onSubmit={onSendMessage}
+        >
+          <input
+            className="flex-grow"
+            type="text"
+            onChange={onChange}
+            value={message}
+          />
+          <button>보내기</button>
+        </form>
       </div>
-
-      <div>
-        <h1>Chat Box</h1>
-        <input value={message} onChange={(e) => setMessage(e.target.value)} />
-        <button onClick={sendMessageHandler}>Send Message</button>
-      </div>
-      <button
-        className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
-        onClick={onSocket}
-      >
-        socket 통신 시작
-      </button> */}
-    </div>
+    </>
   );
 };
-
 export default Chatting;

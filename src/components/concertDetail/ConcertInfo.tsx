@@ -19,7 +19,6 @@ import useTaps from "../../hooks/useTaps";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
-import Chatting from "./Chatting";
 import Calendar from "../Calendar";
 import useDebounce from "../../hooks/useDebounce";
 
@@ -29,8 +28,8 @@ interface ConcertProps {
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  const ticketings = concert.ticketingUrl;
-  console.log("뭘까?", ticketings);
+  // const ticketings = concert.ticketingUrl;
+  // console.log("뭘까?", ticketings);
 
   const [like, setLike] = useState(concert.like);
   const [show, setShow] = useState(false);
@@ -97,16 +96,18 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     ["공연장정보", <NaverMap concert={concert} />],
     ["기대평", <CommentList />]
   );
+
+  console.log("날짜", concert.showTimes);
   return (
     <>
       <div className="flex justify-between m-auto w-full h-full p-5">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
-            <Calendar selectedDate={new Date(concert.showTimes)} />
+            <Calendar selectedDate={new Date(concert.concertDate)} />
             <div className="flex flex-col gap-y-2">
               <div className="flex justify-between w-56 text-xs font-bold">
                 <span>날짜</span>
-                <span>{concert.showTimes}</span>
+                <span>{concert.concertDate}</span>
               </div>
               <div className="flex justify-between w-56 text-xs font-bold">
                 <span>가수</span>
@@ -114,7 +115,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </div>
               <div className="flex justify-between w-56 text-xs font-bold">
                 <span>장소</span>
-                <span>{concert.location}</span>
+                <span>{concert.locationName}</span>
               </div>
             </div>
             {!show ? (
@@ -135,9 +136,8 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </button>
             )}
           </div>
-          {/* <MiniCalendar concert={concert} /> */}
           <div className="flex flex-col gap-2 w-72">
-            <img className="w-72 h-96" alt="poster" src={concert.posterUrl} />
+            <img className="w-72 h-96" alt="poster" src={concert.concertImg} />
             <div className="flex gap-5 justify-center items-center my-4">
               <FacebookMessengerShareButton url={currentUrl} appId={""}>
                 <FacebookIcon size={48} round={true} borderRadius={24} />
@@ -171,17 +171,17 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
           <div className="w-[30rem]">
             <div className="w-[100%] h-8 mb-3">
               <p className="text-xl text-[#707070] font-bold">
-                {concert.title}
+                {concert.concertName}
               </p>
             </div>
             <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070]">
               <div className="flex items-center">
-                티켓팅기간 &nbsp; {concert.showTimes}&nbsp;
+                티켓팅기간 &nbsp; {concert.ticketingDate}&nbsp;
               </div>
-              <p>관람시간 &nbsp; {concert.runningTime}</p>
-              <p>장르 &nbsp; {concert.genre}</p>
-              <p>관람등급 &nbsp; {concert.viewableGrade}</p>
-              <p>공연장 &nbsp; {concert.location}</p>
+              <p>관람시간 &nbsp; {concert.playTime}</p>
+              <p>장르 &nbsp; {concert.categoryId}</p>
+              <p>관람등급 &nbsp; {concert.ratings}</p>
+              <p>공연장 &nbsp; {concert.locationName}</p>
               {!like ? (
                 <button
                   className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
@@ -199,9 +199,8 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <icons.FullHeart className="text-red-500 cursor-pointer " />
                 </button>
               )}
-              {/* <Chatting /> */}
               <div className=" flex flex-col gap-y-4 justify-center items-end">
-                {ticketings &&
+                {/* {ticketings &&
                   ticketings.map((ticketing) => (
                     <button
                       key={ticketing.id}
@@ -212,7 +211,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                     >
                       {ticketing.title}
                     </button>
-                  ))}
+                  ))} */}
               </div>
             </div>
           </div>

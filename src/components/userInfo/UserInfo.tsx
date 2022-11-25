@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import CloudinaryUploadWidget from "./Cloudinary";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
