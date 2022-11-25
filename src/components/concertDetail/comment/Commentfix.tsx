@@ -1,12 +1,11 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { removeComment, editComment } from '../../../apis/query/commentApi';
+import { removeComment, editComment } from "../../../apis/query/commentApi";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { IComments } from './CommentList';
-import { regOptComment } from '../../../utils';
-
+import { IComments } from "./CommentList";
+import { regOptComment } from "../../../utils";
 
 const Commentfix = ({ comment }: IComments) => {
   const [isedit, setIsEdit] = useState(false);
@@ -89,7 +88,9 @@ const Commentfix = ({ comment }: IComments) => {
               취소
             </button>
           </form>
-          <span className="font-bold text-sm text-red-600">{errors.editcomment?.message as string}</span>
+          <span className="font-bold text-sm text-red-600">
+            {errors.editcomment?.message as string}
+          </span>
         </>
       ) : (
         <>

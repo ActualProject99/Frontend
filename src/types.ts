@@ -6,6 +6,9 @@ export type OptionCreator = <T>(option: Option<T>) => SubOptionCreator<T>;
 export interface LoginForm {
   email: string;
   password: string;
+  nickname: string;
+  phoneNumber: string;
+  comfirm: string;
 }
 
 export interface CommentForm {
@@ -17,4 +20,4 @@ export interface IgetComment {
   id?: number;
   postId?: number;
   comment: string;
-};
+}

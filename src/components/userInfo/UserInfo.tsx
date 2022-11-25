@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import CloudinaryUploadWidget from "./Cloudinary";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
@@ -53,7 +52,7 @@ const UserInfo = (): JSX.Element => {
       // formData.append("userImg", e.target.files[0]);
       // console.log("form", formData);
       const payload = {
-        userImg: e.target.files[0],
+        profileImg: e.target.files[0],
       };
       console.log("페이", payload);
       EditUserImg(payload).then(() => {

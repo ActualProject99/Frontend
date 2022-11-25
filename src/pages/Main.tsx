@@ -117,10 +117,56 @@ const Main = () => {
         </div>
         <div ref={content2} className="h-screen">
           <div className="relative h-full">
-            <p className="text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-48 bottom-32">
-              나와 아티스트 / 콘서트 / 티켓을 연결하는
-              <span className="text-secondary-main">Tgle</span>
-            </p>
+            <div className="lg:hidden text-white text-3xl md:text-5xl font-extrabold mb-8 w-[540px] absolute left-[3%] top-[14%]">
+              {contentNo === 1 && (
+                <>
+                  {[
+                    "나와",
+                    "아티스트",
+                    "콘서트",
+                    "티켓을 연결하는",
+                    "Tgle",
+                  ].map((e, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 * i }}
+                      className={cls(
+                        i === 4 && "text-secondary-main font-logo"
+                      )}
+                    >
+                      {e}
+                    </motion.div>
+                  ))}
+                </>
+              )}
+            </div>
+            <div className="lg:block hidden text-white text-4xl font-extrabold mb-8 w-[540px] absolute left-[12%] bottom-[5%]">
+              {contentNo === 1 && (
+                <>
+                  {[
+                    "나와",
+                    "아티스트",
+                    "콘서트",
+                    "티켓을 연결하는",
+                    "Tgle",
+                  ].map((e, i) => (
+                    <motion.div
+                      key={e}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 * i }}
+                      className={cls(
+                        i === 4 && "text-secondary-main font-logo"
+                      )}
+                    >
+                      {e}
+                    </motion.div>
+                  ))}
+                </>
+              )}
+            </div>
             <img
               className="w-full h-screen object-cover absolute top-0 left-0 -z-10"
               src={main2}
@@ -129,19 +175,24 @@ const Main = () => {
           </div>
         </div>
         <Content ref={content3}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 01</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-72">
-              콘서트 일일이 찾아봐? <br />
-              Tgle엔 다 있어!
-            </p>
-            <p className="text-base">
-              콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
-              앞으론 그럴 필요 없습니다.
-              <br /> Tgle이 편리하게 당신을 도와줄겁니다.
-            </p>
-          </div>
-          <div>
+          <ContentCopy
+            no="01"
+            main={
+              <>
+                콘서트 일일이 찾아봐? <br />
+                <span className="font-logo">Tgle</span>엔 다 있어!
+              </>
+            }
+            sub={
+              <>
+                콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
+                앞으론 그럴 필요 없습니다.
+                <br /> <span className="font-logo">Tgle</span>이 편리하게 당신을
+                도와줄겁니다.
+              </>
+            }
+          />
+          <div className="cursor-pointer absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
               className="w-[330px] h-[375px] object-contain"
               src={main3}
@@ -150,35 +201,51 @@ const Main = () => {
           </div>
         </Content>
         <Content ref={content4}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 02</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              티켓팅 놓쳤다고 <br /> 울지마세요! <br />
-              앞으로는 Tgle과 함께!
-            </p>
-            <p className="text-base">
-              티켓팅 예매처 서버시간을 <br />
-              실시간으로 확인할 수 있습니다.
-            </p>
-          </div>
-          <div>
-            <img className="w-[218px] h-96 object-contain" src={main4} alt="" />
+          <ContentCopy
+            no="02"
+            main={
+              <>
+                티켓팅 놓쳤다고 <br /> 울지마세요! <br />
+                앞으로는 <span className="font-logo">Tgle</span>과 함께!
+              </>
+            }
+            sub={
+              <>
+                티켓팅 예매처 서버시간을 <br />
+                실시간으로 확인할 수 있습니다.
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+            <img
+              className="translate-x-[10%] min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[360px] md:h-[540px] object-contain"
+              src={main4}
+              alt=""
+            />
           </div>
         </Content>
         <Content ref={content5}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 03</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              관심 설정해 놓은 <br /> 공연들을 <br />
-              Tgle이 알려드려요!
-            </p>
-            <p className="text-base">
-              보고싶은 콘서트
-              <br /> 티켓팅 일정을 <br /> 알림으로 받아보세요!
-            </p>
-          </div>
-          <div>
-            <img className="w-[330px] h-96 object-cover" src={main5} alt="" />
+          <ContentCopy
+            no="03"
+            main={
+              <>
+                관심 설정해 놓은 <br /> 공연들을 <br />
+                <span className="font-logo">Tgle</span>이 알려드려요!
+              </>
+            }
+            sub={
+              <>
+                보고싶은 콘서트
+                <br /> 티켓팅 일정을 <br /> 알림으로 받아보세요!
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+            <img
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
+              src={main5}
+              alt=""
+            />
           </div>
         </Content>
         <Content ref={content6}>
@@ -198,6 +265,283 @@ const Main = () => {
             <img className="w-[430px] h-96 object-cover" src={main6} alt="" />
           </div>
         </Content>
+        <div ref={content7}>
+          <div
+            className="flex justify-center items-center h-screen w-screen relative overflow-hidden"
+            style={{ perspective: 300 }}
+          >
+            <div
+              className="grid grid-rows-4 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
+              style={{ transform: "rotate3d(3,0,1,20deg)" }}
+            >
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+              <img
+                className="bg-black w-52 h-40 object-contain"
+                src={main5}
+                alt=""
+              />
+            </div>
+            <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
+            <AnimatePresence>
+              {contentNo === 6 && (
+                <>
+                  <motion.div
+                    initial={{ backdropFilter: "blur(0px)" }}
+                    animate={{ backdropFilter: "blur(5px)" }}
+                    transition={{ delay: 0.3 }}
+                    className="h-screen w-screen absolute flex justify-center items-center"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: 0 }}
+                    animate={{ opacity: 1, x: 200 }}
+                    transition={{ delay: 0.6 }}
+                    className="absolute z-50"
+                  >
+                    <p className="font-black text-7xl  text-gray-800 translate-y-40">
+                      티켓팅을 즐겁게
+                      <br />
+                      <span className="text-primary-main font-logo">Tgle</span>
+                    </p>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </>
   );

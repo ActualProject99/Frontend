@@ -42,6 +42,40 @@ export const regOptLogin = {
       },
     },
   ]),
+  comfirm: optionCreator<LoginForm>([
+    "comfirm",
+    {
+      required: "비밀번호를 확인해주세요.",
+    },
+  ]),
+  nickname: optionCreator<LoginForm>([
+    "nickname",
+    {
+      required: "닉네임을 입력해주세요",
+      pattern: {
+        value: /^[가-힣0-9]{3,10}$/,
+        message: "한글, 숫자를 혼용하여 입력해주세요",
+      },
+      minLength: {
+        value: 3,
+        message: "최소 3자 이상의 닉네임을 입력해주세요",
+      },
+      maxLength: {
+        value: 10,
+        message: "10자 이하의 닉네임만 사용가능합니다",
+      },
+    },
+  ]),
+  phoneNumber: optionCreator<LoginForm>([
+    "phoneNumber",
+    {
+      required: "연락처를 입력해주세요",
+      pattern: {
+        value: /^[0-9\b -]{0,11}$/,
+        message: "숫자 11자 이하만 가능합니다.",
+      },
+    },
+  ]),
 };
 
 export const regOptComment = {
@@ -97,4 +131,25 @@ export const shuffle = (array: any[]) => {
   }
 
   return array;
+};
+
+type baseArr = any[] | baseArr[];
+
+export const highDimArr = (Arr: baseArr, indexs: number[]) => {
+  const arrDim = (Arr: baseArr) => {
+    let i = 0;
+    while (Array.isArray(Arr[0])) {
+      Arr = Arr.flat();
+      i++;
+    }
+    return i + 1;
+  };
+  const itering = (Arr: baseArr, iter: IterableIterator<number>): any => {
+    const { value } = iter.next();
+    if (arrDim(Arr) !== 1) return itering(Arr[value], iter);
+    return Arr[value];
+  };
+  if (arrDim(Arr) !== indexs.length) return;
+  const iter = indexs[Symbol.iterator]();
+  return itering(Arr, iter);
 };

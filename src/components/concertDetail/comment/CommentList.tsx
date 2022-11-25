@@ -12,8 +12,7 @@ import { IgetComment } from "../../../types";
 import Commentfix from "./Commentfix";
 import ArrowLeft from "../../../svg/ArrowLeft";
 import ArrowRight from "../../../svg/ArrowRight";
-import { regOptComment } from '../../../utils';
-
+import { regOptComment } from "../../../utils";
 
 export interface IComments {
   comment?: IgetComment;
@@ -60,7 +59,7 @@ const CommentList = () => {
   } else if (isError) {
     return <h3 className="p-4">지금은 댓글을 불러올 수 없어요!</h3>;
   }
-  
+
   /* const { isLoading, isError, data } = useQuery<IgetComment[]>(["allComments"], readComments)
   if (isLoading) {
     return <h3 className='p-4'>Loading...</h3>;
@@ -90,7 +89,9 @@ const CommentList = () => {
         <button className="border 1px w-[9.3rem] h-28 hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
           등록
         </button>
-        <span className="font-bold text-sm text-red-600">{errors.comment?.message as string}</span>
+        <span className="font-bold text-sm text-red-600">
+          {errors.comment?.message as string}
+        </span>
       </form>
 
       <ul className="p-4 w-full max-h-[65rem]">
