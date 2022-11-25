@@ -18,7 +18,7 @@ export const regOptLogin = {
     {
       required: "email이 입력되지 않았습니다.",
       pattern: {
-        value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+        value: /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/,
         message: "email 형식을 확인해주세요",
       },
     },
