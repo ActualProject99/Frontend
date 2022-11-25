@@ -4,7 +4,6 @@ import createScrollSnap from "scroll-snap";
 import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { AnimatePresence, motion } from "framer-motion";
 import icons from "../components/icons";
-import Portal from "../components/Portal";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
 import main3 from "../image/main3.png";
@@ -12,6 +11,7 @@ import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
+import Portal from "../components/Portal";
 const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
@@ -204,11 +204,13 @@ const Main = () => {
                     "Tgle",
                   ].map((e, i) => (
                     <motion.div
-                      key={e}
+                      key={i}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 * i }}
-                      className={cls(i === 4 && "text-secondary-main")}
+                      className={cls(
+                        i === 4 && "text-secondary-main font-logo"
+                      )}
                     >
                       {e}
                     </motion.div>
@@ -231,7 +233,9 @@ const Main = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 * i }}
-                      className={cls(i === 4 && "text-secondary-main")}
+                      className={cls(
+                        i === 4 && "text-secondary-main font-logo"
+                      )}
                     >
                       {e}
                     </motion.div>
@@ -252,14 +256,15 @@ const Main = () => {
             main={
               <>
                 콘서트 일일이 찾아봐? <br />
-                Tgle엔 다 있어!
+                <span className="font-logo">Tgle</span>엔 다 있어!
               </>
             }
             sub={
               <>
                 콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
                 앞으론 그럴 필요 없습니다.
-                <br /> Tgle이 편리하게 당신을 도와줄겁니다.
+                <br /> <span className="font-logo">Tgle</span>이 편리하게 당신을
+                도와줄겁니다.
               </>
             }
           />
@@ -277,7 +282,7 @@ const Main = () => {
             main={
               <>
                 티켓팅 놓쳤다고 <br /> 울지마세요! <br />
-                앞으로는 Tgle과 함께!
+                앞으로는 <span className="font-logo">Tgle</span>과 함께!
               </>
             }
             sub={
@@ -301,7 +306,7 @@ const Main = () => {
             main={
               <>
                 관심 설정해 놓은 <br /> 공연들을 <br />
-                Tgle이 알려드려요!
+                <span className="font-logo">Tgle</span>이 알려드려요!
               </>
             }
             sub={
@@ -613,7 +618,7 @@ const Main = () => {
                     <p className="font-black text-7xl  text-gray-800 translate-y-40">
                       티켓팅을 즐겁게
                       <br />
-                      <span className="text-primary-main">Tgle</span>
+                      <span className="text-primary-main font-logo">Tgle</span>
                     </p>
                   </motion.div>
                 </>

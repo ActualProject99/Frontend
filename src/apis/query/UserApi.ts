@@ -13,7 +13,7 @@ interface EditNamePayload {
   nickname: string | undefined;
 }
 interface EditImgPayload {
-  userImg: string | undefined | File | FormData;
+  profileImg: string | undefined | File | FormData;
 }
 
 //유저 좋아요 콘서트 Interface
@@ -49,18 +49,25 @@ const GetUserInfo = () => {
 
 const EditUserName = () => {
   return useMutation(async (payload: EditNamePayload) => {
-    const { data } = await axios.patch("http://localhost:3001/user", payload);
+    const { data } = await axios.put(
+      "http://tgle.shop/users/userinfo",
+      payload
+    );
     return data;
   });
 };
 
 const EditUserImg = () => {
   return useMutation(async (payload: EditImgPayload) => {
-    const { data } = await axios.patch("http://localhost:3001/user", payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const { data } = await axios.put(
+      "http://tgle.shop/users/userinfo/upload",
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return data;
   });
 };

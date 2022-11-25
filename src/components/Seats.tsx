@@ -1,11 +1,15 @@
 import { MouseEventHandler, useEffect } from "react";
-import { cls } from "../utils";
+import { cls, highDimArr } from "../utils";
 import { useRecoilState } from "recoil";
 import {
   HasBooked,
   hasBooked,
   HasPlaced,
   hasPlaced,
+  isGameSuccess,
+  IsGameSuccess,
+  UserSelected,
+  userSelected,
 } from "../atoms/mockTicketing";
 const Seat = ({
   isTaken,
@@ -33,9 +37,18 @@ const Group = ({
   rows: number;
   cols: number;
 }) => {
-  const [mockBooked, setMockBooked] = useRecoilState<HasBooked>(hasBooked);
+  const [getIsGameSuccess, setIsGameSuccess] =
+    useRecoilState<IsGameSuccess>(isGameSuccess);
+  const [getHasBooked, setHasBooked] = useRecoilState<HasBooked>(hasBooked);
+  const [getUserSelected, setUserSelected] =
+    useRecoilState<UserSelected>(userSelected);
   const handleClick = (index: number, i: number, j: number) => () => {
-    setMockBooked((cur) =>
+    setIsGameSuccess((cur) => [
+      !highDimArr(getHasBooked, [index, i, j]),
+      cur[0],
+    ]);
+    setUserSelected([index, i, j]);
+    setHasBooked((cur) =>
       cur.map((g, gi) =>
         gi === index
           ? [...g].map((r, ri) =>
@@ -53,7 +66,7 @@ const Group = ({
             <Seat
               onClick={handleClick(index, i, j)}
               isTaken={
-                mockBooked.length === 1 ? false : mockBooked[index][i][j]
+                getHasBooked.length === 1 ? false : getHasBooked[index][i][j]
               }
               key={j}
             />

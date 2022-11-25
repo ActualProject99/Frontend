@@ -8,6 +8,9 @@ export interface IGetArtist {
   artistImg: string;
   genre: string;
   like: boolean;
+  searchText?: Array<string>;
+  searchCnt: number;
+  target?: boolean;
   artistConcerts: [
     {
       id: Number;
@@ -31,12 +34,18 @@ interface EditLike {
 }
 
 const GetArtist = () => {
-  return useQuery<IGetArtist[]>(["artistInfo"], async () => {
-    const { data } = await axios.get<IGetArtist[]>(
-      "http://localhost:3001/artists"
-    );
-    return data;
-  });
+  return useQuery<IGetArtist[]>(
+    ["artistInfo"],
+    async () => {
+      const { data } = await axios.get<IGetArtist[]>(
+        "http://localhost:3001/artists"
+      );
+      return data;
+    },
+    {
+      cacheTime: Infinity,
+    }
+  );
 };
 
 const DeleteArtist = () => {

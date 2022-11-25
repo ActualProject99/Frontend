@@ -1,17 +1,22 @@
-import Calendar from "../components/Calendar";
-import { useState } from "react";
+import Calendar, { CalenderDrawer } from "../components/Calendar";
+import { useEffect, useState } from "react";
 import { cls } from "../utils";
 import Cards from "../components/Cards";
-import { dateSelected } from "../atoms/date";
-import { useRecoilState } from "recoil";
-import { format, isSameDay, parseISO } from "date-fns";
-import useFixoluteBox from "../hooks/useFixsolute";
 import {
-  allConcerts,
-  calendarConcerts,
-  Concert,
-  showingConcerts,
-} from "../atoms/concert";
+  concertsDatesFiltered,
+  dateAllConcerts,
+  dateSelected,
+} from "../atoms/date";
+import { useRecoilState } from "recoil";
+import useFixoluteBox from "../hooks/useFixsolute";
+import useWindowSize from "../hooks/window/useWindowSize";
+import Modal from "../components/Modal";
+import useDrawer from "../hooks/useDrawer";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
+import ConcertSlider from "../components/ConcertSlider";
+import Portal from "../components/Portal";
 
 const groups = [
   "전체",
@@ -24,47 +29,40 @@ const groups = [
 ];
 const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   const [select, setSelect] = useState(0);
-  const [getConcerts] = useRecoilState<Concert[]>(allConcerts);
-  const [, setCalendarConcerts] = useRecoilState<Concert[]>(calendarConcerts);
   const [getShowingConcerts, setShowingConcerts] =
     useRecoilState<Concert[]>(showingConcerts);
+  const [getdateAllConcerts, setdateAllConcerts] =
+    useRecoilState<Date[]>(dateAllConcerts);
   const {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox();
+  const { width, height, isMd } = useWindowSize();
+  const [dateChosen] = useRecoilState<Date>(dateSelected);
+  const { handle, Content } = useDrawer({
+    component: <>hi</>,
+    side: "up",
+  });
   const handleClick = (i: number) => () => {
     setSelect(i);
+    setdateAllConcerts(concertsDatesFiltered(i));
+    setShowingConcerts(datedConcerts(i, dateChosen.getDate()));
   };
-  const [dateChosen] = useRecoilState<Date>(dateSelected);
-  const dateChosenConcerts = getConcerts.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), dateChosen)
-  );
-  const groupedConserts = (concerts: any[], select: number) =>
-    concerts.filter((concert) => !select || concert.group === select);
+  useEffect(() => {
+    setShowingConcerts(datedConcerts(select, dateChosen.getDate()));
+    setIsVisible(false);
+  }, [select, dateChosen]);
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <>
-      {no1 ? (
-        <>
-          <div className="pt-16 mb-8  h-[460px]">
-            <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 h-full">
-              <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200  h-full relative">
-                <div>
-                  <Calendar
-                    selectedDate={new Date(2022, 11, 20, 6, 30, 45, 0)}
-                  />
-                  <h3 className="font-semibold text-lg text-gray-900 mt-10 absolute -bottom-8">
-                    <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
-                      {format(dateChosen, "MMM dd, yyy")}
-                    </time>
-                  </h3>
-                </div>
-                <section className="mt-12 md:mt-0 md:pl-14 flex flex-col justify-center items-center gap-10">
-                  {/* <h2 className="font-semibold text-gray-900">
-                Schedule for{" "}
-                <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
-                  {format(dateChosen, "MMM dd, yyy")}
-                </time>
-              </h2> */}
+      <ConcertSlider />
+      <div className="pt-16 mb-8  h-[460px]">
+        <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 h-full">
+          <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200  h-full relative">
+            <div className="relative h-full">
+              {isMd ? (
+                <div className="w-80" ref={fixsolute} style={fixoluteStyle}>
+                  <Calendar selectable checkedDates={getdateAllConcerts} />
                   <ul className="flex justify-center gap-3 flex-wrap">
                     {groups.map((group, i) => (
                       <li
@@ -79,92 +77,86 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
                       </li>
                     ))}
                   </ul>
-                </section>
-              </div>
-            </div>
-          </div>
-          {/* <h3 className="font-semibold text-gray-900 mx-auto flex justify-center items-center w-36 ">
-        <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
-          {format(dateChosen, "MMM dd, yyy")}
-        </time>
-      </h3> */}
-          <div className="flex gap-4 justify-center mt-12 flex-wrap">
-            {getShowingConcerts.length > 0 ? (
-              getShowingConcerts.map((consert, index) => (
-                <Cards key={index} vertical concert data={consert} />
-              ))
-            ) : (
-              <p>No concerts for today.</p>
-            )}
-          </div>
-        </>
-      ) : null}
-      {no2 ? (
-        <>
-          <div className="pt-16 mb-8 min-h-[700px]">
-            <div className="max-w-md px-4 mx-auto md:max-w-6xl h-full">
-              <div className="md:grid md:grid-cols-3 md:divide-x md:divide-gray-200 h-full">
-                <div className="relative h-full">
-                  <div className="w-96" ref={fixsolute} style={fixoluteStyle}>
-                    <Calendar
-                      selectedDate={new Date(2022, 10, 20, 6, 30, 45, 0)}
-                    />
-                    <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
-                      {groups.map((group, i) => (
-                        <li
-                          key={group}
-                          className={cls(
-                            "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                            i === select && "bg-primary-main text-white"
-                          )}
-                          onClick={handleClick(i)}
-                        >
-                          {group}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
-                <section
-                  ref={limit}
-                  className="mt-12 md:min-h-[700px] md:mt-0 md:pl-8 flex flex-col justify-center items-center gap-10 md:col-span-2"
-                >
-                  {/* <h2 className="font-semibold text-gray-900">
+              ) : (
+                <>
+                  <Portal>
+                    <button
+                      className={cls(
+                        "fixed top-1/4 transition-all",
+                        isVisible ? "-left-16" : "left-0"
+                      )}
+                      onClick={() => {
+                        setIsVisible((cur) => !cur);
+                      }}
+                    >
+                      <CalenderDrawer />
+                    </button>
+                  </Portal>
+                  {isVisible ? (
+                    <Modal
+                      onClick={() => {
+                        setIsVisible((cur) => !cur);
+                      }}
+                    >
+                      <div className="fixed left-0 top-0">
+                        <Calendar
+                          selectable
+                          checkedDates={getdateAllConcerts}
+                        />
+                        <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
+                          {groups.map((group, i) => (
+                            <li
+                              key={group}
+                              className={cls(
+                                "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
+                                i === select && "bg-primary-main text-white"
+                              )}
+                              onClick={handleClick(i)}
+                            >
+                              {group}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Modal>
+                  ) : null}
+                </>
+              )}
+            </div>
+            <section
+              ref={limit}
+              className="mt-12 md:min-h-[700px] md:mt-0 md:pl-8 flex flex-col justify-center items-center gap-10 md:col-span-2"
+            >
+              {/* <h2 className="font-semibold text-gray-900">
                 Schedule for{" "}
                 <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
                   {format(dateChosen, "MMM dd, yyy")}
                 </time>
               </h2> */}
 
-                  <div className="hidden xl:flex gap-4 justify-center mt-12 flex-wrap">
-                    {getShowingConcerts.length > 0 ? (
-                      getShowingConcerts.map((consert, i) => (
-                        <Cards key={i} vertical concert data={consert} />
-                      ))
-                    ) : (
-                      <p>No concerts for today.</p>
-                    )}
-                  </div>
-                  <div className="flex xl:hidden gap-2 justify-center mt-12 flex-wrap">
-                    {getShowingConcerts.length > 0 ? (
-                      getShowingConcerts.map((consert, i) => (
-                        <Cards key={i} horizontal concert data={consert} />
-                      ))
-                    ) : (
-                      <p>No concerts for today.</p>
-                    )}
-                  </div>
-                </section>
+              <div className="hidden xl:flex gap-4 justify-center mt-12 flex-wrap">
+                {getShowingConcerts.length > 0 ? (
+                  getShowingConcerts.map((consert, i) => (
+                    <Cards key={i} vertical concert data={consert} />
+                  ))
+                ) : (
+                  <p>No concerts for today.</p>
+                )}
               </div>
-            </div>
+              <div className="flex xl:hidden gap-2 justify-center mt-12 flex-wrap">
+                {getShowingConcerts.length > 0 ? (
+                  getShowingConcerts.map((consert, i) => (
+                    <Cards key={i} horizontal concert data={consert} />
+                  ))
+                ) : (
+                  <p>No concerts for today.</p>
+                )}
+              </div>
+            </section>
           </div>
-          {/* <h3 className="font-semibold text-gray-900 mx-auto flex justify-center items-center w-36 ">
-        <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
-          {format(dateChosen, "MMM dd, yyy")}
-        </time>
-      </h3> */}
-        </>
-      ) : null}
+        </div>
+      </div>
     </>
   );
 };

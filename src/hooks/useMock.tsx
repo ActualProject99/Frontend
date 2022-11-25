@@ -1,9 +1,15 @@
+import { ReactNode } from "react";
 import { useRecoilState } from "recoil";
-import { HasBooked, hasBooked } from "../atoms/mockTicketing";
+import {
+  HasBooked,
+  hasBooked,
+  isGameDone,
+  IsGameDone,
+} from "../atoms/mockTicketing";
 import { shuffle } from "../utils";
 
 const useMock = () => {
-  const [_, setHasBooked] = useRecoilState<HasBooked>(hasBooked);
+  const [, setHasBooked] = useRecoilState<HasBooked>(hasBooked);
   const bookASeat = (index: number, i: number, j: number) => {
     setHasBooked((cur) =>
       cur.map((g, gi) =>
@@ -15,9 +21,9 @@ const useMock = () => {
       )
     );
   };
-
-  const StartBtn = () => {
+  const StartBtn = ({ children }: { children: ReactNode }) => {
     const [getHasBooked] = useRecoilState<HasBooked>(hasBooked);
+    const [, setIsGameDone] = useRecoilState<IsGameDone>(isGameDone);
     const datas = [
       { isPlaced: true, rows: 3, cols: 6 },
       { isPlaced: false, rows: 0, cols: 0 },
@@ -54,16 +60,19 @@ const useMock = () => {
     );
 
     const handleClick = () => {
-      setInterval(() => {
+      const intervalId = setInterval(() => {
         const { value, done } = gen.next();
         if (!done) {
           bookASeat(...(value as [number, number, number]));
+        } else {
+          setIsGameDone(true);
+          clearInterval(intervalId);
         }
-      }, 1);
+      }, 20);
     };
     return (
       <div className="cursor-pointer" onClick={handleClick}>
-        Enter
+        {children}
       </div>
     );
   };
