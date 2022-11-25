@@ -1,5 +1,3 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 if (process.env.NODE_ENV === "production") {
   console.log = function no_console() {};
