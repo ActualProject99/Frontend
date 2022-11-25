@@ -7,7 +7,10 @@ import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
-
+if (process.env.NODE_ENV === "production") {
+  console.log = function no_console() {};
+  console.warn = function no_console() {};
+}
 
 function App() {
   return (
