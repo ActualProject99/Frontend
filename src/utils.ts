@@ -42,6 +42,40 @@ export const regOptLogin = {
       },
     },
   ]),
+  comfirm: optionCreator<LoginForm>([
+    "comfirm",
+    {
+      required: "비밀번호를 확인해주세요.",
+    },
+  ]),
+  nickname: optionCreator<LoginForm>([
+    "nickname",
+    {
+      required: "닉네임을 입력해주세요",
+      pattern: {
+        value: /^[가-힣0-9]{3,10}$/,
+        message: "한글, 숫자를 혼용하여 입력해주세요",
+      },
+      minLength: {
+        value: 3,
+        message: "최소 3자 이상의 닉네임을 입력해주세요",
+      },
+      maxLength: {
+        value: 10,
+        message: "10자 이하의 닉네임만 사용가능합니다",
+      },
+    },
+  ]),
+  phoneNumber: optionCreator<LoginForm>([
+    "phoneNumber",
+    {
+      required: "연락처를 입력해주세요",
+      pattern: {
+        value: /^[0-9\b -]{0,11}$/,
+        message: "숫자 11자 이하만 가능합니다.",
+      },
+    },
+  ]),
 };
 export const scrollTo = (top: number) => {
   window.scrollTo({

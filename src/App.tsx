@@ -6,6 +6,7 @@ import Main from "./pages/Main";
 import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
+import OAuthKakao from "./components/login/OAuthKakao";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         </Route>
         <Route path="mock-ticketing" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
+        <Route path="/kakao/callback" element={<OAuthKakao />} />
       </Routes>
     </Layout>
   );
