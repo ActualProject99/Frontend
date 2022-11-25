@@ -1,4 +1,4 @@
-import { LoginForm, OptionCreator } from "./types";
+import { LoginForm, CommentForm, OptionCreator } from "./types";
 
 export const cls = (...classes: (string | undefined | boolean)[]) =>
   classes
@@ -77,7 +77,37 @@ export const regOptLogin = {
     },
   ]),
 };
-export const scrollTo = (top: number) => {
+
+export const regOptComment = {
+  comment: optionCreator<CommentForm>([
+    "comment",
+    {
+      maxLength: {
+        value: 300,
+        message: "",
+      },
+      minLength: {
+        value: 3,
+        message: "3자 미만으로 작성할 수 없습니다.",
+      },
+    },
+  ]),
+  editcomment: optionCreator<CommentForm>([
+    "editcomment",
+    {
+      maxLength: {
+        value: 300,
+        message: "",
+      },
+      minLength: {
+        value: 3,
+        message: "3자 미만으로 작성할 수 없습니다.",
+      },
+    },
+  ]),
+};
+
+const scrollTo = (top: number) => {
   window.scrollTo({
     top,
     behavior: "smooth",

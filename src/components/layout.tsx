@@ -14,8 +14,9 @@ import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
-import Portal from "./Portal";
+
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+import Portal from "./Portal";
 
 const Search = ({
   viewer,
@@ -69,7 +70,9 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
+    { name: "홈", path: "" },
     { name: "콘서트", path: "concerts" },
+    { name: "장소", path: "" },
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
   ];
@@ -186,7 +189,7 @@ const Nav = ({
 const Footer = () => {
   return (
     <div className="bg-slate-200 h-96 flex items-center">
-      <div className="bg-slate-400 xl:w-[1200px] mx-auto ">footer</div>
+      <div className="bg-slate-400 w-[1200px] mx-auto ">footer</div>
     </div>
   );
 };

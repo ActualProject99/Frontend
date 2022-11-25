@@ -4,7 +4,7 @@ import { IComments } from './CommentList';
 import { IgetComment } from '../../../types';
 
 
-const CommentPagination =  (/* {comment, currentPage} : IComments */) => {
+const CommentPagination =  () => {
 
   /* const [postsPerPage, setPostsPerPage] = useState(10);
   const indexOfLast = currentPage * postsPerPage
@@ -15,8 +15,6 @@ const CommentPagination =  (/* {comment, currentPage} : IComments */) => {
     return currentPosts;
   } */
     
-
-
 return (
     <div>
 

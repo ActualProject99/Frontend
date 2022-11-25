@@ -4,7 +4,6 @@ import createScrollSnap from "scroll-snap";
 import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { AnimatePresence, motion } from "framer-motion";
 import icons from "../components/icons";
-import Portal from "../components/Portal";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
 import main3 from "../image/main3.png";
@@ -12,6 +11,7 @@ import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
+import Portal from "../components/Portal";
 const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);

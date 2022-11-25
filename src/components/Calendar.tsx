@@ -20,7 +20,6 @@ import { useRecoilState } from "recoil";
 import { dateSelected } from "../atoms/date";
 import icons from "../components/icons";
 import { cls } from "../utils";
-import Portal from "./Portal";
 
 interface Props {
   checkedDates?: Date[];
@@ -47,17 +46,14 @@ const Calendar = ({
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [getDateSelected, setDateSelected] = useRecoilState(dateSelected);
-
   let days = eachDayOfInterval({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
-
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
-
   function nextMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
@@ -167,9 +163,7 @@ const Calendar = ({
     </div>
   );
 };
-
 export default Calendar;
-
 let colStartClasses = [
   "",
   "col-start-2",
