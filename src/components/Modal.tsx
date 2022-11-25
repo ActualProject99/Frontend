@@ -1,7 +1,6 @@
 import { MouseEventHandler, ReactNode } from "react";
 import usePreventScroll from "../hooks/window/usePreventScroll";
-import Portal from './Potal';
-
+import Portal from "./Portal";
 
 const Modal = ({
   onClick,

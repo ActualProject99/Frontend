@@ -16,7 +16,7 @@ import Modal from "./Modal";
 import { useForm } from "react-hook-form";
 
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
-import Portal from './Potal';
+import Portal from "./Portal";
 
 const Search = ({
   viewer,

@@ -1,14 +1,9 @@
-import {
-  useRef,
-  useEffect,
-  ReactNode,
-  forwardRef,
-  LegacyRef,
-  useState,
-} from "react";
+import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
-import { mainContent } from "../atoms/mainContent";
+import { mainContent, mainScrollRef } from "../atoms/mainContent";
+import { AnimatePresence, motion } from "framer-motion";
+import icons from "../components/icons";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
 import main3 from "../image/main3.png";
@@ -16,27 +11,77 @@ import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
+import Portal from "../components/Portal";
+const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-  const contrastColorNos = [1];
   return (
-    <div className="fixed flex flex-col gap-6 top-1/2 -translate-y-1/2 left-10">
-      {[1, 2, 3, 4, 5, 6].map((_, i) => (
-        <div
-          key={i}
-          className={cls(
-            "w-2 h-2 transition-colors duration-300 rounded-full",
-            contrastColorNos.includes(contentNo)
-              ? contentNo === i
-                ? "bg-slate-200"
-                : "bg-slate-600"
-              : contentNo === i
-              ? "bg-slate-800"
-              : "bg-slate-400"
-          )}
-        ></div>
-      ))}
-    </div>
+    <Portal>
+      <div className="h-6 lg:h-fit fixed flex flex-row items-end lg:items-start bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-2 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
+        {[1, 2, 3, 4, 5, 6, 7].map((_, i) => (
+          <div
+            key={i}
+            className={cls(
+              "w-9 sm:w-16 transition-all duration-300 lg:h-12",
+              contrastColorNos.includes(contentNo)
+                ? contentNo === i
+                  ? "bg-slate-100 h-1 lg:w-1"
+                  : "bg-slate-500 h-0.5 lg:w-0.5"
+                : contentNo === i
+                ? "bg-slate-400 h-1 lg:w-1"
+                : "bg-slate-200 h-0.5 lg:w-0.5"
+            )}
+          ></div>
+        ))}
+      </div>
+    </Portal>
+  );
+};
+const ScrollTop = () => {
+  const [contentNo] = useRecoilState<number>(mainContent);
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<HTMLDivElement | null>(mainScrollRef);
+  const handleClick = () => {
+    getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+  };
+  return (
+    <Portal>
+      <icons.ArrowTurnUp
+        onClick={handleClick}
+        className={cls(
+          "fixed right-3 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
+          contrastColorNos.includes(contentNo) ? "text-white" : "text-black"
+        )}
+      />
+    </Portal>
+  );
+};
+const ContentCopy = ({
+  no,
+  main,
+  sub,
+}: {
+  no?: string;
+  main: ReactNode;
+  sub: ReactNode;
+}) => {
+  return (
+    <>
+      <div className="hidden lg:block p-2">
+        <p className="mb-6 pl-1 font-bold">{no}</p>
+        <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-full">
+          {main}
+        </p>
+        <p className="text-base">{sub}</p>
+      </div>
+      <div className="lg:hidden min-w-[375px] translate-y-32 backdrop-blur-sm bg-white/60 p-2 rounded-2xl">
+        <p className="mb-6 pl-1 font-bold">{no}</p>
+        <p className="text-3xl leading-[48px] font-extrabold mb-6 w-full">
+          {main}
+        </p>
+        <p className="text-xs font-bold">{sub}</p>
+      </div>
+    </>
   );
 };
 const Main = () => {
@@ -47,7 +92,10 @@ const Main = () => {
   const content4 = useRef<HTMLDivElement | null>(null);
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
-  const [_, setContentNo] = useRecoilState<number>(mainContent);
+  const content7 = useRef<HTMLDivElement | null>(null);
+  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<HTMLDivElement | null>(mainScrollRef);
   useEffect(() => {
     setContentNo(0);
   }, []);
@@ -65,6 +113,7 @@ const Main = () => {
           content4.current?.offsetTop,
           content5.current?.offsetTop,
           content6.current?.offsetTop,
+          content7.current?.offsetTop,
         ].forEach((offsetTop, i) => {
           if (typeof offsetTop !== "undefined" && snapContainer.current) {
             if (
@@ -78,11 +127,16 @@ const Main = () => {
       }
     );
   }, []);
+  useEffect(() => {
+    if (snapContainer.current) {
+      setMainScrollRef(snapContainer.current);
+    }
+  }, []);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
         <div
-          className="h-screen flex justify-between items-center w-[800px] mx-auto"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative"
           ref={ref}
         >
           {children}
@@ -93,23 +147,45 @@ const Main = () => {
   return (
     <>
       <Indicator />
+      <ScrollTop />
       <div
         ref={snapContainer}
         className="h-screen overflow-y-scroll scrollbar-hide"
       >
         <div
           ref={content1}
-          className="h-screen flex justify-center items-center gap-12"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
         >
-          <div>
-            <p className="text-[40px] leading-[48px] font-extrabold pt-40 mb-6 w-80">
-              혼자만의 공연이 함께가 되는 곳
-            </p>
-            <p className="text-2xl">너와 나의 티켓고리</p>
+          <div className="w-[320px]">
+            {contentNo === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white/60 translate-y-20 py-3 rounded-3xl backdrop-blur-sm"
+              >
+                <motion.p
+                  className="text-[40px] leading-[48px] font-extrabold mb-6 w-80"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  혼자만의 공연이 함께가 되는 곳
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                  className="text-2xl"
+                >
+                  너와 나의 티켓고리
+                </motion.p>
+              </motion.div>
+            )}
           </div>
-          <div>
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="w-[520px] h-[640px] object-contain"
+              className="min-w-[340px] sm:min-w-[500px] h-[600px] md:min-w-[320px] md:w-[450px] md:h-[600px] object-contain"
               src={main1}
               alt=""
             />
@@ -194,7 +270,7 @@ const Main = () => {
           />
           <div className="cursor-pointer absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
             <img
-              className="w-[330px] h-[375px] object-contain"
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
               src={main3}
               alt=""
             />
@@ -249,20 +325,28 @@ const Main = () => {
           </div>
         </Content>
         <Content ref={content6}>
-          <div>
-            <p className="mb-6 pl-1 font-bold"> 04</p>
-            <p className="text-[40px] leading-[48px] font-extrabold mb-6 w-[420px]">
-              기다렸던 티켓팅에 <br />
-              실패하지 않도록 <br />
-              미리 워밍업 해보세요!
-            </p>
-            <p className="text-base">
-              예매할 때와 비슷한 환경으로 <br />
-              실패없는 티켓팅을 준비해보세요
-            </p>
-          </div>
-          <div>
-            <img className="w-[430px] h-96 object-cover" src={main6} alt="" />
+          <ContentCopy
+            no="04"
+            main={
+              <>
+                기다렸던 티켓팅에 <br />
+                실패하지 않도록 <br />
+                미리 워밍업 해보세요!
+              </>
+            }
+            sub={
+              <>
+                예매할 때와 비슷한 환경으로 <br />
+                실패없는 티켓팅을 준비해보세요
+              </>
+            }
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+            <img
+              className="min-w-[400px] sm:min-w-[500px] h-[600px] md:w-[330px] md:h-[375px] object-contain"
+              src={main6}
+              alt=""
+            />
           </div>
         </Content>
         <div ref={content7}>
