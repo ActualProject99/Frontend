@@ -6,8 +6,6 @@ import { dateSelected } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import { format, isSameDay, parseISO } from "date-fns";
 import useFixoluteBox from "../hooks/fixsolute";
-import ConcertSlide from '../components/ConcertSlide';
-
 
 const concerts = [
   {
@@ -186,7 +184,6 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   );
   return (
     <>
-      <ConcertSlide/>
       {no1 ? (
         <>
           <div className="pt-16 mb-8  h-[460px]">
