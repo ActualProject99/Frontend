@@ -24,3 +24,13 @@ export const isGameSuccess = atom<IsGameSuccess>({
   key: "isGameSuccess",
   default: [null, null],
 });
+export type IsRefreshedValid = null | boolean;
+export const isRefreshedValid = atom<IsRefreshedValid>({
+  key: "isRefreshedValid",
+  default: null,
+});
+export type IsGameDone = boolean;
+export const isGameDone = atom<IsGameDone>({
+  key: "isGameDone",
+  default: false,
+});

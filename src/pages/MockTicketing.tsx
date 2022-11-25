@@ -3,20 +3,18 @@ import Seats from "../components/Seats";
 import useMock from "../hooks/useMock";
 import { useEffect, useRef, useState } from "react";
 import Clock from "../components/Clock";
-import { cls, highDimArr } from "../utils";
+import { cls } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Modal from "../components/Modal";
-import usePreventWheel from "../hooks/usePreventScroll";
 import { useRecoilState } from "recoil";
 import {
-  hasBooked,
-  hasPlaced,
+  isGameDone,
+  IsGameDone,
   isGameSuccess,
   IsGameSuccess,
-  userSelected,
-  UserSelected,
+  IsRefreshedValid,
+  isRefreshedValid,
 } from "../atoms/mockTicketing";
-import { z } from "zod";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -24,44 +22,44 @@ const MockTicketing = () => {
   const [difficulty, setDifficulty] = useState<"" | "easy">("");
   const [isGamming, setIsGamming] = useState(false);
   const [isCountDownStart, setIsCountDownStart] = useState(false);
+  const resetSession = () => {
+    sessionStorage.removeItem("game");
+    sessionStorage.removeItem("countDownTime");
+  };
   const handleChange = ({ target }) => {
     setDifficulty(target.value);
   };
-  const handleClick = () => {
-    sessionStorage.setItem("key", "value");
+  const handleClickStart = () => {
+    sessionStorage.setItem("game", "started");
     setIsCountDownStart(true);
   };
-  const handleClickStart = () => {
+  const handleClickBook = () => {
     setIsGamming(true);
-    sessionStorage.removeItem("key");
-    sessionStorage.removeItem("countDownTime");
+    resetSession();
   };
   useEffect(() => {
     return () => {
-      sessionStorage.removeItem("key");
-      sessionStorage.removeItem("countDownTime");
+      resetSession();
     };
   }, []);
-  const isGameStated = useRef(sessionStorage.getItem("key")).current;
-  const [getHasBooked, setHasBooked] = useRecoilState(hasBooked);
+  const isGameStated = useRef(sessionStorage.getItem("game"));
+  const [getIsRefreshedValid, setIsRefreshedValid] =
+    useRecoilState<IsRefreshedValid>(isRefreshedValid);
   const [getIsGameSuccess, setIsGameSuccess] =
     useRecoilState<IsGameSuccess>(isGameSuccess);
-  const [getUserSelected, setUserSelected] =
-    useRecoilState<UserSelected>(userSelected);
+  const [getIsGameDone, setIsGameDone] = useRecoilState<IsGameDone>(isGameDone);
+  const [countDown, setCountDown] = useState<Date>(
+    new Date("2022.11.24 19:59:57")
+  );
+  const handleClickBack = () => {
+    setIsRefreshedValid(null);
+    setIsGameDone(false);
+    resetSession();
+    isGameStated.current = false;
+    setIsGamming(false);
+    setCountDown(new Date("2022.11.24 19:59:57"));
+  };
   useEffect(() => {
-    // const seatIndexSchema = z.tuple([z.number(), z.number(), z.number()]);
-    // console.log("getHasBooked : ", getHasBooked);
-    // console.log("getUserSelected : ", getUserSelected);
-    // // console.log(seatIndexSchema.safeParse(getUserSelected));
-    // if (seatIndexSchema.safeParse(getUserSelected).success) {
-    //   console.log(
-    //     highDimArr(
-    //       getHasBooked,
-    //       getUserSelected as z.infer<typeof seatIndexSchema>
-    //     )
-    //   );
-    // }
-    console.log(getIsGameSuccess);
     if (
       getIsGameSuccess.every((success) => success === false) ||
       (getIsGameSuccess[0] === false && getIsGameSuccess[1] === null)
@@ -83,7 +81,7 @@ const MockTicketing = () => {
           isGamming ? "hidden" : "block"
         )}
       >
-        <div className="flex-[3] bg-slate-400 flex flex-col">
+        <div className="flex-[3] flex flex-col">
           <div className="flex-[3] p-3 bg-blue-400 flex gap-2">
             <div className="bg-slate-600 h-full w-full" />
             <div className="bg-slate-400 w-1/2 flex flex-col">
@@ -122,32 +120,43 @@ const MockTicketing = () => {
               </div>
             </div>
           </div>
-          <div className="flex-[1] bg-blue-500">
-            <Clock start={isCountDownStart} />
-            {isGameStated ? (
+          <div className="flex-[1] flex items-center gap-3 justify-center">
+            <div className="relative">
+              <div className="absolute -top-7 w-64">
+                정각이되면 새로고침을 눌러주세요
+              </div>
+              <Clock start={isCountDownStart} time={countDown} />
+            </div>
+            {isGameStated.current ? (
               <StartBtn>
-                <button onClick={handleClickStart}>예매하기</button>
+                <button
+                  className="p-1.5 rounded-2xl text-2xl bg-primary-800 text-white "
+                  onClick={handleClickBook}
+                >
+                  예매하기
+                </button>
               </StartBtn>
             ) : (
-              <button onClick={handleClick}>시작하기</button>
+              <button
+                className="p-1.5 rounded-2xl text-2xl bg-primary-800 text-white relative hover:overflow-hidden hover:scale-110 ease-in-out transition-transform"
+                onClick={handleClickStart}
+              >
+                시작하기
+                <div
+                  className={cls(
+                    "h-full w-full absolute rounded-2xl text-2xl bg-primary-800 text-white top-0 left-0 -z-10",
+                    isCountDownStart || "animate-ping-small"
+                  )}
+                ></div>
+              </button>
             )}
           </div>
         </div>
         <div className="flex-[1] bg-slate-600"></div>
       </div>
-      <button
-        onClick={() => {
-          setToasts((cur) => cur.concat(Date.now()));
-          setTimeout(() => {
-            setToasts((cur) => [...cur.slice(1)]);
-          }, 2000);
-        }}
-      >
-        toast
-      </button>
       <div className="fixed left-0 top-48">
         <AnimatePresence>
-          {toasts?.map((toast, i) => (
+          {toasts?.map((toast) => (
             <motion.div
               initial={{ x: -700 }}
               animate={{ x: 0 }}
@@ -164,6 +173,36 @@ const MockTicketing = () => {
         <Modal onClick={() => setIsGameSuccess((cur) => [false, cur[0]])}>
           <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-primary-700 rounded-xl w-1/2 h-3/4">
             you win
+          </div>
+        </Modal>
+      ) : null}
+      {getIsRefreshedValid === false ? (
+        <Modal onClick={() => {}}>
+          <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-primary-700 rounded-xl w-1/2 h-3/4 px-4 py-8">
+            <div className="flex flex-col mx-auto">
+              you lose! 새로고침을 너무 일찍 했습니다.
+              <button
+                onClick={handleClickBack}
+                className="bg-primary-700 text-white"
+              >
+                돌아가기
+              </button>
+            </div>
+          </div>
+        </Modal>
+      ) : null}
+      {getIsGameDone ? (
+        <Modal onClick={() => {}}>
+          <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-primary-700 rounded-xl w-1/2 h-3/4 px-4 py-8">
+            <div className="flex flex-col mx-auto">
+              you lose 어렵나요 이게
+              <button
+                onClick={handleClickBack}
+                className="bg-primary-700 text-white"
+              >
+                돌아가기
+              </button>
+            </div>
           </div>
         </Modal>
       ) : null}

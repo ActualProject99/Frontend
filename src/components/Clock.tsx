@@ -1,6 +1,8 @@
-import { addSeconds, format, parseISO } from "date-fns";
+import { addSeconds, format, getHours, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { IsRefreshedValid, isRefreshedValid } from "../atoms/mockTicketing";
+import useBeforeRefresh from "../hooks/window/useBeforRefresh";
 
 const Clock = ({
   start = true,
@@ -10,6 +12,8 @@ const Clock = ({
   time: Date;
 }) => {
   const [countDown, setCountDown] = useState<Date>(time);
+  const [, setIsRefreshedValid] =
+    useRecoilState<IsRefreshedValid>(isRefreshedValid);
   useEffect(() => {
     const addSec = function* (countDown: Date) {
       let i = 0;
@@ -37,13 +41,20 @@ const Clock = ({
         1
       );
     if (time) {
-      setCountDown(time);
-      setInterval(() => {
-        setCountDown((cur) => addSeconds(cur, 1));
-      }, 1000);
+      if (getHours(addSeconds(time, -1)) > 19) {
+        setIsRefreshedValid(true);
+        setCountDown(time);
+        setInterval(() => {
+          setCountDown((cur) => addSeconds(cur, 1));
+        }, 1000);
+      } else {
+        setIsRefreshedValid(false);
+      }
     }
   }, []);
-  return <div>{format(countDown, "hh:mm:ss")}</div>;
+  return (
+    <span className="text-4xl font-bold">{format(countDown, "hh:mm:ss")}</span>
+  );
 };
 
 export default Clock;

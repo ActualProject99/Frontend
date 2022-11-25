@@ -7,6 +7,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        "ping-small": "ping-small 1s cubic-bezier(0, 0, 0.2, 1) infinite;",
+      },
+      keyframes: {
+        "ping-small": {
+          "75%, 100%": {
+            transform: "scale(1.3)",
+            opacity: 0,
+          },
+        },
+      },
       colors: {
         primary: {
           main: "#A81DE4",

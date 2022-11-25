@@ -10,7 +10,7 @@ import {
 import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
 import { Concert, datedConcerts, showingConcerts } from "../atoms/concert";
-import useWindowSize from "../hooks/useWindowSize";
+import useWindowSize from "../hooks/window/useWindowSize";
 import Modal from "../components/Modal";
 import useDrawer from "../hooks/useDrawer";
 import { AnimatePresence, motion } from "framer-motion";
