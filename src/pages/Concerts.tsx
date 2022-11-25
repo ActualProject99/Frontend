@@ -6,6 +6,8 @@ import { dateSelected } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import { format, isSameDay, parseISO } from "date-fns";
 import useFixoluteBox from "../hooks/fixsolute";
+import ConcertSlide from '../components/ConcertSlide';
+
 
 const concerts = [
   {
@@ -184,6 +186,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   );
   return (
     <>
+      <ConcertSlide/>
       {no1 ? (
         <>
           <div className="pt-16 mb-8  h-[460px]">
@@ -233,8 +236,8 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
       </h3> */}
           <div className="flex gap-4 justify-center mt-12 flex-wrap">
             {dateChosenConcerts.length > 0 ? (
-              dateChosenConcerts.map((consert, index) => (
-                <Cards key={index} concert data={consert} />
+              dateChosenConcerts.map((concert, index) => (
+                <Cards key={index} concert data={concert} />
               ))
             ) : (
               <p>No concerts for today.</p>

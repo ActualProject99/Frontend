@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { deactivate, activate } from "../instance";
 import axios from "axios";
 
 //콘서트 Interface
