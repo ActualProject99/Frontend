@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        logo: ["lemon"],
+      },
       colors: {
         primary: {
           main: "#A81DE4",
