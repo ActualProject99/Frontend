@@ -18,6 +18,8 @@ jobs: # Job 설정
 
       - name: Build # React Build
         run: npm run build
+        env:
+          CI: ""
 
       - name: Deploy # Upload build file to S3!!
         env:
