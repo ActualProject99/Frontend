@@ -14,8 +14,9 @@ import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
-import Portal from "./Portal";
+
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+import Portal from './Potal';
 
 const Search = ({
   viewer,

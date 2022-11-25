@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deactivate, activate } from "../instance";
 import axios from "axios";
 import { deactivate } from "../instance";
 
