@@ -63,9 +63,7 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
-    { name: "홈", path: "" },
     { name: "콘서트", path: "concerts" },
-    { name: "장소", path: "" },
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
   ];
@@ -165,7 +163,7 @@ const Nav = ({
               contentNo === 1 ? "text-white" : "text-black"
             )}
           >
-            <div className="text-4xl py-2 font-logo">Tgle</div>
+            <div className="text-4xl py-2 font-logo cursor-pointer">Tgle</div>
             <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
               {pages.map((page, i) => (
                 <li key={i}>

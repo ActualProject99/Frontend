@@ -1,28 +1,41 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, ReactNode, useState } from "react";
 type Tap = [string, React.ReactNode];
 const Selector = ({
   name,
   onClick,
+  className,
 }: {
   name: string;
+  className: string;
   onClick: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
-    <div className="cursor-pointer" onClick={onClick}>
+    <div className={className} onClick={onClick}>
       {name}
     </div>
   );
 };
-const useTaps = (...taps: Tap[]) => {
+const useTaps = (styleNo: number, ...taps: Tap[]) => {
+  const styles = [
+    [
+      "flex justify-center items-center h-10 gap-x-28 border border-x-0 border-solid",
+      "cursor-pointer",
+    ],
+  ];
   const [index, setIndex] = useState(0);
   const handleClick = (i: number) => () => {
     setIndex(i);
   };
   const Taps = () => {
     return (
-      <div className="flex justify-center items-center h-10 gap-x-28 border border-x-0 border-solid">
+      <div className={styles[styleNo][0]}>
         {taps.map((tap, i) => (
-          <Selector key={i} onClick={handleClick(i)} name={tap[0]} />
+          <Selector
+            key={i}
+            className={styles[styleNo][1]}
+            onClick={handleClick(i)}
+            name={tap[0]}
+          />
         ))}
       </div>
     );
