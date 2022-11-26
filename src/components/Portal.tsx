@@ -2,6 +2,7 @@ import ReactDOM from "react-dom";
 import { MouseEventHandler, ReactNode, useState } from "react";
 import usePreventScroll from "../hooks/window/usePreventScroll";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+import { cls } from "../utils";
 
 const Portal = ({ children }: { children: ReactNode }) => {
   const modalElement = document.querySelector("#portal");
@@ -30,7 +31,7 @@ export const Modal = ({
   );
 };
 
-export const useModal = (content: ReactNode) => {
+export const useModal = (size: "md" | "sm", content: ReactNode) => {
   const [isOpened, setIsOpened] = useState(false);
   const toggler = () => {
     setIsOpened((cur) => !cur);
@@ -39,7 +40,13 @@ export const useModal = (content: ReactNode) => {
     useWindowKeyboard("Escape", toggler);
     return isOpened ? (
       <Modal onClick={toggler}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20">
+        <div
+          className={cls(
+            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20",
+            size === "md" && "w-1/2 h-3/4",
+            size === "sm" && "w-1/4 h-1/2"
+          )}
+        >
           <div
             onClick={toggler}
             className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
