@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Clock from "../components/Clock";
 import { cls } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
-import Modal from "../components/Modal";
+import { Modal } from "../components/Portal";
 import { useRecoilState } from "recoil";
 import {
   isGameDone,
@@ -20,7 +20,7 @@ const MockTicketing = () => {
   const { StartBtn } = useMock();
   const [toasts, setToasts] = useState<number[]>([]);
   const [difficulty, setDifficulty] = useState<"" | "easy">("");
-  const [isGamming, setIsGamming] = useState(false);
+  const [isGaming, setIsGaming] = useState(false);
   const [isCountDownStart, setIsCountDownStart] = useState(false);
   const resetSession = () => {
     sessionStorage.removeItem("game");
@@ -34,7 +34,7 @@ const MockTicketing = () => {
     setIsCountDownStart(true);
   };
   const handleClickBook = () => {
-    setIsGamming(true);
+    setIsGaming(true);
     resetSession();
   };
   useEffect(() => {
@@ -56,8 +56,9 @@ const MockTicketing = () => {
     setIsGameDone(false);
     resetSession();
     isGameStated.current = false;
-    setIsGamming(false);
+    setIsGaming(false);
     setCountDown(new Date("2022.11.24 19:59:57"));
+    setIsGameSuccess([null, null]);
   };
   useEffect(() => {
     if (
@@ -72,13 +73,13 @@ const MockTicketing = () => {
   }, [getIsGameSuccess]);
   return (
     <>
-      <div className={cls(isGamming ? "block" : "hidden")}>
+      <div className={cls(isGaming ? "block" : "hidden")}>
         <Seats />
       </div>
       <div
         className={cls(
           "w-full h-96 border border-red-300 flex",
-          isGamming ? "hidden" : "block"
+          isGaming ? "hidden" : "block"
         )}
       >
         <div className="flex-[3] flex flex-col">
@@ -173,6 +174,12 @@ const MockTicketing = () => {
         <Modal onClick={() => setIsGameSuccess((cur) => [false, cur[0]])}>
           <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-primary-700 rounded-xl w-1/2 h-3/4">
             you win
+            <button
+              onClick={handleClickBack}
+              className="bg-primary-700 text-white"
+            >
+              돌아가기
+            </button>
           </div>
         </Modal>
       ) : null}
@@ -191,7 +198,7 @@ const MockTicketing = () => {
           </div>
         </Modal>
       ) : null}
-      {getIsGameDone ? (
+      {getIsGameDone && !getIsGameSuccess[0] ? (
         <Modal onClick={() => {}}>
           <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-primary-700 rounded-xl w-1/2 h-3/4 px-4 py-8">
             <div className="flex flex-col mx-auto">

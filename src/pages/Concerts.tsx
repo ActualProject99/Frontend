@@ -10,7 +10,7 @@ import {
 import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
 import useWindowSize from "../hooks/window/useWindowSize";
-import Modal from "../components/Modal";
+import { Modal } from "../components/Portal";
 import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
 import Portal from "../components/Portal";
