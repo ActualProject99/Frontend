@@ -63,9 +63,27 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
-    { name: "콘서트", path: "concerts" },
-    { name: "티켓팅 연습", path: "mock-ticketing" },
-    { name: "마이페이지", path: "user/mypage" },
+    { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
+    { name: "콘서트", path: "concerts", title: "Concert | Tgle", isNav: true },
+    {
+      name: "티켓팅 연습",
+      path: "mock-ticketing",
+      title: "Play Ticketing | Tgle",
+      isNav: true,
+    },
+    {
+      name: "my Picks",
+      path: "user/mypage",
+      title: "my Picks | Tgle",
+      isNav: true,
+    },
+    { name: "login", path: "user/login", title: "log in | Tgle", isNav: false },
+    {
+      name: "signup",
+      path: "user/signup",
+      title: "sign up | Tgle",
+      isNav: false,
+    },
   ];
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
@@ -88,6 +106,14 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
+  console.log(pathname);
+  useEffect(() => {
+    pages.forEach((page) => {
+      if (pathname.includes(page.path)) {
+        document.title = page.title;
+      }
+    });
+  }, [pathname]);
 
   return (
     <Portal>
@@ -110,11 +136,13 @@ const Nav = ({
                   </Link>
                 </div>
                 <ul className="flex gap-4 xl:gap-10">
-                  {pages.map((page, i) => (
-                    <li key={i}>
-                      <Link to={page.path}>{page.name}</Link>
-                    </li>
-                  ))}
+                  {pages.map((page, i) =>
+                    page.isNav ? (
+                      <li key={i}>
+                        <Link to={page.path}>{page.name}</Link>
+                      </li>
+                    ) : null
+                  )}
                 </ul>
               </div>
               <div className="w-60 h-18 flex items-center justify-between gap-3">
@@ -176,11 +204,13 @@ const Nav = ({
           >
             <div className="text-4xl py-2 font-logo cursor-pointer">Tgle</div>
             <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
-              {pages.map((page, i) => (
-                <li key={i}>
-                  <Link to={page.path}>{page.name}</Link>
-                </li>
-              ))}
+              {pages.map((page, i) =>
+                page.isNav ? (
+                  <li key={i}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </li>
+                ) : null
+              )}
             </ul>
           </div>
         )}
