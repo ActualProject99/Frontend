@@ -24,6 +24,6 @@ const useWindowKeyboard = (
     return () => {
       window.addEventListener("keydown", pressKey);
     };
-  }, []);
+  }, [callback, keyName, option.altKey, option.ctrlKey, option.shiftKey]);
 };
 export default useWindowKeyboard;

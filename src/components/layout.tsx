@@ -1,10 +1,4 @@
-import {
-  KeyboardEvent,
-  KeyboardEventHandler,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
@@ -14,8 +8,8 @@ import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
-import Portal from "./Portal";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+import Portal from "./Portal";
 
 const Search = ({
   viewer,
@@ -28,21 +22,21 @@ const Search = ({
   };
   useEffect(() => {
     setFocus("search");
-  }, []);
+  }, [setFocus]);
   useWindowKeyboard("Escape", viewer.off);
   return (
     <Modal onClick={viewer.off}>
       <form
         onSubmit={handleSubmit(onValid)}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl border-2 border-secondary-700 bg-white"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl border-4 border-primary-700 bg-white"
       >
         <div className="pt-4 px-4 flex justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center w-full">
             <icons.Search />
             <input
               type="text"
               spellCheck="false"
-              className="selection:bg-secondary-200 text-lg font-bold text-secondary-700 selection:text-secondary-500 border-none focus:ring-0 caret-secondary-700"
+              className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
               autoComplete="off"
               {...register("search")}
             />
@@ -50,7 +44,7 @@ const Search = ({
           </div>
           <div
             onClick={viewer.off}
-            className="cursor-pointer w-12 h-8 bg-secondary-700 text-white rounded-xl leading-7 text-center"
+            className="cursor-pointer w-12 h-8 bg-primary-700 font-bold text-white rounded-xl leading-7 text-center"
           >
             esc
           </div>
@@ -69,13 +63,15 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
+    { name: "홈", path: "" },
     { name: "콘서트", path: "concerts" },
+    { name: "장소", path: "" },
     { name: "티켓팅 연습", path: "mock-ticketing" },
     { name: "마이페이지", path: "user/mypage" },
   ];
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
-  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<number>(mainContent);
   const handleClick = () => {
     setUser(initUser);
   };
@@ -107,8 +103,13 @@ const Nav = ({
           <div className="flex items-center">
             <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10 xl:gap-24">
-                <div className="w-[140px] h-10 bg-primary-main rounded">
-                  <Link className="w-full h-full block" to=""></Link>
+                <div className="w-[140px] h-10 rounded">
+                  <Link
+                    className="w-full h-full block font-logo text-4xl"
+                    to=""
+                  >
+                    Tgle
+                  </Link>
                 </div>
                 <ul className="flex gap-4 xl:gap-10">
                   {pages.map((page, i) => (
@@ -121,7 +122,7 @@ const Nav = ({
               <div className="w-72 h-18 flex items-center justify-center gap-3 md:justify-between">
                 <div
                   onClick={handleClickSearchOn}
-                  className="w-14 md:w-36 h-10 border-4 border-secondary-main flex justify-center md:justify-between items-center p-2 px-4 rounded-full md:rounded-2xl cursor-pointer"
+                  className="w-14 md:w-36 h-10 border-4 border-primary-700 flex justify-center md:justify-between items-center p-2 px-4 rounded-full md:rounded-2xl cursor-pointer"
                 >
                   <icons.Search strokeWidth={3} />
                   <div className="hidden md:block text-sm font-semibold">
@@ -137,7 +138,7 @@ const Nav = ({
                     }}
                   />
                 ) : null}
-                <div className="w-28 md:w-[140px] h-10 bg-secondary-main flex justify-center items-center rounded-2xl">
+                <div className="w-28 md:w-[140px] h-10 bg-primary-700 text-white font-bold flex justify-center items-center rounded-2xl">
                   {isLoggedin ? (
                     <div
                       className="w-full h-full flex justify-center items-center"
@@ -164,7 +165,7 @@ const Nav = ({
               contentNo === 1 ? "text-white" : "text-black"
             )}
           >
-            <div className="text-4xl font-extrabold py-2">Tgle</div>
+            <div className="text-4xl py-2 font-logo">Tgle</div>
             <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
               {pages.map((page, i) => (
                 <li key={i}>
@@ -181,7 +182,7 @@ const Nav = ({
 const Footer = () => {
   return (
     <div className="bg-slate-200 h-96 flex items-center">
-      <div className="bg-slate-400 xl:w-[1200px] mx-auto ">footer</div>
+      <div className="bg-slate-400 w-[1200px] mx-auto ">footer</div>
     </div>
   );
 };

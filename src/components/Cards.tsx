@@ -1,4 +1,3 @@
-import { format, isSameDay, parseISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
 interface Concert {
   id: number;
@@ -15,7 +14,6 @@ interface Props {
   horizontal?: boolean;
   vertical?: boolean;
 }
-
 const Cards = ({ concert, data, horizontal, vertical, ...rest }: Props) => {
   const navigate = useNavigate();
   const handleClick = () => {
@@ -68,5 +66,4 @@ const Cards = ({ concert, data, horizontal, vertical, ...rest }: Props) => {
     </>
   );
 };
-
 export default Cards;

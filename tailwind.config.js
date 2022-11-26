@@ -21,6 +21,9 @@ module.exports = {
       width: {
         "screen-scroll": "calc(100vw - 18px)",
       },
+      fontFamily: {
+        logo: ["lemon"],
+      },
       colors: {
         primary: {
           main: "#A81DE4",

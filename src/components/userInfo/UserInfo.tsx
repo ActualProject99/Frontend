@@ -83,7 +83,6 @@ const UserInfo = (): JSX.Element => {
         type="file"
         onChange={onChangeImg}
       />
-      {/* <CloudinaryUploadWidget />  */}
       <div className="flex flex-col items-start   w-96 h-36 gap-y-4">
         <div className="flex items-center h-11 ">
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />

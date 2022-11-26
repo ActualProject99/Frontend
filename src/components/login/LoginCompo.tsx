@@ -49,7 +49,7 @@ const LoginCompo = (): JSX.Element => {
       window.alert("이미 로그인 했어요!");
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, cookie]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
