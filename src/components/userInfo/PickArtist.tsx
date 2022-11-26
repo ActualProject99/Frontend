@@ -25,7 +25,7 @@ const PickArtist = (): JSX.Element => {
 
   return (
     <>
-      <div className="flex justify-between py-5 mx-auto mt-10 mb-0 w-[95%]">
+      <div className="flex justify-between py-5 mx-auto mt-2 mb-0 w-[95%]">
         <div className=" flex items-end gap-x-3 ml-1">
           <p className="text-2xl font-bold ">
             <span className="text-primary-500">긍정킹</span>님의 아티스트 취향

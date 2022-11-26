@@ -1,11 +1,12 @@
 import { setAccessToken } from "../cookie";
-import { activate } from "../instance";
+import { activate, deactivate } from "../instance";
 
 export const OAuthAPI = {
   loginWithKakao: async (kakaoToken: string) => {
-    return await activate
+    return await deactivate
       .get(`oauth/kakao/callback?code=${kakaoToken}`)
       .then((data) => {
+        console.log("토큰", data);
         setAccessToken("data.headers.authorization");
       })
       .then(() => {

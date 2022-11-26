@@ -92,6 +92,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   };
 
   const { Taps, Viewer } = useTaps(
+    0,
     ["상세정보", <MoreInfo />],
     ["공연장정보", <NaverMap concert={concert} />],
     ["기대평", <CommentList />]

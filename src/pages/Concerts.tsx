@@ -1,4 +1,4 @@
-import Calendar, { CalenderDrawer } from "../components/Calendar";
+import Calendar from "../components/Calendar";
 import { useEffect, useState } from "react";
 import { cls } from "../utils";
 import Cards from "../components/Cards";
@@ -9,11 +9,8 @@ import {
 } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
-import useWindowSize from "../hooks/window/useWindowSize";
-import Modal from "../components/Modal";
 import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
-import Portal from "../components/Portal";
 
 const groups = [
   "전체",
@@ -33,8 +30,7 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
   const {
     refs: { fixsolute, limit },
     fixoluteStyle,
-  } = useFixoluteBox();
-  const { isMd } = useWindowSize();
+  } = useFixoluteBox(60);
   const [dateChosen] = useRecoilState<Date>(dateSelected);
   const handleClick = (i: number) => () => {
     setSelect(i);
@@ -45,16 +41,16 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
     setShowingConcerts(datedConcerts(select, dateChosen.getDate()));
     setIsVisible(false);
   }, [select, dateChosen, setShowingConcerts]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [, setIsVisible] = useState(false);
   return (
     <>
       <ConcertSlider />
-      <div className="pt-16 mb-8  h-[460px]">
+      <div className="pt-16 mt-[640px] mb-8">
         <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 h-full">
-          <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200  h-full relative">
-            <div className="relative h-full">
-              {isMd ? (
-                <div className="w-80" ref={fixsolute} style={fixoluteStyle}>
+          <div className="grid grid-cols-3 divide-x divide-gray-200  h-full relative">
+            <div className="relative h-[500px]">
+              <div ref={fixsolute} style={fixoluteStyle} className="">
+                <div className=" w-[280px]">
                   <Calendar selectable checkedDates={getdateAllConcerts} />
                   <ul className="flex justify-center gap-3 flex-wrap">
                     {groups.map((group, i) => (
@@ -71,76 +67,16 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
                     ))}
                   </ul>
                 </div>
-              ) : (
-                <>
-                  <Portal>
-                    <button
-                      className={cls(
-                        "fixed top-1/4 transition-all",
-                        isVisible ? "-left-16" : "left-0"
-                      )}
-                      onClick={() => {
-                        setIsVisible((cur) => !cur);
-                      }}
-                    >
-                      <CalenderDrawer />
-                    </button>
-                  </Portal>
-                  {isVisible ? (
-                    <Modal
-                      onClick={() => {
-                        setIsVisible((cur) => !cur);
-                      }}
-                    >
-                      <div className="fixed left-0 top-0">
-                        <Calendar
-                          selectable
-                          checkedDates={getdateAllConcerts}
-                        />
-                        <ul className="flex justify-center gap-3 flex-wrap mt-12 md:px-8">
-                          {groups.map((group, i) => (
-                            <li
-                              key={group}
-                              className={cls(
-                                "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                                i === select && "bg-primary-main text-white"
-                              )}
-                              onClick={handleClick(i)}
-                            >
-                              {group}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </Modal>
-                  ) : null}
-                </>
-              )}
+              </div>
             </div>
             <section
               ref={limit}
-              className="mt-12 md:min-h-[700px] md:mt-0 md:pl-8 flex flex-col justify-center items-center gap-10 md:col-span-2"
+              className="md:pl-8 flex flex-col min-h-[540px] justify-center items-center gap-10 md:col-span-2"
             >
-              {/* <h2 className="font-semibold text-gray-900">
-                Schedule for{" "}
-                <time dateTime={format(dateChosen, "yyyy-MM-dd")}>
-                  {format(dateChosen, "MMM dd, yyy")}
-                </time>
-              </h2> */}
-
-              <div className="hidden xl:flex gap-4 justify-center mt-12 flex-wrap">
+              <div className="flex gap-4 justify-center flex-wrap">
                 {getShowingConcerts.length > 0 ? (
                   getShowingConcerts.map((consert, i) => (
                     <Cards key={i} vertical concert data={consert} />
-                  ))
-                ) : (
-                  <p>No concerts for today.</p>
-                )}
-              </div>
-              <div className="flex xl:hidden gap-2 justify-center mt-12 flex-wrap">
-                {getShowingConcerts.length > 0 ? (
-                  getShowingConcerts.map((consert, i) => (
-                    <Cards key={i} horizontal concert data={consert} />
                   ))
                 ) : (
                   <p>No concerts for today.</p>

@@ -38,7 +38,7 @@ const LoginCompo = (): JSX.Element => {
     }
   };
   const kakaoBtn = () => {
-    const REDIRECT_URL = "http://" + process.env.REACT_APP_REDIRECT_FRONT;
+    const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
@@ -49,7 +49,7 @@ const LoginCompo = (): JSX.Element => {
       window.alert("이미 로그인 했어요!");
       navigate("/");
     }
-  }, [navigate, cookie]);
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
