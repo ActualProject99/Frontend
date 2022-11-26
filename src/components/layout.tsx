@@ -256,9 +256,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </>
       ) : (
-        <div className={cls("h-screen", getScrollable || "overflow-hidden")}>
+        <div
+          className={cls("min-h-screen", getScrollable || "overflow-hidden")}
+        >
           <Nav normal />
-          <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto min-h-screen border py-4 mt-24">
+          <div className="min-w-[360px] w-[1200px] mx-auto min-h-screen border py-4 mt-24">
             {children}
           </div>
           <Footer />
