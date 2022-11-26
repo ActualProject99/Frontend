@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { cls } from "../utils";
 import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
-import Modal from "./Modal";
+import { Modal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
@@ -28,9 +28,9 @@ const Search = ({
     <Modal onClick={viewer.off}>
       <form
         onSubmit={handleSubmit(onValid)}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl border-4 border-primary-700 bg-white"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20"
       >
-        <div className="pt-4 px-4 flex justify-between">
+        <div className="pt-4 px-4 flex justify-between relative">
           <div className="flex items-center w-full">
             <icons.Search />
             <input
@@ -44,7 +44,7 @@ const Search = ({
           </div>
           <div
             onClick={viewer.off}
-            className="cursor-pointer w-12 h-8 bg-primary-700 font-bold text-white rounded-xl leading-7 text-center"
+            className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
           >
             esc
           </div>
@@ -63,11 +63,27 @@ const Nav = ({
   no2?: boolean;
 }) => {
   const pages = [
-    { name: "홈", path: "" },
-    { name: "콘서트", path: "concerts" },
-    { name: "장소", path: "" },
-    { name: "티켓팅 연습", path: "mock-ticketing" },
-    { name: "마이페이지", path: "user/mypage" },
+    { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
+    { name: "콘서트", path: "concerts", title: "Concert | Tgle", isNav: true },
+    {
+      name: "티켓팅 연습",
+      path: "mock-ticketing",
+      title: "Play Ticketing | Tgle",
+      isNav: true,
+    },
+    {
+      name: "my Picks",
+      path: "user/mypage",
+      title: "my Picks | Tgle",
+      isNav: true,
+    },
+    { name: "login", path: "user/login", title: "log in | Tgle", isNav: false },
+    {
+      name: "signup",
+      path: "user/signup",
+      title: "sign up | Tgle",
+      isNav: false,
+    },
   ];
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
@@ -90,6 +106,14 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
+  console.log(pathname);
+  useEffect(() => {
+    pages.forEach((page) => {
+      if (pathname.includes(page.path)) {
+        document.title = page.title;
+      }
+    });
+  }, [pathname]);
 
   return (
     <Portal>
@@ -112,21 +136,27 @@ const Nav = ({
                   </Link>
                 </div>
                 <ul className="flex gap-4 xl:gap-10">
-                  {pages.map((page, i) => (
-                    <li key={i}>
-                      <Link to={page.path}>{page.name}</Link>
-                    </li>
-                  ))}
+                  {pages.map((page, i) =>
+                    page.isNav ? (
+                      <li key={i}>
+                        <Link to={page.path}>{page.name}</Link>
+                      </li>
+                    ) : null
+                  )}
                 </ul>
               </div>
-              <div className="w-72 h-18 flex items-center justify-center gap-3 md:justify-between">
+              <div className="w-60 h-18 flex items-center justify-between gap-3">
                 <div
                   onClick={handleClickSearchOn}
-                  className="w-14 md:w-36 h-10 border-4 border-primary-700 flex justify-center md:justify-between items-center p-2 px-4 rounded-full md:rounded-2xl cursor-pointer"
+                  className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
                 >
-                  <icons.Search strokeWidth={3} />
-                  <div className="hidden md:block text-sm font-semibold">
-                    Ctrl Shift f
+                  <div className="w-28 flex justify-between items-center">
+                    <div className="w-10 h-10 flex justify-center items-center">
+                      <icons.Search className="text-black" strokeWidth={3} />
+                    </div>
+                    <div className="text-xs font-semibold text-black">
+                      Ctrl Shift f
+                    </div>
                   </div>
                 </div>
 
@@ -138,20 +168,27 @@ const Nav = ({
                     }}
                   />
                 ) : null}
-                <div className="w-28 md:w-[140px] h-10 bg-primary-700 text-white font-bold flex justify-center items-center rounded-2xl">
+                <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
                   {isLoggedin ? (
-                    <div
-                      className="w-full h-full flex justify-center items-center"
-                      onClick={handleClick}
-                    >
-                      로그아웃
-                    </div>
+                    <>
+                      <div className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3">
+                        log
+                        <br />
+                        out
+                      </div>
+                      <div
+                        className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
+                        onClick={handleClick}
+                      ></div>
+                    </>
                   ) : (
                     <Link
-                      className="w-full h-full flex justify-center items-center cursor-pointer"
+                      className="cursor-pointer text-xs flex justify-center items-center absolute text-white bg-primary-700 w-10 h-10 rounded-full leading-3"
                       to="/user/login"
                     >
-                      로그인
+                      log
+                      <br />
+                      in
                     </Link>
                   )}
                 </div>
@@ -165,13 +202,15 @@ const Nav = ({
               contentNo === 1 ? "text-white" : "text-black"
             )}
           >
-            <div className="text-4xl py-2 font-logo">Tgle</div>
+            <div className="text-4xl py-2 font-logo cursor-pointer">Tgle</div>
             <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
-              {pages.map((page, i) => (
-                <li key={i}>
-                  <Link to={page.path}>{page.name}</Link>
-                </li>
-              ))}
+              {pages.map((page, i) =>
+                page.isNav ? (
+                  <li key={i}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </li>
+                ) : null
+              )}
             </ul>
           </div>
         )}
