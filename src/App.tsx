@@ -22,9 +22,9 @@ function App() {
           <Route path="signup" element={<user.Signup />} />
           <Route path="mypage" element={<user.Mypage />} />
         </Route>
+        <Route path="/oauth/kakao/callback" element={<OAuthKakao />} />
         <Route path="mock-ticketing" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
-        <Route path="/kakao/callback" element={<OAuthKakao />} />
       </Routes>
     </Layout>
   );
