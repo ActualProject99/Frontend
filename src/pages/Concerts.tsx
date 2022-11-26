@@ -16,12 +16,15 @@ const groups = [
   "전체",
   "아이돌",
   "발라드/R&B",
-  "트로트",
-  "힙합",
+  "힙합/EDM",
   "인디/록",
-  "POP",
+  "내한공연",
+  "페스티벌",
+  "트로트",
+  "댄스",
+  "콘서트",
 ];
-const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
+const Concerts = () => {
   const [select, setSelect] = useState(0);
   const [getShowingConcerts, setShowingConcerts] =
     useRecoilState<Concert[]>(showingConcerts);
@@ -46,27 +49,33 @@ const Concerts = ({ no1, no2 }: { no1?: boolean; no2?: boolean }) => {
     <>
       <ConcertSlider />
       <div className="pt-16 mt-[640px] mb-8">
-        <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 h-full">
-          <div className="grid grid-cols-3 divide-x divide-gray-200  h-full relative">
+        <div className="px-4 h-full">
+          <div className="grid grid-cols-3 h-full relative w-[95%] mx-auto">
             <div className="relative h-[500px]">
-              <div ref={fixsolute} style={fixoluteStyle} className="">
-                <div className=" w-[280px]">
-                  <Calendar selectable checkedDates={getdateAllConcerts} />
-                  <ul className="flex justify-center gap-3 flex-wrap">
-                    {groups.map((group, i) => (
-                      <li
-                        key={group}
-                        className={cls(
-                          "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                          i === select && "bg-primary-main text-white"
-                        )}
-                        onClick={handleClick(i)}
-                      >
-                        {group}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div
+                ref={fixsolute}
+                style={fixoluteStyle}
+                className="w-[340px] flex flex-col items-center gap-6"
+              >
+                <Calendar
+                  selectable
+                  checkedDates={getdateAllConcerts}
+                  className="w-[95%]"
+                />
+                <ul className="flex justify-center gap-3 flex-wrap">
+                  {groups.map((group, i) => (
+                    <li
+                      key={group}
+                      className={cls(
+                        "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
+                        i === select && "bg-primary-main text-white"
+                      )}
+                      onClick={handleClick(i)}
+                    >
+                      {group}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
             <section

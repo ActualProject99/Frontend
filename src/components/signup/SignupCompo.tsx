@@ -51,7 +51,7 @@ const SignupCompo = (): JSX.Element => {
             <input
               type="text"
               className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
-              autoComplete="auto"
+              autoComplete="off"
               placeholder="예) tgle@tgle.co.kr"
               {...register(...regOptLogin.email())}
             />
