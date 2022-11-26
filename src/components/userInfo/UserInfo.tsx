@@ -87,10 +87,10 @@ const UserInfo = (): JSX.Element => {
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
           <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
         </div>
-        <div className="flex items-center ">
+        <div className="flex items-center">
           {!isEdit ? (
-            <div className="flex flex-col items-center gap-y-3 h-28 mt-2">
-              <p className="text-3xl mb-[0.15rem] mt-[-0.15rem] ">
+            <div className="flex flex-col items-center gap-y-2 h-28">
+              <p className="text-2xl mb-[0.5rem] mt-[-0.25rem] ">
                 {userData?.nickname}
               </p>
               <button
@@ -103,7 +103,7 @@ const UserInfo = (): JSX.Element => {
           ) : (
             <div className="flex flex-col items-center gap-y-2 h-28">
               <input
-                className="text-3xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 focus:border-purple-500 focus:ring-transparent"
+                className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
                 value={editNickname}
                 onChange={onChangeNickname}

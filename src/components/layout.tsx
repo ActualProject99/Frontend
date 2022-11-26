@@ -64,7 +64,7 @@ const Nav = ({
   no1?: boolean;
   no2?: boolean;
 }) => {
-  const { toggler, ModalContent } = useModal(<UserInfo />);
+  const { toggler, ModalContent } = useModal("sm", <UserInfo />);
 
   const pages = [
     { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
@@ -76,7 +76,7 @@ const Nav = ({
       isNav: true,
     },
     {
-      name: "my Picks",
+      name: "my Picks!",
       path: "user/mypage",
       title: "my Picks | Tgle",
       isNav: true,
@@ -144,7 +144,7 @@ const Nav = ({
                     Tgle
                   </Link>
                 </div>
-                <ul className="flex gap-4 xl:gap-10">
+                <ul className="flex gap-4 xl:gap-10 font-logo">
                   {pages.map((page, i) =>
                     page.isNav ? (
                       <li key={i}>
@@ -217,7 +217,7 @@ const Nav = ({
             )}
           >
             <div className="text-4xl py-2 font-logo cursor-pointer">Tgle</div>
-            <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base">
+            <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base font-logo">
               {pages.map((page, i) =>
                 page.isNav ? (
                   <li key={i}>
