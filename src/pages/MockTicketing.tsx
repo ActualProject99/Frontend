@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Clock from "../components/Clock";
 import { cls } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
-import Modal from "../components/Modal";
+import { Modal } from "../components/Portal";
 import { useRecoilState } from "recoil";
 import {
   isGameDone,
