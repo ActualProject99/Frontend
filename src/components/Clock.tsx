@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import {
   IsGameDone,
   isGameDone,
+  IsGameSuccess,
+  isGameSuccess,
   IsRefreshedValid,
   isRefreshedValid,
 } from "../atoms/mockTicketing";
@@ -19,8 +21,8 @@ const Clock = ({
   const [countDown, setCountDown] = useState<Date>(time);
   const [, setIsRefreshedValid] =
     useRecoilState<IsRefreshedValid>(isRefreshedValid);
-  const [getIsGameDone, setIsGameDone] = useRecoilState<IsGameDone>(isGameDone);
-
+  const [getIsGameDone] = useRecoilState<IsGameDone>(isGameDone);
+  const [getIsGameSuccess] = useRecoilState<IsGameSuccess>(isGameSuccess);
   const addSec = function* (countDown: Date) {
     let i = 0;
     while (true) {
@@ -52,7 +54,6 @@ const Clock = ({
         parseISO(JSON.parse(sessionStorage.getItem("countDownTime") as string)),
         1
       );
-    console.log(time);
     if (time) {
       if (getHours(addSeconds(time, -1)) > 19) {
         setIsRefreshedValid(true);
@@ -62,11 +63,11 @@ const Clock = ({
     }
   }, []);
   useEffect(() => {
-    if (getIsGameDone) {
+    if (getIsGameDone || getIsGameSuccess[0]) {
       secondCounterOff();
       setCountDown(new Date("2022.11.24 19:59:57"));
     }
-  }, [getIsGameDone]);
+  }, [getIsGameDone, getIsGameSuccess]);
   return (
     <span className="text-4xl font-bold">{format(countDown, "hh:mm:ss")}</span>
   );
