@@ -6,10 +6,12 @@ import { useRecoilState } from "recoil";
 import { cls } from "../utils";
 import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
-import { Modal } from "./Portal";
+import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
+import userDefault from "../image/userDefault.png";
+import UserInfo from "./userInfo/UserInfo";
 
 const Search = ({
   viewer,
@@ -62,6 +64,8 @@ const Nav = ({
   no1?: boolean;
   no2?: boolean;
 }) => {
+  const { toggler, ModalContent } = useModal(<UserInfo />);
+
   const pages = [
     { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
     { name: "콘서트", path: "concerts", title: "Concert | Tgle", isNav: true },
@@ -88,7 +92,12 @@ const Nav = ({
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
   const [contentNo] = useRecoilState<number>(mainContent);
-  const handleClick = () => {
+
+  const handleClickProfile = () => {
+    toggler();
+  };
+
+  const handleClickLogout = () => {
     setUser(initUser);
   };
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -171,15 +180,20 @@ const Nav = ({
                 <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
                   {isLoggedin ? (
                     <>
-                      <div className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3">
+                      <div
+                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
+                        onClick={handleClickLogout}
+                      >
                         log
                         <br />
                         out
                       </div>
-                      <div
+                      <img
+                        alt="profile"
+                        src={userDefault}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
-                        onClick={handleClick}
-                      ></div>
+                        onClick={handleClickProfile}
+                      ></img>
                     </>
                   ) : (
                     <Link
@@ -215,6 +229,7 @@ const Nav = ({
           </div>
         )}
       </nav>
+      <ModalContent />
     </Portal>
   );
 };

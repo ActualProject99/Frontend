@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
+import useImg from "../../image/userDefault.png";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
@@ -64,33 +65,31 @@ const UserInfo = (): JSX.Element => {
   );
 
   return (
-    <div className="flex items-center w-[95%] h-52 p-5 border mx-auto my-5 gap-6">
-      <div className="absolute">
+    <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
+      <div className="w-36 h-36 relative">
         <img
           id="uploadedimage"
-          className="w-36 h-36 rounded-[50%]"
+          className="w-36 h-36 rounded-[50%] absolute"
           alt="userImg"
-          src={imageSrc}
+          // src={imageSrc}
+          src={useImg}
         />
+        <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
+          <input
+            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden"
+            type="file"
+            onChange={onChangeImg}
+          />
+        </label>
       </div>
-      <label
-        className="relative cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]"
-        htmlFor="photo"
-      />
-      <input
-        id="photo"
-        className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden"
-        type="file"
-        onChange={onChangeImg}
-      />
-      <div className="flex flex-col items-start   w-96 h-36 gap-y-4">
+      <div className="flex flex-col items-center justify-center w-96 h-36 gap-y-4 mt-3">
         <div className="flex items-center h-11 ">
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
           <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
         </div>
         <div className="flex items-center ">
           {!isEdit ? (
-            <div className="flex flex-col items-start gap-y-3 h-28 mt-2">
+            <div className="flex flex-col items-center gap-y-3 h-28 mt-2">
               <p className="text-3xl mb-[0.15rem] mt-[-0.15rem] ">
                 {userData?.nickname}
               </p>
@@ -102,7 +101,7 @@ const UserInfo = (): JSX.Element => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-start gap-y-2 h-28">
+            <div className="flex flex-col items-center gap-y-2 h-28">
               <input
                 className="text-3xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 focus:border-purple-500 focus:ring-transparent"
                 type="text"

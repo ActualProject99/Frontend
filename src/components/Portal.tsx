@@ -37,7 +37,7 @@ export const useModal = (content: ReactNode) => {
   };
   const ModalContent = () => {
     useWindowKeyboard("Escape", toggler);
-    return (
+    return isOpened ? (
       <Modal onClick={toggler}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20">
           <div
@@ -49,7 +49,7 @@ export const useModal = (content: ReactNode) => {
           {content}
         </div>
       </Modal>
-    );
+    ) : null;
   };
   return {
     isOpened,
