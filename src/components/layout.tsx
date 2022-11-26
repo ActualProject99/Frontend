@@ -57,12 +57,12 @@ const Search = ({
 };
 const Nav = ({
   main,
-  no1,
-  no2,
+  normal,
+  landing,
 }: {
   main?: boolean;
-  no1?: boolean;
-  no2?: boolean;
+  normal?: boolean;
+  landing?: boolean;
 }) => {
   const { toggler, ModalContent } = useModal("sm", <UserInfo />);
 
@@ -115,7 +115,6 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
-  console.log(pathname);
   useEffect(() => {
     pages.forEach((page) => {
       if (pathname.includes(page.path)) {
@@ -132,10 +131,10 @@ const Nav = ({
           pathname === "/" ? "" : "bg-white"
         )}
       >
-        {no1 ? (
+        {normal ? (
           <div className="flex items-center">
             <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
-              <div className="flex items-center gap-10 xl:gap-24">
+              <div className="flex items-center gap-10">
                 <div className="w-[140px] h-10 rounded">
                   <Link
                     className="w-full h-full block font-logo text-4xl"
@@ -144,10 +143,16 @@ const Nav = ({
                     Tgle
                   </Link>
                 </div>
-                <ul className="flex gap-4 xl:gap-10 font-logo">
+                <ul className="flex gap-4 xl:gap-10 font-logo self-end">
                   {pages.map((page, i) =>
                     page.isNav ? (
-                      <li key={i}>
+                      <li
+                        key={i}
+                        className={cls(
+                          "transition-colors",
+                          pathname.includes(page.path) && "text-accent-main"
+                        )}
+                      >
                         <Link to={page.path}>{page.name}</Link>
                       </li>
                     ) : null
@@ -216,8 +221,8 @@ const Nav = ({
               contentNo === 1 ? "text-white" : "text-black"
             )}
           >
-            <div className="text-4xl py-2 font-logo cursor-pointer">Tgle</div>
-            <ul className="flex gap-5 xl:gap-10 text-sm xl:text-base font-logo">
+            <div className="text-5xl py-2 font-logo cursor-pointer">Tgle</div>
+            <ul className="flex gap-10 text-lg font-logo">
               {pages.map((page, i) =>
                 page.isNav ? (
                   <li key={i}>
@@ -247,12 +252,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <>
       {pathname === "/" ? (
         <>
-          <Nav main no2 />
+          <Nav main landing />
           {children}
         </>
       ) : (
         <div className={cls("h-screen", getScrollable || "overflow-hidden")}>
-          <Nav no1 />
+          <Nav normal />
           <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto min-h-screen border py-4 mt-24">
             {children}
           </div>
