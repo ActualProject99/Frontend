@@ -2,8 +2,6 @@ import axios from "axios";
 import { getCookieToken } from "./cookie";
 
 const baseURL = process.env.REACT_APP_SERVER_URL;
-// const baseURL = "https://tgle.shop";
-console.log("url", baseURL);
 
 const myToken = getCookieToken();
 

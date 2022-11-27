@@ -38,7 +38,7 @@ const LoginCompo = (): JSX.Element => {
     }
   };
   const kakaoBtn = () => {
-    const REDIRECT_URL = "http://" + process.env.REACT_APP_REDIRECT_FRONT;
+    const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
@@ -49,13 +49,13 @@ const LoginCompo = (): JSX.Element => {
       window.alert("이미 로그인 했어요!");
       navigate("/");
     }
-  }, [navigate, cookie]);
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
       <div className="flex flex-col justify-center items-center w-[50%] h-[30rem] gap-y-5">
         <div className="w-60  flex flex-col items-center gap-4">
-          <p className="text-5xl font-bold italic">Tgle</p>
+          <p className="text-5xl font-logo font-bold">Tgle</p>
           <p className="font-bold">Ticket Jungle</p>
         </div>
         <form
@@ -67,7 +67,7 @@ const LoginCompo = (): JSX.Element => {
             <input
               type="text"
               className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
-              autoComplete="auto"
+              autoComplete="off"
               placeholder="예) tgle@tgle.co.kr"
               {...register(...regOptLogin.email())}
             />
@@ -127,7 +127,9 @@ const LoginCompo = (): JSX.Element => {
           </button>
         </div>
         <div className="flex justify-center w-full text-xs font-bold gap-x-2 ">
-          <span className="text-[#707070]">아직 Tgle 회원이 아니신가요?</span>
+          <span className="text-[#707070]">
+            아직 <span className="font-logo">Tgle</span> 회원이 아니신가요?
+          </span>
           <span
             className="text-[#7151A1] cursor-pointer"
             onClick={() => navigate("/user/signup")}
