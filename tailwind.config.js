@@ -23,6 +23,7 @@ module.exports = {
       },
       fontFamily: {
         logo: ["lemon"],
+        base: ["Oswold", "sans-serif"],
       },
       colors: {
         primary: {

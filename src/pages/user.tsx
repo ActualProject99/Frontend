@@ -12,7 +12,7 @@ const Login = () => {
 const Signup = () => {
   return <SignupCompo />;
 };
-const Mypage = () => {
+const MyPick = () => {
   const { Taps, Viewer } = useTaps(
     0,
     ["좋아요 공연", <LikeConcerts />],
@@ -31,6 +31,6 @@ const Mypage = () => {
 const user = {
   Login,
   Signup,
-  Mypage,
+  MyPick,
 };
 export default user;
