@@ -17,8 +17,10 @@ import {
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
 import icons from "../components/icons";
+import useToast from "../hooks/useToast";
 
 const MockTicketing = () => {
+  const { Toasts, toasted } = useToast(["hi"], "bg-lime-300");
   const { StartBtn } = useMock();
   const [toasts, setToasts] = useState<number[]>([]);
   const [difficulty, setDifficulty] = useState<"" | "easy">("");
@@ -97,6 +99,14 @@ const MockTicketing = () => {
 
   return (
     <>
+      <Toasts></Toasts>
+      <button
+        onClick={() => {
+          toasted(0);
+        }}
+      >
+        hi
+      </button>
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
       >
