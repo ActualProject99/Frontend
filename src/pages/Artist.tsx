@@ -5,6 +5,7 @@ import ArtistInfo from "../components/artists/ArtistInfo";
 
 const Artist = () => {
   const { data: artists } = ArtistApi.GetArtist();
+  console.log(artists);
   const { id } = useParams();
   console.log("id", id);
 
@@ -13,7 +14,7 @@ const Artist = () => {
       {artists &&
         artists.map((artist) =>
           artist.artistId === Number(id) ? (
-            <ArtistInfo key={artist.id} artist={artist} />
+            <ArtistInfo key={artist.artistId} artist={artist} />
           ) : null
         )}
     </>

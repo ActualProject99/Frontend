@@ -46,7 +46,6 @@ export interface IGetConcert {
 
 interface EditLike {
   concertId: number;
-  like: boolean;
 }
 
 interface PostSMS {
@@ -64,10 +63,7 @@ const GetConcerts = () => {
 
 const EditLikeConcerts = () => {
   return useMutation(async (payload: EditLike) => {
-    const { data } = await axios.patch(
-      `http://localhost:3001/concerts/${payload.concertId}`,
-      payload
-    );
+    const { data } = await deactivate.patch(`/concerts/${payload.concertId}`);
     return data;
   });
 };

@@ -3,18 +3,13 @@ import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { IGetArtist } from "../../apis/query/ArtistAPI";
 
-const ArtistIcon = ({
-  artist,
-}: {
-  artist: {
-    id: number;
-    artist: string;
-    artistId: number;
-    artistImg: string;
-    genre: string;
-  };
-}): JSX.Element => {
+interface ArtistProps {
+  artist: IGetArtist;
+}
+
+const ArtistIcon = ({ artist }: ArtistProps): JSX.Element => {
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -22,7 +17,6 @@ const ArtistIcon = ({
   const onEditLike = useCallback(() => {
     const payload = {
       artistId: artist.artistId,
-      like: false,
     };
     EditLike(payload).then(() => {
       console.log("pay", payload);
@@ -45,7 +39,7 @@ const ArtistIcon = ({
             onClick={() => navigate(`/artist/${artist.artistId}`)}
           />
         </div>
-        <p>{artist.artist}</p>
+        <p>{artist.artistName}</p>
       </div>
     </>
   );

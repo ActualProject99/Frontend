@@ -195,7 +195,7 @@ const Nav = ({
                       </div>
                       <img
                         alt="profile"
-                        src={userDefault}
+                        src="https://res.cloudinary.com/dwlshjafv/image/upload/v1668536436/AKR20210520093900005_04_i_P4_hwz8en.jpg"
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
                       ></img>
