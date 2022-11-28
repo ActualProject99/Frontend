@@ -24,10 +24,10 @@ function App() {
         <Route path="user">
           <Route path="login" element={<user.Login />} />
           <Route path="signup" element={<user.Signup />} />
-          <Route path="mypage" element={<user.Mypage />} />
+          <Route path="mypick" element={<user.MyPick />} />
         </Route>
         <Route path="/oauth/kakao/callback" element={<OAuthKakao />} />
-        <Route path="mock-ticketing" element={<MockTicketing />} />
+        <Route path="game" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
       </Routes>
     </Layout>

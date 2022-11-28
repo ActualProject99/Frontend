@@ -1,11 +1,16 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
-const useFixoluteBox = () => {
-  const [isFixed, setIsFixed] = useState(true);
+const useFixoluteBox = (marginTop: number) => {
+  const [isFixed, setIsFixed] = useState(false);
+  const [isSecondAbsolute, setIsSecondAbsolute] = useState(false);
   const fixsolute = useRef<HTMLDivElement | null>(null);
   const limit = useRef<HTMLDivElement | null>(null);
-  const fixoluteStyle: CSSProperties = isFixed
-    ? { position: "fixed" }
+  const fixoluteStyle: CSSProperties = !isFixed
+    ? {
+        position: "absolute",
+      }
+    : !isSecondAbsolute
+    ? { position: "fixed", top: marginTop }
     : {
         position: "absolute",
         top:
@@ -14,16 +19,23 @@ const useFixoluteBox = () => {
       };
   useEffect(() => {
     const changeState = () => {
-      console.log(limit.current?.scrollHeight, fixsolute.current?.scrollHeight);
+      if (marginTop > (limit.current?.getBoundingClientRect().y as number)) {
+        setIsFixed(() => true);
+      } else {
+        setIsFixed(() => false);
+      }
       if (
         limit.current &&
         window.scrollY >
           (limit.current?.scrollHeight ?? 0) -
-            (fixsolute.current?.scrollHeight ?? 0)
+            (fixsolute.current?.scrollHeight ?? 0) +
+            window.scrollY +
+            limit.current?.getBoundingClientRect().y -
+            marginTop
       ) {
-        setIsFixed(() => false);
+        setIsSecondAbsolute(() => true);
       } else {
-        setIsFixed(() => true);
+        setIsSecondAbsolute(() => false);
       }
     };
     document.addEventListener("scroll", changeState);

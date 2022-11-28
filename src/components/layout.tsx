@@ -71,13 +71,13 @@ const Nav = ({
     { name: "Concert", path: "concerts", title: "Concert | Tgle", isNav: true },
     {
       name: "Game",
-      path: "mock-ticketing",
+      path: "game",
       title: "Play Ticketing | Tgle",
       isNav: true,
     },
     {
       name: "My Picks!",
-      path: "user/mypage",
+      path: "user/mypick",
       title: "my Picks | Tgle",
       isNav: true,
     },
@@ -127,7 +127,7 @@ const Nav = ({
     <Portal>
       <nav
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2",
+          "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
@@ -168,20 +168,11 @@ const Nav = ({
                     <div className="w-10 h-10 flex justify-center items-center">
                       <icons.Search className="text-black" strokeWidth={3} />
                     </div>
-                    <div className="text-xs font-semibold text-black">
-                      Ctrl Shift f
+                    <div className="text-xs font-semibold text-gray-600">
+                      Ctrl Shift F
                     </div>
                   </div>
                 </div>
-
-                {isSearchVisible ? (
-                  <Search
-                    viewer={{
-                      on: handleClickSearchOn,
-                      off: handleClickSearchOff,
-                    }}
-                  />
-                ) : null}
                 <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
                   {isLoggedin ? (
                     <>
@@ -234,14 +225,87 @@ const Nav = ({
           </div>
         )}
       </nav>
+      {isSearchVisible ? (
+        <Search
+          viewer={{
+            on: handleClickSearchOn,
+            off: handleClickSearchOff,
+          }}
+        />
+      ) : null}
       <ModalContent />
     </Portal>
   );
 };
 const Footer = () => {
+  const members = [
+    {
+      name: "임요한",
+      position: "frontend",
+      github: "https://github.com/obov",
+    },
+    {
+      name: "김혁진",
+      position: "frontend",
+      github: "https://github.com/rklskhj",
+    },
+    {
+      name: "이민기",
+      position: "frontend",
+      github: "https://github.com/Pasilda123",
+    },
+    {
+      name: "예지완",
+      position: "backend",
+      github: "https://github.com/kmdet1235",
+    },
+    {
+      name: "박민호",
+      position: "backend",
+      github: "https://github.com/maino96",
+    },
+    {
+      name: "김정환",
+      position: "backend",
+      github: "https://github.com/jeongpal",
+    },
+  ];
   return (
-    <div className="bg-slate-200 h-96 flex items-center">
-      <div className="bg-slate-400 w-[1200px] mx-auto ">footer</div>
+    <div className="bg-primary-800 h-96 pt-28 flex">
+      <div className="w-[1200px] h-full mx-auto flex justify-center items-start gap-24 text-white">
+        <div className="flex flex-col items-center">
+          <div className="font-logo text-7xl"> Tgle</div>
+          <div className="mt-4">티켓팅을 즐겁게</div>
+        </div>
+        <div className="flex gap-16">
+          <div className="flex flex-col items-center">
+            <span className="text-xl inline-block mb-3">Frontend</span>
+            {members.map((member) =>
+              member.position === "frontend" ? (
+                <div className="flex gap-3">
+                  <div>{member.name}</div>
+                </div>
+              ) : null
+            )}
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-xl inline-block mb-3">Backend</span>
+            {members.map((member) =>
+              member.position === "backend" ? (
+                <div className="flex gap-3">
+                  <div>{member.name}</div>
+                </div>
+              ) : null
+            )}
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-xl inline-block mb-3">Designer</span>
+            <div className="flex gap-3">
+              <div>이주연</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -256,9 +320,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </>
       ) : (
-        <div className={cls("h-screen", getScrollable || "overflow-hidden")}>
+        <div
+          className={cls("min-h-screen", getScrollable || "overflow-hidden")}
+        >
           <Nav normal />
-          <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto min-h-screen border py-4 mt-24">
+          <div className="min-w-[360px] w-[1200px] mx-auto min-h-screen py-4 mt-24">
             {children}
           </div>
           <Footer />
