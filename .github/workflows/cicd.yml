@@ -20,6 +20,14 @@ jobs: # Job 설정
         run: npm run build
         env:
           CI: ""
+          
+      - name: Setting .env
+        run: |
+          echo "REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }}" >> .env
+          echo "REACT_APP_REDIRECT_FRONT=${{ secrets.REACT_APP_REDIRECT_FRONT }}" >> .env
+          echo "REACT_APP_REST_API_KEY=${{ secrets.REACT_APP_REST_API_KEY }}" >> .env
+          echo "REACT_APP_PUBLIC_MAP_KEY=${{ secrets.REACT_APP_PUBLIC_MAP_KEY }}" >> .env
+          cat .env
 
       - name: Deploy # Upload build file to S3!!
         env:
@@ -28,10 +36,4 @@ jobs: # Job 설정
         run: |
           aws s3 cp --recursive --region ap-northeast-2 build s3://hh9f1-front
 
-      - name: Setting .env
-        run: |
-          echo "REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }}" >> .env
-          echo "REACT_APP_REDIRECT_FRONT=${{ secrets.REACT_APP_REDIRECT_FRONT }}" >> .env
-          echo "REACT_APP_REST_API_KEY=${{ secrets.REACT_APP_REST_API_KEY }}" >> .env
-          echo "REACT_APP_PUBLIC_MAP_KEY=${{ secrets.REACT_APP_PUBLIC_MAP_KEY }}" >> .env
-          cat .env
+      
