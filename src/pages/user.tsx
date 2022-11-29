@@ -17,7 +17,7 @@ const Signup = () => {
   return <SignupCompo />;
 };
 const MyPick = () => {
-  const cookie = getCookieToken();
+  
   const navigate = useNavigate();
   const { Taps, Viewer } = useTaps(
     0,
@@ -25,11 +25,7 @@ const MyPick = () => {
     ["작성한 댓글", <MyComments />],
     ["채팅 테스트", <Chatting />]
   );
-  useEffect(() => {
-    if (!cookie) {
-      navigate(-1);
-    }
-  }, []);
+ 
   return (
     <div>
       <PickArtist />
