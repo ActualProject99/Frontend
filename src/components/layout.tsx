@@ -99,17 +99,10 @@ const Nav = ({
   const navigate = useNavigate();
 
   const handleClickPage = (path: string) => () => {
-    if (pathname !== "user/mypick" && path === "user/mypick") {
-      if (cookie) {
-        navigate(path);
-      } else {
-        toasted();
-      }
-    } else {
-      navigate(path);
-    }
+    if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
+      return toasted();
+    if (!pathname.includes(path)) return navigate(path);
   };
-
   const handleClickProfile = () => {
     toggler();
   };

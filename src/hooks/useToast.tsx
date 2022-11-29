@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import icons from "../components/icons";
 import Portal from "../components/Portal";
 import { cls } from "../utils";
@@ -8,6 +9,12 @@ const useToast = (message: string) => {
   const toasted = () => {
     setIsToasted(true);
   };
+  const { pathname } = useLocation();
+  useEffect(() => {
+    if (isToasted) {
+      setIsToasted(false);
+    }
+  }, [pathname]);
   const Toasts = () => {
     const handleAnimationEnd = () => {
       setIsToasted(false);
@@ -22,7 +29,7 @@ const useToast = (message: string) => {
                 "p-3 px-6 fixed opacity-0 min-w-[320px] animate-toast-right rounded bg-white font-bold shadow-xl text-3xl"
               )}
             >
-              <div className="font-logo text-sm flex justify-end mb-1">
+              <div className="font-logo text-sm flex justify-end mb-1 ">
                 tgle
               </div>
               <div className="flex items-center gap-4">
