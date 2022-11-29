@@ -19,7 +19,6 @@ import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 
 const MockTicketing = () => {
-  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const { StartBtn } = useMock();
   const [toasts, setToasts] = useState<number[]>([]);
   const [difficulty, setDifficulty] = useState<"" | "easy">("");
@@ -102,14 +101,6 @@ const MockTicketing = () => {
 
   return (
     <>
-      <Toasts></Toasts>
-      <button
-        onClick={() => {
-          toasted();
-        }}
-      >
-        hi
-      </button>
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
       >
