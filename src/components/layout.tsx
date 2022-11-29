@@ -13,6 +13,7 @@ import Portal from "./Portal";
 import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
+import useToast from "../hooks/useToast";
 
 const Search = ({
   viewer,
@@ -93,8 +94,21 @@ const Nav = ({
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
   const [contentNo] = useRecoilState<number>(mainContent);
+  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();
+
+  const handleClickPage = (path: string) => () => {
+    if (pathname !== "user/mypick" && path === "user/mypick") {
+      if (cookie) {
+        navigate(path);
+      } else {
+        toasted();
+      }
+    } else {
+      navigate(path);
+    }
+  };
 
   const handleClickProfile = () => {
     toggler();
@@ -131,6 +145,7 @@ const Nav = ({
 
   return (
     <Portal>
+      <Toasts />
       <nav
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
@@ -159,7 +174,9 @@ const Nav = ({
                           pathname.includes(page.path) && "text-accent-main"
                         )}
                       >
-                        <Link to={page.path}>{page.name}</Link>
+                        <button onClick={handleClickPage(page.path)}>
+                          {page.name}
+                        </button>
                       </li>
                     ) : null
                   )}
@@ -275,6 +292,7 @@ const Footer = () => {
       position: "backend",
       github: "https://github.com/jeongpal",
     },
+    { name: "이주연", position: "designer", github: "" },
   ];
   return (
     <div className="bg-primary-800 h-96 pt-28 flex">
@@ -284,32 +302,20 @@ const Footer = () => {
           <div className="mt-4">티켓팅을 즐겁게</div>
         </div>
         <div className="flex gap-16">
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Frontend</span>
-            {members.map((member) =>
-              member.position === "frontend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Backend</span>
-            {members.map((member) =>
-              member.position === "backend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Designer</span>
-            <div className="flex gap-3">
-              <div>이주연</div>
+          {["frontend", "backend", "designer"].map((position) => (
+            <div key={position} className="flex flex-col items-center">
+              <span className="text-xl inline-block mb-3 capitalize">
+                {position}
+              </span>
+              {members.map((member) =>
+                member.position === position ? (
+                  <div key={member.name} className="flex gap-3">
+                    <div>{member.name}</div>
+                  </div>
+                ) : null
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

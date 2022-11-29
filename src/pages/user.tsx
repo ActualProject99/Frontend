@@ -8,6 +8,7 @@ import SignupCompo from "../components/signup/SignupCompo";
 import Chatting from "../components/concertDetail/Chatting";
 import { useNavigate } from "react-router-dom";
 import { getCookieToken } from "../apis/cookie";
+import useToast from "../hooks/useToast";
 
 const Login = () => {
   return <LoginCompo />;
@@ -26,7 +27,6 @@ const MyPick = () => {
   );
   useEffect(() => {
     if (!cookie) {
-      window.alert("로그인 후 이용해주세요!");
       navigate(-1);
     }
   }, []);
