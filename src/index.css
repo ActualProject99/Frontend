@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgb(255, 244, 157);
+}
+
+.box-shadow {
+  box-shadow: 0 0 10px rgba(255, 249, 208, 0.817);
+}
+
+.parent {
+  height: 4em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent .child {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.2s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(4em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}
+
+.parent1 {
+  height: 1.5em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent1 .child1 {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.2s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(1.5em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}
+
+.parent2 {
+  height: 5em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent2 .child2 {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.5s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(5em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}

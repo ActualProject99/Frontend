@@ -11,6 +11,7 @@ module.exports = {
         "ping-small": "ping-small 1s cubic-bezier(0, 0, 0.2, 1) infinite;",
         "toast-right": "2s linear toast-right",
         wiggle: "wiggle 1s ease-in-out infinite",
+        "text-erase": "2s linear text-erase",
       },
       keyframes: {
         "ping-small": {
@@ -28,6 +29,10 @@ module.exports = {
         wiggle: {
           "0%, 100%": { transform: "rotate(-3deg)" },
           "50%": { transform: "rotate(3deg)" },
+        },
+        "text-erase": {
+          "0%": { width: "140px" },
+          "100%": { width: 0 },
         },
       },
       width: {
