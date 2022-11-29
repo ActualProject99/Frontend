@@ -1,7 +1,6 @@
-//@ts-nocheck
 import Seats from "../components/Seats";
 import useMock from "../hooks/useMock";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import Clock from "../components/Clock";
 import { cls } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +16,7 @@ import {
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
 import icons from "../components/icons";
+import useToast from "../hooks/useToast";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -35,11 +35,15 @@ const MockTicketing = () => {
     sessionStorage.removeItem("game");
     sessionStorage.removeItem("countDownTime");
   };
-  const handleChangeDifficulty = ({ target }) => {
-    setDifficulty(target.value);
+  const handleChangeDifficulty: ChangeEventHandler<HTMLSelectElement> = ({
+    target,
+  }) => {
+    setDifficulty(target.value as "" | "easy");
   };
-  const handleChangeDate = ({ target }) => {
-    setDate(target.value);
+  const handleChangeDate: ChangeEventHandler<HTMLSelectElement> = ({
+    target,
+  }) => {
+    setDate(target.value as "101회차" | "102회차" | "103회차" | "104회차");
   };
 
   const handleClickStart = () => {
@@ -68,7 +72,7 @@ const MockTicketing = () => {
     setIsRefreshedValid(null);
     setIsGameDone(false);
     resetSession();
-    isGameStated.current = false;
+    isGameStated.current = null;
     setIsGaming(false);
     setCountDown(new Date("2022.11.24 19:59:57"));
     setIsGameSuccess([null, null]);

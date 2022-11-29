@@ -269,6 +269,7 @@ const Footer = () => {
       position: "backend",
       github: "https://github.com/jeongpal",
     },
+    { name: "이주연", position: "designer", github: "" },
   ];
   return (
     <div className="bg-primary-800 h-96 pt-28 flex">
@@ -278,32 +279,20 @@ const Footer = () => {
           <div className="mt-4">티켓팅을 즐겁게</div>
         </div>
         <div className="flex gap-16">
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Frontend</span>
-            {members.map((member) =>
-              member.position === "frontend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Backend</span>
-            {members.map((member) =>
-              member.position === "backend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Designer</span>
-            <div className="flex gap-3">
-              <div>이주연</div>
+          {["frontend", "backend", "designer"].map((position) => (
+            <div key={position} className="flex flex-col items-center">
+              <span className="text-xl inline-block mb-3 capitalize">
+                {position}
+              </span>
+              {members.map((member) =>
+                member.position === position ? (
+                  <div key={member.name} className="flex gap-3">
+                    <div>{member.name}</div>
+                  </div>
+                ) : null
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

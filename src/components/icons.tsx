@@ -223,26 +223,26 @@ const ArrowTurnUp = ({
   strokeWidth = 1.5,
   iconClassName = "w-6 h-6",
   ...props
-  }: IconProps) => {
+}: IconProps) => {
   return (
-  <div {...props}>
-  <svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth={strokeWidth}
-  className={iconClassName}
-  >
-  <path
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  d="M9 9l6-6m0 0l6 6m-6-6v12a6 6 0 01-12 0v-3"
-  />
-  </svg>
-  </div>
+    <div {...props}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        className={iconClassName}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 9l6-6m0 0l6 6m-6-6v12a6 6 0 01-12 0v-3"
+        />
+      </svg>
+    </div>
   );
-  };
+};
 
 const Done = ({
   strokeWidth = 1.5,
@@ -361,6 +361,30 @@ const Bell = ({
   );
 };
 
+const RoundCheck = ({
+  strokeWidth = 1.5,
+  iconClassName = "w-6 h-6",
+  ...props
+}: IconProps) => {
+  return (
+    <div {...props}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={strokeWidth}
+        stroke="currentColor"
+        className={iconClassName}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </div>
+  );
+};
 const icons = {
   Search,
   ChevronLeft,
@@ -377,5 +401,6 @@ const icons = {
   FullHeart,
   ArrowTurnUp,
   Bell,
+  RoundCheck,
 };
 export default icons;
