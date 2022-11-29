@@ -1,7 +1,6 @@
-//@ts-nocheck
 import Seats from "../components/Seats";
 import useMock from "../hooks/useMock";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import Clock from "../components/Clock";
 import { cls } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +16,8 @@ import {
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
 import icons from "../components/icons";
+import useToast from "../hooks/useToast";
+import { getCookieToken } from "../apis/cookie";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -28,6 +29,10 @@ const MockTicketing = () => {
   const [isGaming, setIsGaming] = useState(false);
   const [isCountDownStart, setIsCountDownStart] = useState(false);
   const [seltedDate, setSelectedDate] = useState<number | null>(null);
+  const { Toasts, toasted } = useToast("로그인 후 이용 가능합니다!");
+
+  const cookie = getCookieToken();
+
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
   };
@@ -35,16 +40,24 @@ const MockTicketing = () => {
     sessionStorage.removeItem("game");
     sessionStorage.removeItem("countDownTime");
   };
-  const handleChangeDifficulty = ({ target }) => {
-    setDifficulty(target.value);
+  const handleChangeDifficulty: ChangeEventHandler<HTMLSelectElement> = ({
+    target,
+  }) => {
+    setDifficulty(target.value as "" | "easy");
   };
-  const handleChangeDate = ({ target }) => {
-    setDate(target.value);
+  const handleChangeDate: ChangeEventHandler<HTMLSelectElement> = ({
+    target,
+  }) => {
+    setDate(target.value as "101회차" | "102회차" | "103회차" | "104회차");
   };
 
   const handleClickStart = () => {
-    sessionStorage.setItem("game", "started");
-    setIsCountDownStart(true);
+    if (!cookie) {
+      toasted();
+    } else {
+      sessionStorage.setItem("game", "started");
+      setIsCountDownStart(true);
+    }
   };
   const handleClickBook = () => {
     setIsGaming(true);
@@ -68,7 +81,7 @@ const MockTicketing = () => {
     setIsRefreshedValid(null);
     setIsGameDone(false);
     resetSession();
-    isGameStated.current = false;
+    isGameStated.current = null;
     setIsGaming(false);
     setCountDown(new Date("2022.11.24 19:59:57"));
     setIsGameSuccess([null, null]);
@@ -102,6 +115,7 @@ const MockTicketing = () => {
       >
         <Seats />
       </div>
+      <Toasts />
       <div className={cls("w-full h-96 flex", isGaming ? "hidden" : "block")}>
         <div className="flex-[3] flex flex-col">
           <div className="flex-[3] p-3 flex gap-2">

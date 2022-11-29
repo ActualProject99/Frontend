@@ -1,27 +1,31 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { deactivate, activate } from "../instance";
 
 export interface IGetArtist {
-  id: number;
-  artist: string;
+  artistName: string;
   artistId: number;
   artistImg: string;
-  genre: string;
+  debutSong: string;
+  debutDate: string;
+  category: string;
   like: boolean;
-  searchText?: Array<string>;
-  searchCnt: number;
-  target?: boolean;
-  artistConcerts: [
-    {
-      id: Number;
-      concertId: number;
-      posterUrl: string;
-      title: string;
-      showTimes: string;
-      location: string;
-      like: boolean;
-    }
-  ];
+}
+
+export interface IGetArtistConcert {
+  concertId: number;
+  categoryId: number;
+  artistId: number;
+  concertName: string;
+  concertImg: string;
+  concertInfo: string;
+  concertDate: string;
+  ticketingDate: string;
+  ticketingUrl: string;
+  locationName: string;
+  playTime: string;
+  ratings: string;
+  calender: string;
 }
 
 interface DeletePayload {
@@ -30,16 +34,28 @@ interface DeletePayload {
 
 interface EditLike {
   artistId: number;
-  like: boolean;
 }
 
 const GetArtist = () => {
   return useQuery<IGetArtist[]>(
     ["artistInfo"],
     async () => {
-      const { data } = await axios.get<IGetArtist[]>(
-        "http://localhost:3001/artists"
+      const { data } = await deactivate.get<IGetArtist[]>("/artist");
+      return data;
+    },
+    {
+      cacheTime: Infinity,
+    }
+  );
+};
+const GetArtistConcert = () => {
+  return useQuery<IGetArtistConcert[]>(
+    ["artistConcerts"],
+    async () => {
+      const { data } = await deactivate.get<IGetArtistConcert[]>(
+        `/concert/artist`
       );
+      console.log("data", data);
       return data;
     },
     {
@@ -59,10 +75,7 @@ const DeleteArtist = () => {
 
 const EditLikeArtist = () => {
   return useMutation(async (payload: EditLike) => {
-    const { data } = await axios.patch(
-      `http://localhost:3001/artists/${payload.artistId}`,
-      payload
-    );
+    const { data } = await activate.put(`/artistlike/${payload.artistId}`);
     console.log("페이", data);
     return data;
   });
@@ -72,6 +85,7 @@ const ArtistApi = {
   GetArtist,
   DeleteArtist,
   EditLikeArtist,
+  GetArtistConcert,
 };
 
 export default ArtistApi;

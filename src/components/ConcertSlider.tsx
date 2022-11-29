@@ -60,6 +60,7 @@ const ConcertSlider = (): JSX.Element => {
               <div>
                 <div className="flex flex-col justify-center items-start m-5 gap-2 font-bold">
                   <img
+                    title={concert.title}
                     className="w-full h-[25rem] m-auto transition-all ease-in-out hover:scale-110 shadow-md shadow-white/50"
                     alt="img"
                     src={concert.posterUrl}
@@ -67,7 +68,10 @@ const ConcertSlider = (): JSX.Element => {
                   {concert.title.length < 11 ? (
                     <p className="flex mt-5 w-72 text-xl">{concert.title}</p>
                   ) : (
-                    <p className="w-72 mt-5 text-xl overflow-hidden text-ellipsis whitespace-nowrap">
+                    <p
+                      title={concert.title}
+                      className="w-72 mt-5 text-xl overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
                       {concert.title}
                     </p>
                   )}

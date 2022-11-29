@@ -37,26 +37,30 @@ export const useModal = (size: "md" | "sm", content: ReactNode) => {
     setIsOpened((cur) => !cur);
   };
   const ModalContent = () => {
-    useWindowKeyboard("Escape", toggler);
-    return isOpened ? (
-      <Modal onClick={toggler}>
-        <div
-          className={cls(
-            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20",
-            size === "md" && "w-1/2 h-3/4",
-            size === "sm" && "w-1/4 h-1/2"
-          )}
-        >
+    const ConTent = () => {
+      useWindowKeyboard("Escape", toggler);
+      return (
+        <Modal onClick={toggler}>
           <div
-            onClick={toggler}
-            className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
+            className={cls(
+              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20",
+              size === "md" && "w-1/2 h-3/4",
+              size === "sm" && "w-1/4 h-1/2"
+            )}
           >
-            esc
+            <div
+              onClick={toggler}
+              className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
+            >
+              esc
+            </div>
+            {content}
           </div>
-          {content}
-        </div>
-      </Modal>
-    ) : null;
+        </Modal>
+      );
+    };
+
+    return isOpened ? <ConTent /> : null;
   };
   return {
     isOpened,

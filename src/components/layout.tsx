@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
@@ -12,6 +12,8 @@ import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
+import { getCookieToken, removeCookieToken } from "../apis/cookie";
+import useToast from "../hooks/useToast";
 
 const Search = ({
   viewer,
@@ -92,13 +94,24 @@ const Nav = ({
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
   const [contentNo] = useRecoilState<number>(mainContent);
+  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
+  const cookie = getCookieToken();
+  const navigate = useNavigate();
 
+  const handleClickPage = (path: string) => () => {
+    if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
+      return toasted();
+    if (!pathname.includes(path)) return navigate(path);
+  };
   const handleClickProfile = () => {
     toggler();
   };
 
   const handleClickLogout = () => {
-    setUser(initUser);
+    window.alert("로그아웃 되었습니다.");
+    removeCookieToken();
+    navigate("/");
+    // setUser(initUser);
   };
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const handleClickSearchOn = () => {
@@ -125,6 +138,7 @@ const Nav = ({
 
   return (
     <Portal>
+      <Toasts />
       <nav
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
@@ -153,7 +167,9 @@ const Nav = ({
                           pathname.includes(page.path) && "text-accent-main"
                         )}
                       >
-                        <Link to={page.path}>{page.name}</Link>
+                        <button onClick={handleClickPage(page.path)}>
+                          {page.name}
+                        </button>
                       </li>
                     ) : null
                   )}
@@ -174,7 +190,7 @@ const Nav = ({
                   </div>
                 </div>
                 <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
-                  {isLoggedin ? (
+                  {cookie ? (
                     <>
                       <div
                         className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
@@ -186,7 +202,7 @@ const Nav = ({
                       </div>
                       <img
                         alt="profile"
-                        src={userDefault}
+                        src="https://res.cloudinary.com/dwlshjafv/image/upload/v1668536436/AKR20210520093900005_04_i_P4_hwz8en.jpg"
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
                       ></img>
@@ -269,6 +285,7 @@ const Footer = () => {
       position: "backend",
       github: "https://github.com/jeongpal",
     },
+    { name: "이주연", position: "designer", github: "" },
   ];
   return (
     <div className="bg-primary-800 h-96 pt-28 flex">
@@ -278,32 +295,20 @@ const Footer = () => {
           <div className="mt-4">티켓팅을 즐겁게</div>
         </div>
         <div className="flex gap-16">
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Frontend</span>
-            {members.map((member) =>
-              member.position === "frontend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Backend</span>
-            {members.map((member) =>
-              member.position === "backend" ? (
-                <div className="flex gap-3">
-                  <div>{member.name}</div>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xl inline-block mb-3">Designer</span>
-            <div className="flex gap-3">
-              <div>이주연</div>
+          {["frontend", "backend", "designer"].map((position) => (
+            <div key={position} className="flex flex-col items-center">
+              <span className="text-xl inline-block mb-3 capitalize">
+                {position}
+              </span>
+              {members.map((member) =>
+                member.position === position ? (
+                  <div key={member.name} className="flex gap-3">
+                    <div>{member.name}</div>
+                  </div>
+                ) : null
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
