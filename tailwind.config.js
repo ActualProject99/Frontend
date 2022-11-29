@@ -9,6 +9,8 @@ module.exports = {
     extend: {
       animation: {
         "ping-small": "ping-small 1s cubic-bezier(0, 0, 0.2, 1) infinite;",
+        "toast-right": "2s linear toast-right",
+        wiggle: "wiggle 1s ease-in-out infinite",
       },
       keyframes: {
         "ping-small": {
@@ -16,6 +18,16 @@ module.exports = {
             transform: "scale(1.3)",
             opacity: 0,
           },
+        },
+        "toast-right": {
+          "0%": { transform: "translateX(0)", opacity: 0, right: 0 },
+          "15%": { transform: "translateX(50%)", opacity: 1, right: "50%" },
+          "85%": { transform: "translateX(50%)", opacity: 1, right: "50%" },
+          "100%": { transform: "translateX(0)", opacity: 0, right: 0 },
+        },
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-3deg)" },
+          "50%": { transform: "rotate(3deg)" },
         },
       },
       width: {

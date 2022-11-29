@@ -19,7 +19,7 @@ import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 
 const MockTicketing = () => {
-  const { Toasts, toasted } = useToast(["hi"], "bg-lime-300");
+  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const { StartBtn } = useMock();
   const [toasts, setToasts] = useState<number[]>([]);
   const [difficulty, setDifficulty] = useState<"" | "easy">("");
@@ -105,7 +105,7 @@ const MockTicketing = () => {
       <Toasts></Toasts>
       <button
         onClick={() => {
-          toasted(0);
+          toasted();
         }}
       >
         hi
