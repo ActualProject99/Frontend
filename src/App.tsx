@@ -7,12 +7,14 @@ import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
+import useUser from "./hooks/useUser";
 if (process.env.NODE_ENV === "production") {
   console.log = function no_console() {};
   console.warn = function no_console() {};
 }
 
 function App() {
+  const { isLoggedin } = useUser();
   return (
     <Layout>
       <Routes>
