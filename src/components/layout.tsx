@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
-import { cls, firstUpper } from "../utils";
+import { cls } from "../utils";
 import { mainContent } from "../atoms/mainContent";
 import { scrollable } from "../atoms/scrollable";
 import { Modal, useModal } from "./Portal";
@@ -281,8 +281,8 @@ const Footer = () => {
         <div className="flex gap-16">
           {["frontend", "backend", "designer"].map((position) => (
             <div key={position} className="flex flex-col items-center">
-              <span className="text-xl inline-block mb-3">
-                {firstUpper(position)}
+              <span className="text-xl inline-block mb-3 capitalize">
+                {position}
               </span>
               {members.map((member) =>
                 member.position === position ? (

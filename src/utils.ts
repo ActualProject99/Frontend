@@ -152,6 +152,3 @@ export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   const iter = indexs[Symbol.iterator]();
   return itering(Arr, iter);
 };
-
-export const firstUpper = (str: string) =>
-  str.replace(/\b[a-z]/g, (char) => char.toUpperCase());
