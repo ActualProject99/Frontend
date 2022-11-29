@@ -5,7 +5,6 @@ import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
 import { mainContent } from "../atoms/mainContent";
-import { scrollable } from "../atoms/scrollable";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
@@ -294,7 +293,6 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
-  const [getScrollable] = useRecoilState<boolean>(scrollable);
   return (
     <>
       {pathname === "/" ? (
@@ -303,9 +301,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </>
       ) : (
-        <div
-          className={cls("min-h-screen", getScrollable || "overflow-hidden")}
-        >
+        <div className={cls("min-h-screen")}>
           <Nav normal />
           <div className="min-w-[360px] w-[1200px] mx-auto min-h-screen py-4 mt-24">
             {children}

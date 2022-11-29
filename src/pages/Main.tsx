@@ -12,6 +12,7 @@ import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
+import Explore from "../components/Explore";
 const contrastColorNos = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
@@ -39,11 +40,13 @@ const Indicator = () => {
 };
 const ScrollTop = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef] = useRecoilState<HTMLDivElement | null>(
-    mainScrollRef
-  );
+  const [getMainScrollRef] = useRecoilState(mainScrollRef);
   const handleClick = () => {
-    getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+    getMainScrollRef?.current?.scrollTo({
+      left: 0,
+      top: 0,
+      behavior: "smooth",
+    });
   };
   return (
     <Portal>
@@ -95,9 +98,7 @@ const Main = () => {
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
-  const [, setMainScrollRef] = useRecoilState<HTMLDivElement | null>(
-    mainScrollRef
-  );
+  const [, setMainScrollRef] = useRecoilState(mainScrollRef);
   useEffect(() => {
     setContentNo(0);
   }, [setContentNo]);
@@ -130,8 +131,8 @@ const Main = () => {
     );
   }, [setContentNo]);
   useEffect(() => {
-    if (snapContainer.current) {
-      setMainScrollRef(snapContainer.current);
+    if (snapContainer) {
+      setMainScrollRef(snapContainer);
     }
   }, [setMainScrollRef]);
   const Content = forwardRef(
@@ -150,10 +151,14 @@ const Main = () => {
     <>
       <Indicator />
       <ScrollTop />
+
       <div
         ref={snapContainer}
         className="h-screen overflow-y-scroll scrollbar-hide"
       >
+        <div className="bg-slate-600 h-[300vh] w-24">
+          <Explore />
+        </div>
         <div
           ref={content1}
           className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
