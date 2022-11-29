@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { activate } from "../instance";
 
 //유저Info Interface
 interface IGetUser {
@@ -42,32 +43,25 @@ export interface IGetLikeConcert {
 //유저Info API
 const GetUserInfo = () => {
   return useQuery<IGetUser>(["userInfo"], async () => {
-    const { data } = await axios.get<IGetUser>("http://localhost:3001/user");
+    const { data } = await activate.get<IGetUser>("/users/userinfo");
     return data;
   });
 };
 
 const EditUserName = () => {
   return useMutation(async (payload: EditNamePayload) => {
-    const { data } = await axios.put(
-      "http://tgle.shop/users/userinfo",
-      payload
-    );
+    const { data } = await activate.put("/users/userinfo", payload);
     return data;
   });
 };
 
 const EditUserImg = () => {
   return useMutation(async (payload: EditImgPayload) => {
-    const { data } = await axios.put(
-      "http://tgle.shop/users/userinfo/upload",
-      payload,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const { data } = await activate.put("/users/userinfo/upload", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return data;
   });
 };

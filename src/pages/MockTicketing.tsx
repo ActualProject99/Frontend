@@ -17,6 +17,7 @@ import {
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
 import icons from "../components/icons";
+import { getCookieToken } from "../apis/cookie";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -28,6 +29,9 @@ const MockTicketing = () => {
   const [isGaming, setIsGaming] = useState(false);
   const [isCountDownStart, setIsCountDownStart] = useState(false);
   const [seltedDate, setSelectedDate] = useState<number | null>(null);
+
+  const cookie = getCookieToken();
+
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
   };
@@ -43,8 +47,12 @@ const MockTicketing = () => {
   };
 
   const handleClickStart = () => {
-    sessionStorage.setItem("game", "started");
-    setIsCountDownStart(true);
+    if (!cookie) {
+      window.alert("로그인 후 이용 가능합니다!");
+    } else {
+      sessionStorage.setItem("game", "started");
+      setIsCountDownStart(true);
+    }
   };
   const handleClickBook = () => {
     setIsGaming(true);

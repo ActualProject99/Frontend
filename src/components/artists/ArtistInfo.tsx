@@ -5,6 +5,7 @@ import { deactivate } from "../../apis/instance";
 import ArtistApi, { IGetArtist } from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
+import { getCookieToken } from "../../apis/cookie";
 
 interface ArtistProps {
   artist: IGetArtist;
@@ -15,19 +16,24 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
   const [like, setLike] = useState<boolean>(artist.like);
   console.log("좋아요 스테이트", like);
   console.log("아티스트 서버데이터", artist.like);
+  const cookie = getCookieToken();
   const { data: artistConcerts } = ArtistApi.GetArtistConcert();
 
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 
   const onEditLike = useCallback(() => {
-    const payload = {
-      artistId: artist.artistId,
-    };
-    EditLike(payload).then(() => {
-      queryClient.invalidateQueries(["artistInfo"]);
-    });
-    setLike(!like);
+    if (!cookie) {
+      window.alert("로그인 후 가능해요!");
+    } else {
+      const payload = {
+        artistId: artist.artistId,
+      };
+      EditLike(payload).then(() => {
+        queryClient.invalidateQueries(["artistInfo"]);
+      });
+      setLike(!like);
+    }
   }, [artist.artistId, like, EditLike, queryClient, setLike]);
 
   return (

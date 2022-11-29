@@ -42,7 +42,10 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
         {concert.title.length < 11 ? (
           <p className="flex justify-center w-48 font-bold ">{concert.title}</p>
         ) : (
-          <p className="w-48 font-bold overflow-hidden text-ellipsis whitespace-nowrap">
+          <p
+            title={concert.title}
+            className="w-48 font-bold overflow-hidden text-ellipsis whitespace-nowrap"
+          >
             {concert.title}
           </p>
         )}
