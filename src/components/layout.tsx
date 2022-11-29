@@ -14,6 +14,7 @@ import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
 import useToast from "../hooks/useToast";
+import { pages } from "../routes";
 
 const Search = ({
   viewer,
@@ -68,29 +69,6 @@ const Nav = ({
 }) => {
   const { toggler, ModalContent } = useModal("sm", <UserInfo />);
 
-  const pages = [
-    { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
-    { name: "Concert", path: "concerts", title: "Concert | Tgle", isNav: true },
-    {
-      name: "Game",
-      path: "game",
-      title: "Play Ticketing | Tgle",
-      isNav: true,
-    },
-    {
-      name: "My Picks!",
-      path: "user/mypick",
-      title: "my Picks | Tgle",
-      isNav: true,
-    },
-    { name: "login", path: "user/login", title: "log in | Tgle", isNav: false },
-    {
-      name: "signup",
-      path: "user/signup",
-      title: "sign up | Tgle",
-      isNav: false,
-    },
-  ];
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
   const [contentNo] = useRecoilState<number>(mainContent);
@@ -99,17 +77,10 @@ const Nav = ({
   const navigate = useNavigate();
 
   const handleClickPage = (path: string) => () => {
-    if (pathname !== "user/mypick" && path === "user/mypick") {
-      if (cookie) {
-        navigate(path);
-      } else {
-        toasted();
-      }
-    } else {
-      navigate(path);
-    }
+    if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
+      return toasted();
+    if (!pathname.includes(path)) return navigate(path);
   };
-
   const handleClickProfile = () => {
     toggler();
   };
@@ -136,7 +107,7 @@ const Nav = ({
     altKey: false,
   });
   useEffect(() => {
-    pages.forEach((page) => {
+    Object.values(pages).forEach((page) => {
       if (pathname.includes(page.path)) {
         document.title = page.title;
       }
@@ -165,7 +136,7 @@ const Nav = ({
                   </Link>
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
-                  {pages.map((page, i) =>
+                  {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li
                         key={i}
@@ -237,7 +208,7 @@ const Nav = ({
           >
             <div className="text-5xl py-2 font-logo cursor-pointer">Tgle</div>
             <ul className="flex gap-10 text-lg font-logo">
-              {pages.map((page, i) =>
+              {Object.values(pages).map((page, i) =>
                 page.isNav ? (
                   <li key={i}>
                     <Link to={page.path}>{page.name}</Link>
