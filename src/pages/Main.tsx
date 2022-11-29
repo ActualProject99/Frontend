@@ -369,7 +369,6 @@ const Main = () => {
                   }}
                   transition={{ delay: 0.1 }}
                   className="grid grid-rows-3 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
-                  // style={{ transform: "rotate3d(3,0,1,20deg)" }}
                 >
                   {posters.map((poster) => (
                     <img

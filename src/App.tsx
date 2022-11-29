@@ -8,6 +8,7 @@ import user from "./pages/user";
 import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
 import useUser from "./hooks/useUser";
+import NotFound from "./pages/404";
 if (process.env.NODE_ENV === "production") {
   console.log = function no_console() {};
   console.warn = function no_console() {};
@@ -31,6 +32,7 @@ function App() {
         <Route path="/oauth/kakao/callback" element={<OAuthKakao />} />
         <Route path="game" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   );
