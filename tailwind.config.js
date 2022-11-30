@@ -49,13 +49,13 @@ module.exports = {
         flicker: {
           "0%, 18%, 22%, 25%, 53%, 57%, 100% ": {
             textShadow: `0 0 4px #fff,
-      0 0 11px #fff,
-      0 0 19px #fff,
-      0 0 40px #ec008b,
-      0 0 80px #ec008b,
-      0 0 90px #ec008b,
-      0 0 100px #ec008b,
-      0 0 150px #ec008b;`,
+              0 0 11px #fff,
+              0 0 19px #fff,
+              0 0 40px #ec008b,
+              0 0 80px #ec008b,
+              0 0 90px #ec008b,
+              0 0 100px #ec008b,
+              0 0 150px #ec008b;`,
           },
           "20%, 24%, 55%": {
             textShadow: "none;",
@@ -67,7 +67,7 @@ module.exports = {
       },
       backgroundImage: {
         radial:
-          "radial-gradient(closest-side  , rgba(0,0,0,0.80),rgba(0,0,0), #000);",
+          "radial-gradient(closest-side, rgba(0,0,0,0.90), rgba(0,0,0), #000);",
       },
       fontFamily: {
         logo: ["lemon"],

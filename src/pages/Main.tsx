@@ -143,108 +143,120 @@ const Main = () => {
     [0, k],
     [centerRandom(size), centerRandom(size / 2)],
   ];
+  const transformXValues = (size: number) => [
+    scrollYProgress,
+    [0, k],
+    [centerRandom(size) - 100, centerRandom(size / 2) - 100],
+  ];
+  const transformYValues = (size: number) => [
+    scrollYProgress,
+    [0, k],
+    [centerRandom(size) - 150, centerRandom(size / 2) - 150],
+  ];
 
-  const x1 = useTransform(...transformValues(screenWidth));
-  const y1 = useTransform(...transformValues(screenHeight));
+  const x0 = useTransform(...transformXValues(0));
+  const y0 = useTransform(...transformYValues(0));
+  const x1 = useTransform(...transformXValues(screenWidth));
+  const y1 = useTransform(...transformYValues(screenHeight));
   const r1 = useTransform(...transformValues(90));
-  const x2 = useTransform(...transformValues(screenWidth));
-  const y2 = useTransform(...transformValues(screenHeight));
+  const x2 = useTransform(...transformXValues(screenWidth));
+  const y2 = useTransform(...transformYValues(screenHeight));
   const r2 = useTransform(...transformValues(90));
-  const x3 = useTransform(...transformValues(screenWidth));
-  const y3 = useTransform(...transformValues(screenHeight));
+  const x3 = useTransform(...transformXValues(screenWidth));
+  const y3 = useTransform(...transformYValues(screenHeight));
   const r3 = useTransform(...transformValues(90));
-  const x4 = useTransform(...transformValues(screenWidth));
-  const y4 = useTransform(...transformValues(screenHeight));
+  const x4 = useTransform(...transformXValues(screenWidth));
+  const y4 = useTransform(...transformYValues(screenHeight));
   const r4 = useTransform(...transformValues(90));
-  const x5 = useTransform(...transformValues(screenWidth));
-  const y5 = useTransform(...transformValues(screenHeight));
+  const x5 = useTransform(...transformXValues(screenWidth));
+  const y5 = useTransform(...transformYValues(screenHeight));
   const r5 = useTransform(...transformValues(90));
-  const x6 = useTransform(...transformValues(screenWidth));
-  const y6 = useTransform(...transformValues(screenHeight));
+  const x6 = useTransform(...transformXValues(screenWidth));
+  const y6 = useTransform(...transformYValues(screenHeight));
   const r6 = useTransform(...transformValues(90));
-  const x7 = useTransform(...transformValues(screenWidth));
-  const y7 = useTransform(...transformValues(screenHeight));
+  const x7 = useTransform(...transformXValues(screenWidth));
+  const y7 = useTransform(...transformYValues(screenHeight));
   const r7 = useTransform(...transformValues(90));
-  const x8 = useTransform(...transformValues(screenWidth));
-  const y8 = useTransform(...transformValues(screenHeight));
+  const x8 = useTransform(...transformXValues(screenWidth));
+  const y8 = useTransform(...transformYValues(screenHeight));
   const r8 = useTransform(...transformValues(90));
-  const x9 = useTransform(...transformValues(screenWidth));
-  const y9 = useTransform(...transformValues(screenHeight));
+  const x9 = useTransform(...transformXValues(screenWidth));
+  const y9 = useTransform(...transformYValues(screenHeight));
   const r9 = useTransform(...transformValues(90));
-  const x10 = useTransform(...transformValues(screenWidth));
-  const y10 = useTransform(...transformValues(screenHeight));
+  const x10 = useTransform(...transformXValues(screenWidth));
+  const y10 = useTransform(...transformYValues(screenHeight));
   const r10 = useTransform(...transformValues(90));
-  const x11 = useTransform(...transformValues(screenWidth));
-  const y11 = useTransform(...transformValues(screenHeight));
+  const x11 = useTransform(...transformXValues(screenWidth));
+  const y11 = useTransform(...transformYValues(screenHeight));
   const r11 = useTransform(...transformValues(90));
-  const x12 = useTransform(...transformValues(screenWidth));
-  const y12 = useTransform(...transformValues(screenHeight));
+  const x12 = useTransform(...transformXValues(screenWidth));
+  const y12 = useTransform(...transformYValues(screenHeight));
   const r12 = useTransform(...transformValues(90));
-  const x13 = useTransform(...transformValues(screenWidth));
-  const y13 = useTransform(...transformValues(screenHeight));
+  const x13 = useTransform(...transformXValues(screenWidth));
+  const y13 = useTransform(...transformYValues(screenHeight));
   const r13 = useTransform(...transformValues(90));
-  const x14 = useTransform(...transformValues(screenWidth));
-  const y14 = useTransform(...transformValues(screenHeight));
+  const x14 = useTransform(...transformXValues(screenWidth));
+  const y14 = useTransform(...transformYValues(screenHeight));
   const r14 = useTransform(...transformValues(90));
-  const x15 = useTransform(...transformValues(screenWidth));
-  const y15 = useTransform(...transformValues(screenHeight));
+  const x15 = useTransform(...transformXValues(screenWidth));
+  const y15 = useTransform(...transformYValues(screenHeight));
   const r15 = useTransform(...transformValues(90));
-  const x16 = useTransform(...transformValues(screenWidth));
-  const y16 = useTransform(...transformValues(screenHeight));
+  const x16 = useTransform(...transformXValues(screenWidth));
+  const y16 = useTransform(...transformYValues(screenHeight));
   const r16 = useTransform(...transformValues(90));
-  const x17 = useTransform(...transformValues(screenWidth));
-  const y17 = useTransform(...transformValues(screenHeight));
+  const x17 = useTransform(...transformXValues(screenWidth));
+  const y17 = useTransform(...transformYValues(screenHeight));
   const r17 = useTransform(...transformValues(90));
-  const x18 = useTransform(...transformValues(screenWidth));
-  const y18 = useTransform(...transformValues(screenHeight));
+  const x18 = useTransform(...transformXValues(screenWidth));
+  const y18 = useTransform(...transformYValues(screenHeight));
   const r18 = useTransform(...transformValues(90));
-  const x19 = useTransform(...transformValues(screenWidth));
-  const y19 = useTransform(...transformValues(screenHeight));
+  const x19 = useTransform(...transformXValues(screenWidth));
+  const y19 = useTransform(...transformYValues(screenHeight));
   const r19 = useTransform(...transformValues(90));
-  const x20 = useTransform(...transformValues(screenWidth));
-  const y20 = useTransform(...transformValues(screenHeight));
+  const x20 = useTransform(...transformXValues(screenWidth));
+  const y20 = useTransform(...transformYValues(screenHeight));
   const r20 = useTransform(...transformValues(90));
-  const x21 = useTransform(...transformValues(screenWidth));
-  const y21 = useTransform(...transformValues(screenHeight));
+  const x21 = useTransform(...transformXValues(screenWidth));
+  const y21 = useTransform(...transformYValues(screenHeight));
   const r21 = useTransform(...transformValues(90));
-  const x22 = useTransform(...transformValues(screenWidth));
-  const y22 = useTransform(...transformValues(screenHeight));
+  const x22 = useTransform(...transformXValues(screenWidth));
+  const y22 = useTransform(...transformYValues(screenHeight));
   const r22 = useTransform(...transformValues(90));
-  const x23 = useTransform(...transformValues(screenWidth));
-  const y23 = useTransform(...transformValues(screenHeight));
+  const x23 = useTransform(...transformXValues(screenWidth));
+  const y23 = useTransform(...transformYValues(screenHeight));
   const r23 = useTransform(...transformValues(90));
-  const x24 = useTransform(...transformValues(screenWidth));
-  const y24 = useTransform(...transformValues(screenHeight));
+  const x24 = useTransform(...transformXValues(screenWidth));
+  const y24 = useTransform(...transformYValues(screenHeight));
   const r24 = useTransform(...transformValues(90));
-  const x25 = useTransform(...transformValues(screenWidth));
-  const y25 = useTransform(...transformValues(screenHeight));
+  const x25 = useTransform(...transformXValues(screenWidth));
+  const y25 = useTransform(...transformYValues(screenHeight));
   const r25 = useTransform(...transformValues(90));
-  const x26 = useTransform(...transformValues(screenWidth));
-  const y26 = useTransform(...transformValues(screenHeight));
+  const x26 = useTransform(...transformXValues(screenWidth));
+  const y26 = useTransform(...transformYValues(screenHeight));
   const r26 = useTransform(...transformValues(90));
-  const x27 = useTransform(...transformValues(screenWidth));
-  const y27 = useTransform(...transformValues(screenHeight));
+  const x27 = useTransform(...transformXValues(screenWidth));
+  const y27 = useTransform(...transformYValues(screenHeight));
   const r27 = useTransform(...transformValues(90));
-  const x28 = useTransform(...transformValues(screenWidth));
-  const y28 = useTransform(...transformValues(screenHeight));
+  const x28 = useTransform(...transformXValues(screenWidth));
+  const y28 = useTransform(...transformYValues(screenHeight));
   const r28 = useTransform(...transformValues(90));
-  const x29 = useTransform(...transformValues(screenWidth));
-  const y29 = useTransform(...transformValues(screenHeight));
+  const x29 = useTransform(...transformXValues(screenWidth));
+  const y29 = useTransform(...transformYValues(screenHeight));
   const r29 = useTransform(...transformValues(90));
-  const x30 = useTransform(...transformValues(screenWidth));
-  const y30 = useTransform(...transformValues(screenHeight));
+  const x30 = useTransform(...transformXValues(screenWidth));
+  const y30 = useTransform(...transformYValues(screenHeight));
   const r30 = useTransform(...transformValues(90));
-  const x31 = useTransform(...transformValues(screenWidth));
-  const y31 = useTransform(...transformValues(screenHeight));
+  const x31 = useTransform(...transformXValues(screenWidth));
+  const y31 = useTransform(...transformYValues(screenHeight));
   const r31 = useTransform(...transformValues(90));
-  const x32 = useTransform(...transformValues(screenWidth));
-  const y32 = useTransform(...transformValues(screenHeight));
+  const x32 = useTransform(...transformXValues(screenWidth));
+  const y32 = useTransform(...transformYValues(screenHeight));
   const r32 = useTransform(...transformValues(90));
-  const x33 = useTransform(...transformValues(screenWidth));
-  const y33 = useTransform(...transformValues(screenHeight));
+  const x33 = useTransform(...transformXValues(screenWidth));
+  const y33 = useTransform(...transformYValues(screenHeight));
   const r33 = useTransform(...transformValues(90));
-  const x34 = useTransform(...transformValues(screenWidth));
-  const y34 = useTransform(...transformValues(screenHeight));
+  const x34 = useTransform(...transformXValues(screenWidth));
+  const y34 = useTransform(...transformYValues(screenHeight));
   const r34 = useTransform(...transformValues(90));
   const opacity = useTransform(scrollYProgress, [0, 3 / 18, k], [0, 1, 0]);
   const opacityBack = useTransform(
@@ -356,22 +368,15 @@ const Main = () => {
       );
     }
   );
-  console.log(window.Screen);
-  console.log(window.screen);
   return (
     <>
       <Indicator />
       <ScrollTop />
       <div
         ref={snapContainer}
-        className="h-screen overflow-y-scroll overflow-x-hidden"
+        className="h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black"
       >
         <div className="bg-gradient-to-b h-[300vh] w-8">
-          {/* <div className="fixed grid grid-cols-12 -z-10 blur-xl ">
-            {posters.map((poster) => (
-              <img src={poster} className="w-40" />
-            ))}
-          </div> */}
           <m.div
             style={{ opacity: opacityBlock }}
             className="w-screen h-screen top-0 left-0 -z-10 fixed bg-[url('https://previews.123rf.com/images/rawpixel/rawpixel1603/rawpixel160305951/53433656-%EB[…]%EA%B5%AC%EC%B2%B4%EC%A0%81%EC%9D%B8-%EA%B0%9C%EB%85%90.jpg')]"
@@ -382,7 +387,7 @@ const Main = () => {
           >
             <m.span
               style={{ opacity: opacityBlock }}
-              className="font-NeonBines animate-flicker text-9xl neonText"
+              className="font-NeonBines animate-flicker text-9xl text-white flex justify-center items-center"
             >
               Tgle
             </m.span>
