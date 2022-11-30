@@ -4,7 +4,7 @@ import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import { mainContent } from "../atoms/mainContent";
+import { MainContent, mainContent } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
@@ -70,7 +70,7 @@ const Nav = ({
 
   const { pathname } = useLocation();
   const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
-  const [contentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();

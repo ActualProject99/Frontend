@@ -1,8 +1,9 @@
 import { RefObject } from "react";
 import { atom } from "recoil";
 
-const initContent = 0;
-export const mainContent = atom<number>({
+const initContent = null;
+export type MainContent = number | null;
+export const mainContent = atom<MainContent>({
   key: "mainContent",
   default: initContent,
 });

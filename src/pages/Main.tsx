@@ -1,8 +1,13 @@
 import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
-import { mainContent, mainScrollRef } from "../atoms/mainContent";
-import { AnimatePresence, motion } from "framer-motion";
+import { MainContent, mainContent, mainScrollRef } from "../atoms/mainContent";
+import {
+  AnimatePresence,
+  motion as m,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import icons from "../components/icons";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
@@ -13,9 +18,9 @@ import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
 import Explore from "../components/Explore";
-const contrastColorNos = [1];
+const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
-  const [contentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   return (
     <Portal>
       <div className="h-6 lg:h-fit fixed flex flex-row items-end lg:items-start bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-2 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
@@ -39,7 +44,7 @@ const Indicator = () => {
   );
 };
 const ScrollTop = () => {
-  const [contentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   const [getMainScrollRef] = useRecoilState(mainScrollRef);
   const handleClick = () => {
     getMainScrollRef?.current?.scrollTo({
@@ -90,6 +95,7 @@ const ContentCopy = ({
 };
 const Main = () => {
   const snapContainer = useRef<HTMLDivElement | null>(null);
+  const animate = useRef<HTMLDivElement | null>(null);
   const content1 = useRef<HTMLDivElement | null>(null);
   const content2 = useRef<HTMLDivElement | null>(null);
   const content3 = useRef<HTMLDivElement | null>(null);
@@ -97,16 +103,61 @@ const Main = () => {
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
-  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
+  const [contentNo, setContentNo] = useRecoilState<number | null>(mainContent);
   const [, setMainScrollRef] = useRecoilState(mainScrollRef);
+
+  const { scrollY, scrollYProgress } = useScroll({
+    container: snapContainer,
+  });
+  const scale1 = useTransform(
+    scrollYProgress,
+    [0, 2 / 9, 3 / 9 - 1 / 18],
+    [1, 3, 10]
+  );
+  const scale2 = useTransform(
+    scrollYProgress,
+    [0, 2 / 9 + 1 / 90, 3 / 9 - 1 / 18],
+    [1, 3, 10]
+  );
+  const scale3 = useTransform(
+    scrollYProgress,
+    [0, 2 / 9 + 2 / 90, 3 / 9 - 1 / 18],
+    [1, 3, 10]
+  );
+  const scale4 = useTransform(
+    scrollYProgress,
+    [0, 2 / 9 + 3 / 90, 3 / 9 - 1 / 18],
+    [1, 3, 10]
+  );
+  const scale5 = useTransform(
+    scrollYProgress,
+    [0, 2 / 9 + 4 / 90, 3 / 9 - 1 / 18],
+    [1, 3, 10]
+  );
+  const x1 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [300, 0]);
+  const y1 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [200, 0]);
+  const x2 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [250, 0]);
+  const y2 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-220, 0]);
+  const x3 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [130, 0]);
+  const y3 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-100, 0]);
+  const x4 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [400, 0]);
+  const y4 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-340, 0]);
+  const x5 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-300, 0]);
+  const y5 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [100, 0]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 2 / 9, 3 / 9 - 1 / 18],
+    [0, 1, 0]
+  );
+  const rotate = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [0, 360]);
   useEffect(() => {
     setContentNo(0);
   }, [setContentNo]);
   useEffect(() => {
-    createScrollSnap(
+    const { bind, unbind } = createScrollSnap(
       snapContainer.current as HTMLDivElement,
       {
-        snapDestinationY: "100%",
+        snapDestinationY: "103%",
       },
       () => {
         [
@@ -120,8 +171,8 @@ const Main = () => {
         ].forEach((offsetTop, i) => {
           if (typeof offsetTop !== "undefined" && snapContainer.current) {
             if (
-              offsetTop < snapContainer.current?.scrollTop + 10 &&
-              offsetTop > snapContainer.current?.scrollTop - 10
+              offsetTop < snapContainer.current?.scrollTop + 100 &&
+              offsetTop > snapContainer.current?.scrollTop - 100
             ) {
               setContentNo(i);
             }
@@ -129,7 +180,19 @@ const Main = () => {
         });
       }
     );
-  }, [setContentNo]);
+    unbind();
+    const conditionalBind = () => {
+      if (scrollYProgress.get() > 3 / 10) {
+        bind();
+      } else {
+        unbind();
+      }
+    };
+    snapContainer.current?.addEventListener("scroll", conditionalBind);
+    return () => {
+      snapContainer.current?.addEventListener("scroll", conditionalBind);
+    };
+  }, [setContentNo, scrollYProgress]);
   useEffect(() => {
     if (snapContainer) {
       setMainScrollRef(snapContainer);
@@ -147,47 +210,66 @@ const Main = () => {
       );
     }
   );
+
   return (
     <>
       <Indicator />
       <ScrollTop />
-
       <div
         ref={snapContainer}
         className="h-screen overflow-y-scroll scrollbar-hide"
       >
-        <div className="bg-slate-600 h-[300vh] w-24">
-          <Explore />
-        </div>
+        <m.div className="bg-gradient-to-b from-slate-300 to-slate-800 h-[300vh] w-24">
+          <m.div
+            style={{ scale: scale1, opacity, x: x1, y: y1 }}
+            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+          ></m.div>
+          <m.div
+            style={{ scale: scale2, opacity, x: x2, y: y2 }}
+            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+          ></m.div>
+          <m.div
+            style={{ scale: scale3, opacity, x: x3, y: y3 }}
+            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+          ></m.div>
+          <m.div
+            style={{ scale: scale4, opacity, x: x4, y: y4 }}
+            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+          ></m.div>
+          <m.div
+            style={{ scale: scale5, opacity, x: x5, y: y5 }}
+            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+          ></m.div>
+        </m.div>
         <div
           ref={content1}
           className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
         >
           <div className="w-[320px]">
             {contentNo === 0 && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
                 className="bg-white/60 translate-y-20 py-3 rounded-3xl backdrop-blur-sm"
               >
-                <motion.p
+                <m.p
                   className="text-[40px] leading-[48px] font-extrabold mb-6 w-80"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
                   혼자만의 공연이 함께가 되는 곳
-                </motion.p>
-                <motion.p
+                </m.p>
+                <m.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.9 }}
                   className="text-2xl"
                 >
                   너와 나의 티켓고리
-                </motion.p>
-              </motion.div>
+                </m.p>
+              </m.div>
             )}
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
@@ -210,7 +292,7 @@ const Main = () => {
                     "티켓을 연결하는",
                     "Tgle",
                   ].map((e, i) => (
-                    <motion.div
+                    <m.div
                       key={i}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -220,7 +302,7 @@ const Main = () => {
                       )}
                     >
                       {e}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </>
               )}
@@ -235,7 +317,7 @@ const Main = () => {
                     "티켓을 연결하는",
                     "Tgle",
                   ].map((e, i) => (
-                    <motion.div
+                    <m.div
                       key={e}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -245,7 +327,7 @@ const Main = () => {
                       )}
                     >
                       {e}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </>
               )}
@@ -363,7 +445,7 @@ const Main = () => {
           >
             {contentNo === 6 && (
               <>
-                <motion.div
+                <m.div
                   initial={{
                     transform: "rotate3d(3,0,1,0deg)",
                     opacity: 0,
@@ -382,17 +464,17 @@ const Main = () => {
                       alt=""
                     />
                   ))}
-                </motion.div>
+                </m.div>
                 <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
                 <AnimatePresence>
                   <>
-                    <motion.div
+                    <m.div
                       initial={{ backdropFilter: "blur(0px)" }}
                       animate={{ backdropFilter: "blur(5px)" }}
                       transition={{ delay: 0.4 }}
                       className="h-screen w-screen absolute flex justify-center items-center"
-                    ></motion.div>
-                    <motion.div
+                    ></m.div>
+                    <m.div
                       initial={{ opacity: 0, x: 0 }}
                       animate={{ opacity: 1, x: 200 }}
                       transition={{ delay: 0.7 }}
@@ -405,7 +487,7 @@ const Main = () => {
                           Tgle
                         </span>
                       </p>
-                    </motion.div>
+                    </m.div>
                   </>
                 </AnimatePresence>
               </>
