@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
@@ -58,7 +59,7 @@ const ScrollTop = () => {
       <icons.ArrowTurnUp
         onClick={handleClick}
         className={cls(
-          "fixed right-3 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
+          "fixed right-12 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
           contrastColorNos.includes(contentNo) ? "text-white" : "text-black"
         )}
       />
@@ -109,47 +110,192 @@ const Main = () => {
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
   });
+  const k = 3 / 9 - 1 / 18;
   const scale1 = useTransform(
     scrollYProgress,
     [0, 2 / 9, 3 / 9 - 1 / 18],
-    [1, 3, 10]
+    [1.2 + 0.8 * Math.random(), 4.5, 10]
   );
   const scale2 = useTransform(
     scrollYProgress,
     [0, 2 / 9 + 1 / 90, 3 / 9 - 1 / 18],
-    [1, 3, 10]
+    [1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
   );
   const scale3 = useTransform(
     scrollYProgress,
     [0, 2 / 9 + 2 / 90, 3 / 9 - 1 / 18],
-    [1, 3, 10]
+    [1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
   );
   const scale4 = useTransform(
     scrollYProgress,
     [0, 2 / 9 + 3 / 90, 3 / 9 - 1 / 18],
-    [1, 3, 10]
+    [1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
   );
   const scale5 = useTransform(
     scrollYProgress,
     [0, 2 / 9 + 4 / 90, 3 / 9 - 1 / 18],
-    [1, 3, 10]
+    [1.2, 2.2 + 1.2 * Math.random(), 10]
   );
-  const x1 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [300, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [200, 0]);
-  const x2 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [250, 0]);
-  const y2 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-220, 0]);
-  const x3 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [130, 0]);
-  const y3 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-100, 0]);
-  const x4 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [400, 0]);
-  const y4 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-340, 0]);
-  const x5 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [-300, 0]);
-  const y5 = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [100, 0]);
-  const opacity = useTransform(
+  const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
+  const centerRandom = (val: number) => Math.random() * val - val / 2;
+  const transformValues = (size: number) => [
     scrollYProgress,
-    [0, 2 / 9, 3 / 9 - 1 / 18],
-    [0, 1, 0]
+    [0, k],
+    [centerRandom(size), centerRandom(size / 2)],
+  ];
+
+  const x1 = useTransform(...transformValues(screenWidth));
+  const y1 = useTransform(...transformValues(screenHeight));
+  const r1 = useTransform(...transformValues(90));
+  const x2 = useTransform(...transformValues(screenWidth));
+  const y2 = useTransform(...transformValues(screenHeight));
+  const r2 = useTransform(...transformValues(90));
+  const x3 = useTransform(...transformValues(screenWidth));
+  const y3 = useTransform(...transformValues(screenHeight));
+  const r3 = useTransform(...transformValues(90));
+  const x4 = useTransform(...transformValues(screenWidth));
+  const y4 = useTransform(...transformValues(screenHeight));
+  const r4 = useTransform(...transformValues(90));
+  const x5 = useTransform(...transformValues(screenWidth));
+  const y5 = useTransform(...transformValues(screenHeight));
+  const r5 = useTransform(...transformValues(90));
+  const x6 = useTransform(...transformValues(screenWidth));
+  const y6 = useTransform(...transformValues(screenHeight));
+  const r6 = useTransform(...transformValues(90));
+  const x7 = useTransform(...transformValues(screenWidth));
+  const y7 = useTransform(...transformValues(screenHeight));
+  const r7 = useTransform(...transformValues(90));
+  const x8 = useTransform(...transformValues(screenWidth));
+  const y8 = useTransform(...transformValues(screenHeight));
+  const r8 = useTransform(...transformValues(90));
+  const x9 = useTransform(...transformValues(screenWidth));
+  const y9 = useTransform(...transformValues(screenHeight));
+  const r9 = useTransform(...transformValues(90));
+  const x10 = useTransform(...transformValues(screenWidth));
+  const y10 = useTransform(...transformValues(screenHeight));
+  const r10 = useTransform(...transformValues(90));
+  const x11 = useTransform(...transformValues(screenWidth));
+  const y11 = useTransform(...transformValues(screenHeight));
+  const r11 = useTransform(...transformValues(90));
+  const x12 = useTransform(...transformValues(screenWidth));
+  const y12 = useTransform(...transformValues(screenHeight));
+  const r12 = useTransform(...transformValues(90));
+  const x13 = useTransform(...transformValues(screenWidth));
+  const y13 = useTransform(...transformValues(screenHeight));
+  const r13 = useTransform(...transformValues(90));
+  const x14 = useTransform(...transformValues(screenWidth));
+  const y14 = useTransform(...transformValues(screenHeight));
+  const r14 = useTransform(...transformValues(90));
+  const x15 = useTransform(...transformValues(screenWidth));
+  const y15 = useTransform(...transformValues(screenHeight));
+  const r15 = useTransform(...transformValues(90));
+  const x16 = useTransform(...transformValues(screenWidth));
+  const y16 = useTransform(...transformValues(screenHeight));
+  const r16 = useTransform(...transformValues(90));
+  const x17 = useTransform(...transformValues(screenWidth));
+  const y17 = useTransform(...transformValues(screenHeight));
+  const r17 = useTransform(...transformValues(90));
+  const x18 = useTransform(...transformValues(screenWidth));
+  const y18 = useTransform(...transformValues(screenHeight));
+  const r18 = useTransform(...transformValues(90));
+  const x19 = useTransform(...transformValues(screenWidth));
+  const y19 = useTransform(...transformValues(screenHeight));
+  const r19 = useTransform(...transformValues(90));
+  const x20 = useTransform(...transformValues(screenWidth));
+  const y20 = useTransform(...transformValues(screenHeight));
+  const r20 = useTransform(...transformValues(90));
+  const x21 = useTransform(...transformValues(screenWidth));
+  const y21 = useTransform(...transformValues(screenHeight));
+  const r21 = useTransform(...transformValues(90));
+  const x22 = useTransform(...transformValues(screenWidth));
+  const y22 = useTransform(...transformValues(screenHeight));
+  const r22 = useTransform(...transformValues(90));
+  const x23 = useTransform(...transformValues(screenWidth));
+  const y23 = useTransform(...transformValues(screenHeight));
+  const r23 = useTransform(...transformValues(90));
+  const x24 = useTransform(...transformValues(screenWidth));
+  const y24 = useTransform(...transformValues(screenHeight));
+  const r24 = useTransform(...transformValues(90));
+  const x25 = useTransform(...transformValues(screenWidth));
+  const y25 = useTransform(...transformValues(screenHeight));
+  const r25 = useTransform(...transformValues(90));
+  const x26 = useTransform(...transformValues(screenWidth));
+  const y26 = useTransform(...transformValues(screenHeight));
+  const r26 = useTransform(...transformValues(90));
+  const x27 = useTransform(...transformValues(screenWidth));
+  const y27 = useTransform(...transformValues(screenHeight));
+  const r27 = useTransform(...transformValues(90));
+  const x28 = useTransform(...transformValues(screenWidth));
+  const y28 = useTransform(...transformValues(screenHeight));
+  const r28 = useTransform(...transformValues(90));
+  const x29 = useTransform(...transformValues(screenWidth));
+  const y29 = useTransform(...transformValues(screenHeight));
+  const r29 = useTransform(...transformValues(90));
+  const x30 = useTransform(...transformValues(screenWidth));
+  const y30 = useTransform(...transformValues(screenHeight));
+  const r30 = useTransform(...transformValues(90));
+  const x31 = useTransform(...transformValues(screenWidth));
+  const y31 = useTransform(...transformValues(screenHeight));
+  const r31 = useTransform(...transformValues(90));
+  const x32 = useTransform(...transformValues(screenWidth));
+  const y32 = useTransform(...transformValues(screenHeight));
+  const r32 = useTransform(...transformValues(90));
+  const x33 = useTransform(...transformValues(screenWidth));
+  const y33 = useTransform(...transformValues(screenHeight));
+  const r33 = useTransform(...transformValues(90));
+  const x34 = useTransform(...transformValues(screenWidth));
+  const y34 = useTransform(...transformValues(screenHeight));
+  const r34 = useTransform(...transformValues(90));
+  const opacity = useTransform(scrollYProgress, [0, 3 / 18, k], [0, 1, 0]);
+  const opacityBack = useTransform(
+    scrollYProgress,
+    [0, 1 / 9, 3 / 9],
+    [1, 1, 0]
   );
-  const rotate = useTransform(scrollYProgress, [0, 3 / 9 - 1 / 18], [0, 360]);
+  const opacityBlock = useTransform(
+    scrollYProgress,
+    [0, 1 / 36, 1 / 18],
+    [1, 1, 0]
+  );
+  const motionProps = [
+    [x1, y1, scale1, opacity, r1],
+    [x2, y2, scale1, opacity, r2],
+    [x3, y3, scale1, opacity, r3],
+    [x4, y4, scale1, opacity, r4],
+    [x5, y5, scale1, opacity, r5],
+    [x6, y6, scale1, opacity, r6],
+    [x7, y7, scale1, opacity, r7],
+    [x8, y8, scale1, opacity, r8],
+    [x9, y9, scale1, opacity, r9],
+    [x10, y10, scale1, opacity, r10],
+    [x11, y11, scale1, opacity, r11],
+    [x12, y12, scale1, opacity, r12],
+    [x13, y13, scale2, opacity, r13],
+    [x14, y14, scale2, opacity, r14],
+    [x15, y15, scale3, opacity, r15],
+    [x16, y16, scale3, opacity, r16],
+    [x17, y17, scale3, opacity, r17],
+    [x18, y18, scale4, opacity, r18],
+    [x19, y19, scale4, opacity, r19],
+    [x20, y20, scale4, opacity, r20],
+    [x21, y21, scale4, opacity, r21],
+    [x22, y22, scale4, opacity, r22],
+    [x23, y23, scale4, opacity, r23],
+    [x24, y24, scale4, opacity, r24],
+    [x25, y25, scale4, opacity, r25],
+    [x26, y26, scale4, opacity, r26],
+    [x27, y27, scale5, opacity, r27],
+    [x28, y28, scale5, opacity, r28],
+    [x29, y29, scale5, opacity, r29],
+    [x30, y30, scale5, opacity, r30],
+    [x31, y31, scale5, opacity, r31],
+    [x32, y32, scale5, opacity, r32],
+    [x33, y33, scale5, opacity, r33],
+    [x34, y34, scale5, opacity, r34],
+  ].map((e, i) => ({
+    style: { x: e[0], y: e[1], scale: e[2], opacity: e[3], rotate: e[4] },
+    src: posters[i],
+  }));
   useEffect(() => {
     setContentNo(0);
   }, [setContentNo]);
@@ -157,7 +303,7 @@ const Main = () => {
     const { bind, unbind } = createScrollSnap(
       snapContainer.current as HTMLDivElement,
       {
-        snapDestinationY: "103%",
+        snapDestinationY: "100%",
       },
       () => {
         [
@@ -210,37 +356,45 @@ const Main = () => {
       );
     }
   );
-
+  console.log(window.Screen);
+  console.log(window.screen);
   return (
     <>
       <Indicator />
       <ScrollTop />
       <div
         ref={snapContainer}
-        className="h-screen overflow-y-scroll scrollbar-hide"
+        className="h-screen overflow-y-scroll overflow-x-hidden"
       >
-        <m.div className="bg-gradient-to-b from-slate-300 to-slate-800 h-[300vh] w-24">
+        <div className="bg-gradient-to-b h-[300vh] w-8">
+          {/* <div className="fixed grid grid-cols-12 -z-10 blur-xl ">
+            {posters.map((poster) => (
+              <img src={poster} className="w-40" />
+            ))}
+          </div> */}
           <m.div
-            style={{ scale: scale1, opacity, x: x1, y: y1 }}
-            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
+            style={{ opacity: opacityBlock }}
+            className="w-screen h-screen top-0 left-0 -z-10 fixed bg-[url('https://previews.123rf.com/images/rawpixel/rawpixel1603/rawpixel160305951/53433656-%EB[…]%EA%B5%AC%EC%B2%B4%EC%A0%81%EC%9D%B8-%EA%B0%9C%EB%85%90.jpg')]"
           ></m.div>
           <m.div
-            style={{ scale: scale2, opacity, x: x2, y: y2 }}
-            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
-          ></m.div>
-          <m.div
-            style={{ scale: scale3, opacity, x: x3, y: y3 }}
-            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
-          ></m.div>
-          <m.div
-            style={{ scale: scale4, opacity, x: x4, y: y4 }}
-            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
-          ></m.div>
-          <m.div
-            style={{ scale: scale5, opacity, x: x5, y: y5 }}
-            className="w-24 fixed -z-10 left-1/2 top-1/2 -translate-x-1/2  h-24 bg-rose-500"
-          ></m.div>
-        </m.div>
+            className="fixed w-screen h-screen top-0 left-0 -z-10 bg-radial flex justify-center items-center "
+            style={{ opacity: opacityBack }}
+          >
+            <m.span
+              style={{ opacity: opacityBlock }}
+              className="font-NeonBines animate-flicker text-9xl neonText"
+            >
+              Tgle
+            </m.span>
+          </m.div>
+          {motionProps.map((prop, i) => (
+            <m.img
+              key={i}
+              {...prop}
+              className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            ></m.img>
+          ))}
+        </div>
         <div
           ref={content1}
           className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
@@ -272,7 +426,7 @@ const Main = () => {
               </m.div>
             )}
           </div>
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
             <img
               className="min-w-[340px] sm:min-w-[500px] h-[600px] md:min-w-[320px] md:w-[450px] md:h-[600px] object-contain"
               src={main1}
@@ -534,4 +688,11 @@ const posters = [
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114114152db099f86-a006-4626-af46-5bc648720d0d.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221116125917358d9f1c-1d50-4b36-b313-c23a1e82b6ca.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221121182038d18fbe09-ef9f-4415-9a8c-ea8e36fc081a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811278/nahoona55th_bridge_big_tqczd6.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811279/%EC%95%84%EC%9D%B4%EC%9C%A0_n8qclt.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1668610025/10cm_%ED%8F%AC%EC%8A%A4%ED%84%B0_udawch.png",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811267/EGGTMSMMBSWGNZRU3FIY6KGOVQ_uhy71h.webp",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811267/20141104084410_534084_400_600_nvxiu2.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811279/2022110114012832258_1_c4vjpz.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811364/image_readtop_2022_968182_16672057175215847_xlztje.jpg",
 ];

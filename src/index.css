@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "NEON";
+  src: url(./fonts/NEON____.TTF) format("truetype");
+}
+@font-face {
+  font-family: "NeonBines";
+  src: url(./fonts/NeonBines.ttf) format("truetype");
+}
+
 .text-shadow {
   text-shadow: 2px 2px 4px rgb(255, 244, 157);
 }
@@ -69,3 +78,11 @@
     transform: translateY(0);
   }
 }
+.neonText {
+  color: #fff;
+  text-shadow: 0 0 4px #fff, 0 0 9px #fff, 0 0 18px #fff, 0 0 36px #ec008b,
+    0 0 82px #ec008b, 0 0 92px #ec008b, 0 0 102px #ec008b, 0 0 151px #ec008b;
+}
+
+
+
