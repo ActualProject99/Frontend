@@ -72,8 +72,8 @@ const LoginCompo = (): JSX.Element => {
           className="w-72 flex flex-col gap-2"
           onSubmit={handleSubmit(onValid)}
         >
-          <div className="parent3">
-            <div className="flex flex-col gap-y-1 h-16 child3">
+          <div className="parent2">
+            <div className="flex flex-col gap-y-1 h-16 child2">
               <label className="text-xs font-bold ">이메일 주소</label>
               <input
                 type="text"
