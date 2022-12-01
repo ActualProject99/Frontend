@@ -3,7 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import { MainContent, mainContent } from "../atoms/mainContent";
+import {
+  MainContent,
+  mainContent,
+  MainScrollRef,
+  mainScrollRef,
+} from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
@@ -12,6 +17,8 @@ import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
 import useToast from "../hooks/useToast";
 import { pages } from "../routes";
+import { motion as m, AnimatePresence } from "framer-motion";
+import useIsScrolled from "../hooks/window/useHowMuchScroll";
 
 const Search = ({
   viewer,
@@ -71,7 +78,8 @@ const Nav = ({
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<MainScrollRef>(mainScrollRef);
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
       return toasted();
@@ -100,6 +108,10 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
+  const { isScrolled } = useIsScrolled({
+    ref: getMainScrollRef,
+    value: window.innerHeight * 3 - 100,
+  });
   useEffect(() => {
     Object.values(pages).forEach((page) => {
       if (pathname.includes(page.path)) {
@@ -107,7 +119,6 @@ const Nav = ({
       }
     });
   }, [pathname]);
-
   return (
     <Portal>
       <Toasts />
@@ -194,23 +205,32 @@ const Nav = ({
             </div>
           </div>
         ) : (
-          <div
-            className={cls(
-              "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
-              contentNo === 1 ? "text-white" : "text-black"
-            )}
-          >
-            <div className="text-5xl py-2 font-logo cursor-pointer">Tgle</div>
-            <ul className="flex gap-10 text-lg font-logo">
-              {Object.values(pages).map((page, i) =>
-                page.isNav ? (
-                  <li key={i}>
-                    <Link to={page.path}>{page.name}</Link>
-                  </li>
-                ) : null
-              )}
-            </ul>
-          </div>
+          <AnimatePresence>
+            {isScrolled ? (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className={cls(
+                  "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
+                  contentNo === 1 ? "text-white" : "text-black"
+                )}
+              >
+                <div className="text-5xl py-2 font-logo cursor-pointer">
+                  Tgle
+                </div>
+                <ul className="flex gap-10 text-lg font-logo">
+                  {Object.values(pages).map((page, i) =>
+                    page.isNav ? (
+                      <li key={i}>
+                        <Link to={page.path}>{page.name}</Link>
+                      </li>
+                    ) : null
+                  )}
+                </ul>
+              </m.div>
+            ) : null}
+          </AnimatePresence>
         )}
       </nav>
       {isSearchVisible ? (

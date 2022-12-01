@@ -19,6 +19,7 @@ import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
 import Explore from "../components/Explore";
+import useIsScrolled from "../hooks/window/useHowMuchScroll";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
@@ -106,6 +107,10 @@ const Main = () => {
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number | null>(mainContent);
   const [getMainScrollRef, setMainScrollRef] = useRecoilState(mainScrollRef);
+  const { isScrolled } = useIsScrolled({
+    ref: getMainScrollRef,
+    value: window.innerHeight * 3 - 100,
+  });
 
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
@@ -113,27 +118,27 @@ const Main = () => {
   const k = 3 / 9 - 1 / 18;
   const scale1 = useTransform(
     scrollYProgress,
-    [0, 2 / 9, 3 / 9 - 1 / 18],
+    [0, 2 / 9, k],
     [1.2 + 0.8 * Math.random(), 4.5, 10]
   );
   const scale2 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 1 / 90, 3 / 9 - 1 / 18],
+    [0, 2 / 9 + 1 / 90, k],
     [1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
   );
   const scale3 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 2 / 90, 3 / 9 - 1 / 18],
+    [0, 2 / 9 + 2 / 90, k],
     [1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
   );
   const scale4 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 3 / 90, 3 / 9 - 1 / 18],
+    [0, 2 / 9 + 3 / 90, k],
     [1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
   );
   const scale5 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 4 / 90, 3 / 9 - 1 / 18],
+    [0, 2 / 9 + 4 / 90, k],
     [1.2, 2.2 + 1.2 * Math.random(), 10]
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
@@ -370,8 +375,13 @@ const Main = () => {
   );
   return (
     <>
-      <Indicator />
-      <ScrollTop />
+      {isScrolled ? (
+        <>
+          <Indicator />
+          <ScrollTop />
+        </>
+      ) : null}
+
       <div
         ref={snapContainer}
         className="h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black"

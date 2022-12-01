@@ -8,7 +8,8 @@ export const mainContent = atom<MainContent>({
   default: initContent,
 });
 const initRef = null;
-export const mainScrollRef = atom<HTMLElement | null>({
+export type MainScrollRef = HTMLElement | null;
+export const mainScrollRef = atom<MainScrollRef>({
   key: "mainScrollRef",
   default: initRef,
 });
