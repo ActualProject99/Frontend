@@ -110,7 +110,7 @@ const Nav = ({
   });
   const { isScrolled } = useIsScrolled({
     ref: getMainScrollRef,
-    value: window.innerHeight * 3 - 100,
+    value: window.innerHeight * 10 - 100,
   });
   useEffect(() => {
     Object.values(pages).forEach((page) => {

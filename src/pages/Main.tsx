@@ -18,7 +18,6 @@ import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
-import Explore from "../components/Explore";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
@@ -109,55 +108,65 @@ const Main = () => {
   const [getMainScrollRef, setMainScrollRef] = useRecoilState(mainScrollRef);
   const { isScrolled } = useIsScrolled({
     ref: getMainScrollRef,
-    value: window.innerHeight * 3 - 100,
+    value: window.innerHeight * 10 - 100,
   });
 
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
   });
-  const k = 3 / 9 - 1 / 18;
+  const s = 0.0625;
+  const k = 10 * s - (1 / 2) * s;
   const scale1 = useTransform(
     scrollYProgress,
-    [0, 2 / 9, k],
-    [1.2 + 0.8 * Math.random(), 4.5, 10]
+    [0, 4 * s, 9 * s, k],
+    [1.2, 1.2 + 0.8 * Math.random(), 4.5, 10]
   );
   const scale2 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 1 / 90, k],
-    [1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
+    [0, 4 * s, 9 * s + s / 10, k],
+    [1.2, 1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
   );
   const scale3 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 2 / 90, k],
-    [1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
+    [0, 4 * s, 9 * s + (s / 10) * 2, k],
+    [1.2, 1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
   );
   const scale4 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 3 / 90, k],
-    [1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
+    [0, 4 * s, 9 * s + (s / 10) * 3, k],
+    [1.2, 1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
   );
   const scale5 = useTransform(
     scrollYProgress,
-    [0, 2 / 9 + 4 / 90, k],
-    [1.2, 2.2 + 1.2 * Math.random(), 10]
+    [0, 4 * s, 9 * s + (s / 10) * 4, k],
+    [1.2, 1.2, 2.2 + 1.2 * Math.random(), 10]
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
   const centerRandom = (val: number) => Math.random() * val - val / 2;
-  const transformValues = (size: number) => [
-    scrollYProgress,
-    [0, k],
-    [centerRandom(size), centerRandom(size / 2)],
-  ];
-  const transformXValues = (size: number) => [
-    scrollYProgress,
-    [0, k],
-    [centerRandom(size) - 100, centerRandom(size / 2) - 100],
-  ];
-  const transformYValues = (size: number) => [
-    scrollYProgress,
-    [0, k],
-    [centerRandom(size) - 150, centerRandom(size / 2) - 150],
-  ];
+  const transformValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue, rndValue, centerRandom(size / 2)],
+    ];
+  };
+  const transformXValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue - 100, rndValue - 100, centerRandom(size / 2) - 100],
+    ];
+  };
+  const transformYValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue - 150, rndValue - 150, centerRandom(size / 2) - 150],
+    ];
+  };
 
   const x0 = useTransform(...transformXValues(0));
   const y0 = useTransform(...transformYValues(0));
@@ -263,15 +272,29 @@ const Main = () => {
   const x34 = useTransform(...transformXValues(screenWidth));
   const y34 = useTransform(...transformYValues(screenHeight));
   const r34 = useTransform(...transformValues(90));
-  const opacity = useTransform(scrollYProgress, [0, 3 / 18, k], [0, 1, 0]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 4 * s - 0.1 * s, 4 * s, k],
+    [0, 0, 1, 0]
+  );
+  const clipPath = useTransform(
+    scrollYProgress,
+    [0, 2 * s, 4 * s - s / 10, 4 * s],
+    [
+      "polygon(0% 0%, 0 0, 0 0%, 25% 0%, 100% 0%, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%)",
+      "polygon(0% 0%, 0 0, 0 15%, 25% 15%, 100% 15%, 100% 85%, 0 85%, 0 100%, 100% 100%, 100% 0%)",
+      "polygon(0% 0%, 0 0, 0 25%, 25% 25%, 100% 25%, 100% 75%, 0 75%, 0 100%, 100% 100%, 100% 0%)",
+      "polygon(0% 0%, 0 0, 0 0%, 25% 0%, 100% 0%, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%)",
+    ]
+  );
   const opacityBack = useTransform(
     scrollYProgress,
-    [0, 1 / 9, 3 / 9],
+    [0, 7 * s, 9 * s],
     [1, 1, 0]
   );
   const opacityBlock = useTransform(
     scrollYProgress,
-    [0, 1 / 36, 1 / 18],
+    [0, 1 * s, 2 * s],
     [1, 1, 0]
   );
   const motionProps = [
@@ -345,7 +368,7 @@ const Main = () => {
     );
     unbind();
     const conditionalBind = () => {
-      if (scrollYProgress.get() > 3 / 10) {
+      if (scrollYProgress.get() > 9 / 16) {
         bind();
       } else {
         unbind();
@@ -386,7 +409,7 @@ const Main = () => {
         ref={snapContainer}
         className="h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black"
       >
-        <div className="bg-gradient-to-b h-[300vh] w-8">
+        <div className="bg-gradient-to-b h-[1000vh] w-8">
           <m.div
             style={{ opacity: opacityBlock }}
             className="w-screen h-screen top-0 left-0 -z-10 fixed bg-[url('https://previews.123rf.com/images/rawpixel/rawpixel1603/rawpixel160305951/53433656-%EB[…]%EA%B5%AC%EC%B2%B4%EC%A0%81%EC%9D%B8-%EA%B0%9C%EB%85%90.jpg')]"
@@ -409,6 +432,12 @@ const Main = () => {
               className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             ></m.img>
           ))}
+          <m.div
+            className="fixed -z-10 w-screen h-screen bg-primary-900"
+            style={{
+              clipPath,
+            }}
+          ></m.div>
         </div>
         <div
           ref={content1}
