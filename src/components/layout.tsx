@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
@@ -9,7 +8,6 @@ import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
-import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
 import useToast from "../hooks/useToast";
@@ -67,13 +65,12 @@ const Nav = ({
   landing?: boolean;
 }) => {
   const { toggler, ModalContent } = useModal("sm", <UserInfo />);
-
   const { pathname } = useLocation();
-  const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
   const [contentNo] = useRecoilState<MainContent>(mainContent);
   const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
@@ -83,14 +80,12 @@ const Nav = ({
   const handleClickProfile = () => {
     toggler();
   };
-
   const handleClickLogout = () => {
     window.alert("로그아웃 되었습니다.");
     removeCookieToken();
     navigate("/");
-    // setUser(initUser);
   };
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   const handleClickSearchOn = () => {
     setIsSearchVisible(true);
   };
@@ -118,7 +113,7 @@ const Nav = ({
       <Toasts />
       <nav
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
@@ -231,39 +226,6 @@ const Nav = ({
   );
 };
 const Footer = () => {
-  const members = [
-    {
-      name: "임요한",
-      position: "frontend",
-      github: "https://github.com/obov",
-    },
-    {
-      name: "김혁진",
-      position: "frontend",
-      github: "https://github.com/rklskhj",
-    },
-    {
-      name: "이민기",
-      position: "frontend",
-      github: "https://github.com/Pasilda123",
-    },
-    {
-      name: "예지완",
-      position: "backend",
-      github: "https://github.com/kmdet1235",
-    },
-    {
-      name: "박민호",
-      position: "backend",
-      github: "https://github.com/maino96",
-    },
-    {
-      name: "김정환",
-      position: "backend",
-      github: "https://github.com/jeongpal",
-    },
-    { name: "이주연", position: "designer", github: "" },
-  ];
   return (
     <div className="bg-primary-800 h-96 pt-28 flex">
       <div className="w-[1200px] h-full mx-auto flex justify-center items-start gap-24 text-white">
@@ -313,3 +275,36 @@ const Layout = ({ children }: { children: ReactNode }) => {
   );
 };
 export default Layout;
+const members = [
+  {
+    name: "임요한",
+    position: "frontend",
+    github: "https://github.com/obov",
+  },
+  {
+    name: "김혁진",
+    position: "frontend",
+    github: "https://github.com/rklskhj",
+  },
+  {
+    name: "이민기",
+    position: "frontend",
+    github: "https://github.com/Pasilda123",
+  },
+  {
+    name: "예지완",
+    position: "backend",
+    github: "https://github.com/kmdet1235",
+  },
+  {
+    name: "박민호",
+    position: "backend",
+    github: "https://github.com/maino96",
+  },
+  {
+    name: "김정환",
+    position: "backend",
+    github: "https://github.com/jeongpal",
+  },
+  { name: "이주연", position: "designer", github: "" },
+];
