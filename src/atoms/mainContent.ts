@@ -7,8 +7,8 @@ export const mainContent = atom<MainContent>({
   key: "mainContent",
   default: initContent,
 });
-const initRef = undefined;
-export const mainScrollRef = atom<RefObject<HTMLElement> | undefined>({
+const initRef = null;
+export const mainScrollRef = atom<HTMLElement | null>({
   key: "mainScrollRef",
   default: initRef,
 });
