@@ -48,7 +48,7 @@ const ScrollTop = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
   const [getMainScrollRef] = useRecoilState(mainScrollRef);
   const handleClick = () => {
-    getMainScrollRef?.current?.scrollTo({
+    getMainScrollRef?.scrollTo({
       left: 0,
       top: 0,
       behavior: "smooth",
@@ -105,7 +105,7 @@ const Main = () => {
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number | null>(mainContent);
-  const [, setMainScrollRef] = useRecoilState(mainScrollRef);
+  const [getMainScrollRef, setMainScrollRef] = useRecoilState(mainScrollRef);
 
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
@@ -352,8 +352,8 @@ const Main = () => {
     };
   }, [setContentNo, scrollYProgress]);
   useEffect(() => {
-    if (snapContainer) {
-      setMainScrollRef(snapContainer);
+    if (snapContainer && !getMainScrollRef) {
+      setMainScrollRef(snapContainer.current);
     }
   }, [setMainScrollRef]);
   const Content = forwardRef(
