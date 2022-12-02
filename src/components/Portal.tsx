@@ -24,7 +24,7 @@ export const Modal = ({
       <div
         onClick={onClick}
         {...rest}
-        className="fixed w-screen h-screen bg-white/60 backdrop-blur-sm top-0 left-0"
+        className="fixed w-screen h-screen backdrop-blur-sm backdrop-saturate-200 top-0 left-0"
       />
       {children}
     </Portal>
