@@ -12,6 +12,8 @@ module.exports = {
         "toast-right": "2s linear toast-right",
         wiggle: "wiggle 1s ease-in-out infinite",
         "text-erase": "2s linear text-erase",
+        pulsate: "pulsate 1s ease-in-out infinite alternate;",
+        flicker: "flicker 1.5s infinite alternate;",
       },
       keyframes: {
         "ping-small": {
@@ -34,13 +36,45 @@ module.exports = {
           "0%": { width: "140px" },
           "100%": { width: 0 },
         },
+        pulsate: {
+          "100%": {
+            /* Larger blur radius */ textShadow:
+              "0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #f09, 0 0 80px #f09, 0 0 90px #f09, 0 0 100px #f09, 0 0 150px #f09;",
+          },
+          "0%": {
+            /* A slightly smaller blur radius */ textShadow:
+              "0 0 4px #fff, 0 0 10px #fff, 0 0 18px #fff, 0 0 38px #f09, 0 0 73px #f09, 0 0 80px #f09, 0 0 94px #f09, 0 0 140px #f09;",
+          },
+        },
+        flicker: {
+          "0%, 18%, 22%, 25%, 53%, 57%, 100% ": {
+            textShadow: `0 0 4px #fff,
+              0 0 11px #fff,
+              0 0 19px #fff,
+              0 0 40px #ec008b,
+              0 0 80px #ec008b,
+              0 0 90px #ec008b,
+              0 0 100px #ec008b,
+              0 0 150px #ec008b;`,
+          },
+          "20%, 24%, 55%": {
+            textShadow: "none;",
+          },
+        },
       },
       width: {
         "screen-scroll": "calc(100vw - 18px)",
+        "screen-scroll-double": "calc(100vw - 40px)",
+      },
+      backgroundImage: {
+        radial:
+          "radial-gradient(closest-side, rgba(0,0,0,0.90), rgba(0,0,0), #000);",
       },
       fontFamily: {
         logo: ["lemon"],
         base: ["Oswold", "sans-serif"],
+        neon: ["NEON"],
+        NeonBines: ["NeonBines"],
       },
       colors: {
         primary: {
