@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .janus {
   background-image: url("https://bit.ly/3H2hrMK");
   clip-path: circle(2.5rem at var(--x) var(--y));
@@ -15,7 +14,6 @@
 @font-face {
   font-family: "NeonBines";
   src: url(./fonts/NeonBines.ttf) format("truetype");
-
 }
 
 .text-shadow {
