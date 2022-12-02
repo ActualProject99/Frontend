@@ -1,20 +1,24 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import { mainContent } from "../atoms/mainContent";
-import { scrollable } from "../atoms/scrollable";
+import {
+  MainContent,
+  mainContent,
+  MainScrollRef,
+  mainScrollRef,
+} from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
-import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
 import useToast from "../hooks/useToast";
 import { pages } from "../routes";
+import { motion as m, AnimatePresence } from "framer-motion";
+import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 
 const Search = ({
@@ -69,15 +73,15 @@ const Nav = ({
   landing?: boolean;
 }) => {
   const { toggler, ModalContent } = useModal("sm", <UserInfo />);
-
   const { pathname } = useLocation();
-  const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
-  const [contentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [getMainScrollRef, setMainScrollRef] =
+    useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
-
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
       return toasted();
@@ -86,14 +90,12 @@ const Nav = ({
   const handleClickProfile = () => {
     toggler();
   };
-
   const handleClickLogout = () => {
     window.alert("로그아웃 되었습니다.");
     removeCookieToken();
     navigate("/");
-    // setUser(initUser);
   };
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   const handleClickSearchOn = () => {
     setIsSearchVisible(true);
   };
@@ -108,6 +110,10 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
+  const { isScrolled } = useIsScrolled({
+    ref: getMainScrollRef,
+    value: window.innerHeight * 10 - 100,
+  });
   useEffect(() => {
     Object.values(pages).forEach((page) => {
       if (pathname.includes(page.path)) {
@@ -115,13 +121,12 @@ const Nav = ({
       }
     });
   }, [pathname]);
-
   return (
     <Portal>
       <Toasts />
       <nav
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
@@ -207,23 +212,32 @@ const Nav = ({
             </div>
           </div>
         ) : (
-          <div
-            className={cls(
-              "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
-              contentNo === 1 ? "text-white" : "text-black"
-            )}
-          >
-            <div className="text-5xl py-2 font-logo cursor-pointer">Tgle</div>
-            <ul className="flex gap-10 text-lg font-logo">
-              {Object.values(pages).map((page, i) =>
-                page.isNav ? (
-                  <li key={i}>
-                    <Link to={page.path}>{page.name}</Link>
-                  </li>
-                ) : null
-              )}
-            </ul>
-          </div>
+          <AnimatePresence>
+            {isScrolled ? (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className={cls(
+                  "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
+                  contentNo === 1 ? "text-white" : "text-black"
+                )}
+              >
+                <div className="text-5xl py-2 font-logo cursor-pointer">
+                  Tgle
+                </div>
+                <ul className="flex gap-10 text-lg font-logo">
+                  {Object.values(pages).map((page, i) =>
+                    page.isNav ? (
+                      <li key={i}>
+                        <Link to={page.path}>{page.name}</Link>
+                      </li>
+                    ) : null
+                  )}
+                </ul>
+              </m.div>
+            ) : null}
+          </AnimatePresence>
         )}
       </nav>
       {isSearchVisible ? (
@@ -239,39 +253,6 @@ const Nav = ({
   );
 };
 const Footer = () => {
-  const members = [
-    {
-      name: "임요한",
-      position: "frontend",
-      github: "https://github.com/obov",
-    },
-    {
-      name: "김혁진",
-      position: "frontend",
-      github: "https://github.com/rklskhj",
-    },
-    {
-      name: "이민기",
-      position: "frontend",
-      github: "https://github.com/Pasilda123",
-    },
-    {
-      name: "예지완",
-      position: "backend",
-      github: "https://github.com/kmdet1235",
-    },
-    {
-      name: "박민호",
-      position: "backend",
-      github: "https://github.com/maino96",
-    },
-    {
-      name: "김정환",
-      position: "backend",
-      github: "https://github.com/jeongpal",
-    },
-    { name: "이주연", position: "designer", github: "" },
-  ];
   return (
     <div className="bg-primary-800 h-96 pt-20 flex">
       <div className="w-[1200px] h-full mx-auto flex justify-center items-start gap-24 ">
@@ -330,7 +311,6 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
-  const [getScrollable] = useRecoilState<boolean>(scrollable);
   return (
     <>
       {pathname === "/" ? (
@@ -339,9 +319,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </>
       ) : (
-        <div
-          className={cls("min-h-screen", getScrollable || "overflow-hidden")}
-        >
+        <div className={cls("min-h-screen")}>
           <Nav normal />
           <div className="min-w-[360px] w-[1200px] mx-auto min-h-screen py-4 mt-24">
             {children}
@@ -353,3 +331,36 @@ const Layout = ({ children }: { children: ReactNode }) => {
   );
 };
 export default Layout;
+const members = [
+  {
+    name: "임요한",
+    position: "frontend",
+    github: "https://github.com/obov",
+  },
+  {
+    name: "김혁진",
+    position: "frontend",
+    github: "https://github.com/rklskhj",
+  },
+  {
+    name: "이민기",
+    position: "frontend",
+    github: "https://github.com/Pasilda123",
+  },
+  {
+    name: "예지완",
+    position: "backend",
+    github: "https://github.com/kmdet1235",
+  },
+  {
+    name: "박민호",
+    position: "backend",
+    github: "https://github.com/maino96",
+  },
+  {
+    name: "김정환",
+    position: "backend",
+    github: "https://github.com/jeongpal",
+  },
+  { name: "이주연", position: "designer", github: "" },
+];
