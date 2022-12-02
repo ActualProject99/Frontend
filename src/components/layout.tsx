@@ -135,17 +135,14 @@ const Nav = ({
             <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[140px] h-10 rounded relative cursor-pointer bottom-4"
+                  className="w-[140px] h-10 rounded cursor-pointer"
                   onClick={() => navigate("/")}
                 >
                   <img
-                    className="absolute"
+                    className="w-36 h-16"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669947023/%ED%8B%B0%EC%BC%93_euyskm.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669958939/KakaoTalk_20221202_140614837_smr5fd.png"
                   />
-                  <div className="flex justify-center items-center w-28 h-12 font-logo text-4xl absolute left-3.5 top-3.5 border-2 border-dashed pb-1">
-                    Tgle
-                  </div>
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
                   {Object.values(pages).map((page, i) =>
