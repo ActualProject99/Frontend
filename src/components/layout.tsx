@@ -75,8 +75,7 @@ const Nav = ({
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<MainScrollRef>(mainScrollRef);
+  const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
