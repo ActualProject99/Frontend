@@ -97,14 +97,14 @@ const Calendar = ({
         <div>금</div>
         <div>토</div>
       </div>
-      <div className="grid grid-cols-7 mt-2 text-sm border-b-[4px] border-dotted pb-3">
+      <div className="grid grid-cols-7 text-sm border-b-[4px] border-dotted">
         {days.map((day, dayIdx) => {
           return (
             <div
               key={day.toString()}
               className={cls(
                 dayIdx === 0 && colStartClasses[getDay(day)],
-                "py-1.5"
+                "py-0.5"
               )}
             >
               <button

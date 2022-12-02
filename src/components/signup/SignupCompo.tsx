@@ -27,9 +27,12 @@ const SignupCompo = (): JSX.Element => {
         nickname,
         phoneNumber,
       });
-      if (response.status === 200) {
+      console.log("리스폰스", response);
+      if (response.status === 201) {
         window.alert("가입을 축하드려요!");
         navigate("/user/login");
+      } else if (response.status === 401) {
+        window.alert(response.data.message);
       }
     } catch (error) {
       console.log("회원가입 에러", error);
@@ -113,7 +116,7 @@ const SignupCompo = (): JSX.Element => {
                 type="text"
                 className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
                 autoComplete="auto"
-                placeholder="한글, 숫자 조합 3-10자"
+                placeholder="한글, 숫자, 영문 3-10자"
                 {...register(...regOptLogin.nickname())}
               />
               <p className="text-xs text-red-500 ">
@@ -129,7 +132,7 @@ const SignupCompo = (): JSX.Element => {
                 type="text"
                 className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
                 autoComplete="auto"
-                placeholder="한글, 숫자 조합 3-10자"
+                placeholder="'-' 없이 작성해주세요"
                 {...register(...regOptLogin.phoneNumber())}
               />
               <p className="text-xs text-red-500 ">

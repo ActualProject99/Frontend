@@ -52,8 +52,8 @@ export const regOptLogin = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9]{3,10}$/,
-        message: "한글, 숫자를 혼용하여 입력해주세요",
+        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
         value: 3,
@@ -70,8 +70,8 @@ export const regOptLogin = {
     {
       required: "연락처를 입력해주세요",
       pattern: {
-        value: /^[0-9\b -]{0,11}$/,
-        message: "숫자 11자 이하만 가능합니다.",
+        value: /^(010|011|016|017|018|019)[0-9\b ]{0,11}$/,
+        message: "'-'없이, 휴대번호 형식만 가능합니다.",
       },
     },
   ]),

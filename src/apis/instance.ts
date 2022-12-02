@@ -5,6 +5,8 @@ const isDev = ["localhost:3000", "127.0.0.1:3000"].includes(
   window.location.host
 );
 
+const jwtToken = localStorage.getItem("AccessToken");
+console.log(jwtToken);
 //const baseURL = process.env.REACT_APP_SERVER_URL;
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -22,7 +24,7 @@ export const activate = axios.create({
   // 로그인을 한 상태
   baseURL: isDev ? PROXY_URL : SERVER_URL,
   headers: {
-    Authorization: `jwt=${myToken}`,
+    authorization: `Bearer ${jwtToken}`,
     "Cache-Control": "no-cache",
   },
 });

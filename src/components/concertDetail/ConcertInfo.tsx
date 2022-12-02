@@ -28,7 +28,8 @@ interface ConcertProps {
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  // const ticketings = concert.ticketingUrl;
+  // const ticketingUrl = concert.ticketingUrl;
+  // const ticketings = JSON.parse(ticketingUrl);
   // console.log("뭘까?", ticketings);
 
   const [like, setLike] = useState(concert.like);
@@ -93,35 +94,30 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
 
   const { Taps, Viewer } = useTaps(
     0,
-    ["상세정보", <MoreInfo />],
+    ["상세정보", <MoreInfo concert={concert} />],
     ["공연장정보", <NaverMap concert={concert} />],
     ["기대평", <CommentList />]
   );
 
-  console.log("날짜", concert.showTimes);
   return (
     <>
       <div className="flex justify-between m-auto w-full h-full p-5">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
-            <Calendar selectedDate={new Date(concert.concertDate)} />
-            <div className="flex flex-col gap-y-2">
+            <Calendar selectedDate={new Date(concert.ticketingDate)} />
+            <div className="flex flex-col gap-y-3 mt-3">
               <div className="flex justify-between w-56 text-xs font-bold">
-                <span>날짜</span>
+                <span className="text-accent-main">티켓팅 시작일</span>
+                <span>{concert.ticketingDate} - 마감시</span>
+              </div>
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span className="text-purple-700">공연 기간</span>
                 <span>{concert.concertDate}</span>
-              </div>
-              <div className="flex justify-between w-56 text-xs font-bold">
-                <span>가수</span>
-                <span>임영웅</span>
-              </div>
-              <div className="flex justify-between w-56 text-xs font-bold">
-                <span>장소</span>
-                <span>{concert.locationName}</span>
               </div>
             </div>
             {!show ? (
               <button
-                className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
+                className="flex items-center justify-center w-56 h-9 rounded-xl mt-3 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
                 onClick={DeleteSMS}
               >
                 <icons.Bell />
@@ -169,9 +165,9 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </span>
             </div>
           </div>
-          <div className="w-[30rem]">
+          <div className="flex flex-col gap-y-10 w-[30rem]">
             <div className="w-[100%] h-8 mb-3">
-              <p className="text-xl text-[#707070] font-bold">
+              <p className="text-xl text-black font-bold">
                 {concert.concertName}
               </p>
             </div>
@@ -180,7 +176,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                 티켓팅기간 &nbsp; {concert.ticketingDate}&nbsp;
               </div>
               <p>관람시간 &nbsp; {concert.playTime}</p>
-              <p>장르 &nbsp; {concert.categoryId}</p>
+              <p>장르 &nbsp; 콘서트</p>
               <p>관람등급 &nbsp; {concert.ratings}</p>
               <p>공연장 &nbsp; {concert.locationName}</p>
               {!like ? (
@@ -200,20 +196,20 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <icons.FullHeart className="text-red-500 cursor-pointer " />
                 </button>
               )}
-              <div className=" flex flex-col gap-y-4 justify-center items-end">
-                {/* {ticketings &&
+              {/* <div className=" flex flex-col gap-y-4 justify-center items-end">
+                {ticketings &&
                   ticketings.map((ticketing) => (
                     <button
                       key={ticketing.id}
                       className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
                       onClick={() => {
-                        window.open(ticketing.url);
+                        window.open();
                       }}
                     >
                       {ticketing.title}
                     </button>
-                  ))} */}
-              </div>
+                  ))}
+              </div> */}
             </div>
           </div>
         </div>
