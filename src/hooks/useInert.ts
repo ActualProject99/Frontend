@@ -11,5 +11,5 @@ const useInert = () => {
       nav?.removeAttribute("inert");
     };
   }, []);
-};
+}; //
 export default useInert;
