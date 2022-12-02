@@ -1,13 +1,3 @@
-import React from 'react'
-
-const Chatting = () => {
-  return (
-    <div>Chatting</div>
-  )
-}
-
-export default Chatting;
-
 // import classNames from "classnames";
 // import {
 //   ChangeEvent,
@@ -81,7 +71,6 @@ export default Chatting;
 //               key={index}
 //               className={classNames({
 //                 my_message: socket.id === chat.username,
-//                 alarm: !chat.username,
 //               })}
 //             >
 //               <span>
@@ -114,3 +103,11 @@ export default Chatting;
 //   );
 // };
 // export default Chatting;
+
+import React from "react";
+
+const Chatting = () => {
+  return <div>Chatting</div>;
+};
+
+export default Chatting;

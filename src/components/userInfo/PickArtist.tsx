@@ -11,7 +11,6 @@ const PickArtist = (): JSX.Element => {
   const { data: artists } = ArtistApi.GetArtist();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  console.log("아티스트", artists);
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -20,13 +19,13 @@ const PickArtist = (): JSX.Element => {
   useEffect(() => {
     console.log(
       "얍",
-      artists?.filter((artist) => artist.artist.includes(inputValue))
+      artists?.filter((artist) => artist.artistName.includes(inputValue))
     );
-  }, [inputValue]);
+  }, [inputValue, artists]);
 
   return (
     <>
-      <div className="flex justify-between py-5 mx-auto mt-10 mb-0 w-[95%]">
+      <div className="flex justify-between py-5 mx-auto mt-2 mb-0 w-[95%]">
         <div className=" flex items-end gap-x-3 ml-1">
           <p className="text-2xl font-bold ">
             <span className="text-primary-500">긍정킹</span>님의 아티스트 취향
@@ -56,7 +55,9 @@ const PickArtist = (): JSX.Element => {
               ?.filter(
                 (artist) =>
                   inputValue &&
-                  artist.artist.toUpperCase().includes(inputValue.toUpperCase())
+                  artist.artistName
+                    .toUpperCase()
+                    .includes(inputValue.toUpperCase())
               )
               .reduce(
                 (acc, cur) => {
@@ -69,20 +70,19 @@ const PickArtist = (): JSX.Element => {
                 [[]] as IGetArtist[][]
               )
               .map((artists) => {
-                console.log("아티스트결과", artists);
                 return artists.map((artist) => {
                   return (
                     <li
                       className="flex items-center gap-2 hover:bg-[#7151A1] hover:text-white cursor-pointer"
                       onClick={() => navigate(`/artist/${artist.artistId}`)}
-                      key={artist.id}
+                      key={artist.artistId}
                     >
                       <img
                         className="w-14 h-14 rounded-[50%]"
                         alt="at"
                         src={artist.artistImg}
                       />
-                      {artist.artist}
+                      {artist.artistName}
                     </li>
                   );
                 });
@@ -99,7 +99,7 @@ const PickArtist = (): JSX.Element => {
           {artists &&
             artists?.map((artist: IGetArtist) =>
               artist.like === true ? (
-                <ArtistIcon key={artist.id} artist={artist} />
+                <ArtistIcon key={artist.artistId} artist={artist} />
               ) : null
             )}
         </div>

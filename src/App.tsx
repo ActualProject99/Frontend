@@ -7,9 +7,15 @@ import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
-
+import useUser from "./hooks/useUser";
+import NotFound from "./pages/404";
+if (process.env.NODE_ENV === "production") {
+  console.log = function no_console() {};
+  console.warn = function no_console() {};
+}
 
 function App() {
+  const { isLoggedin } = useUser();
   return (
     <Layout>
       <Routes>
@@ -21,11 +27,12 @@ function App() {
         <Route path="user">
           <Route path="login" element={<user.Login />} />
           <Route path="signup" element={<user.Signup />} />
-          <Route path="mypage" element={<user.Mypage />} />
+          <Route path="mypick" element={<user.MyPick />} />
         </Route>
-        <Route path="mock-ticketing" element={<MockTicketing />} />
+        <Route path="/oauth/kakao/callback" element={<OAuthKakao />} />
+        <Route path="game" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
-        <Route path="/kakao/callback" element={<OAuthKakao />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   );

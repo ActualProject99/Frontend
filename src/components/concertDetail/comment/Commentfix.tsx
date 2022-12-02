@@ -1,4 +1,3 @@
-import React from "react";
 import { useMutation } from "@tanstack/react-query";
 import { removeComment, editComment } from "../../../apis/query/commentApi";
 import { useState, useEffect } from "react";
@@ -65,7 +64,7 @@ const Commentfix = ({ comment }: IComments) => {
     if (isedit) {
       setValue("editcomment", comment?.comment);
     }
-  }, [isedit]);
+  }, [isedit, comment?.comment, setValue]);
 
   return (
     <li className="mb-3 w-full m-auto mt-0 pb-3 border-b">

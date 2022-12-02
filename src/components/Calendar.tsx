@@ -1,4 +1,3 @@
-import { Menu, Transition } from "@headlessui/react";
 import {
   add,
   eachDayOfInterval,
@@ -10,12 +9,11 @@ import {
   isSameMonth,
   isToday,
   parse,
-  parseISO,
   startOfToday,
 } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useEffect } from "react";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { dateSelected } from "../atoms/date";
 import icons from "../components/icons";
@@ -45,7 +43,7 @@ const Calendar = ({
   let [dateChosen, setdateChosen] = useState(today);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-  const [getDateSelected, setDateSelected] = useRecoilState(dateSelected);
+  const [, setDateSelected] = useRecoilState(dateSelected);
   let days = eachDayOfInterval({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),

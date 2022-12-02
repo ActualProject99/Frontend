@@ -1,9 +1,4 @@
-import {
-  isError,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { readComments, addComment } from "../../../apis/query/commentApi";
 import { useState, useEffect } from "react";
@@ -100,7 +95,7 @@ const CommentList = () => {
 
       <ul className="p-4 w-full max-h-[65rem]">
         {data
-          ?.filter((concert) => concert.postId == id)
+          ?.filter((concert) => concert.postId === id)
           .map((comment) => (
             <Commentfix key={comment.id} comment={comment} />
           ))}

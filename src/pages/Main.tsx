@@ -39,8 +39,9 @@ const Indicator = () => {
 };
 const ScrollTop = () => {
   const [contentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<HTMLDivElement | null>(mainScrollRef);
+  const [getMainScrollRef] = useRecoilState<HTMLDivElement | null>(
+    mainScrollRef
+  );
   const handleClick = () => {
     getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   };
@@ -94,11 +95,12 @@ const Main = () => {
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<HTMLDivElement | null>(mainScrollRef);
+  const [, setMainScrollRef] = useRecoilState<HTMLDivElement | null>(
+    mainScrollRef
+  );
   useEffect(() => {
     setContentNo(0);
-  }, []);
+  }, [setContentNo]);
   useEffect(() => {
     createScrollSnap(
       snapContainer.current as HTMLDivElement,
@@ -126,12 +128,12 @@ const Main = () => {
         });
       }
     );
-  }, []);
+  }, [setContentNo]);
   useEffect(() => {
     if (snapContainer.current) {
       setMainScrollRef(snapContainer.current);
     }
-  }, []);
+  }, [setMainScrollRef]);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
@@ -354,281 +356,95 @@ const Main = () => {
             className="flex justify-center items-center h-screen w-screen relative overflow-hidden"
             style={{ perspective: 300 }}
           >
-            <div
-              className="grid grid-rows-4 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
-              style={{ transform: "rotate3d(3,0,1,20deg)" }}
-            >
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-              <img
-                className="bg-black w-52 h-40 object-contain"
-                src={main5}
-                alt=""
-              />
-            </div>
-            <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
-            <AnimatePresence>
-              {contentNo === 6 && (
-                <>
-                  <motion.div
-                    initial={{ backdropFilter: "blur(0px)" }}
-                    animate={{ backdropFilter: "blur(5px)" }}
-                    transition={{ delay: 0.3 }}
-                    className="h-screen w-screen absolute flex justify-center items-center"
-                  ></motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: 0 }}
-                    animate={{ opacity: 1, x: 200 }}
-                    transition={{ delay: 0.6 }}
-                    className="absolute z-50"
-                  >
-                    <p className="font-black text-7xl  text-gray-800 translate-y-40">
-                      티켓팅을 즐겁게
-                      <br />
-                      <span className="text-primary-main font-logo">Tgle</span>
-                    </p>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+            {contentNo === 6 && (
+              <>
+                <motion.div
+                  initial={{
+                    transform: "rotate3d(3,0,1,0deg)",
+                    opacity: 0,
+                  }}
+                  animate={{
+                    transform: "rotate3d(3,0,1,20deg)",
+                    opacity: 1,
+                  }}
+                  transition={{ delay: 0.1 }}
+                  className="grid grid-rows-3 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
+                >
+                  {posters.map((poster) => (
+                    <img
+                      className="w-[180px] h-[254px] object-cover"
+                      src={poster}
+                      alt=""
+                    />
+                  ))}
+                </motion.div>
+                <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
+                <AnimatePresence>
+                  <>
+                    <motion.div
+                      initial={{ backdropFilter: "blur(0px)" }}
+                      animate={{ backdropFilter: "blur(5px)" }}
+                      transition={{ delay: 0.4 }}
+                      className="h-screen w-screen absolute flex justify-center items-center"
+                    ></motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: 0 }}
+                      animate={{ opacity: 1, x: 200 }}
+                      transition={{ delay: 0.7 }}
+                      className="absolute z-50"
+                    >
+                      <p className="font-black text-7xl  text-gray-800 translate-y-40">
+                        <span className="text-black">티켓팅을 즐겁게</span>
+                        <br />
+                        <span className="text-primary-main text-9xl font-logo">
+                          Tgle
+                        </span>
+                      </p>
+                    </motion.div>
+                  </>
+                </AnimatePresence>
+              </>
+            )}
           </div>
         </div>
       </div>
     </>
   );
 };
-
 export default Main;
+
+const posters = [
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/10/2022101210464406c2f97c-f12d-4632-8c75-7b84502afa7b.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221123095349d67af859-d516-4334-bbce-38d5a6ff1c42.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111715300206344042-acfa-46fa-a724-d5dbf2fc2197.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111719432656049e10-97aa-4cbf-8594-a87a9dfdccbc.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022110811345758ee1f95-5e61-4a59-831e-c7e0ea501de5.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221117195835ebb6e0bc-3552-457c-9ad0-511efed8eaa0.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221118160940cc8a8c98-33f8-4835-886e-ca8d687ff52a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221122132637652860e8-5da5-4ae9-be23-6322201e50c9.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221117141650ccedb235-0e17-46e7-beba-4dd098898d00.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114133100dc5098f2-05e9-407c-bb84-6e9d5b6f6d88.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111617504259941190-29ff-4acd-87cd-2f1390737d68.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022112217510488bd7320-b505-475b-8de6-b2ba74e0f686.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111613020119cf2680-f853-45ec-bb26-1d1431f9f811.png/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111516155683da8dd3-8b80-498a-afc2-4f60a8fbc640.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111713273557b8678c-6059-454b-a4ea-32672a0cea4e.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211211139255d01329c-3c96-4f47-88be-6b83594e2a99.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221116171930250efe46-45cb-4ab9-b325-6d1a386df348.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211091324577ac1fd6b-45d7-422e-9428-191f7b2fd343.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211221316515ae7aab9-75ac-4f1a-a8c2-111d91ebf3bb.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211171135039cb03922-1be2-4c21-a3ee-4ea381c2b56f.jpg/melon/resize/180x250/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221115153103511be5f8-d8f8-49a0-ab93-08351cb7738a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211211009461108650b-ba69-4ce5-891f-2305234468cb.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111813572990e0c433-4424-4217-8490-9e845543704a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114164634f34e8b41-894b-41d6-918e-0b4c36118d67.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221104143802d3234174-4711-4d11-bed2-3f2625bda4de.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/202211111316062f887edd-c02b-42b8-86be-32baba700500.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221116181122add9e9b7-6782-427a-bafc-1ad5abf0af6b.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111116433648f75e17-ab02-47b3-aa3f-9b59f68cc70d.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/2022111719432656049e10-97aa-4cbf-8594-a87a9dfdccbc.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114133922b5c1dff3-7435-46d8-ba17-303bc18769c8.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114114152db099f86-a006-4626-af46-5bc648720d0d.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221116125917358d9f1c-1d50-4b36-b313-c23a1e82b6ca.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221121182038d18fbe09-ef9f-4415-9a8c-ea8e36fc081a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+];

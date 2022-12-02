@@ -1,6 +1,6 @@
 import Badge from "../Badge";
 import icons from "../icons";
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 type JoinState = "before" | "opened" | "closed";
 const Room = ({
@@ -53,12 +53,15 @@ const Room = ({
       });
     }
   };
-  const xy = (e: any) => {
-    setIsMoved(true);
-    if (!ref.current || !startPosition.y || !startPosition.x) return;
-    ref.current.style.top = `${-startPosition.y + e.pageY}px`;
-    ref.current.style.left = `${-startPosition.x + e.pageX}px`;
-  };
+  const xy = useCallback(
+    (e: any) => {
+      setIsMoved(true);
+      if (!ref.current || !startPosition.y || !startPosition.x) return;
+      ref.current.style.top = `${-startPosition.y + e.pageY}px`;
+      ref.current.style.left = `${-startPosition.x + e.pageX}px`;
+    },
+    [startPosition.x, startPosition.y]
+  );
   useEffect(() => {
     (function () {
       if (!ref.current || !startPosition.y || !startPosition.x) return;
@@ -78,16 +81,18 @@ const Room = ({
         }
       });
     })();
-  }, [startPosition]);
+  }, [startPosition, xy]);
   const firstX = ref.current && +ref.current.style.left.slice(0, -2);
   const firstY = ref.current && +ref.current.style.top.slice(0, -2);
-  const moveOnDoc = useCallback((e: any) => {
-    if (isMoved) {
-      xy(e);
-    }
-  }, []);
-  const upOndDoc = () => {
-    console.log("hi");
+  const moveOnDoc = useCallback(
+    (e: any) => {
+      if (isMoved) {
+        xy(e);
+      }
+    },
+    [isMoved, xy]
+  );
+  const upOndDoc = useCallback(() => {
     document.removeEventListener("mousemove", moveOnDoc);
     if (!ref.current || !startPosition.y || !startPosition.x) return;
     if (
@@ -96,7 +101,7 @@ const Room = ({
     ) {
       setIsMoved(false);
     }
-  };
+  }, [firstX, firstY, moveOnDoc, startPosition.x, startPosition.y]);
   useEffect(() => {
     if (!ref.current || !startPosition.y || !startPosition.x) return;
 
@@ -105,7 +110,7 @@ const Room = ({
     return () => {
       document.removeEventListener("mouseup", upOndDoc);
     };
-  }, [startPosition, isMoved]);
+  }, [startPosition, isMoved, moveOnDoc, upOndDoc]);
   return (
     <div className="relative">
       <div className="absolute z-10 top-0 left-0" ref={ref}>

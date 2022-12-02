@@ -1,4 +1,3 @@
-import axios from "axios";
 import { deactivate, activate } from "../instance";
 
 interface IPayload {

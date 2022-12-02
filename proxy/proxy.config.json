@@ -1,0 +1,9 @@
+{
+  "port": 18000,
+  "list": [
+    {
+      "key": "tgle",
+      "target": "https://tgle.shop"
+    }
+  ]
+}
