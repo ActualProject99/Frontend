@@ -152,3 +152,13 @@ export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   const iter = indexs[Symbol.iterator]();
   return itering(Arr, iter);
 };
+
+export const filterClassStartwith = (
+  className: string,
+  ...starts: string[]
+) => {
+  return className
+    .split(" ")
+    .filter((cn) => starts.some((st) => cn.startsWith(st)))
+    .join(" ");
+};
