@@ -1,6 +1,7 @@
 import React from "react";
 import { IGetConcert } from "../../apis/query/ConcertApi";
 import ArtistApi from "../../apis/query/ArtistAPI";
+import { useNavigate } from "react-router-dom";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -8,6 +9,7 @@ interface ConcertProps {
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
+  const navigate = useNavigate();
 
   return (
     <div className="px-5 py-8">
@@ -16,7 +18,10 @@ const MoreInfo = ({ concert }: ConcertProps) => {
         {artists &&
           artists.map((artist) =>
             concert.artistId === artist.artistId ? (
-              <div className="grid content-center justify-start justify-items-center items-center gap-y-2">
+              <div
+                className="grid content-center justify-start justify-items-center items-center gap-y-2 cursor-pointer"
+                onClick={() => navigate(`/artist/${artist.artistId}`)}
+              >
                 <img
                   className="w-24 h-24 rounded-[50%]"
                   alt="artist"

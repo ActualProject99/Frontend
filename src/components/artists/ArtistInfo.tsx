@@ -8,6 +8,7 @@ import ArtistConcerts from "./ArtistConcerts";
 import { getCookieToken } from "../../apis/cookie";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { useParams } from "react-router-dom";
+import useTicket from "../../hooks/useTicketPop";
 
 interface ArtistProps {
   artist: IGetArtist;
@@ -21,9 +22,24 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      확인: {
+        value: () => {
+          console.log("ok");
+        },
+        className: "bg-red-200 text-lime-800",
+      },
+      아니오: null,
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+
   const onEditLike = useCallback(() => {
     if (!cookie) {
-      window.alert("로그인 후 가능해요!");
+      poped();
     } else {
       const payload = {
         artistId: artist.artistId,
@@ -37,6 +53,7 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
 
   return (
     <>
+      <Ticket />
       <div className="flex justify-between items-center w-[95%] h-52 p-8 border mx-auto my-5 gap-6">
         <div className="flex items-center gap-x-10">
           <div>

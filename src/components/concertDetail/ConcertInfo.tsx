@@ -21,7 +21,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
 import Calendar from "../Calendar";
 import useDebounce from "../../hooks/useDebounce";
-import { loadavg } from "os";
+import useTicket from "../../hooks/useTicketPop";
+import { getCookieToken } from "../../apis/cookie";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -32,7 +33,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   // const ticketingUrl = concert.ticketingUrl;
   // const ticketings = JSON.parse(ticketingUrl);
   // console.log("뭘까?", ticketings);
-
   const [like, setLike] = useState(concert.like);
   const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
@@ -44,10 +44,21 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
-  console.log("위치정보", location);
-
-  console.log("테스트");
-
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      확인: {
+        value: () => {
+          console.log("ok");
+        },
+        className: "bg-red-200 text-lime-800",
+      },
+      아니오: null,
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+  const cookie = getCookieToken();
   const debouncer = useDebounce(1000);
   const PostDebounced = useRef(
     debouncer(({ concertId }: { concertId: number }) => {
@@ -56,6 +67,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     })
   ).current;
   const PostSMS = () => {
+    if (!cookie) return poped();
     PostDebounced(concert.concertId);
   };
 
@@ -66,13 +78,14 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     })
   ).current;
   const DeleteSMS = () => {
+    if (!cookie) return poped();
     DeleteDebounced(concert.concertId);
   };
 
   const onEditLike = useCallback(() => {
+    if (!cookie) return poped();
     const payload = {
       concertId: concert.concertId,
-      like: !like,
     };
     EditLike(payload).then(() => {
       console.log("pay", payload);
@@ -111,6 +124,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
 
   return (
     <>
+      <Ticket />
       <div className="flex justify-between m-auto w-full h-full p-5">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">

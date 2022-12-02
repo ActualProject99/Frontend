@@ -6,6 +6,7 @@ import kakaoLogo from "../../image/kakaoLogo.png";
 import useImg from "../../image/userDefault.png";
 import useTicket from "../../hooks/useTicketPop";
 import { LoginForm } from "../../types";
+import { regOptLogin } from "../../utils";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
@@ -27,11 +28,11 @@ const UserInfo = (): JSX.Element => {
   const { Ticket, poped, userInput } = useTicket("닉네임 변경 완료!🎉", {
     cacelButton: false,
     userInputs: {
-      "ok 😆": true,
+      예: true,
       no: "no",
     },
-    toastOnly: true,
-    type: "ckeck",
+    toastOnly: false,
+    type: "info",
   });
 
   const onChangeNickname = useCallback(
@@ -44,16 +45,16 @@ const UserInfo = (): JSX.Element => {
 
   const onNicknameEdit = useCallback((): void => {
     if (editNickname === "") {
-      return window.alert("모두 입력해주세요");
+      return poped("입력해주세요!", { newType: "info" });
     }
     if (!editNickname?.trim()) return;
     const payload = {
       nickname: editNickname,
     };
+
     EditUserName(payload).then(() => {
-      console.log("pay", payload);
-      queryClient.invalidateQueries(["userInfo"]);
       poped();
+      queryClient.invalidateQueries(["userInfo"]);
     });
 
     setIsEdit(false);
@@ -73,13 +74,13 @@ const UserInfo = (): JSX.Element => {
       const payload = {
         profileImg: e.target.files[0],
       };
-      console.log("페이", payload);
+
       EditUserImg(payload).then(() => {
+        poped("프로필 사진 변경 완료!💾");
         queryClient.invalidateQueries(["userInfo"]);
-        window.alert("변경 완료!");
       });
     },
-    [EditUserImg, queryClient]
+    [EditUserImg, queryClient, poped]
   );
 
   return (
@@ -126,8 +127,13 @@ const UserInfo = (): JSX.Element => {
                 className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
                 value={editNickname}
-                onChange={onChangeNickname}
+                autoComplete="auto"
+                placeholder="한글, 숫자, 영문 3-10자"
+                {...register(...regOptLogin.nickname())}
               />
+              <p className="text-xs text-red-500 ">
+                {errors.nickname?.message as string}
+              </p>
               <button className="flex justify-center items-center w-28 h-10 border rounded-md">
                 변경 완료
               </button>
