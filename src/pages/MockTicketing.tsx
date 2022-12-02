@@ -34,18 +34,23 @@ const MockTicketing = () => {
 
   const cookie = getCookieToken();
 
-  const { Ticket, Poped, userInput } = useTicketPop(
-    () => (Math.random() > 0.5 ? "안녕하세요" : "방가방가"),
-    {
-      cacelButton: false,
-      userInputs: {
-        "ok 😆": "ok",
-        no: "no",
-      },
-      toastOnly: false,
-      type: "only msg",
-    }
-  );
+  const { Ticket, poped, userInput } = useTicketPop("안녕하세요", {
+    cacelButton: {
+      value: true,
+      buttonText: "취소",
+      className: "bg-red-200 text-lime-800",
+    },
+    userInputs: {
+      확인: { value: "???", className: "bg-red-200 text-lime-800" },
+      아니오: null,
+    },
+    toastOnly: false,
+    type: "warn",
+  });
+
+  useEffect(() => {
+    console.log(userInput);
+  }, [userInput]);
 
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
@@ -128,7 +133,7 @@ const MockTicketing = () => {
       {userInput}
       <button
         onClick={() => {
-          Poped();
+          poped();
         }}
       >
         hihi

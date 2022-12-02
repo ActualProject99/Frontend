@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
 import { Modal } from "../components/Portal";
-import { cls } from "../utils";
+import { cls, filterClassStartwith } from "../utils";
 import icons from "../components/icons";
 import ticket from "../image/ticket.png";
 import useWindowKeyboard from "./window/useWindowKeyboard";
+import z from "zod";
+
+type UserValue = number | string | boolean | null | (() => void);
+
+interface UserInput {
+  [key: string]: UserValue | { value: UserValue; className: string };
+}
+
+interface CancelButton {
+  buttonText: string;
+  value: boolean;
+  className: string;
+}
 
 interface Option {
-  userInputs?: {
-    [key: string]: any;
-  };
-  cacelButton: boolean;
+  userInputs?: UserInput;
+  cacelButton: boolean | CancelButton;
   toastOnly: boolean;
   type: "ckeck" | "warn" | "info" | "only msg";
 }
@@ -18,7 +29,8 @@ const useTicket = (
   message: string | (() => string),
   { userInputs = {}, cacelButton, toastOnly, type }: Option
 ) => {
-  const [userInput, setUserInput] = useState<string | null>(null);
+  const [userInput, setUserInput] = useState<UserValue>(null);
+  const [msg, setMsg] = useState(message);
   const buttonTexts = Object.keys(userInputs);
   const buttonValues = Object.values(userInputs);
   if (buttonTexts.length > 4) {
@@ -29,7 +41,12 @@ const useTicket = (
   const [isPoped, setIsPoped] = useState(false);
 
   useEffect(() => {}, []);
-  const Poped = () => {
+  const poped = (newMessage: string = "") => {
+    if (newMessage) {
+      setMsg(newMessage);
+    } else {
+      setMsg(message);
+    }
     setIsPoped(true);
   };
 
@@ -63,8 +80,25 @@ const useTicket = (
     const handleClickCancel = () => {
       setIsPoped(false);
     };
+
+    const userInputSchema = z.union([
+      z.string(),
+      z.number(),
+      z.boolean(),
+      z.null(),
+      z.function(),
+    ]);
+    const userInputObjectSchema = z.object({
+      value: userInputSchema,
+      className: z.string(),
+    });
     const handleClickButton = (i: number) => () => {
-      setUserInput(buttonValues[i]);
+      if (userInputSchema.safeParse(buttonValues[i]).success) {
+        setUserInput(buttonValues[i] as z.infer<typeof userInputSchema>);
+      } else if (userInputObjectSchema.safeParse(buttonValues[i]).success) {
+        //@ts-ignore
+        setUserInput(buttonValues[i].value);
+      }
       setIsPoped(false);
     };
     return isPoped ? (
@@ -102,36 +136,65 @@ const useTicket = (
               />
               <div className="flex flex-col items-center justify-center h-48 gap-2">
                 <Icon />
-                <span className="font-bold text-xl">
-                  {typeof message === "string" ? message : message()}
-                </span>
+                <span className="font-bold text-xl whitespace-pre">{msg}</span>
                 <div className="flex mt-3 text-sm divide-x-2 ">
                   {!toastOnly
-                    ? buttonTexts?.map((text, i) => (
-                        <button
-                          key={i}
-                          className={cls(
-                            "h-7  bg-gray-700 text-white first:rounded-l-lg",
-                            cacelButton || "last:rounded-r-lg",
-                            buttonTexts.length > 3 ? "w-16" : "w-24"
-                          )}
-                          onClick={handleClickButton(i)}
-                        >
-                          {text}
-                        </button>
-                      ))
+                    ? buttonTexts?.map((text, i) => {
+                        return (
+                          <button
+                            key={i}
+                            className={cls(
+                              "h-7 first:rounded-l-lg",
+                              typeof cacelButton === "boolean"
+                                ? cacelButton || "last:rounded-r-lg"
+                                : cacelButton.value || "last:rounded-r-lg",
+                              buttonTexts.length > 3 ? "w-16" : "w-24",
+                              userInputSchema.safeParse(buttonValues[i]).success
+                                ? "bg-gray-700 text-white"
+                                : filterClassStartwith(
+                                    //@ts-ignore
+                                    buttonValues[i].className,
+                                    "bg",
+                                    "text"
+                                  )
+                            )}
+                            onClick={handleClickButton(i)}
+                          >
+                            {text}
+                          </button>
+                        );
+                      })
                     : null}
-                  {cacelButton ? (
+                  {typeof cacelButton === "boolean" ? (
+                    cacelButton ? (
+                      <button
+                        className={cls(
+                          "h-7 rounded-r-lg bg-gray-300 text-gray-600",
+                          (buttonTexts?.length === 0 || toastOnly) &&
+                            "rounded-l-lg",
+                          buttonTexts.length > 3 ? "w-16" : "w-24"
+                        )}
+                        onClick={handleClickCancel}
+                      >
+                        cancel
+                      </button>
+                    ) : null
+                  ) : cacelButton.value ? (
                     <button
                       className={cls(
-                        "h-7 rounded-r-lg bg-gray-300 text-gray-600",
+                        "h-7 rounded-r-lg",
                         (buttonTexts?.length === 0 || toastOnly) &&
                           "rounded-l-lg",
-                        buttonTexts.length > 3 ? "w-16" : "w-24"
+                        buttonTexts.length > 3 ? "w-16" : "w-24",
+                        filterClassStartwith(
+                          cacelButton.className,
+                          "bg",
+                          "text"
+                        )
                       )}
                       onClick={handleClickCancel}
                     >
-                      cancel
+                      {cacelButton.buttonText}
                     </button>
                   ) : null}
                 </div>
@@ -154,6 +217,6 @@ const useTicket = (
       </Modal>
     ) : null;
   };
-  return { Ticket, Poped, userInput };
+  return { Ticket, poped, userInput };
 };
 export default useTicket;
