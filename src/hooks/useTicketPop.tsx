@@ -23,7 +23,7 @@ const useTicket = (
   const buttonValues = Object.values(userInputs);
   if (buttonTexts.length > 4) {
     throw new Error(
-      "Number of userInputs(property of Option which is the second param of useTicket) should less than 5"
+      "Number of userInputs(property of Option which is the second param of useTicket) should less than 5!"
     );
   }
   const [isPoped, setIsPoped] = useState(false);
