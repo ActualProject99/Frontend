@@ -17,13 +17,14 @@ interface CancelButton {
   value: boolean;
   className: string;
 }
-
+type IconType = "ckeck" | "warn" | "info" | "only msg";
 interface Option {
   userInputs?: UserInput;
   cacelButton: boolean | CancelButton;
   toastOnly: boolean;
-  type: "ckeck" | "warn" | "info" | "only msg";
+  type: IconType;
 }
+type AfterToasted = () => void;
 
 const useTicket = (
   message: string | (() => string),
@@ -31,6 +32,11 @@ const useTicket = (
 ) => {
   const [userInput, setUserInput] = useState<UserValue>(null);
   const [msg, setMsg] = useState(message);
+  const [tp, setTp] = useState(type);
+  const [getAfterToasted, setAfterToasted] = useState<AfterToasted | null>(
+    null
+  );
+  const [getToastOnly, setToastOnly] = useState<boolean>(toastOnly);
   const buttonTexts = Object.keys(userInputs);
   const buttonValues = Object.values(userInputs);
   if (buttonTexts.length > 4) {
@@ -40,26 +46,61 @@ const useTicket = (
   }
   const [isPoped, setIsPoped] = useState(false);
 
-  useEffect(() => {}, []);
-  const poped = (newMessage: string = "") => {
+  const poped = (
+    newMessage: string | null = null,
+    {
+      newType,
+      afterToasted,
+      isToastOnly,
+    }: {
+      newType?: IconType;
+      afterToasted?: AfterToasted;
+      isToastOnly?: boolean;
+    } = {
+      newType: undefined,
+      afterToasted: undefined,
+      isToastOnly: undefined,
+    }
+  ) => {
     if (newMessage) {
       setMsg(newMessage);
     } else {
       setMsg(message);
     }
+    if (newType) {
+      setTp(newType);
+    } else {
+      setTp(type);
+    }
+    if (afterToasted) {
+      setAfterToasted(() => afterToasted);
+    } else {
+      setAfterToasted(null);
+    }
+    if (isToastOnly) {
+      setToastOnly(isToastOnly);
+    } else {
+      setToastOnly(toastOnly);
+    }
     setIsPoped(true);
   };
+
+  useEffect(() => {
+    if (typeof userInput === "function") {
+      userInput();
+    }
+  }, [userInput]);
 
   const Icon = () => {
     return (
       <>
-        {type === "ckeck" ? (
+        {tp === "ckeck" ? (
           <icons.RoundCheck iconClassName="w-12 h-12 text-lime-700" />
         ) : null}
-        {type === "warn" ? (
+        {tp === "warn" ? (
           <icons.Warn iconClassName="w-12 h-12 text-rose-700" />
         ) : null}
-        {type === "info" ? (
+        {tp === "info" ? (
           <icons.Info iconClassName="w-12 h-12 text-blue-700" />
         ) : null}
       </>
@@ -73,8 +114,11 @@ const useTicket = (
       setIsPoped(false);
     };
     const handleAnimationEnd = () => {
-      if (toastOnly) {
+      if (getToastOnly) {
         setIsPoped(false);
+        if (getAfterToasted) {
+          getAfterToasted();
+        }
       }
     };
     const handleClickCancel = () => {
@@ -107,7 +151,7 @@ const useTicket = (
           onAnimationEnd={handleAnimationEnd}
           className={cls(
             "p-3 px-6 fixed top-1/4 w-[717px] h-[384px] rounded font-bold",
-            toastOnly
+            getToastOnly
               ? "animate-toast-right opacity-0"
               : "animate-popup-right opacity-1 right-1/2 translate-x-1/2"
           )}
@@ -125,11 +169,11 @@ const useTicket = (
               <div
                 className={cls(
                   "w-full h-[1px] bg-gradient-to-br to-slate-300",
-                  type === "ckeck"
+                  tp === "ckeck"
                     ? "from-lime-200"
-                    : type === "warn"
+                    : tp === "warn"
                     ? "from-rose-200"
-                    : type === "info"
+                    : tp === "info"
                     ? "from-blue-200"
                     : "from-gray-200"
                 )}
@@ -138,7 +182,7 @@ const useTicket = (
                 <Icon />
                 <span className="font-bold text-xl whitespace-pre">{msg}</span>
                 <div className="flex mt-3 text-sm divide-x-2 ">
-                  {!toastOnly
+                  {!getToastOnly
                     ? buttonTexts?.map((text, i) => {
                         return (
                           <button
@@ -170,7 +214,7 @@ const useTicket = (
                       <button
                         className={cls(
                           "h-7 rounded-r-lg bg-gray-300 text-gray-600",
-                          (buttonTexts?.length === 0 || toastOnly) &&
+                          (buttonTexts?.length === 0 || getToastOnly) &&
                             "rounded-l-lg",
                           buttonTexts.length > 3 ? "w-16" : "w-24"
                         )}
@@ -183,7 +227,7 @@ const useTicket = (
                     <button
                       className={cls(
                         "h-7 rounded-r-lg",
-                        (buttonTexts?.length === 0 || toastOnly) &&
+                        (buttonTexts?.length === 0 || getToastOnly) &&
                           "rounded-l-lg",
                         buttonTexts.length > 3 ? "w-16" : "w-24",
                         filterClassStartwith(
@@ -202,11 +246,11 @@ const useTicket = (
               <div
                 className={cls(
                   "w-full h-[3px] bg-gradient-to-br from-slate-300",
-                  type === "ckeck"
+                  tp === "ckeck"
                     ? "to-lime-200"
-                    : type === "warn"
+                    : tp === "warn"
                     ? "to-rose-200"
-                    : type === "info"
+                    : tp === "info"
                     ? "to-blue-200"
                     : "to-gray-200"
                 )}
