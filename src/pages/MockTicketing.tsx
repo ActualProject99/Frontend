@@ -18,6 +18,7 @@ import { parseISO } from "date-fns";
 import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 import { getCookieToken } from "../apis/cookie";
+import useTicketPop from "../hooks/useTicketPop";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -32,6 +33,19 @@ const MockTicketing = () => {
   const { Toasts, toasted } = useToast("로그인 후 이용 가능합니다!");
 
   const cookie = getCookieToken();
+
+  const { Ticket, Poped, userInput } = useTicketPop(
+    () => (Math.random() > 0.5 ? "안녕하세요" : "방가방가"),
+    {
+      cacelButton: false,
+      userInputs: {
+        "ok 😆": "ok",
+        no: "no",
+      },
+      toastOnly: false,
+      type: "only msg",
+    }
+  );
 
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
@@ -110,11 +124,21 @@ const MockTicketing = () => {
 
   return (
     <>
+      <Ticket />
+      {userInput}
+      <button
+        onClick={() => {
+          Poped();
+        }}
+      >
+        hihi
+      </button>
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
       >
         <Seats />
       </div>
+
       <Toasts />
       <div className={cls("w-full h-96 flex", isGaming ? "hidden" : "block")}>
         <div className="flex-[3] flex flex-col">
