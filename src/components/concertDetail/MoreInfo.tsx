@@ -1,38 +1,39 @@
 import React from "react";
+import { IGetConcert } from "../../apis/query/ConcertApi";
+import ArtistApi from "../../apis/query/ArtistAPI";
 
-const MoreInfo = () => {
+interface ConcertProps {
+  concert: IGetConcert;
+}
+
+const MoreInfo = ({ concert }: ConcertProps) => {
+  const { data: artists } = ArtistApi.GetArtist();
+
   return (
     <div className="px-5 py-8">
-      <p className="text-2xl mb-7 ">출연진</p>
+      <p className="text-2xl mb-7 text-accent-main font-bold">출연진</p>
       <div className="flex gap-x-7 mb-10">
-        <div className="grid content-center justify-start justify-items-center items-center">
-          <img
-            className="w-24 h-24 rounded-[50%]"
-            alt="artist"
-            src="https://cdnimg.melon.co.kr/cm2/artistcrop/images/018/65/556/1865556_20221028132435.jpg/melon/thumbnail/320x300"
-          />
-          <p>SAAY</p>
-        </div>
-        <div className="grid content-center justify-start justify-items-center items-center">
-          <img
-            className="w-24 h-24 rounded-[50%]"
-            alt="artist"
-            src="https://cdnimg.melon.co.kr/cm2/artistcrop/images/018/65/556/1865556_20221028132435.jpg/melon/thumbnail/320x300"
-          />
-          <p>SAAY</p>
-        </div>
+        {artists &&
+          artists.map((artist) =>
+            concert.artistId === artist.artistId ? (
+              <div className="grid content-center justify-start justify-items-center items-center gap-y-2">
+                <img
+                  className="w-24 h-24 rounded-[50%]"
+                  alt="artist"
+                  src={artist.artistImg}
+                />
+                <p className="font-bold">{artist.artistName}</p>
+              </div>
+            ) : null
+          )}
       </div>
       <div className="mb-10">
-        <p className="text-2xl mb-5 ">공연시간</p>
-        <p className="pl-1">2022년 12월 15일(목) 오후 8시</p>
+        <p className="text-2xl mb-5 text-accent-main font-bold">공연기간</p>
+        <p className="pl-1 font-bold">{concert.concertDate}</p>
       </div>
       <div className="mb-10">
-        <p className="text-2xl mb-5 ">작품설명</p>
-        <img
-          alt="concertInfo"
-          src="https://cdnticket.melon.co.kr/resource/image/upload/product/2022/10/202210271723577c456247-ac91-478d-a0dd-7a730e6fa234.jpg/melon/quality/90/optimize"
-          className="pl-1"
-        ></img>
+        <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
+        <img alt="concertInfo" src={concert.concertInfo} className="pl-1"></img>
       </div>
     </div>
   );

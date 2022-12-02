@@ -6,19 +6,18 @@ import ArtistApi, { IGetArtist } from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
 import { getCookieToken } from "../../apis/cookie";
+import ConcertApi from "../../apis/query/ConcertApi";
+import { useParams } from "react-router-dom";
 
 interface ArtistProps {
   artist: IGetArtist;
 }
 
 const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
-  console.log("artist", artist);
   const [like, setLike] = useState<boolean>(artist.like);
-  console.log("좋아요 스테이트", like);
-  console.log("아티스트 서버데이터", artist.like);
   const cookie = getCookieToken();
-  const { data: artistConcerts } = ArtistApi.GetArtistConcert();
-
+  const { id } = useParams();
+  const { data: artistConcerts } = ConcertApi.GetConcerts();
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 
@@ -87,12 +86,14 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
       <div className="flex flex-col w-[95%] h-[40rem] p-7 border mx-auto my-2 gap-6 ">
         <div className="flex justify-center items-start flex-wrap w-full h-full  gap-x-10 gap-y-14 overflow-y-scroll scrollbar-hide">
           {artistConcerts &&
-            artistConcerts.map((artistConcert) => (
-              <ArtistConcerts
-                key={artistConcert.artistId}
-                artistConcert={artistConcert}
-              />
-            ))}
+            artistConcerts.map((artistConcert) =>
+              artistConcert.artistId === Number(id) ? (
+                <ArtistConcerts
+                  key={artistConcert.artistId}
+                  artistConcert={artistConcert}
+                />
+              ) : null
+            )}
         </div>
       </div>
     </>

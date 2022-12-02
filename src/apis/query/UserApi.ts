@@ -9,6 +9,8 @@ interface IGetUser {
   nickname: string;
   phone: string;
   userImg: string;
+  phoneNumber: number;
+  profileImg: string;
 }
 interface EditNamePayload {
   nickname: string | undefined;
@@ -33,6 +35,7 @@ export interface IGetLikeConcert {
   longitude: number;
   vendor: number;
   like: boolean;
+  buy: string;
   ticketingUrl: {
     melon: string;
     interpark: string;

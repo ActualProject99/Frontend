@@ -5,7 +5,7 @@ import ArtistInfo from "../components/artists/ArtistInfo";
 
 const Artist = () => {
   const { data: artists } = ArtistApi.GetArtist();
-  console.log(artists);
+  console.log("아티스트", artists);
   const { id } = useParams();
   console.log("id", id);
 

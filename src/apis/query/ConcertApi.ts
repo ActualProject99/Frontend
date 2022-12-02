@@ -55,7 +55,7 @@ interface PostSMS {
 //콘서트 API
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concert");
+    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
     console.log("data", data);
     return data;
   });
@@ -63,7 +63,7 @@ const GetConcerts = () => {
 
 const EditLikeConcerts = () => {
   return useMutation(async (payload: EditLike) => {
-    const { data } = await deactivate.patch(`/concerts/${payload.concertId}`);
+    const { data } = await deactivate.put(`/concertlike/${payload.concertId}`);
     return data;
   });
 };
