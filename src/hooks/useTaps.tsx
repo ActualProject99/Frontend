@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, ReactNode, useState } from "react";
-type Tap = [string, React.ReactNode];
+import { Tap } from "../types";
+
 const Selector = ({
   name,
   onClick,

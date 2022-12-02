@@ -1,15 +1,7 @@
 import { parseISO } from "date-fns";
 import { atom } from "recoil";
+import { Concert } from "../types";
 
-export interface Concert {
-  id: number;
-  group: number;
-  name: string;
-  location: string;
-  imageUrl: string;
-  startDatetime: string;
-  endDatetime: string;
-}
 export const initConcerts = [
   {
     id: 1,

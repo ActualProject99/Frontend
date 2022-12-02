@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { readComments, addComment } from "../../../apis/query/commentApi";
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IgetComment } from "../../../types";
 import Commentfix from "./Commentfix";
@@ -9,9 +8,6 @@ import ArrowLeft from "../../../svg/ArrowLeft";
 import ArrowRight from "../../../svg/ArrowRight";
 import { regOptComment } from "../../../utils";
 
-export interface IComments {
-  comment?: IgetComment;
-}
 
 const CommentList = () => {
   const { id } = useParams();

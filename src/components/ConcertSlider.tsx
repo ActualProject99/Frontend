@@ -8,7 +8,6 @@ import "slick-carousel/slick/slick-theme.css";
 import Next from "../image/Next.png";
 import Prev from "../image/Prev.png";
 import { useNavigate } from "react-router-dom";
-import { cls } from "../utils";
 
 const ConcertSlider = (): JSX.Element => {
   const { data: concerts } = UserApi.GetLikeConcert();

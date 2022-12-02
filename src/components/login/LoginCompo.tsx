@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { setAccessToken, getCookieToken } from "../../apis/cookie";
 import { deactivate } from "../../apis/instance";
-import { User, userState } from "../../atoms/user";
+import { userState } from "../../atoms/user";
 import { cls, regOptLogin } from "../../utils";
-import { LoginForm } from "../../types";
+import { LoginForm, User } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useTicket from "../../hooks/useTicketPop";
 

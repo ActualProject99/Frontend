@@ -3,12 +3,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import useImg from "../../image/userDefault.png";
 import useTicket from "../../hooks/useTicketPop";
 import { LoginForm } from "../../types";
 import { regOptLogin } from "../../utils";
 
-const UserInfo = (): JSX.Element => {
+//@ts-ignore
+const UserInfo = ({ poped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
@@ -24,16 +24,6 @@ const UserInfo = (): JSX.Element => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [editNickname, setEditNickname] = useState(userData?.nickname);
-
-  const { Ticket, poped, userInput } = useTicket("닉네임 변경 완료!🎉", {
-    cacelButton: false,
-    userInputs: {
-      예: true,
-      no: "no",
-    },
-    toastOnly: false,
-    type: "info",
-  });
 
   const onChangeNickname = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,18 +57,15 @@ const UserInfo = (): JSX.Element => {
         return;
       }
       setImageSrc(URL.createObjectURL(e.target.files[0]));
-
-      // const formData = new FormData();
-      // formData.append("userImg", e.target.files[0]);
-      // console.log("form", formData);
       const payload = {
         profileImg: e.target.files[0],
       };
 
       EditUserImg(payload).then(() => {
-        poped("프로필 사진 변경 완료!💾");
         queryClient.invalidateQueries(["userInfo"]);
+        poped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
+      console.log("뭐야?");
     },
     [EditUserImg, queryClient, poped]
   );
@@ -141,7 +128,6 @@ const UserInfo = (): JSX.Element => {
           )}
         </div>
       </div>
-      <Ticket />
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { IGetLikeConcert } from "../../apis/query/UserApi";
 import icons from "../icons";
 import { useNavigate } from "react-router-dom";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { IGetLikeConcert } from "../../types";
 
 interface IConcertProps {
   concert: IGetLikeConcert;
@@ -19,7 +19,6 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
   const onEditLike = useCallback(() => {
     const payload = {
       concertId: concert.concertId,
-      like: !like,
     };
     EditLike(payload).then(() => {
       console.log("pay", payload);

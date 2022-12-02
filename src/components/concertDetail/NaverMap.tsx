@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Marker from "../../image/Marker.png";
-import { IGetConcert, IGetLocation } from "../../apis/query/ConcertApi";
+import { IGetLocation } from "../../types";
 
 interface ConcertProps {
   location: IGetLocation;

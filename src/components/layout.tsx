@@ -3,12 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import {
-  MainContent,
-  mainContent,
-  MainScrollRef,
-  mainScrollRef,
-} from "../atoms/mainContent";
+import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
@@ -19,6 +14,7 @@ import { pages } from "../routes";
 import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
+import { MainContent, MainScrollRef } from "../types";
 import useTicket from "../hooks/useTicketPop";
 
 const Search = ({
@@ -72,14 +68,12 @@ const Nav = ({
   normal?: boolean;
   landing?: boolean;
 }) => {
-  const { toggler, ModalContent } = useModal("sm", <UserInfo />);
   const { pathname } = useLocation();
   const [contentNo] = useRecoilState<MainContent>(mainContent);
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<MainScrollRef>(mainScrollRef);
+  const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
 
   const { Ticket, poped, userInput } = useTicket("정말 로그아웃 하시겠어요?", {
@@ -97,27 +91,7 @@ const Nav = ({
     toastOnly: false,
     type: "info",
   });
-
-  // const {
-  //   Ticket: OutTicket,
-  //   poped: OutPoped,
-  //   userInput: OutInput,
-  // } = useTicket("로그인 후 이용해주세요!😉", {
-  //   cacelButton: false,
-  //   userInputs: {
-  //     예: {
-  //       value: () => {
-  //         removeCookieToken();
-  //         navigate("/");
-  //       },
-  //       className: "bg-accent-main text-white",
-  //     },
-  //     아니요: null,
-  //   },
-  //   toastOnly: false,
-  //   type: "info",
-  // });
-
+  const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
       return poped("로그인 후 이용해주세요!😉", {
@@ -163,6 +137,7 @@ const Nav = ({
       <Ticket />
 
       <nav
+        id="nav"
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
           pathname === "/" ? "" : "bg-white"

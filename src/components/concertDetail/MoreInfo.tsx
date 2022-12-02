@@ -1,11 +1,7 @@
 import React from "react";
-import { IGetConcert } from "../../apis/query/ConcertApi";
 import ArtistApi from "../../apis/query/ArtistAPI";
+import { ConcertProps } from "../../types";
 import { useNavigate } from "react-router-dom";
-
-interface ConcertProps {
-  concert: IGetConcert;
-}
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();

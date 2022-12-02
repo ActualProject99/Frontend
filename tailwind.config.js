@@ -90,6 +90,7 @@ module.exports = {
         base: ["Oswold", "sans-serif"],
         neon: ["NEON"],
         NeonBines: ["NeonBines"],
+        dohyen: ["Do Hyeon"],
       },
       colors: {
         primary: {

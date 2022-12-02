@@ -1,47 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  EditImgPayload,
+  EditNamePayload,
+  IGetLikeConcert,
+  IGetUser,
+} from "../../types";
 import { activate } from "../instance";
-
-//유저Info Interface
-interface IGetUser {
-  id: number;
-  email: any;
-  nickname: string;
-  phone: string;
-  userImg: string;
-  phoneNumber: number;
-  profileImg: string;
-}
-interface EditNamePayload {
-  nickname: string | undefined;
-}
-interface EditImgPayload {
-  profileImg: string | undefined | File | FormData;
-}
-
-//유저 좋아요 콘서트 Interface
-
-export interface IGetLikeConcert {
-  id: number;
-  concertId: number;
-  posterUrl: string;
-  title: string;
-  showTimes: string;
-  location: string;
-  runningTime: string;
-  viewableGrade: string;
-  genre: string;
-  latitude: number;
-  longitude: number;
-  vendor: number;
-  like: boolean;
-  buy: string;
-  ticketingUrl: {
-    melon: string;
-    interpark: string;
-    yes24: string;
-  };
-}
 
 //유저Info API
 const GetUserInfo = () => {

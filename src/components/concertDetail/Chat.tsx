@@ -1,8 +1,8 @@
 import Badge from "../Badge";
 import icons from "../icons";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { JoinState } from "../../types";
 
-type JoinState = "before" | "opened" | "closed";
 const Room = ({
   joinState,
   setJoinState,

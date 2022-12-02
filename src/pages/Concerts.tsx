@@ -9,8 +9,9 @@ import {
 } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
-import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
+import { datedConcerts, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
+import { Concert } from "../types";
 
 const groups = [
   "전체",
