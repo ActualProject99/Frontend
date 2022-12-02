@@ -11,9 +11,9 @@ interface IPayload {
   };
 }
 
-export const readComments = async (pageNum: number) => {
-  const { data } = await deactivate.get(`comments?_limit=10&_page=${pageNum}`);
-  return data; // 페이지 당 코멘트 10개씩 불러오도록 지정
+export const readComments = async () => {
+  const { data } = await deactivate.get("comments");
+  return data;
 };
 
 export const addComment = async (payload: IPayload) => {
