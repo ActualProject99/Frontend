@@ -8,10 +8,7 @@ import { Modal } from "../components/Portal";
 import { useRecoilState } from "recoil";
 import {
   isGameDone,
-  IsGameDone,
   isGameSuccess,
-  IsGameSuccess,
-  IsRefreshedValid,
   isRefreshedValid,
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
@@ -19,6 +16,7 @@ import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 import { getCookieToken } from "../apis/cookie";
 import useTicketPop from "../hooks/useTicketPop";
+import { IsGameDone, IsGameSuccess, IsRefreshedValid } from "../types";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -35,18 +33,9 @@ const MockTicketing = () => {
   const cookie = getCookieToken();
 
   const { Ticket, poped, userInput } = useTicketPop("안녕하세요", {
-    cacelButton: {
-      value: true,
-      buttonText: "취소",
-      className: "bg-red-200 text-lime-800",
-    },
+    cacelButton: true,
     userInputs: {
-      확인: {
-        value: () => {
-          console.log("ok");
-        },
-        className: "bg-red-200 text-lime-800",
-      },
+      "확인 🤑": true,
       아니오: null,
     },
     toastOnly: false,
@@ -137,13 +126,7 @@ const MockTicketing = () => {
       <Ticket />
       <button
         onClick={() => {
-          poped(null, {
-            newType: "only msg",
-            afterToasted: () => {
-              console.log("hi");
-            },
-            isToastOnly: true,
-          });
+          poped();
         }}
       >
         hihi

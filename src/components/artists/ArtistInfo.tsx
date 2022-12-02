@@ -1,19 +1,14 @@
-import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useCallback } from "react";
-import { deactivate } from "../../apis/instance";
-import ArtistApi, { IGetArtist } from "../../apis/query/ArtistAPI";
+import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
 import { getCookieToken } from "../../apis/cookie";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { useParams } from "react-router-dom";
+import { ArtistInfoProps, ArtistProps } from "../../types";
 
-interface ArtistProps {
-  artist: IGetArtist;
-}
-
-const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
+const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
   const [like, setLike] = useState<boolean>(artist.like);
   const cookie = getCookieToken();
   const { id } = useParams();

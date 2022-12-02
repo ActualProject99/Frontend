@@ -5,30 +5,11 @@ import icons from "../components/icons";
 import ticket from "../image/ticket.png";
 import useWindowKeyboard from "./window/useWindowKeyboard";
 import z from "zod";
-
-type UserValue = number | string | boolean | null | (() => void);
-
-interface UserInput {
-  [key: string]: UserValue | { value: UserValue; className: string };
-}
-
-interface CancelButton {
-  buttonText: string;
-  value: boolean;
-  className: string;
-}
-type IconType = "ckeck" | "warn" | "info" | "only msg";
-interface Option {
-  userInputs?: UserInput;
-  cacelButton: boolean | CancelButton;
-  toastOnly: boolean;
-  type: IconType;
-}
-type AfterToasted = () => void;
+import { AfterToasted, IconType, PopupOptions, UserValue } from "../types";
 
 const useTicket = (
   message: string | (() => string),
-  { userInputs = {}, cacelButton, toastOnly, type }: Option
+  { userInputs = {}, cacelButton, toastOnly, type }: PopupOptions
 ) => {
   const [userInput, setUserInput] = useState<UserValue>(null);
   const [msg, setMsg] = useState(message);

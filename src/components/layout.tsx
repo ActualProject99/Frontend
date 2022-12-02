@@ -3,12 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import {
-  MainContent,
-  mainContent,
-  MainScrollRef,
-  mainScrollRef,
-} from "../atoms/mainContent";
+import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
@@ -20,6 +15,7 @@ import { pages } from "../routes";
 import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
+import { MainContent, MainScrollRef } from "../types";
 
 const Search = ({
   viewer,

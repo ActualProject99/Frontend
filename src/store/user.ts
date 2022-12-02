@@ -1,12 +1,5 @@
 import { atom } from "recoil";
-
-export interface IUesrTypes {
-  id: number;
-  email: any;
-  nickname: string;
-  phone: string;
-  userImg: string;
-}
+import { IUesrTypes } from "../types";
 
 export const userState = atom<IUesrTypes>({
   key: "userState",
