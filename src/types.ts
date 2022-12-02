@@ -102,7 +102,7 @@ export interface PostSMS {
   concertId: number;
 }
 
-//유저Info Interface
+//유저 Info Interface
 export interface IGetUser {
   id: number;
   email: any;
