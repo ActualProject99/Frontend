@@ -1,40 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  ArtistLike,
+  DeletePayload,
+  IGetArtist,
+  IGetArtistConcert,
+} from "../../types";
 import { deactivate, activate } from "../instance";
-
-export interface IGetArtist {
-  artistName: string;
-  artistId: number;
-  artistImg: string;
-  debutSong: string;
-  debutDate: string;
-  category: string;
-  like: boolean;
-}
-
-export interface IGetArtistConcert {
-  concertId: number;
-  categoryId: number;
-  artistId: number;
-  concertName: string;
-  concertImg: string;
-  concertInfo: string;
-  concertDate: string;
-  ticketingDate: string;
-  ticketingUrl: string;
-  locationName: string;
-  playTime: string;
-  ratings: string;
-  calender: string;
-}
-
-interface DeletePayload {
-  id: number;
-}
-
-interface EditLike {
-  artistId: number;
-}
 
 const GetArtist = () => {
   return useQuery<IGetArtist[]>(
@@ -74,7 +46,7 @@ const DeleteArtist = () => {
 };
 
 const EditLikeArtist = () => {
-  return useMutation(async (payload: EditLike) => {
+  return useMutation(async (payload: ArtistLike) => {
     const { data } = await activate.put(`/artistlike/${payload.artistId}`);
     console.log("페이", data);
     return data;

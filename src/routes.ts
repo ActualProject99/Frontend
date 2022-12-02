@@ -1,14 +1,6 @@
-interface Page {
-  name: string;
-  path: string;
-  title: string;
-  isNav: boolean;
-  isNeedLogin: boolean;
-}
-interface Pages {
-  [key: string]: Page;
-}
-export const pages = {
+import { Pages } from "./types";
+
+export const pages: Pages = {
   Home: {
     name: "Home",
     path: "/",

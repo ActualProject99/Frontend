@@ -1,20 +1,13 @@
 import { useNavigate } from "react-router-dom";
-interface Concert {
-  id: number;
-  group: number;
-  name: string;
-  location: string;
-  imageUrl: string;
-  startDatetime: string;
-  endDatetime: string;
-}
-interface Props {
-  concert?: boolean;
-  data: Concert;
-  horizontal?: boolean;
-  vertical?: boolean;
-}
-const Cards = ({ concert, data, horizontal, vertical, ...rest }: Props) => {
+import { CardsProps } from "../types";
+
+const Cards = ({
+  concert,
+  data,
+  horizontal,
+  vertical,
+  ...rest
+}: CardsProps) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`./${data.id}`);

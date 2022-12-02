@@ -1,14 +1,5 @@
+import { IPayload } from "../../types";
 import { deactivate, activate } from "../instance";
-
-interface IPayload {
-  id?: number;
-  postId?: number;
-  comment?: string;
-  body?: {
-    postId?: number;
-    comment: string;
-  };
-}
 
 export const readComments = async () => {
   const { data } = await deactivate.get("comments");

@@ -1,10 +1,6 @@
 import { atom } from "recoil";
+import { User } from "../types";
 
-export interface User {
-  isLoggedin: boolean;
-  id: number | null;
-  email: string | null;
-}
 export const initUser: User = {
   isLoggedin: false,
   id: null,

@@ -1,8 +1,4 @@
-interface IconProps {
-  strokeWidth?: number;
-  iconClassName?: string;
-  [key: string]: any;
-}
+import { IconProps } from "../types";
 
 const Search = ({
   strokeWidth = 1.5,

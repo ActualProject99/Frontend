@@ -1,4 +1,4 @@
-import { LoginForm, CommentForm, OptionCreator } from "./types";
+import { LoginForm, CommentForm, OptionCreator, baseArr } from "./types";
 
 export const cls = (...classes: (string | undefined | boolean)[]) =>
   classes
@@ -132,7 +132,7 @@ export const shuffle = (array: any[]) => {
   return array;
 };
 
-type baseArr = any[] | baseArr[];
+
 
 export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   const arrDim = (Arr: baseArr) => {

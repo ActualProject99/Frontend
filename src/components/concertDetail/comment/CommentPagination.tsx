@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { IComments } from './CommentList';
-import { IgetComment } from '../../../types';
+import React from "react";
 
-
-const CommentPagination =  () => {
-
+const CommentPagination = () => {
   /* const [postsPerPage, setPostsPerPage] = useState(10);
   const indexOfLast = currentPage * postsPerPage
   const indexOfFirst = indexOfLast - postsPerPage;
@@ -14,12 +9,8 @@ const CommentPagination =  () => {
     currentPosts = comment.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   } */
-    
-return (
-    <div>
 
-    </div>
-  )
-}
+  return <div></div>;
+};
 
 export default CommentPagination;

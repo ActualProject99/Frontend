@@ -21,16 +21,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
 import Calendar from "../Calendar";
 import useDebounce from "../../hooks/useDebounce";
-
-interface ConcertProps {
-  concert: IGetConcert;
-}
+import { ConcertProps } from "../../types";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  // const ticketingUrl = concert.ticketingUrl;
-  // const ticketings = JSON.parse(ticketingUrl);
-  // console.log("뭘까?", ticketings);
 
   const [like, setLike] = useState(concert.like);
   const [show, setShow] = useState(false);
@@ -196,20 +190,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <icons.FullHeart className="text-red-500 cursor-pointer " />
                 </button>
               )}
-              {/* <div className=" flex flex-col gap-y-4 justify-center items-end">
-                {ticketings &&
-                  ticketings.map((ticketing) => (
-                    <button
-                      key={ticketing.id}
-                      className="w-[140px] h-10 mr-5 text-white bg-[#7151A1] flex  justify-center items-center rounded-2xl"
-                      onClick={() => {
-                        window.open();
-                      }}
-                    >
-                      {ticketing.title}
-                    </button>
-                  ))}
-              </div> */}
             </div>
           </div>
         </div>
