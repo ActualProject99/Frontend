@@ -3,8 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { deactivate } from "../../apis/instance";
 import { LoginForm } from "../../types";
 import { cls, regOptLogin } from "../../utils";
+import useTicket from "../../hooks/useTicketPop";
 
 const SignupCompo = (): JSX.Element => {
+  const { Ticket, Poped, userInput } = useTicket("가입을 축하드려요!🎉", {
+    cacelButton: false,
+    userInputs: {
+      "ok 😆": true,
+      no: "no",
+    },
+    toastOnly: true,
+    type: "ckeck",
+  });
   const {
     register,
     handleSubmit,
@@ -29,7 +39,7 @@ const SignupCompo = (): JSX.Element => {
       });
       console.log("리스폰스", response);
       if (response.status === 201) {
-        window.alert("가입을 축하드려요!");
+        Poped();
         navigate("/user/login");
       } else if (response.status === 401) {
         window.alert(response.data.message);
@@ -49,6 +59,7 @@ const SignupCompo = (): JSX.Element => {
             </p>
           </div>
         </div>
+        <Ticket />
         <form
           className="w-72 flex flex-col gap-1"
           onSubmit={handleSubmit(onValid)}

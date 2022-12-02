@@ -20,6 +20,7 @@ import { pages } from "../routes";
 import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
+import useTicket from "../hooks/useTicketPop";
 
 const Search = ({
   viewer,
@@ -75,16 +76,27 @@ const Nav = ({
   const { toggler, ModalContent } = useModal("sm", <UserInfo />);
   const { pathname } = useLocation();
   const [contentNo] = useRecoilState<MainContent>(mainContent);
-  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef, setMainScrollRef] =
     useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
+
+  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
+  const { Ticket, Poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      "ok 😆": true,
+      no: "no",
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
-      return toasted();
+      return Poped();
     if (!pathname.includes(path)) return navigate(path);
   };
   const handleClickProfile = () => {
@@ -123,7 +135,7 @@ const Nav = ({
   }, [pathname]);
   return (
     <Portal>
-      <Toasts />
+      <Ticket />
       <nav
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",

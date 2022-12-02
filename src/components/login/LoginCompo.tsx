@@ -8,6 +8,7 @@ import { User, userState } from "../../atoms/user";
 import { cls, regOptLogin } from "../../utils";
 import { LoginForm } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
+import useTicket from "../../hooks/useTicketPop";
 
 const LoginCompo = (): JSX.Element => {
   const navigate = useNavigate();
@@ -20,10 +21,22 @@ const LoginCompo = (): JSX.Element => {
 
   const [user, setUser] = useRecoilState<User>(userState);
 
+  const { Ticket, Poped, userInput } = useTicket(
+    "로그인 실패..!\n아이디와 패스워드를 확인해주세요😢",
+    {
+      cacelButton: false,
+      userInputs: {
+        "ok 😆": true,
+        no: "no",
+      },
+      toastOnly: true,
+      type: "warn",
+    }
+  );
+
   const onValid = async (data: LoginForm) => {
     try {
       const response = await deactivate.post("/users/login", data);
-      console.log("답", response);
       setAccessToken(response.data.jwt);
       const AccessToken = response.data.jwt;
       localStorage.setItem("AccessToken", AccessToken);
@@ -31,7 +44,7 @@ const LoginCompo = (): JSX.Element => {
       navigate("/concerts");
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     } catch (error) {
-      window.alert("로그인 실패");
+      Poped();
       console.log(error);
     }
   };
@@ -66,6 +79,7 @@ const LoginCompo = (): JSX.Element => {
             </p>
           </div>
         </div>
+        <Ticket />
         <form
           className="w-72 flex flex-col gap-2"
           onSubmit={handleSubmit(onValid)}

@@ -30,6 +30,7 @@ export interface IGetConcert {
   concertId: number;
   categoryId: number;
   artistId: number;
+  locationId: number;
   concertName: string;
   concertImg: string;
   concertInfo: string;
@@ -50,6 +51,17 @@ interface EditLike {
 
 interface PostSMS {
   concertId: number;
+}
+
+export interface IGetLocation {
+  locationId: number;
+  locationName: string;
+  locationAddress: string;
+  locationCall: string;
+  locationUrl: string;
+  locationImg: string;
+  latitude: number;
+  longitude: number;
 }
 
 //콘서트 API
@@ -83,11 +95,21 @@ const DeleteConcertSMS = () => {
   });
 };
 
+//공연장 정보 API
+const GetLocation = () => {
+  return useQuery<IGetLocation[]>(["location"], async () => {
+    const { data } = await deactivate.get<IGetLocation[]>("/location");
+    console.log("data", data);
+    return data;
+  });
+};
+
 const ConcertApi = {
   GetConcerts,
   EditLikeConcerts,
   PostConcertSMS,
   DeleteConcertSMS,
+  GetLocation,
 };
 
 export default ConcertApi;

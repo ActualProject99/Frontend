@@ -21,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import CommentList from "./comment/CommentList";
 import Calendar from "../Calendar";
 import useDebounce from "../../hooks/useDebounce";
+import { loadavg } from "os";
 
 interface ConcertProps {
   concert: IGetConcert;
@@ -35,9 +36,18 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const [like, setLike] = useState(concert.like);
   const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
+  const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
   const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
+
+  const location = locations?.find(
+    (location) => location.locationId === concert.locationId
+  );
+  console.log("위치정보", location);
+  console.log("위치들", locations);
+  console.log("테스트");
+
   const debouncer = useDebounce(1000);
   const PostDebounced = useRef(
     debouncer(({ concertId }: { concertId: number }) => {
@@ -95,7 +105,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const { Taps, Viewer } = useTaps(
     0,
     ["상세정보", <MoreInfo concert={concert} />],
-    ["공연장정보", <NaverMap concert={concert} />],
+    ["공연장정보", <NaverMap concert={concert} location={location} />],
     ["기대평", <CommentList />]
   );
 

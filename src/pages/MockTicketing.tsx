@@ -18,7 +18,7 @@ import { parseISO } from "date-fns";
 import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 import { getCookieToken } from "../apis/cookie";
-import useTicketPop from "../hooks/useTicketPop";
+import useTicket from "../hooks/useTicketPop";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -34,18 +34,15 @@ const MockTicketing = () => {
 
   const cookie = getCookieToken();
 
-  const { Ticket, Poped, userInput } = useTicketPop(
-    () => (Math.random() > 0.5 ? "안녕하세요" : "방가방가"),
-    {
-      cacelButton: false,
-      userInputs: {
-        "ok 😆": "ok",
-        no: "no",
-      },
-      toastOnly: false,
-      type: "only msg",
-    }
-  );
+  const { Ticket, Poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      "ok 😆": true,
+      no: "no",
+    },
+    toastOnly: true,
+    type: "warn",
+  });
 
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
@@ -67,7 +64,7 @@ const MockTicketing = () => {
 
   const handleClickStart = () => {
     if (!cookie) {
-      toasted();
+      Poped();
     } else {
       sessionStorage.setItem("game", "started");
       setIsCountDownStart(true);
