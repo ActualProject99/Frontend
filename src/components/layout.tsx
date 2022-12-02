@@ -75,8 +75,7 @@ const Nav = ({
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [getMainScrollRef, setMainScrollRef] =
-    useRecoilState<MainScrollRef>(mainScrollRef);
+  const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
@@ -121,6 +120,7 @@ const Nav = ({
     <Portal>
       <Toasts />
       <nav
+        id="nav"
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
           pathname === "/" ? "" : "bg-white"

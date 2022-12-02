@@ -13,14 +13,14 @@ const NotFound = () => {
   };
   return (
     <Modal onClick={() => {}}>
-      <div className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2  bg-white w-72 h-48 shadow-lg rounded flex flex-col gap-4 justify-center">
+      <div className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-80 h-48 shadow-lg rounded flex flex-col gap-4 justify-center font-dohyen">
         <div className="flex justify-center items-center gap-3">
           <icons.Warn
             className="text-red-600"
             strokeWidth={3}
             iconClassName="w-8 h-8"
           />
-          <span className="text-xl font-bold">page not found</span>
+          <span className="text-xl">페이지를 찾을 수 없습니다</span>
         </div>
         <div className="flex gap-12 justify-center text-sm">
           <button

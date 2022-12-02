@@ -12,7 +12,6 @@ import {
   startOfToday,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useEffect } from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { dateSelected } from "../atoms/date";

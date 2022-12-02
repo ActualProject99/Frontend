@@ -136,7 +136,6 @@ const MockTicketing = () => {
       >
         <Seats />
       </div>
-
       <Toasts />
       <div className={cls("w-full h-96 flex", isGaming ? "hidden" : "block")}>
         <div className="flex-[3] flex flex-col">

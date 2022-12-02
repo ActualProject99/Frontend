@@ -1,8 +1,9 @@
 import ReactDOM from "react-dom";
-import { MouseEventHandler, ReactNode, useState } from "react";
+import { MouseEventHandler, ReactNode, useEffect, useState } from "react";
 import usePreventScroll from "../hooks/window/usePreventScroll";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import { cls } from "../utils";
+import useInert from "../hooks/useInert";
 
 const Portal = ({ children }: { children: ReactNode }) => {
   const modalElement = document.querySelector("#portal");
@@ -19,9 +20,11 @@ export const Modal = ({
   [key: string]: any;
 }) => {
   usePreventScroll();
+  useInert();
   return (
     <Portal>
       <div
+        id="modal"
         onClick={onClick}
         {...rest}
         className="fixed w-screen h-screen backdrop-blur-sm backdrop-saturate-200 top-0 left-0"

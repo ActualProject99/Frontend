@@ -6,7 +6,7 @@ import ArtistConcerts from "./ArtistConcerts";
 import { getCookieToken } from "../../apis/cookie";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { useParams } from "react-router-dom";
-import { ArtistInfoProps, ArtistProps } from "../../types";
+import { ArtistInfoProps } from "../../types";
 
 const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
   const [like, setLike] = useState<boolean>(artist.like);

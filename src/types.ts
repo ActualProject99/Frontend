@@ -1,4 +1,20 @@
 import { RegisterOptions } from "react-hook-form";
+
+// Component Props
+export interface ArtistProps {
+  artistConcert: IGetArtistConcert;
+}
+export interface ArtistInfoProps {
+  artist: IGetArtist;
+}
+export interface IComments {
+  comment?: IgetComment;
+}
+export type JoinState = "before" | "opened" | "closed";
+export interface ConcertProps {
+  concert: IGetConcert;
+}
+
 export type Option<T> = [keyof T, RegisterOptions];
 export type SubOptionCreator<T> = (customOpts?: RegisterOptions) => Option<T>;
 export type OptionCreator = <T>(option: Option<T>) => SubOptionCreator<T>;
@@ -187,22 +203,6 @@ export interface IconProps {
   [key: string]: any;
 }
 
-export interface ArtistProps {
-  artistConcert: IGetArtistConcert;
-}
-
-export interface ArtistInfoProps {
-  artist: IGetArtist;
-}
-
-export interface ConcertProps {
-  concert: IGetConcert;
-}
-
-export interface IComments {
-  comment?: IgetComment;
-}
-
 export interface ArtistIconProps {
   artist: IGetArtist;
 }
@@ -230,13 +230,7 @@ export interface PopupOptions {
   type: IconType;
 }
 export type AfterToasted = () => void;
-export interface IUesrTypes {
-  id: number;
-  email: any;
-  nickname: string;
-  phone: string;
-  userImg: string;
-}
+
 export type baseArr = any[] | baseArr[];
 export type MainContent = number | null;
 export type MainScrollRef = HTMLElement | null;
@@ -246,5 +240,5 @@ export type HasPlaced = boolean[];
 export type IsGameSuccess = [boolean | null, boolean | null];
 export type IsRefreshedValid = null | boolean;
 export type IsGameDone = boolean;
-export type JoinState = "before" | "opened" | "closed";
+
 export type Tap = [string, React.ReactNode];

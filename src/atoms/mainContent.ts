@@ -1,4 +1,3 @@
-import { RefObject } from "react";
 import { atom } from "recoil";
 import { MainContent, MainScrollRef } from "../types";
 
