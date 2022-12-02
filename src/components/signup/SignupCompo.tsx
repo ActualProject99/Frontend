@@ -6,7 +6,7 @@ import { cls, regOptLogin } from "../../utils";
 import useTicket from "../../hooks/useTicketPop";
 
 const SignupCompo = (): JSX.Element => {
-  const { Ticket, Poped, userInput } = useTicket("가입을 축하드려요!🎉", {
+  const { Ticket, poped, userInput } = useTicket("가입을 축하드려요!🎉", {
     cacelButton: false,
     userInputs: {
       "ok 😆": true,
@@ -39,7 +39,7 @@ const SignupCompo = (): JSX.Element => {
       });
       console.log("리스폰스", response);
       if (response.status === 201) {
-        Poped();
+        poped();
         navigate("/user/login");
       } else if (response.status === 401) {
         window.alert(response.data.message);

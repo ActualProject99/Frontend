@@ -34,15 +34,23 @@ const MockTicketing = () => {
 
   const cookie = getCookieToken();
 
-  const { Ticket, Poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
-    cacelButton: false,
-    userInputs: {
-      "ok 😆": true,
-      no: "no",
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: {
+      value: true,
+      buttonText: "취소",
+      className: "bg-red-200 text-lime-800",
     },
-    toastOnly: true,
+    userInputs: {
+      확인: { value: "???", className: "bg-red-200 text-lime-800" },
+      아니오: null,
+    },
+    toastOnly: false,
     type: "warn",
   });
+
+  useEffect(() => {
+    console.log(userInput);
+  }, [userInput]);
 
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
@@ -64,7 +72,7 @@ const MockTicketing = () => {
 
   const handleClickStart = () => {
     if (!cookie) {
-      Poped();
+      poped();
     } else {
       sessionStorage.setItem("game", "started");
       setIsCountDownStart(true);
@@ -125,7 +133,7 @@ const MockTicketing = () => {
       {userInput}
       <button
         onClick={() => {
-          Poped();
+          poped();
         }}
       >
         hihi

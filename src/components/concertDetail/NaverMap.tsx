@@ -3,11 +3,10 @@ import Marker from "../../image/Marker.png";
 import { IGetConcert, IGetLocation } from "../../apis/query/ConcertApi";
 
 interface ConcertProps {
-  concert: IGetConcert;
   location: IGetLocation;
 }
 
-export const NaverMap = ({ concert, location }: ConcertProps) => {
+export const NaverMap = ({ location }: ConcertProps) => {
   const mapRef = useRef<HTMLElement | null | any>(null);
   useEffect(() => {
     mapRef.current = new naver.maps.Map("map", {
@@ -77,13 +76,14 @@ export const NaverMap = ({ concert, location }: ConcertProps) => {
       <div className="px-5 py-10">
         <div className="flex gap-7">
           <img
+            className="flex, justify-items-center, items-center w-60 h-44"
             style={{
               display: "flex",
               justifyItems: "center",
               alignItems: "center",
             }}
             alt="hallImg"
-            src="https://cdnticket.melon.co.kr/resource/image/upload/place/2020/01/20200116133533fc40dccb-243a-46a0-a025-7330614275d6.jpg"
+            src={location.locationImg}
           />
           <div className="flex flex-wrap flex-col  gap-y-3 py-2">
             <p className="text-xl mb-3">{location.locationName}</p>

@@ -83,8 +83,7 @@ const Nav = ({
     useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
 
-  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
-  const { Ticket, Poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
     cacelButton: false,
     userInputs: {
       "ok 😆": true,
@@ -94,18 +93,36 @@ const Nav = ({
     type: "warn",
   });
 
+  const {
+    Ticket: OutTicket,
+    poped: OutPoped,
+    userInput: OutInput,
+  } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      예: {
+        value: () => {
+          removeCookieToken();
+          navigate("/");
+        },
+        className: "bg-accent-main text-white",
+      },
+      아니요: null,
+    },
+    toastOnly: false,
+    type: "info",
+  });
+
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
-      return Poped();
+      return poped();
     if (!pathname.includes(path)) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
   };
   const handleClickLogout = () => {
-    window.alert("로그아웃 되었습니다.");
-    removeCookieToken();
-    navigate("/");
+    OutPoped("정말 로그아웃 하시겠어요?");
   };
 
   const handleClickSearchOn = () => {
@@ -133,9 +150,15 @@ const Nav = ({
       }
     });
   }, [pathname]);
+  useEffect(() => {
+    if (typeof OutInput === "function") {
+      OutInput();
+    }
+  }, [OutInput]);
   return (
     <Portal>
       <Ticket />
+      <OutTicket />
       <nav
         className={cls(
           "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
@@ -151,9 +174,9 @@ const Nav = ({
                   onClick={() => navigate("/")}
                 >
                   <img
-                    className="w-36 h-16"
+                    className="w-28 h-12"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669958939/KakaoTalk_20221202_140614837_smr5fd.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669987631/KakaoTalk_20221202_222151940_05_lhpttb.png"
                   />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">

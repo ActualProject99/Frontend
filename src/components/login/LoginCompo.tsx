@@ -21,7 +21,7 @@ const LoginCompo = (): JSX.Element => {
 
   const [user, setUser] = useRecoilState<User>(userState);
 
-  const { Ticket, Poped, userInput } = useTicket(
+  const { Ticket, poped, userInput } = useTicket(
     "로그인 실패..!\n아이디와 패스워드를 확인해주세요😢",
     {
       cacelButton: false,
@@ -33,6 +33,21 @@ const LoginCompo = (): JSX.Element => {
       type: "warn",
     }
   );
+  const {
+    Ticket: ScsTicket,
+    poped: ScsPoped,
+    userInput: ScsInput,
+  } = useTicket("로그인 성공!", {
+    cacelButton: false,
+    userInputs: {
+      입장하기: () => {
+        navigate("/concerts");
+      },
+      나가기: null,
+    },
+    toastOnly: false,
+    type: "ckeck",
+  });
 
   const onValid = async (data: LoginForm) => {
     try {
@@ -40,16 +55,17 @@ const LoginCompo = (): JSX.Element => {
       setAccessToken(response.data.jwt);
       const AccessToken = response.data.jwt;
       localStorage.setItem("AccessToken", AccessToken);
-      window.alert(response.data.nickname + "님 환영합니다!");
-      navigate("/concerts");
+      ScsPoped(response.data.nickname + "님 환영합니다!🎉");
+
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     } catch (error) {
-      Poped();
+      poped();
       console.log(error);
     }
   };
   const kakaoBtn = () => {
     const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
+    console.log("리다이렉트", REDIRECT_URL);
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
@@ -61,6 +77,11 @@ const LoginCompo = (): JSX.Element => {
       navigate("/");
     }
   }, [navigate]);
+  useEffect(() => {
+    if (typeof ScsInput === "function") {
+      ScsInput();
+    }
+  }, [ScsInput]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
@@ -80,6 +101,8 @@ const LoginCompo = (): JSX.Element => {
           </div>
         </div>
         <Ticket />
+        <ScsTicket />
+
         <form
           className="w-72 flex flex-col gap-2"
           onSubmit={handleSubmit(onValid)}

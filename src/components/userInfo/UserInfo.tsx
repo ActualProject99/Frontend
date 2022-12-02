@@ -1,27 +1,43 @@
-import React, { useState, useCallback, ChangeEvent } from "react";
+import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-
+import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useImg from "../../image/userDefault.png";
+import useTicket from "../../hooks/useTicketPop";
+import { LoginForm } from "../../types";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
 
-  console.log("유저정보", userData);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<LoginForm>({ mode: "onChange" });
 
   const queryClient = useQueryClient();
 
   const [isEdit, setIsEdit] = useState(false);
   const [editNickname, setEditNickname] = useState(userData?.nickname);
 
+  const { Ticket, poped, userInput } = useTicket("닉네임 변경 완료!🎉", {
+    cacelButton: false,
+    userInputs: {
+      "ok 😆": true,
+      no: "no",
+    },
+    toastOnly: true,
+    type: "ckeck",
+  });
+
   const onChangeNickname = useCallback(
-    (e: ChangeEvent<HTMLInputElement>): void => {
+    async (e: ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
       setEditNickname(value);
-      console.log("value", value);
     },
     [setEditNickname]
   );
@@ -37,7 +53,7 @@ const UserInfo = (): JSX.Element => {
     EditUserName(payload).then(() => {
       console.log("pay", payload);
       queryClient.invalidateQueries(["userInfo"]);
-      window.alert("변경 완료!");
+      poped();
     });
 
     setIsEdit(false);
@@ -102,23 +118,24 @@ const UserInfo = (): JSX.Element => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-y-2 h-28">
+            <form
+              className="flex flex-col items-center gap-y-2 h-28"
+              onSubmit={handleSubmit(onNicknameEdit)}
+            >
               <input
                 className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
                 value={editNickname}
                 onChange={onChangeNickname}
               />
-              <button
-                className="flex justify-center items-center w-28 h-10 border rounded-md"
-                onClick={onNicknameEdit}
-              >
+              <button className="flex justify-center items-center w-28 h-10 border rounded-md">
                 변경 완료
               </button>
-            </div>
+            </form>
           )}
         </div>
       </div>
+      <Ticket />
     </div>
   );
 };
