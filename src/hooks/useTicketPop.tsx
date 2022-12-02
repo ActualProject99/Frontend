@@ -23,8 +23,8 @@ interface Option {
   cacelButton: boolean | CancelButton;
   toastOnly: boolean;
   type: IconType;
-  afterToasted: () => void;
 }
+type AfterToasted = () => void;
 
 const useTicket = (
   message: string | (() => string),
@@ -33,6 +33,10 @@ const useTicket = (
   const [userInput, setUserInput] = useState<UserValue>(null);
   const [msg, setMsg] = useState(message);
   const [tp, setTp] = useState(type);
+  const [getAfterToasted, setAfterToasted] = useState<AfterToasted | null>(
+    null
+  );
+  const [getToastOnly, setToastOnly] = useState<boolean>(toastOnly);
   const buttonTexts = Object.keys(userInputs);
   const buttonValues = Object.values(userInputs);
   if (buttonTexts.length > 4) {
@@ -42,7 +46,22 @@ const useTicket = (
   }
   const [isPoped, setIsPoped] = useState(false);
 
-  const poped = (newMessage: string = "", newType?: IconType) => {
+  const poped = (
+    newMessage: string | null = null,
+    {
+      newType,
+      afterToasted,
+      isToastOnly,
+    }: {
+      newType?: IconType;
+      afterToasted?: AfterToasted;
+      isToastOnly?: boolean;
+    } = {
+      newType: undefined,
+      afterToasted: undefined,
+      isToastOnly: undefined,
+    }
+  ) => {
     if (newMessage) {
       setMsg(newMessage);
     } else {
@@ -53,6 +72,16 @@ const useTicket = (
     } else {
       setTp(type);
     }
+    if (afterToasted) {
+      setAfterToasted(() => afterToasted);
+    } else {
+      setAfterToasted(null);
+    }
+    if (isToastOnly) {
+      setToastOnly(isToastOnly);
+    } else {
+      setToastOnly(toastOnly);
+    }
     setIsPoped(true);
   };
 
@@ -61,7 +90,7 @@ const useTicket = (
       userInput();
     }
   }, [userInput]);
-  
+
   const Icon = () => {
     return (
       <>
@@ -85,8 +114,11 @@ const useTicket = (
       setIsPoped(false);
     };
     const handleAnimationEnd = () => {
-      if (toastOnly) {
+      if (getToastOnly) {
         setIsPoped(false);
+        if (getAfterToasted) {
+          getAfterToasted();
+        }
       }
     };
     const handleClickCancel = () => {
@@ -119,7 +151,7 @@ const useTicket = (
           onAnimationEnd={handleAnimationEnd}
           className={cls(
             "p-3 px-6 fixed top-1/4 w-[717px] h-[384px] rounded font-bold",
-            toastOnly
+            getToastOnly
               ? "animate-toast-right opacity-0"
               : "animate-popup-right opacity-1 right-1/2 translate-x-1/2"
           )}
@@ -150,7 +182,7 @@ const useTicket = (
                 <Icon />
                 <span className="font-bold text-xl whitespace-pre">{msg}</span>
                 <div className="flex mt-3 text-sm divide-x-2 ">
-                  {!toastOnly
+                  {!getToastOnly
                     ? buttonTexts?.map((text, i) => {
                         return (
                           <button
@@ -182,7 +214,7 @@ const useTicket = (
                       <button
                         className={cls(
                           "h-7 rounded-r-lg bg-gray-300 text-gray-600",
-                          (buttonTexts?.length === 0 || toastOnly) &&
+                          (buttonTexts?.length === 0 || getToastOnly) &&
                             "rounded-l-lg",
                           buttonTexts.length > 3 ? "w-16" : "w-24"
                         )}
@@ -195,7 +227,7 @@ const useTicket = (
                     <button
                       className={cls(
                         "h-7 rounded-r-lg",
-                        (buttonTexts?.length === 0 || toastOnly) &&
+                        (buttonTexts?.length === 0 || getToastOnly) &&
                           "rounded-l-lg",
                         buttonTexts.length > 3 ? "w-16" : "w-24",
                         filterClassStartwith(

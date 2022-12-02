@@ -41,7 +41,12 @@ const MockTicketing = () => {
       className: "bg-red-200 text-lime-800",
     },
     userInputs: {
-      확인: { value: "???", className: "bg-red-200 text-lime-800" },
+      확인: {
+        value: () => {
+          console.log("ok");
+        },
+        className: "bg-red-200 text-lime-800",
+      },
       아니오: null,
     },
     toastOnly: false,
@@ -130,10 +135,15 @@ const MockTicketing = () => {
   return (
     <>
       <Ticket />
-      {userInput}
       <button
         onClick={() => {
-          poped();
+          poped(null, {
+            newType: "only msg",
+            afterToasted: () => {
+              console.log("hi");
+            },
+            isToastOnly: true,
+          });
         }}
       >
         hihi
