@@ -58,10 +58,10 @@ const useTicket = (
     } else {
       setAfterToasted(null);
     }
-    if (isToastOnly) {
-      setToastOnly(isToastOnly);
-    } else {
+    if (typeof isToastOnly === "undefined") {
       setToastOnly(toastOnly);
+    } else {
+      setToastOnly(isToastOnly);
     }
     setIsPoped(true);
   };
