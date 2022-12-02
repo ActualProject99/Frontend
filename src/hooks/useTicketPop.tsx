@@ -17,12 +17,13 @@ interface CancelButton {
   value: boolean;
   className: string;
 }
-
+type IconType = "ckeck" | "warn" | "info" | "only msg";
 interface Option {
   userInputs?: UserInput;
   cacelButton: boolean | CancelButton;
   toastOnly: boolean;
-  type: "ckeck" | "warn" | "info" | "only msg";
+  type: IconType;
+  afterToasted: () => void;
 }
 
 const useTicket = (
@@ -31,6 +32,7 @@ const useTicket = (
 ) => {
   const [userInput, setUserInput] = useState<UserValue>(null);
   const [msg, setMsg] = useState(message);
+  const [tp, setTp] = useState(type);
   const buttonTexts = Object.keys(userInputs);
   const buttonValues = Object.values(userInputs);
   if (buttonTexts.length > 4) {
@@ -40,26 +42,36 @@ const useTicket = (
   }
   const [isPoped, setIsPoped] = useState(false);
 
-  useEffect(() => {}, []);
-  const poped = (newMessage: string = "") => {
+  const poped = (newMessage: string = "", newType?: IconType) => {
     if (newMessage) {
       setMsg(newMessage);
     } else {
       setMsg(message);
     }
+    if (newType) {
+      setTp(newType);
+    } else {
+      setTp(type);
+    }
     setIsPoped(true);
   };
 
+  useEffect(() => {
+    if (typeof userInput === "function") {
+      userInput();
+    }
+  }, [userInput]);
+  
   const Icon = () => {
     return (
       <>
-        {type === "ckeck" ? (
+        {tp === "ckeck" ? (
           <icons.RoundCheck iconClassName="w-12 h-12 text-lime-700" />
         ) : null}
-        {type === "warn" ? (
+        {tp === "warn" ? (
           <icons.Warn iconClassName="w-12 h-12 text-rose-700" />
         ) : null}
-        {type === "info" ? (
+        {tp === "info" ? (
           <icons.Info iconClassName="w-12 h-12 text-blue-700" />
         ) : null}
       </>
@@ -125,11 +137,11 @@ const useTicket = (
               <div
                 className={cls(
                   "w-full h-[1px] bg-gradient-to-br to-slate-300",
-                  type === "ckeck"
+                  tp === "ckeck"
                     ? "from-lime-200"
-                    : type === "warn"
+                    : tp === "warn"
                     ? "from-rose-200"
-                    : type === "info"
+                    : tp === "info"
                     ? "from-blue-200"
                     : "from-gray-200"
                 )}
@@ -202,11 +214,11 @@ const useTicket = (
               <div
                 className={cls(
                   "w-full h-[3px] bg-gradient-to-br from-slate-300",
-                  type === "ckeck"
+                  tp === "ckeck"
                     ? "to-lime-200"
-                    : type === "warn"
+                    : tp === "warn"
                     ? "to-rose-200"
-                    : type === "info"
+                    : tp === "info"
                     ? "to-blue-200"
                     : "to-gray-200"
                 )}
