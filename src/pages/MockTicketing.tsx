@@ -38,7 +38,7 @@ const MockTicketing = () => {
       "확인 🤑": true,
       아니오: null,
     },
-    toastOnly: false,
+    toastOnly: true,
     type: "warn",
   });
 
@@ -126,7 +126,7 @@ const MockTicketing = () => {
       <Ticket />
       <button
         onClick={() => {
-          poped();
+          poped(null, { isToastOnly: false });
         }}
       >
         hihi
