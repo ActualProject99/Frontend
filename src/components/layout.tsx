@@ -123,13 +123,13 @@ const Nav = ({
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
         {normal ? (
           <div className="flex items-center">
-            <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
+            <div className="min-w-[360px] w-screen mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
                   className="w-[140px] h-10 rounded relative cursor-pointer bottom-4"
@@ -216,7 +216,7 @@ const Nav = ({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className={cls(
-                  "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
+                  "min-w-[360px] w-screen-scroll-double mx-auto flex justify-between gap-12 items-center",
                   contentNo === 1 ? "text-white" : "text-black"
                 )}
               >
