@@ -33,29 +33,17 @@ const LoginCompo = (): JSX.Element => {
       type: "warn",
     }
   );
-  const {
-    Ticket: ScsTicket,
-    poped: ScsPoped,
-    userInput: ScsInput,
-  } = useTicket("로그인 성공!", {
-    cacelButton: false,
-    userInputs: {
-      입장하기: () => {
-        navigate("/concerts");
-      },
-      나가기: null,
-    },
-    toastOnly: false,
-    type: "ckeck",
-  });
 
   const onValid = async (data: LoginForm) => {
     try {
       const response = await deactivate.post("/users/login", data);
       setAccessToken(response.data.jwt);
-      const AccessToken = response.data.jwt;
-      localStorage.setItem("AccessToken", AccessToken);
-      ScsPoped(response.data.nickname + "님 환영합니다!🎉");
+      // const AccessToken = response.data.jwt;
+      // localStorage.setItem("AccessToken", AccessToken);
+      poped(response.data.nickname + "님 환영합니다!🎉", {
+        afterToasted: () => navigate("/concerts"),
+        newType: "ckeck",
+      });
 
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     } catch (error) {
@@ -77,11 +65,6 @@ const LoginCompo = (): JSX.Element => {
       navigate("/");
     }
   }, [navigate]);
-  useEffect(() => {
-    if (typeof ScsInput === "function") {
-      ScsInput();
-    }
-  }, [ScsInput]);
 
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
@@ -101,8 +84,6 @@ const LoginCompo = (): JSX.Element => {
           </div>
         </div>
         <Ticket />
-        <ScsTicket />
-
         <form
           className="w-72 flex flex-col gap-2"
           onSubmit={handleSubmit(onValid)}
