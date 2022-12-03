@@ -17,7 +17,11 @@ export interface CommentForm {
 }
 
 export interface IgetComment { 
-  id?: number;
-  postId?: number;
+  concertId?: number;
+  userId?: number;
+  commentId : number;
   comment: string;
+  name : string,
+  profileImg : string,
+  createdAt : string
 }

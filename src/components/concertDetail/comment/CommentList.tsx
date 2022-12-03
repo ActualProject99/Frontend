@@ -11,10 +11,11 @@ import { regOptComment } from "../../../utils";
 
 export interface IComments {
   comment?: IgetComment;
+  userId?: IgetComment;
 }
 
 const CommentList = () => {
-  const { id } = useParams();
+  const { concertId } = useParams();
   const queryClient = useQueryClient();
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
@@ -44,7 +45,6 @@ const CommentList = () => {
 
   /* 다음 페이지를 누르기 전에 다음 페이지 내용을 미리 불러옴. 
   딜레이 체감 없애기 */
-
   /* const { isLoading, isError, data } = useQuery<IgetComment[]>(
     ["allComments", currentPage],
     () => readComments(currentPage),
@@ -57,10 +57,10 @@ const CommentList = () => {
   }  */
 
   const { isLoading, isError, data } = useQuery<IgetComment[]>(
-    ["allComments"],
-    readComments,
+    ["allComments", readComments],
     { staleTime: 2000, keepPreviousData: true, refetchOnWindowFocus: false }
   );
+  
   if (isLoading) {
     return <h3 className="p-4">Loading...</h3>;
   } else if (isError) {
@@ -68,7 +68,7 @@ const CommentList = () => {
   }
 
   const onValid = (data: any) => {
-    addCommentFn({ postId: Number(id), comment: data.comment });
+    /* addCommentFn({ concertId: concertId, comment: data }); */
     reset();
   };
 
@@ -94,11 +94,13 @@ const CommentList = () => {
       </form>
 
       <ul className="p-4 w-full max-h-[65rem]">
-        {data
-          ?.filter((concert) => concert.postId === id)
-          .map((comment) => (
-            <Commentfix key={comment.id} comment={comment} />
-          ))}
+        <>
+          {data
+            ?.filter((concert) => concert.userId === concertId)
+            .map((comment) => {
+              <Commentfix key={comment.commentId} comment={comment} />;
+            })}
+        </>
       </ul>
       <div className="flex w-full justify-around">
         <button
@@ -120,3 +122,4 @@ const CommentList = () => {
 };
 
 export default CommentList;
+

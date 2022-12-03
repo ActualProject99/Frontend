@@ -32,8 +32,8 @@ const Commentfix = ({ comment }: IComments) => {
     const removeConfirm = window.confirm("해당 댓글을 삭제하시겠습니까?");
     if (removeConfirm) {
       /* const {id, postId} = comment; */
-      const payload = { id: comment?.id, postId: comment?.postId };
-      removeCommentFn(payload);
+      /* const payload = { id: comment?.id, postId: comment?.postId };
+      removeCommentFn(payload); */
     }
   };
 
@@ -41,10 +41,10 @@ const Commentfix = ({ comment }: IComments) => {
     const askConfirm = window.confirm("작성하신 댓글로 변경하시겠습니까?");
     if (askConfirm) {
       /* const {id, postId} = comment; */
-      editCommentFn({
+      /* editCommentFn({
         id: comment?.id,
         body: { postId: comment?.postId, comment: data.editcomment },
-      });
+      }); */
       setIsEdit((cur) => !cur);
     }
   };
