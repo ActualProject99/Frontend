@@ -12,7 +12,6 @@ const useIsScrolled = ({
     if (ref) {
       const logging = () => {
         setIsScrolled(ref?.scrollTop > value);
-        console.log("셋스크롤");
       };
       ref?.addEventListener("scroll", logging);
       return () => {

@@ -18,6 +18,7 @@ import { dateSelected } from "../atoms/date";
 import icons from "../components/icons";
 import { CalendarProps } from "../types";
 import { cls } from "../utils";
+import ConcertApi from "../apis/query/ConcertApi";
 
 export const CalendarDrawer = () => {
   return (
@@ -42,6 +43,14 @@ const Calendar = ({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
+
+  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
+    locale: ko,
+  }).split(" ");
+  const payload = Number(month.split("월")[0]);
+  const { data } = ConcertApi.GetMonthConcerts(payload);
+  console.log("몇월?", month);
+
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
@@ -54,9 +63,7 @@ const Calendar = ({
     setdateChosen(day);
     setDateSelected(day);
   };
-  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
-    locale: ko,
-  }).split(" ");
+
   return (
     <div className={cls(className)}>
       <div className="flex items-center border-b-[4px] border-dotted pb-3">

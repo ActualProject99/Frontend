@@ -69,7 +69,7 @@ module.exports = {
       },
       width: {
         "screen-scroll": "calc(100vw - 18px)",
-        "screen-scroll-double": "calc(100vw - 40px)",
+        "screen-scroll-double": "calc(100vw - 80px)",
       },
       backgroundImage: {
         radial:

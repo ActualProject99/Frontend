@@ -108,8 +108,8 @@ export interface IGetConcert {
   createdAt: string;
   updatedAt: string;
   calender: string;
+  month: number;
 }
-
 export interface ConcertLike {
   concertId: number;
 }
@@ -253,3 +253,4 @@ export type IsRefreshedValid = null | boolean;
 export type IsGameDone = boolean;
 
 export type Tap = [string, React.ReactNode];
+export type IsScrolled = boolean;

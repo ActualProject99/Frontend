@@ -12,6 +12,7 @@ import useFixoluteBox from "../hooks/useFixsolute";
 import { datedConcerts, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
 import { Concert } from "../types";
+import ConcertApi from "../apis/query/ConcertApi";
 
 const groups = [
   "전체",
@@ -26,6 +27,8 @@ const groups = [
   "콘서트",
 ];
 const Concerts = () => {
+  const { data: concerts } = ConcertApi.GetConcerts();
+
   const [select, setSelect] = useState(0);
   const [getShowingConcerts, setShowingConcerts] =
     useRecoilState<Concert[]>(showingConcerts);

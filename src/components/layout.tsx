@@ -15,7 +15,7 @@ import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
-import useTicket from "../hooks/useTicketPop";
+import useTicketPop from "../hooks/useTicketPop";
 
 const Search = ({
   viewer,
@@ -76,21 +76,24 @@ const Nav = ({
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
 
-  const { Ticket, poped, userInput } = useTicket("정말 로그아웃 하시겠어요?", {
-    cacelButton: false,
-    userInputs: {
-      예: {
-        value: () => {
-          removeCookieToken();
-          navigate("/");
+  const { Ticket, poped, userInput } = useTicketPop(
+    "정말 로그아웃 하시겠어요?",
+    {
+      cacelButton: false,
+      userInputs: {
+        예: {
+          value: () => {
+            removeCookieToken();
+            navigate("/");
+          },
+          className: "bg-accent-main text-white",
         },
-        className: "bg-accent-main text-white",
+        아니요: null,
       },
-      아니요: null,
-    },
-    toastOnly: false,
-    type: "info",
-  });
+      toastOnly: false,
+      type: "info",
+    }
+  );
   const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
@@ -121,7 +124,7 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
-  const { isScrolled } = useIsScrolled({
+  const { getIsScrolled } = useIsScrolled({
     ref: getMainScrollRef,
     value: window.innerHeight * 10 - 100,
   });
@@ -139,16 +142,16 @@ const Nav = ({
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen-scroll-double py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
         {normal ? (
           <div className="flex items-center">
-            <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
+            <div className="min-w-[360px] w-screen mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[140px] h-10 rounded cursor-pointer"
+                  className="w-[140px] h-10 rounded ml-10 cursor-pointer"
                   onClick={() => navigate("/")}
                 >
                   <img
@@ -175,7 +178,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 flex items-center justify-between gap-3">
+              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
@@ -205,7 +208,7 @@ const Nav = ({
                         src={user?.profileImg}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
-                      ></img>
+                      />
                     </>
                   ) : (
                     <Link
@@ -223,13 +226,13 @@ const Nav = ({
           </div>
         ) : (
           <AnimatePresence>
-            {isScrolled ? (
+            {getIsScrolled ? (
               <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className={cls(
-                  "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
+                  "min-w-[360px] w-screen-scroll-double mx-auto flex justify-between gap-12 items-center",
                   contentNo === 1 ? "text-white" : "text-black"
                 )}
               >

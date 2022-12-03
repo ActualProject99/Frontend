@@ -12,6 +12,16 @@ const GetConcerts = () => {
   });
 };
 
+const GetMonthConcerts = (payload: number) => {
+  return useQuery<IGetConcert[]>(["monthConcert", payload], async () => {
+    const { data } = await deactivate.get<IGetConcert[]>(
+      `/concert?month=${payload}`
+    );
+    console.log("요청", data);
+    return data;
+  });
+};
+
 const EditLikeConcerts = () => {
   return useMutation(async (payload: ConcertLike) => {
     const { data } = await deactivate.put(`/concertlike/${payload.concertId}`);
@@ -49,6 +59,7 @@ const ConcertApi = {
   PostConcertSMS,
   DeleteConcertSMS,
   GetLocation,
+  GetMonthConcerts,
 };
 
 export default ConcertApi;
