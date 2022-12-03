@@ -3,12 +3,13 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import useImg from "../../image/userDefault.png";
 
 const UserInfo = (): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
+
+  console.log("유저정보", userData);
 
   const queryClient = useQueryClient();
 
@@ -41,7 +42,7 @@ const UserInfo = (): JSX.Element => {
     setIsEdit(false);
   }, [editNickname, EditUserName, queryClient]);
 
-  const [imageSrc, setImageSrc] = useState(userData?.userImg);
+  const [imageSrc, setImageSrc] = useState(userData?.profileImg);
   const onChangeImg = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) {
@@ -71,8 +72,7 @@ const UserInfo = (): JSX.Element => {
           id="uploadedimage"
           className="w-36 h-36 rounded-[50%] absolute"
           alt="userImg"
-          // src={imageSrc}
-          src={useImg}
+          src={imageSrc}
         />
         <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
           <input

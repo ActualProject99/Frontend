@@ -3,13 +3,9 @@ import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { IGetArtist } from "../../apis/query/ArtistAPI";
+import { ArtistIconProps } from "../../types";
 
-interface ArtistProps {
-  artist: IGetArtist;
-}
-
-const ArtistIcon = ({ artist }: ArtistProps): JSX.Element => {
+const ArtistIcon = ({ artist }: ArtistIconProps): JSX.Element => {
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
   const queryClient = useQueryClient();
   const navigate = useNavigate();

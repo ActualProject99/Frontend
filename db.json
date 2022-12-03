@@ -944,13 +944,13 @@
       "minute": 0,
       "vendor": 1,
       "like": true,
+      "buy": "melon 단독",
       "ticketingUrl": [
         {
           "url": "https://ticket.melon.com/performance/index.htm?prodId=207476#skip_nav",
           "title": "멜론 티켓"
         }
-      ],
-      "true": ""
+      ]
     },
     {
       "id": 2,
@@ -968,13 +968,13 @@
       "minute": 0,
       "vendor": 2,
       "like": true,
+      "buy": "yse24 단독",
       "ticketingUrl": [
         {
           "url": "http://ticket.yes24.com/Special/43825",
           "title": "yes24 티켓"
         }
-      ],
-      "true": ""
+      ]
     },
     {
       "id": 3,
@@ -992,6 +992,7 @@
       "minute": 0,
       "vendor": 2,
       "like": true,
+      "buy": "yse24 단독",
       "ticketingUrl": [
         {
           "url": "http://ticket.yes24.com/Perf/44100?Gcode=009_303",
@@ -1015,6 +1016,7 @@
       "minute": 0,
       "vendor": 1,
       "like": true,
+      "buy": "melon 단독",
       "ticketingUrl": [
         {
           "url": "https://ticket.melon.com/performance/index.htm?prodId=207449",
@@ -1038,6 +1040,7 @@
       "minute": 0,
       "vendor": 1,
       "like": true,
+      "buy": "melon 단독",
       "ticketingUrl": [
         {
           "url": "https://ticket.melon.com/performance/index.htm?prodId=207532",
@@ -1061,6 +1064,7 @@
       "minute": 0,
       "vendor": 3,
       "like": true,
+      "buy": "인터파크 단독",
       "ticketingUrl": [
         {
           "url": "https://tickets.interpark.com/goods/22015069",
@@ -1084,6 +1088,7 @@
       "minute": 0,
       "vendor": 3,
       "like": true,
+      "buy": "인터파크 단독",
       "ticketingUrl": [
         {
           "url": "https://tickets.interpark.com/goods/22015956",

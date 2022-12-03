@@ -3,8 +3,8 @@ import { removeComment, editComment } from "../../../apis/query/commentApi";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { IComments } from "./CommentList";
 import { regOptComment } from "../../../utils";
+import { IComments } from "../../../types";
 
 const Commentfix = ({ comment }: IComments) => {
   const [isedit, setIsEdit] = useState(false);

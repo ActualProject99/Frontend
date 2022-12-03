@@ -1,69 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ConcertLike, IGetConcert, PostSMS } from "../../types";
 import { deactivate } from "../instance";
-
-//콘서트 Interface
-
-// export interface IGetConcert {
-//   id: number;
-//   concertId: number;
-//   posterUrl: string;
-//   title: string;
-//   showTimes: string;
-//   location: string;
-//   runningTime: string;
-//   viewableGrade: string;
-//   genre: string;
-//   latitude: number;
-//   longitude: number;
-//   vendor: number;
-//   like: boolean;
-//   ticketingUrl: [
-//     {
-//       url: string;
-//       title: string;
-//     }
-//   ];
-// }
-
-export interface IGetConcert {
-  concertId: number;
-  categoryId: number;
-  artistId: number;
-  concertName: string;
-  concertImg: string;
-  concertInfo: string;
-  concertDate: string;
-  ticketingDate: string;
-  ticketingUrl: string;
-  locationName: string;
-  playTime: string;
-  ratings: string;
-  createdAt: string;
-  updatedAt: string;
-  calender: string;
-}
-
-interface EditLike {
-  concertId: number;
-}
-
-interface PostSMS {
-  concertId: number;
-}
 
 //콘서트 API
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concert");
+    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
     console.log("data", data);
     return data;
   });
 };
 
 const EditLikeConcerts = () => {
-  return useMutation(async (payload: EditLike) => {
-    const { data } = await deactivate.patch(`/concerts/${payload.concertId}`);
+  return useMutation(async (payload: ConcertLike) => {
+    const { data } = await deactivate.put(`/concertlike/${payload.concertId}`);
     return data;
   });
 };

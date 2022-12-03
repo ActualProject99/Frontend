@@ -9,8 +9,9 @@ import {
 } from "../atoms/date";
 import { useRecoilState } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
-import { datedConcerts, Concert, showingConcerts } from "../atoms/concert";
+import { datedConcerts, showingConcerts } from "../atoms/concert";
 import ConcertSlider from "../components/ConcertSlider";
+import { Concert } from "../types";
 
 const groups = [
   "전체",
@@ -88,7 +89,7 @@ const Concerts = () => {
                     <Cards key={i} vertical concert data={consert} />
                   ))
                 ) : (
-                  <p>No concerts for today.</p>
+                  <p>해당 날짜에 공연이 없어요!</p>
                 )}
               </div>
             </section>

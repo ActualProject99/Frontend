@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
 import { useRecoilState } from "recoil";
 import {
-  HasBooked,
   hasBooked,
   isGameDone,
-  IsGameDone,
 } from "../atoms/mockTicketing";
+import { HasBooked, IsGameDone } from "../types";
 import { shuffle } from "../utils";
 
 const useMock = () => {

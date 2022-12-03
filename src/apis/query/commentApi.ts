@@ -1,3 +1,4 @@
+import { IPayload } from "../../types";
 import { deactivate, activate } from "../instance";
 
 interface IPayload {

@@ -8,7 +8,6 @@ import "slick-carousel/slick/slick-theme.css";
 import Next from "../image/Next.png";
 import Prev from "../image/Prev.png";
 import { useNavigate } from "react-router-dom";
-import { cls } from "../utils";
 
 const ConcertSlider = (): JSX.Element => {
   const { data: concerts } = UserApi.GetLikeConcert();
@@ -58,7 +57,7 @@ const ConcertSlider = (): JSX.Element => {
         <Slider {...settings}>
           {concerts &&
             concerts.map((concert) => (
-              <div>
+              <div key={concert.id}>
                 <div
                   className="flex flex-col relative overflow-hidden group m-5 gap-2 font-bold text-white cursor-pointer"
                   onClick={() => navigate(`/concerts/${concert.concertId}`)}
@@ -68,6 +67,21 @@ const ConcertSlider = (): JSX.Element => {
                       <p className="text-2xl">{concert.title}</p>
                     </div>
                     <div className="flex flex-col justify-end items-end gap-x-3">
+                      {concert.buy === "인터파크 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#EF554D]/60 text-white rounded">
+                          인터파크 단독
+                        </div>
+                      ) : null}
+                      {concert.buy === "melon 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#41D26B]/60 text-white rounded">
+                          melon 단독
+                        </div>
+                      ) : null}
+                      {concert.buy === "yse24 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#196ab3]/60 text-white rounded">
+                          yse24 단독
+                        </div>
+                      ) : null}
                       <p className="text-xl text-accent-main">
                         {concert.showTimes}
                       </p>

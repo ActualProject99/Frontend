@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { setAccessToken, getCookieToken } from "../../apis/cookie";
 import { deactivate } from "../../apis/instance";
-import { User, userState } from "../../atoms/user";
+import { userState } from "../../atoms/user";
 import { cls, regOptLogin } from "../../utils";
-import { LoginForm } from "../../types";
+import { LoginForm, User } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 
 const LoginCompo = (): JSX.Element => {
@@ -24,14 +24,12 @@ const LoginCompo = (): JSX.Element => {
     try {
       const response = await deactivate.post("/users/login", data);
       console.log("답", response);
-      setAccessToken(response.data.AccessToken);
-      const AccessToken = response.data.AccessToken;
+      setAccessToken(response.data.jwt);
+      const AccessToken = response.data.jwt;
       localStorage.setItem("AccessToken", AccessToken);
-      console.log("jwt", AccessToken);
-      navigate("/");
-      window.alert("로그인 성공");
+      window.alert(response.data.nickname + "님 환영합니다!");
+      navigate("/concerts");
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
-      console.log(user);
     } catch (error) {
       window.alert("로그인 실패");
       console.log(error);
