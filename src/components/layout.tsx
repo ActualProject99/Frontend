@@ -128,8 +128,8 @@ const Nav = ({
         )}
       >
         {normal ? (
-          <div className="flex items-center">
-            <div className="min-w-[360px] w-screen mx-auto flex justify-between items-center">
+          <div className="flex items-center w-screen">
+            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
                   className="w-[140px] h-10 rounded relative cursor-pointer bottom-4"
