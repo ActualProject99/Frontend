@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { isScrolled } from "../../atoms/isScrolled";
+import { IsScrolled } from "../../types";
 
 const useIsScrolled = ({
   ref,
@@ -7,7 +10,7 @@ const useIsScrolled = ({
   ref: HTMLElement | null;
   value: number;
 }) => {
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [getIsScrolled, setIsScrolled] = useRecoilState<IsScrolled>(isScrolled);
   useEffect(() => {
     if (ref) {
       const logging = () => {
@@ -19,6 +22,6 @@ const useIsScrolled = ({
       };
     }
   }, [ref]);
-  return { isScrolled };
+  return { getIsScrolled };
 };
 export default useIsScrolled;
