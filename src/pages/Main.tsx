@@ -95,6 +95,8 @@ const ContentCopy = ({
     </>
   );
 };
+const s = 0.0625;
+const k = 10 * s - (1 / 2) * s;
 const Main = () => {
   const snapContainer = useRef<HTMLDivElement | null>(null);
   const animate = useRef<HTMLDivElement | null>(null);
@@ -112,8 +114,7 @@ const Main = () => {
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
   });
-  const s = 0.0625;
-  const k = 10 * s - (1 / 2) * s;
+
   const scale1 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s, k],
@@ -389,7 +390,7 @@ const Main = () => {
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
           ref={ref}
         >
           {children}
@@ -405,10 +406,9 @@ const Main = () => {
           <ScrollTop />
         </>
       ) : null}
-
       <div
         ref={snapContainer}
-        className="h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black"
+        className="relative h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black "
       >
         <div className="bg-gradient-to-b h-[1000vh] w-8">
           <m.div
@@ -433,16 +433,16 @@ const Main = () => {
               className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             ></m.img>
           ))}
-          <m.div
+          {/* <m.div
             className="fixed -z-10 w-screen h-screen bg-primary-900"
             style={{
               clipPath,
             }}
-          ></m.div>
+          ></m.div> */}
         </div>
         <div
           ref={content1}
-          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
+          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative"
         >
           <div className="w-[320px]">
             {contentNo === 0 && (
@@ -693,8 +693,52 @@ const Main = () => {
             )}
           </div>
         </div>
+        <Clipper scrollYProgress={scrollYProgress} />
       </div>
     </>
+  );
+};
+const Clipper = ({ scrollYProgress }) => {
+  const background = useTransform(
+    scrollYProgress,
+    [
+      0,
+      2 * s,
+      4 * s - s / 10,
+      4 * s,
+      8.5 * s,
+      9 * s,
+      10 * s,
+      11 * s,
+      12 * s,
+      13 * s,
+      14 * s,
+      15 * s,
+      1,
+    ],
+    [
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.3) 100%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 40%,rgba(26, 18, 33,0.3) 40%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.3) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 50% 0%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 40% 30%,rgba(0, 0, 0, 0) 70%,#ffffff 70%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 60% 40%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 45% 60%,rgba(0, 0, 0, 0) 75%,rgba(26, 18, 33,0.2) 75%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 60% 20%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 30% 80%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+    ]
+  );
+  return (
+    <m.div
+      style={{
+        background,
+      }}
+      className="fixed left-0 top-0 w-screen h-screen -z-10"
+    ></m.div>
   );
 };
 export default Main;
