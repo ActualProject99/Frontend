@@ -18,7 +18,8 @@ import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
-import useIsScrolled from "../hooks/window/useHowMuchScroll";
+import { isScrolled } from "../atoms/isScrolled";
+import { IsScrolled } from "../types";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
@@ -106,10 +107,7 @@ const Main = () => {
   const content7 = useRef<HTMLDivElement | null>(null);
   const [contentNo, setContentNo] = useRecoilState<number | null>(mainContent);
   const [getMainScrollRef, setMainScrollRef] = useRecoilState(mainScrollRef);
-  const { isScrolled } = useIsScrolled({
-    ref: getMainScrollRef,
-    value: window.innerHeight * 10 - 100,
-  });
+  const [getIsScrolled] = useRecoilState<IsScrolled>(isScrolled);
 
   const { scrollY, scrollYProgress } = useScroll({
     container: snapContainer,
@@ -383,6 +381,9 @@ const Main = () => {
     if (snapContainer && !getMainScrollRef) {
       setMainScrollRef(snapContainer.current);
     }
+    return () => {
+      setMainScrollRef(null);
+    };
   }, [setMainScrollRef]);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
@@ -398,7 +399,7 @@ const Main = () => {
   );
   return (
     <>
-      {isScrolled ? (
+      {getIsScrolled ? (
         <>
           <Indicator />
           <ScrollTop />

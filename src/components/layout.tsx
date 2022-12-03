@@ -16,6 +16,7 @@ import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
+import useTicketPop from "../hooks/useTicketPop";
 
 const Search = ({
   viewer,
@@ -105,7 +106,7 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
-  const { isScrolled } = useIsScrolled({
+  const { getIsScrolled } = useIsScrolled({
     ref: getMainScrollRef,
     value: window.innerHeight * 10 - 100,
   });
@@ -161,7 +162,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 flex items-center justify-between gap-3">
+              <div className="w-60 h-18 flex items-center justify-between pr-12">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
@@ -191,7 +192,7 @@ const Nav = ({
                         src={user?.profileImg}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
-                      ></img>
+                      />
                     </>
                   ) : (
                     <Link
@@ -209,7 +210,7 @@ const Nav = ({
           </div>
         ) : (
           <AnimatePresence>
-            {isScrolled ? (
+            {getIsScrolled ? (
               <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
