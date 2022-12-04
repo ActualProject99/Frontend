@@ -7,7 +7,6 @@ import { deactivate } from "../instance";
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
     const { data } = await deactivate.get<IGetConcert[]>("/concerts");
-    console.log("data", data);
     return data;
   });
 };

@@ -1,37 +1,35 @@
-import { IPayload } from "../../types";
 import { deactivate, activate } from "../instance";
 
 interface IPayload {
-  concertId?: number;
-  commentId?: number;
+  concertId: number;
+  commentId: string;
   userId: number;
   comment: string;
   name : string,
   profileImg : string,
   createdAt : string
   body?: {
-    commentId?: number;
+    commentId: number;
     comment: string;
   };
 }
 
-export const readComments = async ( userId: number ) => {
-  const { data } = await deactivate.get(`comment/user/${userId}`);
-  console.log(userId);
+export const readComments = async ( concertId: IPayload ) => {
+  const { data } = await deactivate.get(`comment/${concertId}`);
   return data;
 };
 
-export const addComment = async (payload: IPayload) => {
+export const addComment = async ( payload: IPayload ) => {
   const { data } = await activate.post(`comment/${payload.concertId}`, payload.comment);
   return data;
 };
 
-export const removeComment = async (payload: IPayload) => {
-  const { data } = await activate.delete(`comment/${payload.concertId}`);
+export const removeComment = async ( payload: IPayload ) => {
+  const { data } = await activate.delete(`/comment/detail/${payload}`);
   return data;
 };
 
-export const editComment = async (payload: IPayload) => {
-  const { data } = await activate.patch(`comment/${payload.concertId}`, payload.body);
+export const editComment = async ( payload: IPayload ) => {
+  const { data } = await activate.patch(`comment/detail/${payload.commentId}`, payload.comment);
   return data;
 };
