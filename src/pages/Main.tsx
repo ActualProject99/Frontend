@@ -95,7 +95,7 @@ const ContentCopy = ({
     </>
   );
 };
-const s = 0.0625;
+const s = 0.0625; // === 1/16
 const k = 10 * s - (1 / 2) * s;
 const Main = () => {
   const snapContainer = useRef<HTMLDivElement | null>(null);
@@ -276,16 +276,6 @@ const Main = () => {
     [0, 4 * s - 0.1 * s, 4 * s, k],
     [0, 0, 1, 0]
   );
-  const clipPath = useTransform(
-    scrollYProgress,
-    [0, 2 * s, 4 * s - s / 10, 4 * s],
-    [
-      "polygon(0% 0%, 0 0, 0 0%, 25% 0%, 100% 0%, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%)",
-      "polygon(0% 0%, 0 0, 0 25%, 25% 25%, 100% 25%, 100% 75%, 0 75%, 0 100%, 100% 100%, 100% 0%)",
-      "polygon(0% 0%, 0 0, 0 30%, 25% 30%, 100% 30%, 100% 70%, 0 70%, 0 100%, 100% 100%, 100% 0%)",
-      "polygon(0% 0%, 0 0, 0 0%, 25% 0%, 100% 0%, 100% 100%, 0 100%, 0 100%, 100% 100%, 100% 0%)",
-    ]
-  );
   const opacityBack = useTransform(
     scrollYProgress,
     [0, 7 * s, 9 * s],
@@ -433,12 +423,6 @@ const Main = () => {
               className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             ></m.img>
           ))}
-          {/* <m.div
-            className="fixed -z-10 w-screen h-screen bg-primary-900"
-            style={{
-              clipPath,
-            }}
-          ></m.div> */}
         </div>
         <div
           ref={content1}
@@ -710,26 +694,34 @@ const Clipper = ({ scrollYProgress }) => {
       9 * s,
       10 * s,
       11 * s,
+      11.5 * s,
       12 * s,
+      12.5 * s,
       13 * s,
+      13.5 * s,
       14 * s,
+      14.5 * s,
       15 * s,
       1,
     ],
     [
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.3) 100%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 40%,rgba(26, 18, 33,0.3) 40%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.3) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 50% 0%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 40% 30%,rgba(0, 0, 0, 0) 70%,#ffffff 70%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 60% 40%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 45% 60%,rgba(0, 0, 0, 0) 75%,rgba(26, 18, 33,0.2) 75%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 60% 20%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 30% 80%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)",
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)",
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.8) 100%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //0
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 40%,rgba(26, 18, 33,0.8) 40%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //2 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.8) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //4 * s - s / 10
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //4 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //8.5 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //9 * s
+      "radial-gradient(circle at 50% 0%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //10 * s
+      "radial-gradient(circle at 40% 30%,rgba(0, 0, 0, 0) 70%,rgba(255, 255, 255,0.3) 70%,rgba(255, 255, 255,0.1) 100%,rgba(2, 0, 36, 1) 100%)", //11 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(255, 255, 255,0.6) 100%,rgba(255, 255, 255,0.4) 100%,rgba(2, 0, 36, 1) 100%)", //11.5 * s
+      "radial-gradient(circle at 60% 40%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12.5 * s
+      "radial-gradient(circle at 45% 60%,rgba(0, 0, 0, 0) 75%,rgba(26, 18, 33,0.2) 75%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //13 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 105%,rgba(26, 18, 33,0.2) 105%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //13.5 * s
+      "radial-gradient(circle at 60% 20%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14.5 * s
+      "radial-gradient(circle at 30% 80%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //15 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //1
     ]
   );
   return (
