@@ -14,7 +14,7 @@ import {
 import { ko } from "date-fns/locale";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { dateSelected } from "../atoms/date";
+import { dateSelected, monthConcerts } from "../atoms/date";
 import icons from "../components/icons";
 import { CalendarProps } from "../types";
 import { cls } from "../utils";
@@ -35,7 +35,7 @@ const Calendar = ({
   selectedDate,
 }: CalendarProps) => {
   let today = startOfToday();
-  let [dateChosen, setdateChosen] = useState(today);
+  let [dateChosen, setdateChosen] = useState<Date | null>(null);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [, setDateSelected] = useRecoilState(dateSelected);
@@ -44,12 +44,12 @@ const Calendar = ({
     end: endOfMonth(firstDayCurrentMonth),
   });
 
+  const [, setMonthdata] = useRecoilState(monthConcerts);
   const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
     locale: ko,
   }).split(" ");
   const payload = Number(month.split("월")[0]);
-  const { data } = ConcertApi.GetMonthConcerts(payload);
-  console.log("몇월?", month);
+  setMonthdata(payload);
 
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
@@ -60,8 +60,17 @@ const Calendar = ({
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
   const handleClickDate = (day: Date) => () => {
-    setdateChosen(day);
-    setDateSelected(day);
+    if (
+      !dateChosen ||
+      (dateChosen &&
+        format(day, "yyyy MM d") !== format(dateChosen, "yyyy MM d"))
+    ) {
+      setdateChosen(day);
+      setDateSelected(day);
+    } else {
+      setdateChosen(null);
+      setDateSelected(null);
+    }
   };
 
   return (
@@ -111,7 +120,7 @@ const Calendar = ({
                 type="button"
                 onClick={selectable ? handleClickDate(day) : () => {}}
                 className={
-                  selectable
+                  selectable && dateChosen
                     ? cls(
                         isEqual(day, dateChosen) && "text-white",
                         !isEqual(day, dateChosen) &&

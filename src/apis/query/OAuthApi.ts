@@ -4,7 +4,7 @@ import { activate, deactivate } from "../instance";
 export const OAuthAPI = {
   loginWithKakao: async (kakaoToken: string) => {
     return await deactivate
-      .get(`/users/kakao?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
+      .get(`/users/oauth/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
       .then((data) => {
         console.log("토큰", data);
         setAccessToken("data.headers.authorization");

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ConcertLike, IGetConcert, IGetLocation, PostSMS } from "../../types";
-import { deactivate } from "../instance";
+import { activate, deactivate } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
@@ -12,7 +12,7 @@ const GetConcerts = () => {
   });
 };
 
-const GetMonthConcerts = (payload: number) => {
+const GetMonthConcerts = (payload: number | Date) => {
   return useQuery<IGetConcert[]>(["monthConcert", payload], async () => {
     const { data } = await deactivate.get<IGetConcert[]>(
       `/concert?month=${payload}`
@@ -22,9 +22,16 @@ const GetMonthConcerts = (payload: number) => {
   });
 };
 
+const GetLikeConcert = (payload: number) => {
+  return useQuery(["LikeConcert", payload], async () => {
+    const { data } = await activate.get(`/concertlike/${payload}`);
+    return data;
+  });
+};
+
 const EditLikeConcerts = () => {
   return useMutation(async (payload: ConcertLike) => {
-    const { data } = await deactivate.put(`/concertlike/${payload.concertId}`);
+    const { data } = await activate.put(`/concertlike/${payload.concertId}`);
     return data;
   });
 };
@@ -60,6 +67,7 @@ const ConcertApi = {
   DeleteConcertSMS,
   GetLocation,
   GetMonthConcerts,
+  GetLikeConcert,
 };
 
 export default ConcertApi;

@@ -74,10 +74,6 @@ export interface IGetArtistConcert {
   calender: string;
 }
 
-export interface DeletePayload {
-  id: number;
-}
-
 export interface ArtistLike {
   artistId: number;
 }
@@ -203,7 +199,7 @@ export interface Concert {
 }
 export interface CardsProps {
   concert?: boolean;
-  data: Concert;
+  data: IGetConcert;
   horizontal?: boolean;
   vertical?: boolean;
 }

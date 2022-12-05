@@ -61,8 +61,10 @@ const LoginCompo = (): JSX.Element => {
 
   useEffect(() => {
     if (cookie) {
-      window.alert("이미 로그인 했어요!");
-      navigate("/");
+      poped("이미 로그인 되었습니다!", {
+        afterToasted: () => navigate("/concerts"),
+        newType: "info",
+      });
     }
   }, [navigate]);
 

@@ -10,7 +10,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
-import ConcertApi, { IGetConcert } from "../../apis/query/ConcertApi";
+import ConcertApi from "../../apis/query/ConcertApi";
 import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
 import { NaverMap } from "./NaverMap";
@@ -28,7 +28,9 @@ import { getCookieToken } from "../../apis/cookie";
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
 
-  const [like, setLike] = useState(concert.like);
+  const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
+  console.log("라이크데이터", LikeCon);
+  const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
   const { data: locations } = ConcertApi.GetLocation();
@@ -83,7 +85,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
       concertId: concert.concertId,
     };
     EditLike(payload).then(() => {
-      console.log("pay", payload);
       queryClient.invalidateQueries(["concert"]);
     });
     setLike((prev) => !prev);
@@ -116,6 +117,9 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     ["공연장정보", <NaverMap location={location} />],
     ["기대평", <CommentList />]
   );
+  useEffect(() => {
+    if (LikeCon) setLike(LikeCon?.isLike);
+  }, [LikeCon, setLike]);
 
   return (
     <>

@@ -1,11 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  ArtistLike,
-  DeletePayload,
-  IGetArtist,
-  IGetArtistConcert,
-} from "../../types";
+import { ArtistLike, IGetArtist, IGetArtistConcert } from "../../types";
 import { deactivate, activate } from "../instance";
 
 const GetArtist = () => {
@@ -27,7 +22,6 @@ const GetArtistConcert = () => {
       const { data } = await deactivate.get<IGetArtistConcert[]>(
         `/concert/artist`
       );
-      console.log("data", data);
       return data;
     },
     {
@@ -36,11 +30,9 @@ const GetArtistConcert = () => {
   );
 };
 
-const DeleteArtist = () => {
-  return useMutation(async (payload: DeletePayload) => {
-    const { data } = await axios.delete(
-      `http://localhost:3001/artists/${payload.id}`
-    );
+const GetLikeArtist = (payload: number) => {
+  return useQuery(["LikeArtist", payload], async () => {
+    const { data } = await activate.get(`/artistlike/${payload}`);
     return data;
   });
 };
@@ -55,9 +47,9 @@ const EditLikeArtist = () => {
 
 const ArtistApi = {
   GetArtist,
-  DeleteArtist,
   EditLikeArtist,
   GetArtistConcert,
+  GetLikeArtist,
 };
 
 export default ArtistApi;

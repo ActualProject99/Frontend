@@ -7,7 +7,7 @@ const isDev = ["localhost:3000", "127.0.0.1:3000"].includes(
 
 const jwtToken = localStorage.getItem("AccessToken");
 console.log(jwtToken);
-//const baseURL = process.env.REACT_APP_SERVER_URL;
+// const baseURL = process.env.REACT_APP_SERVER_URL;
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const PROXY_URL = process.env.REACT_APP_PROXY_URL;

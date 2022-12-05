@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
@@ -10,7 +10,10 @@ import { ArtistInfoProps } from "../../types";
 import useTicket from "../../hooks/useTicketPop";
 
 const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
-  const [like, setLike] = useState<boolean>(artist.like);
+  const { data: LikeArtist } = ArtistApi.GetLikeArtist(artist.artistId);
+  console.log("얍", LikeArtist);
+  const [like, setLike] = useState<boolean>(false);
+
   const cookie = getCookieToken();
   const { id } = useParams();
   const { data: artistConcerts } = ConcertApi.GetConcerts();
@@ -45,6 +48,10 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
       setLike(!like);
     }
   }, [artist.artistId, like, EditLike, queryClient, setLike]);
+
+  useEffect(() => {
+    if (LikeArtist) setLike(LikeArtist?.isLike);
+  }, [LikeArtist, setLike]);
 
   return (
     <>

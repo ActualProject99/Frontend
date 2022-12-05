@@ -84,7 +84,7 @@ const Nav = ({
         예: {
           value: () => {
             removeCookieToken();
-            navigate("/");
+            navigate("/concerts");
           },
           className: "bg-accent-main text-white",
         },
@@ -155,9 +155,9 @@ const Nav = ({
                   onClick={() => navigate("/")}
                 >
                   <img
-                    className="w-28 h-12"
+                    className="w-34 h-12"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669987631/KakaoTalk_20221202_222151940_05_lhpttb.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670216652/KakaoTalk_20221205_140340263_01_iawauv.png"
                   />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
