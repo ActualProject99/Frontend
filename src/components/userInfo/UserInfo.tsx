@@ -1,15 +1,24 @@
-import React, { useState, useCallback, ChangeEvent } from "react";
+import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-
+import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
+import useTicket from "../../hooks/useTicketPop";
+import { LoginForm } from "../../types";
+import { regOptLogin } from "../../utils";
 
-const UserInfo = (): JSX.Element => {
+//@ts-ignore
+const UserInfo = ({ poped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
 
-  console.log("유저정보", userData);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<LoginForm>({ mode: "onChange" });
 
   const queryClient = useQueryClient();
 
@@ -17,26 +26,25 @@ const UserInfo = (): JSX.Element => {
   const [editNickname, setEditNickname] = useState(userData?.nickname);
 
   const onChangeNickname = useCallback(
-    (e: ChangeEvent<HTMLInputElement>): void => {
+    async (e: ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
       setEditNickname(value);
-      console.log("value", value);
     },
     [setEditNickname]
   );
 
   const onNicknameEdit = useCallback((): void => {
     if (editNickname === "") {
-      return window.alert("모두 입력해주세요");
+      return poped("입력해주세요!", { newType: "info" });
     }
     if (!editNickname?.trim()) return;
     const payload = {
       nickname: editNickname,
     };
+
     EditUserName(payload).then(() => {
-      console.log("pay", payload);
+      poped();
       queryClient.invalidateQueries(["userInfo"]);
-      window.alert("변경 완료!");
     });
 
     setIsEdit(false);
@@ -49,20 +57,17 @@ const UserInfo = (): JSX.Element => {
         return;
       }
       setImageSrc(URL.createObjectURL(e.target.files[0]));
-
-      // const formData = new FormData();
-      // formData.append("userImg", e.target.files[0]);
-      // console.log("form", formData);
       const payload = {
         profileImg: e.target.files[0],
       };
-      console.log("페이", payload);
+
       EditUserImg(payload).then(() => {
         queryClient.invalidateQueries(["userInfo"]);
-        window.alert("변경 완료!");
+        poped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
+      console.log("뭐야?");
     },
-    [EditUserImg, queryClient]
+    [EditUserImg, queryClient, poped]
   );
 
   return (
@@ -101,20 +106,25 @@ const UserInfo = (): JSX.Element => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-y-2 h-28">
+            <form
+              className="flex flex-col items-center gap-y-2 h-28"
+              onSubmit={handleSubmit(onNicknameEdit)}
+            >
               <input
                 className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
                 value={editNickname}
-                onChange={onChangeNickname}
+                autoComplete="auto"
+                placeholder="한글, 숫자, 영문 3-10자"
+                {...register(...regOptLogin.nickname())}
               />
-              <button
-                className="flex justify-center items-center w-28 h-10 border rounded-md"
-                onClick={onNicknameEdit}
-              >
+              <p className="text-xs text-red-500 ">
+                {errors.nickname?.message as string}
+              </p>
+              <button className="flex justify-center items-center w-28 h-10 border rounded-md">
                 변경 완료
               </button>
-            </div>
+            </form>
           )}
         </div>
       </div>

@@ -79,10 +79,6 @@ export interface IGetArtistConcert {
   calender: string;
 }
 
-export interface DeletePayload {
-  id: number;
-}
-
 export interface ArtistLike {
   artistId: number;
 }
@@ -113,14 +109,25 @@ export interface IGetConcert {
   createdAt: string;
   updatedAt: string;
   calender: string;
+  month: number;
 }
-
 export interface ConcertLike {
   concertId: number;
 }
 
 export interface PostSMS {
   concertId: number;
+}
+
+export interface IGetLocation {
+  locationId: number;
+  locationName: string;
+  locationAddress: string;
+  locationCall: string;
+  locationUrl: string;
+  locationImg: string;
+  latitude: number;
+  longitude: number;
 }
 
 //유저 Info Interface
@@ -197,7 +204,7 @@ export interface Concert {
 }
 export interface CardsProps {
   concert?: boolean;
-  data: Concert;
+  data: IGetConcert;
   horizontal?: boolean;
   vertical?: boolean;
 }

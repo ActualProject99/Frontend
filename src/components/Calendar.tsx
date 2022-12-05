@@ -14,10 +14,11 @@ import {
 import { ko } from "date-fns/locale";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { dateSelected } from "../atoms/date";
+import { dateSelected, monthConcerts } from "../atoms/date";
 import icons from "../components/icons";
 import { CalendarProps } from "../types";
 import { cls } from "../utils";
+import ConcertApi from "../apis/query/ConcertApi";
 
 export const CalendarDrawer = () => {
   return (
@@ -34,7 +35,7 @@ const Calendar = ({
   selectedDate,
 }: CalendarProps) => {
   let today = startOfToday();
-  let [dateChosen, setdateChosen] = useState(today);
+  let [dateChosen, setdateChosen] = useState<Date | null>(null);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [, setDateSelected] = useRecoilState(dateSelected);
@@ -42,6 +43,14 @@ const Calendar = ({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
+
+  const [, setMonthdata] = useRecoilState(monthConcerts);
+  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
+    locale: ko,
+  }).split(" ");
+  const payload = Number(month.split("월")[0]);
+  setMonthdata(payload);
+
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
@@ -51,12 +60,19 @@ const Calendar = ({
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
   const handleClickDate = (day: Date) => () => {
-    setdateChosen(day);
-    setDateSelected(day);
+    if (
+      !dateChosen ||
+      (dateChosen &&
+        format(day, "yyyy MM d") !== format(dateChosen, "yyyy MM d"))
+    ) {
+      setdateChosen(day);
+      setDateSelected(day);
+    } else {
+      setdateChosen(null);
+      setDateSelected(null);
+    }
   };
-  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
-    locale: ko,
-  }).split(" ");
+
   return (
     <div className={cls(className)}>
       <div className="flex items-center border-b-[4px] border-dotted pb-3">
@@ -104,7 +120,7 @@ const Calendar = ({
                 type="button"
                 onClick={selectable ? handleClickDate(day) : () => {}}
                 className={
-                  selectable
+                  selectable && dateChosen
                     ? cls(
                         isEqual(day, dateChosen) && "text-white",
                         !isEqual(day, dateChosen) &&

@@ -10,7 +10,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
-import ConcertApi, { IGetConcert } from "../../apis/query/ConcertApi";
+import ConcertApi from "../../apis/query/ConcertApi";
 import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
 import { NaverMap } from "./NaverMap";
@@ -22,16 +22,40 @@ import CommentList from "./comment/CommentList";
 import Calendar from "../Calendar";
 import useDebounce from "../../hooks/useDebounce";
 import { ConcertProps } from "../../types";
+import useTicket from "../../hooks/useTicketPop";
+import { getCookieToken } from "../../apis/cookie";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
 
-  const [like, setLike] = useState(concert.like);
+  const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
+  console.log("라이크데이터", LikeCon);
+  const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
+  const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
   const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
+  console.log("위치들", locations);
+  const location = locations?.find(
+    (location) => location.locationId === concert.locationId
+  );
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      확인: {
+        value: () => {
+          console.log("ok");
+        },
+        className: "bg-red-200 text-lime-800",
+      },
+      아니오: null,
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+  const cookie = getCookieToken();
   const debouncer = useDebounce(1000);
   const PostDebounced = useRef(
     debouncer(({ concertId }: { concertId: number }) => {
@@ -40,6 +64,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     })
   ).current;
   const PostSMS = () => {
+    if (!cookie) return poped();
     PostDebounced(concert.concertId);
   };
 
@@ -50,16 +75,16 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     })
   ).current;
   const DeleteSMS = () => {
+    if (!cookie) return poped();
     DeleteDebounced(concert.concertId);
   };
 
   const onEditLike = useCallback(() => {
+    if (!cookie) return poped();
     const payload = {
       concertId: concert.concertId,
-      like: !like,
     };
     EditLike(payload).then(() => {
-      console.log("pay", payload);
       queryClient.invalidateQueries(["concert"]);
     });
     setLike((prev) => !prev);
@@ -89,12 +114,16 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const { Taps, Viewer } = useTaps(
     0,
     ["상세정보", <MoreInfo concert={concert} />],
-    ["공연장정보", <NaverMap concert={concert} />],
+    ["공연장정보", <NaverMap location={location} />],
     ["기대평", <CommentList />]
   );
+  useEffect(() => {
+    if (LikeCon) setLike(LikeCon?.isLike);
+  }, [LikeCon, setLike]);
 
   return (
     <>
+      <Ticket />
       <div className="flex justify-between m-auto w-full h-full p-5">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">

@@ -15,7 +15,6 @@ const Concert = () => {
             <ConcertInfo key={concert.concertId} concert={concert} />
           ) : null
         )}
-
     </>
   );
 };
