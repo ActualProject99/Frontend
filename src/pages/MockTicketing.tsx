@@ -66,7 +66,7 @@ const MockTicketing = () => {
 
   const handleClickStart = () => {
     if (!cookie) {
-      toasted();
+      poped();
     } else {
       sessionStorage.setItem("game", "started");
       setIsCountDownStart(true);

@@ -65,6 +65,7 @@ const useTicket = (
     }
     setIsPoped(true);
   };
+  useEffect(() => {}, [isPoped]);
 
   useEffect(() => {
     if (typeof userInput === "function") {
@@ -131,7 +132,7 @@ const useTicket = (
         <div
           onAnimationEnd={handleAnimationEnd}
           className={cls(
-            "p-3 px-6 fixed top-1/4 w-[717px] h-[384px] rounded font-bold",
+            "p-3 px-6 fixed top-1/4 z-10 w-[717px] h-[384px] rounded font-bold",
             getToastOnly
               ? "animate-toast-right opacity-0"
               : "animate-popup-right opacity-1 right-1/2 translate-x-1/2"

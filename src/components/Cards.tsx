@@ -10,7 +10,7 @@ const Cards = ({
 }: CardsProps) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`./${data.id}`);
+    navigate(`./${data.concertId}`);
   };
   return (
     <>
@@ -21,18 +21,18 @@ const Cards = ({
         >
           <img
             className="w-[180px] h-[250px] mx-auto"
-            src={data.imageUrl}
+            src={data.concertImg}
             alt=""
           />
           <p className="whitespace-nowrap overflow-hidden text-ellipsis text-base font-bold">
-            {data.name}
+            {data.concertName}
           </p>
           {/* <p className="text-xs">
         {format(parseISO(data.startDatetime), "yyyy-MM-dd") +
           " ~ " +
           format(parseISO(data.startDatetime), "yyyy-MM-dd")}
       </p> */}
-          <p className="text-xs">{data.location}</p>
+          <p className="text-xs">{data.locationName}</p>
         </div>
       ) : null}
       {concert && horizontal ? (
@@ -42,18 +42,18 @@ const Cards = ({
         >
           <img
             className="w-[180px] h-[250px] mx-auto"
-            src={data.imageUrl}
+            src={data.concertImg}
             alt=""
           />
           <p className="whitespace-nowrap overflow-hidden text-ellipsis text-base font-bold">
-            {data.name}
+            {data.concertName}
           </p>
           {/* <p className="text-xs">
         {format(parseISO(data.startDatetime), "yyyy-MM-dd") +
           " ~ " +
           format(parseISO(data.startDatetime), "yyyy-MM-dd")}
       </p> */}
-          <p className="text-xs">{data.location}</p>
+          <p className="text-xs">{data.locationName}</p>
         </div>
       ) : null}
     </>

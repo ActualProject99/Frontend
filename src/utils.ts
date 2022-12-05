@@ -1,3 +1,4 @@
+import { activate } from "./apis/instance";
 import { LoginForm, CommentForm, OptionCreator, baseArr } from "./types";
 
 export const cls = (...classes: (string | undefined | boolean)[]) =>
@@ -62,6 +63,12 @@ export const regOptLogin = {
       maxLength: {
         value: 10,
         message: "10자 이하의 닉네임만 사용가능합니다",
+      },
+      validate: {
+        doubleCheck: async (v: string) => {
+          const { data } = await activate.get(`/users/userinfo?queryName=${v}`);
+          return data.ok || "닉네임이 중복됩니다!";
+        },
       },
     },
   ]),
@@ -131,8 +138,6 @@ export const shuffle = (array: any[]) => {
 
   return array;
 };
-
-
 
 export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   const arrDim = (Arr: baseArr) => {

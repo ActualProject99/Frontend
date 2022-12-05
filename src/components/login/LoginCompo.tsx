@@ -8,6 +8,7 @@ import { userState } from "../../atoms/user";
 import { cls, regOptLogin } from "../../utils";
 import { LoginForm, User } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
+import useTicket from "../../hooks/useTicketPop";
 
 const LoginCompo = (): JSX.Element => {
   const navigate = useNavigate();
@@ -20,23 +21,39 @@ const LoginCompo = (): JSX.Element => {
 
   const [user, setUser] = useRecoilState<User>(userState);
 
+  const { Ticket, poped, userInput } = useTicket(
+    "로그인 실패..!\n아이디와 패스워드를 확인해주세요😢",
+    {
+      cacelButton: false,
+      userInputs: {
+        "ok 😆": true,
+        no: "no",
+      },
+      toastOnly: true,
+      type: "warn",
+    }
+  );
+
   const onValid = async (data: LoginForm) => {
     try {
       const response = await deactivate.post("/users/login", data);
-      console.log("답", response);
       setAccessToken(response.data.jwt);
-      const AccessToken = response.data.jwt;
-      localStorage.setItem("AccessToken", AccessToken);
-      window.alert(response.data.nickname + "님 환영합니다!");
-      navigate("/concerts");
+      // const AccessToken = response.data.jwt;
+      // localStorage.setItem("AccessToken", AccessToken);
+      poped(response.data.nickname + "님 환영합니다!🎉", {
+        afterToasted: () => navigate("/concerts"),
+        newType: "ckeck",
+      });
+
       setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     } catch (error) {
-      window.alert("로그인 실패");
+      poped();
       console.log(error);
     }
   };
   const kakaoBtn = () => {
     const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
+    console.log("리다이렉트", REDIRECT_URL);
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
@@ -44,8 +61,10 @@ const LoginCompo = (): JSX.Element => {
 
   useEffect(() => {
     if (cookie) {
-      window.alert("이미 로그인 했어요!");
-      navigate("/");
+      poped("이미 로그인 되었습니다!", {
+        afterToasted: () => navigate("/concerts"),
+        newType: "info",
+      });
     }
   }, [navigate]);
 
@@ -66,6 +85,7 @@ const LoginCompo = (): JSX.Element => {
             </p>
           </div>
         </div>
+        <Ticket />
         <form
           className="w-72 flex flex-col gap-2"
           onSubmit={handleSubmit(onValid)}
