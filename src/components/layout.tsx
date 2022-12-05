@@ -10,7 +10,6 @@ import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
-import useToast from "../hooks/useToast";
 import { pages } from "../routes";
 import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
@@ -69,27 +68,46 @@ const Nav = ({
   normal?: boolean;
   landing?: boolean;
 }) => {
-  const { toggler, ModalContent } = useModal("sm", <UserInfo />);
   const { pathname } = useLocation();
   const [contentNo] = useRecoilState<MainContent>(mainContent);
-  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
   const cookie = getCookieToken();
   const navigate = useNavigate();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
+
+  const { Ticket, poped, userInput } = useTicketPop(
+    "정말 로그아웃 하시겠어요?",
+    {
+      cacelButton: false,
+      userInputs: {
+        예: {
+          value: () => {
+            removeCookieToken();
+            navigate("/concerts");
+          },
+          className: "bg-accent-main text-white",
+        },
+        아니요: null,
+      },
+      toastOnly: false,
+      type: "info",
+    }
+  );
+  const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
-      return toasted();
+      return poped("로그인 후 이용해주세요!😉", {
+        isToastOnly: true,
+        newType: "warn",
+      });
     if (!pathname.includes(path)) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
   };
   const handleClickLogout = () => {
-    window.alert("로그아웃 되었습니다.");
-    removeCookieToken();
-    navigate("/");
+    poped();
   };
 
   const handleClickSearchOn = () => {
@@ -119,7 +137,8 @@ const Nav = ({
   }, [pathname]);
   return (
     <Portal>
-      <Toasts />
+      <Ticket />
+
       <nav
         id="nav"
         className={cls(
@@ -132,17 +151,14 @@ const Nav = ({
             <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[140px] h-10 rounded relative cursor-pointer bottom-4"
+                  className="w-[140px] h-10 rounded ml-10 cursor-pointer"
                   onClick={() => navigate("/")}
                 >
                   <img
-                    className="absolute"
+                    className="w-34 h-12"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669947023/%ED%8B%B0%EC%BC%93_euyskm.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670224597/KakaoTalk_20221205_144918151_ivwxck.png"
                   />
-                  <div className="flex justify-center items-center w-28 h-12 font-logo text-4xl absolute left-3.5 top-3.5 border-2 border-dashed pb-1">
-                    Tgle
-                  </div>
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
                   {Object.values(pages).map((page, i) =>
@@ -162,7 +178,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 flex items-center justify-between pr-12">
+              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"

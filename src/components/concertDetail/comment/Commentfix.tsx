@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useMutation } from "@tanstack/react-query";
 import { removeComment, editComment } from "../../../apis/query/commentApi";
 import { useState, useEffect } from "react";
@@ -7,6 +8,7 @@ import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
 
 const Commentfix = ({ comment }: IComments) => {
+  const commentId = comment.commentId;
   const [isedit, setIsEdit] = useState(false);
   const {
     register,
@@ -31,20 +33,19 @@ const Commentfix = ({ comment }: IComments) => {
   const onDelete = () => {
     const removeConfirm = window.confirm("해당 댓글을 삭제하시겠습니까?");
     if (removeConfirm) {
-      /* const {id, postId} = comment; */
-      const payload = { id: comment?.id, postId: comment?.postId };
-      removeCommentFn(payload);
+      removeCommentFn(comment.commentId);
     }
   };
 
   const onEdit = (data: any) => {
+    const { comment } = data;
     const askConfirm = window.confirm("작성하신 댓글로 변경하시겠습니까?");
     if (askConfirm) {
-      /* const {id, postId} = comment; */
-      editCommentFn({
-        id: comment?.id,
-        body: { postId: comment?.postId, comment: data.editcomment },
-      });
+      const EditData = {
+        commentId: commentId,
+        comment,
+      };
+      editCommentFn(EditData);
       setIsEdit((cur) => !cur);
     }
   };
@@ -62,7 +63,7 @@ const Commentfix = ({ comment }: IComments) => {
 
   useEffect(() => {
     if (isedit) {
-      setValue("editcomment", comment?.comment);
+      setValue("comment", comment?.comment);
     }
   }, [isedit, comment?.comment, setValue]);
 
@@ -93,8 +94,9 @@ const Commentfix = ({ comment }: IComments) => {
         </>
       ) : (
         <>
+          {comment?.profileImg}
           {comment?.comment}
-          <p className="text-xs mt-2">2022.11.11 22:59</p>
+          <p className="text-xs mt-2">{comment?.createdAt}</p>
           <button className="mt-1 mr-1 text-xs" onClick={showEditMode}>
             수정
           </button>

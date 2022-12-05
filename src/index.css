@@ -15,6 +15,30 @@
   font-family: "NeonBines";
   src: url(./fonts/NeonBines.ttf) format("truetype");
 }
+@font-face {
+  font-family: "Tonight";
+  src: url(./fonts/Tonight.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Clip";
+  src: url(./fonts/Clip.ttf) format("truetype");
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #e9e6f1;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+*::-webkit-scrollbar-track {
+  background-color: #3e344e67;
+  /* border-radius: 10px; */
+  /* box-shadow: inset 0px 0px 5px white; */
+}
 
 .text-shadow {
   text-shadow: 2px 2px 4px rgb(255, 244, 157);

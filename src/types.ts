@@ -32,10 +32,15 @@ export interface CommentForm {
   editcomment: string;
 }
 
-export interface IgetComment {
-  id?: number;
-  postId?: number;
+export interface IgetComment { 
+  concertId?: number;
+  id:number;
+  userId?: number;
+  commentId : number;
   comment: string;
+  name : string,
+  profileImg : string,
+  createdAt : string
 }
 interface Page {
   name: string;
@@ -74,20 +79,21 @@ export interface IGetArtistConcert {
   calender: string;
 }
 
-export interface DeletePayload {
-  id: number;
-}
-
 export interface ArtistLike {
   artistId: number;
 }
 
 export interface IPayload {
-  id?: number;
-  postId?: number;
-  comment?: string;
+  concertId: string;
+  commentId: number;
+  id:number;
+  userId: number;
+  comment: string;
+  name: string;
+  profileImg: string;
+  createdAt: string;
   body?: {
-    postId?: number;
+    commentId: number;
     comment: string;
   };
 }
@@ -108,14 +114,25 @@ export interface IGetConcert {
   createdAt: string;
   updatedAt: string;
   calender: string;
+  month: number;
 }
-
 export interface ConcertLike {
   concertId: number;
 }
 
 export interface PostSMS {
   concertId: number;
+}
+
+export interface IGetLocation {
+  locationId: number;
+  locationName: string;
+  locationAddress: string;
+  locationCall: string;
+  locationUrl: string;
+  locationImg: string;
+  latitude: number;
+  longitude: number;
 }
 
 //유저 Info Interface
@@ -192,7 +209,7 @@ export interface Concert {
 }
 export interface CardsProps {
   concert?: boolean;
-  data: Concert;
+  data: IGetConcert;
   horizontal?: boolean;
   vertical?: boolean;
 }

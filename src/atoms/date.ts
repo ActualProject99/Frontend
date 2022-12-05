@@ -1,11 +1,17 @@
 import { atom } from "recoil";
-import { startOfToday, parseISO } from "date-fns";
+import { startOfToday, parseISO, startOfMonth } from "date-fns";
 import { initConcerts } from "./concert";
 
-export const initDateSelected = startOfToday();
-export const dateSelected = atom<Date>({
+export const initDateSelected = null;
+export const initMonth = startOfMonth(startOfToday());
+export const dateSelected = atom<Date | null>({
   key: "dateSelected",
   default: initDateSelected,
+});
+
+export const monthConcerts = atom<Date | number>({
+  key: "monthConcerts",
+  default: initMonth,
 });
 
 export const concertsDatesFiltered = (groupNo: number) => {

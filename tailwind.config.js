@@ -91,6 +91,8 @@ module.exports = {
         neon: ["NEON"],
         NeonBines: ["NeonBines"],
         dohyen: ["Do Hyeon"],
+        Tonight: ["Tonight"],
+        Clip: ["Clip"],
       },
       colors: {
         primary: {
