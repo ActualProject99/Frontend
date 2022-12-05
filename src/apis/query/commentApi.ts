@@ -1,19 +1,7 @@
 import { deactivate, activate } from "../instance";
+import { IPayload } from '../../types';
 
-interface IPayload {
-  concertId: string;
-  commentId: number;
-  id:number;
-  userId: number;
-  comment: string;
-  name: string;
-  profileImg: string;
-  createdAt: string;
-  body?: {
-    commentId: number;
-    comment: string;
-  };
-}
+
 
 export const readComments = async ( concertId: IPayload) => {
   const { data } = await deactivate.get(`comment/${concertId}`);

@@ -84,11 +84,16 @@ export interface ArtistLike {
 }
 
 export interface IPayload {
-  id?: number;
-  postId?: number;
-  comment?: string;
+  concertId: string;
+  commentId: number;
+  id:number;
+  userId: number;
+  comment: string;
+  name: string;
+  profileImg: string;
+  createdAt: string;
   body?: {
-    postId?: number;
+    commentId: number;
     comment: string;
   };
 }
