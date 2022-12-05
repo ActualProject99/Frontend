@@ -8,7 +8,7 @@ import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
 
 const Commentfix = ({ comment }: IComments) => {
-  const commentId = comment.commentId
+  const commentId = comment.commentId;
   const [isedit, setIsEdit] = useState(false);
   const {
     register,
@@ -26,7 +26,7 @@ const Commentfix = ({ comment }: IComments) => {
 
   const { mutate: editCommentFn } = useMutation(editComment, {
     onSuccess: (data, variable, context) => {
-      queryClient.invalidateQueries(["allComments",commentId]);
+      queryClient.invalidateQueries(["allComments"]);
     },
   });
 
@@ -36,14 +36,14 @@ const Commentfix = ({ comment }: IComments) => {
       removeCommentFn(comment.commentId);
     }
   };
-  
+
   const onEdit = (data: any) => {
-    const comment = data.editcomment;
+    const { comment } = data;
     const askConfirm = window.confirm("작성하신 댓글로 변경하시겠습니까?");
     if (askConfirm) {
       const EditData = {
         commentId: commentId,
-        comment: comment,
+        comment,
       };
       editCommentFn(EditData);
       setIsEdit((cur) => !cur);
@@ -63,7 +63,7 @@ const Commentfix = ({ comment }: IComments) => {
 
   useEffect(() => {
     if (isedit) {
-      setValue("editcomment", comment?.comment);
+      setValue("comment", comment?.comment);
     }
   }, [isedit, comment?.comment, setValue]);
 

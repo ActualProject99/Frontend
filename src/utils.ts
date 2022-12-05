@@ -92,7 +92,7 @@ export const regOptComment = {
     },
   ]),
   editcomment: optionCreator<CommentForm>([
-    "editcomment",
+    "comment",
     {
       maxLength: {
         value: 300,

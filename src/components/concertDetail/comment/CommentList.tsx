@@ -11,7 +11,6 @@ import { regOptComment } from "../../../utils";
 
 export interface IComments {
   comment?: IgetComment;
-  userId?: IgetComment;
 }
 
 const CommentList = () => {

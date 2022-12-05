@@ -34,6 +34,7 @@ export interface CommentForm {
 
 export interface IgetComment { 
   concertId?: number;
+  id:number;
   userId?: number;
   commentId : number;
   comment: string;
