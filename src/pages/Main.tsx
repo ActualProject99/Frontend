@@ -1,5 +1,13 @@
 //@ts-nocheck
-import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
+import {
+  useRef,
+  useEffect,
+  ReactNode,
+  forwardRef,
+  LegacyRef,
+  useState,
+  useMemo,
+} from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
 import { MainContent, mainContent, mainScrollRef } from "../atoms/mainContent";
@@ -20,6 +28,8 @@ import { cls } from "../utils";
 import Portal from "../components/Portal";
 import { isScrolled } from "../atoms/isScrolled";
 import { IsScrolled } from "../types";
+import useTimeout from "../hooks/useTimeout";
+import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
@@ -121,10 +131,9 @@ const Main = () => {
       snapContainer.current as HTMLDivElement,
       {
         snapDestinationY: "100%",
-        timeout: 300,
-        duration: 1000,
-        easing: (t) =>
-          t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+        timeout: 30,
+        duration: 200,
+        easing: (t) => t * t,
       },
       () => {
         [
@@ -180,6 +189,7 @@ const Main = () => {
       );
     }
   );
+
   return (
     <>
       {getIsScrolled ? (
@@ -192,6 +202,10 @@ const Main = () => {
         ref={snapContainer}
         className="relative h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black "
       >
+        <EnterButton
+          scrollYProgress={scrollYProgress}
+          snapContainer={snapContainer}
+        />
         <Intro scrollYProgress={scrollYProgress} />
         <div
           ref={content1}
@@ -451,7 +465,68 @@ const Main = () => {
     </>
   );
 };
+const EnterButton = ({ scrollYProgress, snapContainer }) => {
+  const [isButtonShow, setIsButtonShow] = useState({
+    isGoingUpOrStoped: true,
+    isIntroing: true,
+  });
+  const { innerHeight: screenHeight } = window;
+  function cme_scrollToY(y, duration = 0, element = document.scrollingElement) {
+    // cancel if already on target position
+    if (element.scrollTop === y) return;
 
+    const cosParameter = (element.scrollTop - y) / 2;
+    let scrollCount = 0,
+      oldTimestamp = null;
+
+    function step(newTimestamp) {
+      if (oldTimestamp !== null) {
+        // if duration is 0 scrollCount will be Infinity
+        scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
+        if (scrollCount >= Math.PI) return (element.scrollTop = y);
+        element.scrollTop =
+          cosParameter + y + cosParameter * Math.cos(scrollCount);
+      }
+      oldTimestamp = newTimestamp;
+      window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
+  const handleClick = () => {
+    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+  };
+  useWindowKeyboard("Enter", () => {
+    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+  });
+  useEffect(() => {
+    // const check
+    const progesslog = () => {
+      const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
+      const isIntroing = scrollYProgress.get() < 10 / 16;
+      setIsButtonShow((cur) => ({
+        isGoingUpOrStoped,
+        isIntroing,
+      }));
+    };
+    snapContainer.current.addEventListener("scroll", progesslog);
+    return () => {
+      snapContainer.current.removeEventListener("scroll", progesslog);
+    };
+  }, []);
+  return (
+    <button
+      className={cls(
+        "font-Clip text-xl bg-transparent text-white fixed top-[80vh] left-1/2 -translate-x-1/2 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
+        Object.values(isButtonShow).every((e) => e) ? "block" : "hidden"
+      )}
+      onClick={handleClick}
+    >
+      press Enter
+    </button>
+  );
+};
 const Intro = ({ scrollYProgress }) => {
   const scale1 = useTransform(
     scrollYProgress,
@@ -693,7 +768,7 @@ const Clipper = ({ scrollYProgress }) => {
     scrollYProgress,
     [
       0,
-      2 * s,
+      1.3 * s,
       4 * s - s / 10,
       4 * s,
       8.5 * s,
@@ -712,14 +787,14 @@ const Clipper = ({ scrollYProgress }) => {
     ],
     [
       "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.8) 100%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //0
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 40%,rgba(26, 18, 33,0.8) 40%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //2 * s
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.8) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //4 * s - s / 10
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.8) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //2 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 20%,rgba(26, 18, 33,0.8) 20%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //4 * s - s / 10
       "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //4 * s
       "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //8.5 * s
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //9 * s
-      "radial-gradient(circle at 50% 0%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //10 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 2%,#ffffff 2%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //9 * s
+      "radial-gradient(circle at 50% -200%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //10 * s
       "radial-gradient(circle at 40% 30%,rgba(0, 0, 0, 0) 70%,rgba(255, 255, 255,0.3) 70%,rgba(255, 255, 255,0.1) 100%,rgba(2, 0, 36, 1) 100%)", //11 * s
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(255, 255, 255,0.6) 100%,rgba(255, 255, 255,0.4) 100%,rgba(2, 0, 36, 1) 100%)", //11.5 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 20%,rgba(0, 0, 0,0.6) 20%,rgba(0, 0, 0,0.4) 100%,rgba(2, 0, 36, 1) 100%)", //11.5 * s
       "radial-gradient(circle at 60% 40%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12 * s
       "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12.5 * s
       "radial-gradient(circle at 45% 60%,rgba(0, 0, 0, 0) 75%,rgba(26, 18, 33,0.2) 75%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //13 * s
