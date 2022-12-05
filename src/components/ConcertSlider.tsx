@@ -59,7 +59,7 @@ const ConcertSlider = (): JSX.Element => {
             concerts.map((concert) => (
               <div key={concert.id}>
                 <div
-                  className="flex flex-col relative overflow-hidden w-[26rem] group m-5 gap-2 font-bold text-white cursor-pointer shadow-lg shadow-black"
+                  className="flex flex-col relative overflow-hidden w-[26rem] group m-5 gap-2 font-bold text-white cursor-pointer shadow-lg shadow-black rounded"
                   onClick={() => navigate(`/concerts/${concert.concertId}`)}
                 >
                   <div className="flex flex-col justify-between w-full h-[40%] absolute -bottom-full bg-black/80 group-hover:bottom-0 transition-all duration-700 peer z-10 p-4">
@@ -90,7 +90,7 @@ const ConcertSlider = (): JSX.Element => {
                   </div>
                   <img
                     title={concert.title}
-                    className="w-[26rem] h-[33rem] m-auto transition-all duration-700 ease-in-out hover:scale-110 peer-hover:scale-110"
+                    className="w-[26rem] h-[33rem] m-auto transition-all duration-700 ease-in-out rounded hover:scale-110 peer-hover:scale-110"
                     alt="img"
                     src={concert.posterUrl}
                   />

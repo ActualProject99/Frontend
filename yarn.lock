@@ -1217,6 +1217,16 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@flarelane/flarelane-web-sdk@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/@flarelane/flarelane-web-sdk/-/flarelane-web-sdk-0.2.3.tgz"
+  integrity sha512-gKxnIfpoX2qAbmINlKo5GnO3cs+zV+BverI7DauUY+1KWf6CkzPhDLlWR5sB4qDSHip1VP4mY4+CMX3OVH1oXA==
+  dependencies:
+    bowser "^2.11.0"
+    idb "^7.0.0"
+    path-to-regexp "^6.2.1"
+    uuid "^8.3.2"
+
 "@headlessui/react@^1.7.4":
   version "1.7.4"
   resolved "https://registry.npmjs.org/@headlessui/react/-/react-1.7.4.tgz"
@@ -3023,6 +3033,11 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
+
+bowser@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.npmjs.org/bowser/-/bowser-2.11.0.tgz"
+  integrity sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -5266,7 +5281,7 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   resolved "https://registry.npmjs.org/icss-utils/-/icss-utils-5.1.0.tgz"
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
-idb@^7.0.1:
+idb@^7.0.0, idb@^7.0.1:
   version "7.1.1"
   resolved "https://registry.npmjs.org/idb/-/idb-7.1.1.tgz"
   integrity sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==
@@ -7056,6 +7071,11 @@ path-to-regexp@^1.0.3:
   integrity sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==
   dependencies:
     isarray "0.0.1"
+
+path-to-regexp@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-6.2.1.tgz"
+  integrity sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==
 
 path-type@^4.0.0:
   version "4.0.0"
