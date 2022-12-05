@@ -157,7 +157,7 @@ const Nav = ({
                   <img
                     className="w-34 h-12"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670216652/KakaoTalk_20221205_140340263_01_iawauv.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670216652/KakaoTalk_20221205_140340263_ogwy5b.png"
                   />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
