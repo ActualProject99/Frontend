@@ -15,6 +15,14 @@
   font-family: "NeonBines";
   src: url(./fonts/NeonBines.ttf) format("truetype");
 }
+@font-face {
+  font-family: "Tonight";
+  src: url(./fonts/Tonight.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Clip";
+  src: url(./fonts/Clip.ttf) format("truetype");
+}
 
 *::-webkit-scrollbar {
   width: 10px;
