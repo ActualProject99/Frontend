@@ -32,10 +32,15 @@ export interface CommentForm {
   editcomment: string;
 }
 
-export interface IgetComment {
-  id?: number;
-  postId?: number;
+export interface IgetComment { 
+  concertId?: number;
+  id:number;
+  userId?: number;
+  commentId : number;
   comment: string;
+  name : string,
+  profileImg : string,
+  createdAt : string
 }
 interface Page {
   name: string;
@@ -79,11 +84,16 @@ export interface ArtistLike {
 }
 
 export interface IPayload {
-  id?: number;
-  postId?: number;
-  comment?: string;
+  concertId: string;
+  commentId: number;
+  id:number;
+  userId: number;
+  comment: string;
+  name: string;
+  profileImg: string;
+  createdAt: string;
   body?: {
-    postId?: number;
+    commentId: number;
     comment: string;
   };
 }
