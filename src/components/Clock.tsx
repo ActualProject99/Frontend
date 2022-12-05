@@ -2,14 +2,12 @@ import { addSeconds, format, getHours, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
-  IsGameDone,
   isGameDone,
-  IsGameSuccess,
   isGameSuccess,
-  IsRefreshedValid,
   isRefreshedValid,
 } from "../atoms/mockTicketing";
 import useInterval from "../hooks/useInterval";
+import { IsGameDone, IsGameSuccess, IsRefreshedValid } from "../types";
 
 const Clock = ({
   start = true,

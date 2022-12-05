@@ -1,8 +1,22 @@
-import { useRef, useEffect, ReactNode, forwardRef, LegacyRef } from "react";
+//@ts-nocheck
+import {
+  useRef,
+  useEffect,
+  ReactNode,
+  forwardRef,
+  LegacyRef,
+  useState,
+  useMemo,
+} from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
-import { mainContent, mainScrollRef } from "../atoms/mainContent";
-import { AnimatePresence, motion } from "framer-motion";
+import { MainContent, mainContent, mainScrollRef } from "../atoms/mainContent";
+import {
+  AnimatePresence,
+  motion as m,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import icons from "../components/icons";
 import main1 from "../image/main1.png";
 import main2 from "../image/main2.png";
@@ -12,9 +26,13 @@ import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
 import { cls } from "../utils";
 import Portal from "../components/Portal";
-const contrastColorNos = [1];
+import { isScrolled } from "../atoms/isScrolled";
+import { IsScrolled } from "../types";
+import useTimeout from "../hooks/useTimeout";
+import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
-  const [contentNo] = useRecoilState<number>(mainContent);
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   return (
     <Portal>
       <div className="h-6 lg:h-fit fixed flex flex-row items-end lg:items-start bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 gap-2 lg:flex-col lg:gap-2 lg:top-1/2 lg:-translate-y-1/2 lg:left-10">
@@ -38,19 +56,21 @@ const Indicator = () => {
   );
 };
 const ScrollTop = () => {
-  const [contentNo] = useRecoilState<number>(mainContent);
-  const [getMainScrollRef] = useRecoilState<HTMLDivElement | null>(
-    mainScrollRef
-  );
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
+  const [getMainScrollRef] = useRecoilState(mainScrollRef);
   const handleClick = () => {
-    getMainScrollRef?.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+    getMainScrollRef?.scrollTo({
+      left: 0,
+      top: 0,
+      behavior: "smooth",
+    });
   };
   return (
     <Portal>
       <icons.ArrowTurnUp
         onClick={handleClick}
         className={cls(
-          "fixed right-3 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
+          "fixed right-12 bottom-10 w-12 h-12 rounded-full shadow-lg flex justify-center items-center cursor-pointer",
           contrastColorNos.includes(contentNo) ? "text-white" : "text-black"
         )}
       />
@@ -85,6 +105,8 @@ const ContentCopy = ({
     </>
   );
 };
+const s = 0.0625; // === 1/16
+const k = 10 * s - (1 / 2) * s;
 const Main = () => {
   const snapContainer = useRef<HTMLDivElement | null>(null);
   const content1 = useRef<HTMLDivElement | null>(null);
@@ -94,18 +116,24 @@ const Main = () => {
   const content5 = useRef<HTMLDivElement | null>(null);
   const content6 = useRef<HTMLDivElement | null>(null);
   const content7 = useRef<HTMLDivElement | null>(null);
-  const [contentNo, setContentNo] = useRecoilState<number>(mainContent);
-  const [, setMainScrollRef] = useRecoilState<HTMLDivElement | null>(
-    mainScrollRef
-  );
+  const [contentNo, setContentNo] = useRecoilState<number | null>(mainContent);
+  const [getMainScrollRef, setMainScrollRef] = useRecoilState(mainScrollRef);
+  const [getIsScrolled] = useRecoilState<IsScrolled>(isScrolled);
+
+  const { scrollYProgress } = useScroll({
+    container: snapContainer,
+  });
   useEffect(() => {
     setContentNo(0);
   }, [setContentNo]);
   useEffect(() => {
-    createScrollSnap(
+    const { bind, unbind } = createScrollSnap(
       snapContainer.current as HTMLDivElement,
       {
         snapDestinationY: "100%",
+        timeout: 30,
+        duration: 200,
+        easing: (t) => t * t,
       },
       () => {
         [
@@ -119,8 +147,8 @@ const Main = () => {
         ].forEach((offsetTop, i) => {
           if (typeof offsetTop !== "undefined" && snapContainer.current) {
             if (
-              offsetTop < snapContainer.current?.scrollTop + 10 &&
-              offsetTop > snapContainer.current?.scrollTop - 10
+              offsetTop < snapContainer.current?.scrollTop + 100 &&
+              offsetTop > snapContainer.current?.scrollTop - 100
             ) {
               setContentNo(i);
             }
@@ -128,17 +156,32 @@ const Main = () => {
         });
       }
     );
-  }, [setContentNo]);
+    unbind();
+    const conditionalBind = () => {
+      if (scrollYProgress.get() > 9.5 / 16) {
+        bind();
+      } else {
+        unbind();
+      }
+    };
+    snapContainer.current?.addEventListener("scroll", conditionalBind);
+    return () => {
+      snapContainer.current?.addEventListener("scroll", conditionalBind);
+    };
+  }, [setContentNo, scrollYProgress]);
   useEffect(() => {
-    if (snapContainer.current) {
+    if (snapContainer && !getMainScrollRef) {
       setMainScrollRef(snapContainer.current);
     }
+    return () => {
+      setMainScrollRef(null);
+    };
   }, [setMainScrollRef]);
   const Content = forwardRef(
     ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
       return (
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
           ref={ref}
         >
           {children}
@@ -146,46 +189,56 @@ const Main = () => {
       );
     }
   );
+
   return (
     <>
-      <Indicator />
-      <ScrollTop />
+      {getIsScrolled ? (
+        <>
+          <Indicator />
+          <ScrollTop />
+        </>
+      ) : null}
       <div
         ref={snapContainer}
-        className="h-screen overflow-y-scroll scrollbar-hide"
+        className="relative h-screen overflow-y-scroll overflow-x-hidden [&:-webkit-scrollbar]:bg-black "
       >
+        <EnterButton
+          scrollYProgress={scrollYProgress}
+          snapContainer={snapContainer}
+        />
+        <Intro scrollYProgress={scrollYProgress} />
         <div
           ref={content1}
-          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative "
+          className="h-screen flex justify-center gap-3 items-center w-11/12 sm:w-[600px] md:w-[800px] mx-auto relative"
         >
           <div className="w-[320px]">
             {contentNo === 0 && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
                 className="bg-white/60 translate-y-20 py-3 rounded-3xl backdrop-blur-sm"
               >
-                <motion.p
+                <m.p
                   className="text-[40px] leading-[48px] font-extrabold mb-6 w-80"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
                   혼자만의 공연이 함께가 되는 곳
-                </motion.p>
-                <motion.p
+                </m.p>
+                <m.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.9 }}
                   className="text-2xl"
                 >
                   너와 나의 티켓고리
-                </motion.p>
-              </motion.div>
+                </m.p>
+              </m.div>
             )}
           </div>
-          <div className="absolute left-1/2 -translate-x-1/2 -z-10 lg:static lg:translate-x-0">
+          <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
             <img
               className="min-w-[340px] sm:min-w-[500px] h-[600px] md:min-w-[320px] md:w-[450px] md:h-[600px] object-contain"
               src={main1}
@@ -205,7 +258,7 @@ const Main = () => {
                     "티켓을 연결하는",
                     "Tgle",
                   ].map((e, i) => (
-                    <motion.div
+                    <m.div
                       key={i}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -215,7 +268,7 @@ const Main = () => {
                       )}
                     >
                       {e}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </>
               )}
@@ -230,7 +283,7 @@ const Main = () => {
                     "티켓을 연결하는",
                     "Tgle",
                   ].map((e, i) => (
-                    <motion.div
+                    <m.div
                       key={e}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -240,7 +293,7 @@ const Main = () => {
                       )}
                     >
                       {e}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </>
               )}
@@ -358,7 +411,7 @@ const Main = () => {
           >
             {contentNo === 6 && (
               <>
-                <motion.div
+                <m.div
                   initial={{
                     transform: "rotate3d(3,0,1,0deg)",
                     opacity: 0,
@@ -369,7 +422,6 @@ const Main = () => {
                   }}
                   transition={{ delay: 0.1 }}
                   className="grid grid-rows-3 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
-                  // style={{ transform: "rotate3d(3,0,1,20deg)" }}
                 >
                   {posters.map((poster) => (
                     <img
@@ -378,17 +430,17 @@ const Main = () => {
                       alt=""
                     />
                   ))}
-                </motion.div>
+                </m.div>
                 <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
                 <AnimatePresence>
                   <>
-                    <motion.div
+                    <m.div
                       initial={{ backdropFilter: "blur(0px)" }}
                       animate={{ backdropFilter: "blur(5px)" }}
                       transition={{ delay: 0.4 }}
                       className="h-screen w-screen absolute flex justify-center items-center"
-                    ></motion.div>
-                    <motion.div
+                    ></m.div>
+                    <m.div
                       initial={{ opacity: 0, x: 0 }}
                       animate={{ opacity: 1, x: 200 }}
                       transition={{ delay: 0.7 }}
@@ -401,17 +453,368 @@ const Main = () => {
                           Tgle
                         </span>
                       </p>
-                    </motion.div>
+                    </m.div>
                   </>
                 </AnimatePresence>
               </>
             )}
           </div>
         </div>
+        <Clipper scrollYProgress={scrollYProgress} />
       </div>
     </>
   );
 };
+const EnterButton = ({ scrollYProgress, snapContainer }) => {
+  const [isButtonShow, setIsButtonShow] = useState({
+    isGoingUpOrStoped: true,
+    isIntroing: true,
+  });
+  const { innerHeight: screenHeight } = window;
+  function cme_scrollToY(y, duration = 0, element = document.scrollingElement) {
+    // cancel if already on target position
+    if (element.scrollTop === y) return;
+
+    const cosParameter = (element.scrollTop - y) / 2;
+    let scrollCount = 0,
+      oldTimestamp = null;
+
+    function step(newTimestamp) {
+      if (oldTimestamp !== null) {
+        // if duration is 0 scrollCount will be Infinity
+        scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
+        if (scrollCount >= Math.PI) return (element.scrollTop = y);
+        element.scrollTop =
+          cosParameter + y + cosParameter * Math.cos(scrollCount);
+      }
+      oldTimestamp = newTimestamp;
+      window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
+  const handleClick = () => {
+    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+  };
+  useWindowKeyboard("Enter", () => {
+    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+  });
+  useEffect(() => {
+    // const check
+    const progesslog = () => {
+      const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
+      const isIntroing = scrollYProgress.get() < 10 / 16;
+      setIsButtonShow((cur) => ({
+        isGoingUpOrStoped,
+        isIntroing,
+      }));
+    };
+    snapContainer.current.addEventListener("scroll", progesslog);
+    return () => {
+      snapContainer.current.removeEventListener("scroll", progesslog);
+    };
+  }, []);
+  return (
+    <button
+      className={cls(
+        "font-Clip text-xl bg-transparent text-white fixed top-[80vh] left-1/2 -translate-x-1/2 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
+        Object.values(isButtonShow).every((e) => e) ? "block" : "hidden"
+      )}
+      onClick={handleClick}
+    >
+      press Enter
+    </button>
+  );
+};
+const Intro = ({ scrollYProgress }) => {
+  const scale1 = useTransform(
+    scrollYProgress,
+    [0, 4 * s, 9 * s, k],
+    [1.2, 1.2 + 0.8 * Math.random(), 4.5, 10]
+  );
+  const scale2 = useTransform(
+    scrollYProgress,
+    [0, 4 * s, 9 * s + s / 10, k],
+    [1.2, 1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
+  );
+  const scale3 = useTransform(
+    scrollYProgress,
+    [0, 4 * s, 9 * s + (s / 10) * 2, k],
+    [1.2, 1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
+  );
+  const scale4 = useTransform(
+    scrollYProgress,
+    [0, 4 * s, 9 * s + (s / 10) * 3, k],
+    [1.2, 1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
+  );
+  const scale5 = useTransform(
+    scrollYProgress,
+    [0, 4 * s, 9 * s + (s / 10) * 4, k],
+    [1.2, 1.2, 2.2 + 1.2 * Math.random(), 10]
+  );
+  const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
+  const centerRandom = (val: number) => Math.random() * val - val / 2;
+  const transformValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue, rndValue, centerRandom(size / 2)],
+    ];
+  };
+  const transformXValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue - 100, rndValue - 100, centerRandom(size / 2) - 100],
+    ];
+  };
+  const transformYValues = (size: number) => {
+    const rndValue = centerRandom(size);
+    return [
+      scrollYProgress,
+      [0, 4 * s, k],
+      [rndValue - 150, rndValue - 150, centerRandom(size / 2) - 150],
+    ];
+  };
+  const x1 = useTransform(...transformXValues(screenWidth));
+  const y1 = useTransform(...transformYValues(screenHeight));
+  const r1 = useTransform(...transformValues(90));
+  const x2 = useTransform(...transformXValues(screenWidth));
+  const y2 = useTransform(...transformYValues(screenHeight));
+  const r2 = useTransform(...transformValues(90));
+  const x3 = useTransform(...transformXValues(screenWidth));
+  const y3 = useTransform(...transformYValues(screenHeight));
+  const r3 = useTransform(...transformValues(90));
+  const x4 = useTransform(...transformXValues(screenWidth));
+  const y4 = useTransform(...transformYValues(screenHeight));
+  const r4 = useTransform(...transformValues(90));
+  const x5 = useTransform(...transformXValues(screenWidth));
+  const y5 = useTransform(...transformYValues(screenHeight));
+  const r5 = useTransform(...transformValues(90));
+  const x6 = useTransform(...transformXValues(screenWidth));
+  const y6 = useTransform(...transformYValues(screenHeight));
+  const r6 = useTransform(...transformValues(90));
+  const x7 = useTransform(...transformXValues(screenWidth));
+  const y7 = useTransform(...transformYValues(screenHeight));
+  const r7 = useTransform(...transformValues(90));
+  const x8 = useTransform(...transformXValues(screenWidth));
+  const y8 = useTransform(...transformYValues(screenHeight));
+  const r8 = useTransform(...transformValues(90));
+  const x9 = useTransform(...transformXValues(screenWidth));
+  const y9 = useTransform(...transformYValues(screenHeight));
+  const r9 = useTransform(...transformValues(90));
+  const x10 = useTransform(...transformXValues(screenWidth));
+  const y10 = useTransform(...transformYValues(screenHeight));
+  const r10 = useTransform(...transformValues(90));
+  const x11 = useTransform(...transformXValues(screenWidth));
+  const y11 = useTransform(...transformYValues(screenHeight));
+  const r11 = useTransform(...transformValues(90));
+  const x12 = useTransform(...transformXValues(screenWidth));
+  const y12 = useTransform(...transformYValues(screenHeight));
+  const r12 = useTransform(...transformValues(90));
+  const x13 = useTransform(...transformXValues(screenWidth));
+  const y13 = useTransform(...transformYValues(screenHeight));
+  const r13 = useTransform(...transformValues(90));
+  const x14 = useTransform(...transformXValues(screenWidth));
+  const y14 = useTransform(...transformYValues(screenHeight));
+  const r14 = useTransform(...transformValues(90));
+  const x15 = useTransform(...transformXValues(screenWidth));
+  const y15 = useTransform(...transformYValues(screenHeight));
+  const r15 = useTransform(...transformValues(90));
+  const x16 = useTransform(...transformXValues(screenWidth));
+  const y16 = useTransform(...transformYValues(screenHeight));
+  const r16 = useTransform(...transformValues(90));
+  const x17 = useTransform(...transformXValues(screenWidth));
+  const y17 = useTransform(...transformYValues(screenHeight));
+  const r17 = useTransform(...transformValues(90));
+  const x18 = useTransform(...transformXValues(screenWidth));
+  const y18 = useTransform(...transformYValues(screenHeight));
+  const r18 = useTransform(...transformValues(90));
+  const x19 = useTransform(...transformXValues(screenWidth));
+  const y19 = useTransform(...transformYValues(screenHeight));
+  const r19 = useTransform(...transformValues(90));
+  const x20 = useTransform(...transformXValues(screenWidth));
+  const y20 = useTransform(...transformYValues(screenHeight));
+  const r20 = useTransform(...transformValues(90));
+  const x21 = useTransform(...transformXValues(screenWidth));
+  const y21 = useTransform(...transformYValues(screenHeight));
+  const r21 = useTransform(...transformValues(90));
+  const x22 = useTransform(...transformXValues(screenWidth));
+  const y22 = useTransform(...transformYValues(screenHeight));
+  const r22 = useTransform(...transformValues(90));
+  const x23 = useTransform(...transformXValues(screenWidth));
+  const y23 = useTransform(...transformYValues(screenHeight));
+  const r23 = useTransform(...transformValues(90));
+  const x24 = useTransform(...transformXValues(screenWidth));
+  const y24 = useTransform(...transformYValues(screenHeight));
+  const r24 = useTransform(...transformValues(90));
+  const x25 = useTransform(...transformXValues(screenWidth));
+  const y25 = useTransform(...transformYValues(screenHeight));
+  const r25 = useTransform(...transformValues(90));
+  const x26 = useTransform(...transformXValues(screenWidth));
+  const y26 = useTransform(...transformYValues(screenHeight));
+  const r26 = useTransform(...transformValues(90));
+  const x27 = useTransform(...transformXValues(screenWidth));
+  const y27 = useTransform(...transformYValues(screenHeight));
+  const r27 = useTransform(...transformValues(90));
+  const x28 = useTransform(...transformXValues(screenWidth));
+  const y28 = useTransform(...transformYValues(screenHeight));
+  const r28 = useTransform(...transformValues(90));
+  const x29 = useTransform(...transformXValues(screenWidth));
+  const y29 = useTransform(...transformYValues(screenHeight));
+  const r29 = useTransform(...transformValues(90));
+  const x30 = useTransform(...transformXValues(screenWidth));
+  const y30 = useTransform(...transformYValues(screenHeight));
+  const r30 = useTransform(...transformValues(90));
+  const x31 = useTransform(...transformXValues(screenWidth));
+  const y31 = useTransform(...transformYValues(screenHeight));
+  const r31 = useTransform(...transformValues(90));
+  const x32 = useTransform(...transformXValues(screenWidth));
+  const y32 = useTransform(...transformYValues(screenHeight));
+  const r32 = useTransform(...transformValues(90));
+  const x33 = useTransform(...transformXValues(screenWidth));
+  const y33 = useTransform(...transformYValues(screenHeight));
+  const r33 = useTransform(...transformValues(90));
+  const x34 = useTransform(...transformXValues(screenWidth));
+  const y34 = useTransform(...transformYValues(screenHeight));
+  const r34 = useTransform(...transformValues(90));
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 4 * s - 0.1 * s, 4 * s, k],
+    [0, 0, 1, 0]
+  );
+  const opacityBack = useTransform(
+    scrollYProgress,
+    [0, 7 * s, 9 * s],
+    [1, 1, 0]
+  );
+  const opacityBlock = useTransform(
+    scrollYProgress,
+    [0, 1 * s, 2 * s],
+    [1, 1, 0]
+  );
+  const motionProps = [
+    [x1, y1, scale1, opacity, r1],
+    [x2, y2, scale1, opacity, r2],
+    [x3, y3, scale1, opacity, r3],
+    [x4, y4, scale1, opacity, r4],
+    [x5, y5, scale1, opacity, r5],
+    [x6, y6, scale1, opacity, r6],
+    [x7, y7, scale1, opacity, r7],
+    [x8, y8, scale1, opacity, r8],
+    [x9, y9, scale1, opacity, r9],
+    [x10, y10, scale1, opacity, r10],
+    [x11, y11, scale1, opacity, r11],
+    [x12, y12, scale1, opacity, r12],
+    [x13, y13, scale2, opacity, r13],
+    [x14, y14, scale2, opacity, r14],
+    [x15, y15, scale3, opacity, r15],
+    [x16, y16, scale3, opacity, r16],
+    [x17, y17, scale3, opacity, r17],
+    [x18, y18, scale4, opacity, r18],
+    [x19, y19, scale4, opacity, r19],
+    [x20, y20, scale4, opacity, r20],
+    [x21, y21, scale4, opacity, r21],
+    [x22, y22, scale4, opacity, r22],
+    [x23, y23, scale4, opacity, r23],
+    [x24, y24, scale4, opacity, r24],
+    [x25, y25, scale4, opacity, r25],
+    [x26, y26, scale4, opacity, r26],
+    [x27, y27, scale5, opacity, r27],
+    [x28, y28, scale5, opacity, r28],
+    [x29, y29, scale5, opacity, r29],
+    [x30, y30, scale5, opacity, r30],
+    [x31, y31, scale5, opacity, r31],
+    [x32, y32, scale5, opacity, r32],
+    [x33, y33, scale5, opacity, r33],
+    [x34, y34, scale5, opacity, r34],
+  ].map((e, i) => ({
+    style: { x: e[0], y: e[1], scale: e[2], opacity: e[3], rotate: e[4] },
+    src: posters[i],
+  }));
+  return (
+    <div className="bg-gradient-to-b h-[1000vh] w-8">
+      <m.div
+        style={{ opacity: opacityBlock }}
+        className="w-screen h-screen top-0 left-0 -z-10 fixed bg-[url('https://previews.123rf.com/images/rawpixel/rawpixel1603/rawpixel160305951/53433656-%EB[…]%EA%B5%AC%EC%B2%B4%EC%A0%81%EC%9D%B8-%EA%B0%9C%EB%85%90.jpg')]"
+      ></m.div>
+      <m.div
+        className="fixed w-screen h-screen top-0 left-0 -z-10 bg-radial flex justify-center items-center "
+        style={{ opacity: opacityBack }}
+      >
+        <m.span
+          style={{ opacity: opacityBlock }}
+          className="font-NeonBines animate-flicker text-9xl text-white flex justify-center items-center"
+        >
+          Tgle
+        </m.span>
+      </m.div>
+      {motionProps.map((prop, i) => (
+        <m.img
+          key={i}
+          {...prop}
+          className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        ></m.img>
+      ))}
+    </div>
+  );
+};
+
+const Clipper = ({ scrollYProgress }) => {
+  const background = useTransform(
+    scrollYProgress,
+    [
+      0,
+      1.3 * s,
+      4 * s - s / 10,
+      4 * s,
+      8.5 * s,
+      9 * s,
+      10 * s,
+      11 * s,
+      11.5 * s,
+      12 * s,
+      12.5 * s,
+      13 * s,
+      13.5 * s,
+      14 * s,
+      14.5 * s,
+      15 * s,
+      1,
+    ],
+    [
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.8) 100%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //0
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 30%,rgba(26, 18, 33,0.8) 30%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //2 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 20%,rgba(26, 18, 33,0.8) 20%,rgba(26, 18, 33,0.3) 100%,rgba(225, 225, 225, 1) 100%)", //4 * s - s / 10
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //4 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,#ffffff 100%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //8.5 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 2%,#ffffff 2%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //9 * s
+      "radial-gradient(circle at 50% -200%,rgba(0, 0, 0, 0) 0%,#ffffff 0%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //10 * s
+      "radial-gradient(circle at 40% 30%,rgba(0, 0, 0, 0) 70%,rgba(255, 255, 255,0.3) 70%,rgba(255, 255, 255,0.1) 100%,rgba(2, 0, 36, 1) 100%)", //11 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 20%,rgba(0, 0, 0,0.6) 20%,rgba(0, 0, 0,0.4) 100%,rgba(2, 0, 36, 1) 100%)", //11.5 * s
+      "radial-gradient(circle at 60% 40%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //12.5 * s
+      "radial-gradient(circle at 45% 60%,rgba(0, 0, 0, 0) 75%,rgba(26, 18, 33,0.2) 75%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //13 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 105%,rgba(26, 18, 33,0.2) 105%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //13.5 * s
+      "radial-gradient(circle at 60% 20%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14.5 * s
+      "radial-gradient(circle at 30% 80%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //15 * s
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //1
+    ]
+  );
+  return (
+    <m.div
+      style={{
+        background,
+      }}
+      className="fixed left-0 top-0 w-screen h-screen -z-10"
+    ></m.div>
+  );
+};
+
 export default Main;
 
 const posters = [
@@ -448,4 +851,11 @@ const posters = [
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221114114152db099f86-a006-4626-af46-5bc648720d0d.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221116125917358d9f1c-1d50-4b36-b313-c23a1e82b6ca.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
   "https://cdnticket.melon.co.kr/resource/image/upload/product/2022/11/20221121182038d18fbe09-ef9f-4415-9a8c-ea8e36fc081a.jpg/melon/resize/180x254/strip/true/quality/90/optimize",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811278/nahoona55th_bridge_big_tqczd6.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811279/%EC%95%84%EC%9D%B4%EC%9C%A0_n8qclt.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1668610025/10cm_%ED%8F%AC%EC%8A%A4%ED%84%B0_udawch.png",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811267/EGGTMSMMBSWGNZRU3FIY6KGOVQ_uhy71h.webp",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811267/20141104084410_534084_400_600_nvxiu2.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811279/2022110114012832258_1_c4vjpz.jpg",
+  "https://res.cloudinary.com/dwlshjafv/image/upload/v1669811364/image_readtop_2022_968182_16672057175215847_xlztje.jpg",
 ];

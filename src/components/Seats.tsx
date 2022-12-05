@@ -2,15 +2,12 @@ import { MouseEventHandler, useEffect, useMemo } from "react";
 import { cls, highDimArr } from "../utils";
 import { useRecoilState } from "recoil";
 import {
-  HasBooked,
   hasBooked,
-  HasPlaced,
   hasPlaced,
   isGameSuccess,
-  IsGameSuccess,
-  UserSelected,
   userSelected,
 } from "../atoms/mockTicketing";
+import { HasBooked, HasPlaced, IsGameSuccess, UserSelected } from "../types";
 const Seat = ({
   isTaken,
   onClick,

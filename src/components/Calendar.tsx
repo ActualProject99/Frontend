@@ -12,20 +12,15 @@ import {
   startOfToday,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useEffect } from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { dateSelected } from "../atoms/date";
+import { dateSelected, monthConcerts } from "../atoms/date";
 import icons from "../components/icons";
+import { CalendarProps } from "../types";
 import { cls } from "../utils";
+import ConcertApi from "../apis/query/ConcertApi";
 
-interface Props {
-  checkedDates?: Date[];
-  className?: string;
-  selectable?: boolean;
-  selectedDate?: Date;
-}
-export const CalenderDrawer = () => {
+export const CalendarDrawer = () => {
   return (
     <icons.Calendar
       className="w-16 transition-colors py-2 pr-2 h-14 flex justify-end items-center rounded-r-xl bg-primary-200 text-gray-900 group hover:bg-primary-600 hover:text-gray-100"
@@ -38,9 +33,9 @@ const Calendar = ({
   className,
   selectable,
   selectedDate,
-}: Props) => {
+}: CalendarProps) => {
   let today = startOfToday();
-  let [dateChosen, setdateChosen] = useState(today);
+  let [dateChosen, setdateChosen] = useState<Date | null>(null);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [, setDateSelected] = useRecoilState(dateSelected);
@@ -48,6 +43,14 @@ const Calendar = ({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
+
+  const [, setMonthdata] = useRecoilState(monthConcerts);
+  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
+    locale: ko,
+  }).split(" ");
+  const payload = Number(month.split("월")[0]);
+  setMonthdata(payload);
+
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
@@ -57,13 +60,19 @@ const Calendar = ({
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
   const handleClickDate = (day: Date) => () => {
-    setdateChosen(day);
-    setDateSelected(day);
+    if (
+      !dateChosen ||
+      (dateChosen &&
+        format(day, "yyyy MM d") !== format(dateChosen, "yyyy MM d"))
+    ) {
+      setdateChosen(day);
+      setDateSelected(day);
+    } else {
+      setdateChosen(null);
+      setDateSelected(null);
+    }
   };
-  const [year, month] = format(firstDayCurrentMonth, "yyyy MMMM", {
-    locale: ko,
-  }).split(" ");
-  useEffect(() => {}, []);
+
   return (
     <div className={cls(className)}>
       <div className="flex items-center border-b-[4px] border-dotted pb-3">
@@ -97,21 +106,21 @@ const Calendar = ({
         <div>금</div>
         <div>토</div>
       </div>
-      <div className="grid grid-cols-7 mt-2 text-sm border-b-[4px] border-dotted pb-3">
+      <div className="grid grid-cols-7 text-sm border-b-[4px] border-dotted">
         {days.map((day, dayIdx) => {
           return (
             <div
               key={day.toString()}
               className={cls(
                 dayIdx === 0 && colStartClasses[getDay(day)],
-                "py-1.5"
+                "py-0.5"
               )}
             >
               <button
                 type="button"
                 onClick={selectable ? handleClickDate(day) : () => {}}
                 className={
-                  selectable
+                  selectable && dateChosen
                     ? cls(
                         isEqual(day, dateChosen) && "text-white",
                         !isEqual(day, dateChosen) &&

@@ -1,32 +1,9 @@
-import React, { useState, useCallback } from "react";
-import icons from "../icons";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
-import ConcertApi from "../../apis/query/ConcertApi";
-import { IGetArtistConcert } from "../../apis/query/ArtistAPI";
-
-interface ArtistProps {
-  artistConcert: IGetArtistConcert;
-}
+import { ArtistProps } from "../../types";
 
 const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
   const navigate = useNavigate();
-
-  // const [like, setLike] = useState(false);
-  // const queryClient = useQueryClient();
-  // const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
-
-  // const onEditLike = useCallback(() => {
-  //   const payload = {
-  //     concertId: artistConcert.concertId,
-  //     like: !artistConcert.like,
-  //   };
-  //   EditLike(payload).then(() => {
-  //     console.log("pay", payload);
-  //     queryClient.invalidateQueries(["concert"]);
-  //   });
-  //   setLike((prev) => !prev);
-  // }, [EditLike, artistConcert.concertId, artistConcert.like, queryClient]);
 
   return (
     <>
@@ -51,19 +28,6 @@ const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
           )}
           <p className="text-sm">{artistConcert.playTime}</p>
           <p className="text-sm font-bold">{artistConcert.locationName}</p>
-          {/* <div className="flex justify-end w-[92%] ">
-            {!like ? (
-              <icons.FullHeart
-                className="text-red-500 cursor-pointer transition-all ease-in-out  opacity-0 group-hover:opacity-100"
-                onClick={onEditLike}
-              />
-            ) : (
-              <icons.EmptyHeart
-                className="text-red-500 cursor-pointer transition-all ease-in-out  opacity-0 group-hover:opacity-100"
-                onClick={onEditLike}
-              />
-            )}
-          </div> */}
         </div>
       </div>
     </>

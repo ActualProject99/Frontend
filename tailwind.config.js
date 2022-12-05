@@ -9,8 +9,12 @@ module.exports = {
     extend: {
       animation: {
         "ping-small": "ping-small 1s cubic-bezier(0, 0, 0.2, 1) infinite;",
-        "toast-right": "2s linear toast-right",
+        "toast-right": "1.5s linear toast-right",
         wiggle: "wiggle 1s ease-in-out infinite",
+        "text-erase": "2s linear text-erase",
+        pulsate: "pulsate 1s ease-in-out infinite alternate;",
+        flicker: "flicker 1.5s infinite alternate;",
+        "popup-right": "0.3s ease-in popup-right",
       },
       keyframes: {
         "ping-small": {
@@ -29,13 +33,66 @@ module.exports = {
           "0%, 100%": { transform: "rotate(-3deg)" },
           "50%": { transform: "rotate(3deg)" },
         },
+        "text-erase": {
+          "0%": { width: "140px" },
+          "100%": { width: 0 },
+        },
+        pulsate: {
+          "100%": {
+            /* Larger blur radius */ textShadow:
+              "0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #f09, 0 0 80px #f09, 0 0 90px #f09, 0 0 100px #f09, 0 0 150px #f09;",
+          },
+          "0%": {
+            /* A slightly smaller blur radius */ textShadow:
+              "0 0 4px #fff, 0 0 10px #fff, 0 0 18px #fff, 0 0 38px #f09, 0 0 73px #f09, 0 0 80px #f09, 0 0 94px #f09, 0 0 140px #f09;",
+          },
+        },
+        flicker: {
+          "0%, 18%, 22%, 25%, 53%, 57%, 100% ": {
+            textShadow: `0 0 4px #fff,
+              0 0 11px #fff,
+              0 0 19px #fff,
+              0 0 40px #ec008b,
+              0 0 80px #ec008b,
+              0 0 90px #ec008b,
+              0 0 100px #ec008b,
+              0 0 150px #ec008b;`,
+          },
+          "20%, 24%, 55%": {
+            textShadow: "none;",
+          },
+        },
+        "popup-right": {
+          "0%": { transform: "translateX(0)", opacity: 0, right: 0 },
+          "100%": { transform: "translateX(50%)", opacity: 1, right: "50%" },
+        },
       },
       width: {
         "screen-scroll": "calc(100vw - 18px)",
+        "screen-scroll-double": "calc(100vw - 80px)",
+      },
+      backgroundImage: {
+        radial:
+          "radial-gradient(closest-side, rgba(0,0,0,0.90), rgba(0,0,0), #000);",
+        "left-top-hall":
+          "radial-gradient(ellipse at left top,rgba(0, 0, 0, 0) 20%,#ffffff 20%,#ffffff 100%,rgba(2, 0, 36, 1) 100%);",
+        "center-top-hall":
+          "radial-gradient(ellipse at center top,rgba(0, 0, 0, 0) 20%,#ffffff 20%,#ffffff 100%,rgba(2, 0, 36, 1) 100%);",
+        "right-top-hall":
+          "radial-gradient(ellipse at right top,rgba(0, 0, 0, 0) 20%,#ffffff 20%,#ffffff 100%,rgba(2, 0, 36, 1) 100%);",
+        "left-center-hall":
+          "radial-gradient(ellipse at left center,rgba(0, 0, 0, 0) 20%,#ffffff 20%,#ffffff 100%,rgba(2, 0, 36, 1) 100%);",
+        "right-center-hall":
+          "radial-gradient(ellipse at right center,rgba(0, 0, 0, 0) 20%,#ffffff 20%,#ffffff 100%,rgba(2, 0, 36, 1) 100%);",
       },
       fontFamily: {
         logo: ["lemon"],
         base: ["Oswold", "sans-serif"],
+        neon: ["NEON"],
+        NeonBines: ["NeonBines"],
+        dohyen: ["Do Hyeon"],
+        Tonight: ["Tonight"],
+        Clip: ["Clip"],
       },
       colors: {
         primary: {

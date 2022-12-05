@@ -1,19 +1,21 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { initUser, User, userState } from "../atoms/user";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
-import { mainContent } from "../atoms/mainContent";
-import { scrollable } from "../atoms/scrollable";
+import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
 import { useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
-import userDefault from "../image/userDefault.png";
 import UserInfo from "./userInfo/UserInfo";
 import { getCookieToken, removeCookieToken } from "../apis/cookie";
-import useToast from "../hooks/useToast";
+import { pages } from "../routes";
+import { motion as m, AnimatePresence } from "framer-motion";
+import useIsScrolled from "../hooks/window/useHowMuchScroll";
+import UserApi from "../apis/query/UserApi";
+import { MainContent, MainScrollRef } from "../types";
+import useTicketPop from "../hooks/useTicketPop";
 
 const Search = ({
   viewer,
@@ -66,54 +68,48 @@ const Nav = ({
   normal?: boolean;
   landing?: boolean;
 }) => {
-  const { toggler, ModalContent } = useModal("sm", <UserInfo />);
-
-  const pages = [
-    { name: "홈", path: "/", title: "Home | Tgle", isNav: false },
-    { name: "Concert", path: "concerts", title: "Concert | Tgle", isNav: true },
-    {
-      name: "Game",
-      path: "game",
-      title: "Play Ticketing | Tgle",
-      isNav: true,
-    },
-    {
-      name: "My Picks!",
-      path: "user/mypick",
-      title: "my Picks | Tgle",
-      isNav: true,
-    },
-    { name: "login", path: "user/login", title: "log in | Tgle", isNav: false },
-    {
-      name: "signup",
-      path: "user/signup",
-      title: "sign up | Tgle",
-      isNav: false,
-    },
-  ];
   const { pathname } = useLocation();
-  const [{ isLoggedin }, setUser] = useRecoilState<User>(userState);
-  const [contentNo] = useRecoilState<number>(mainContent);
-  const { Toasts, toasted } = useToast("로그인이후 이용해주세요");
+  const [contentNo] = useRecoilState<MainContent>(mainContent);
   const cookie = getCookieToken();
   const navigate = useNavigate();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
+  const { data: user } = UserApi.GetUserInfo();
 
+  const { Ticket, poped, userInput } = useTicketPop(
+    "정말 로그아웃 하시겠어요?",
+    {
+      cacelButton: false,
+      userInputs: {
+        예: {
+          value: () => {
+            removeCookieToken();
+            navigate("/concerts");
+          },
+          className: "bg-accent-main text-white",
+        },
+        아니요: null,
+      },
+      toastOnly: false,
+      type: "info",
+    }
+  );
+  const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
-      return toasted();
+      return poped("로그인 후 이용해주세요!😉", {
+        isToastOnly: true,
+        newType: "warn",
+      });
     if (!pathname.includes(path)) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
   };
-
   const handleClickLogout = () => {
-    window.alert("로그아웃 되었습니다.");
-    removeCookieToken();
-    navigate("/");
-    // setUser(initUser);
+    poped();
   };
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   const handleClickSearchOn = () => {
     setIsSearchVisible(true);
   };
@@ -128,37 +124,44 @@ const Nav = ({
     shiftKey: true,
     altKey: false,
   });
+  const { getIsScrolled } = useIsScrolled({
+    ref: getMainScrollRef,
+    value: window.innerHeight * 10 - 100,
+  });
   useEffect(() => {
-    pages.forEach((page) => {
+    Object.values(pages).forEach((page) => {
       if (pathname.includes(page.path)) {
         document.title = page.title;
       }
     });
   }, [pathname]);
-
   return (
     <Portal>
-      <Toasts />
+      <Ticket />
+
       <nav
+        id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 w-screen py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 py-2 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
         {normal ? (
           <div className="flex items-center">
-            <div className="min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between items-center">
+            <div className="min-w-[360px] w-screen mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
-                <div className="w-[140px] h-10 rounded">
-                  <Link
-                    className="w-full h-full block font-logo text-4xl"
-                    to=""
-                  >
-                    Tgle
-                  </Link>
+                <div
+                  className="w-[140px] h-10 rounded ml-10 cursor-pointer"
+                  onClick={() => navigate("/")}
+                >
+                  <img
+                    className="w-34 h-12"
+                    alt="logo"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670224597/KakaoTalk_20221205_144918151_ivwxck.png"
+                  />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
-                  {pages.map((page, i) =>
+                  {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li
                         key={i}
@@ -175,7 +178,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 flex items-center justify-between gap-3">
+              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
@@ -202,10 +205,10 @@ const Nav = ({
                       </div>
                       <img
                         alt="profile"
-                        src="https://res.cloudinary.com/dwlshjafv/image/upload/v1668536436/AKR20210520093900005_04_i_P4_hwz8en.jpg"
+                        src={user?.profileImg}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
-                      ></img>
+                      />
                     </>
                   ) : (
                     <Link
@@ -222,23 +225,32 @@ const Nav = ({
             </div>
           </div>
         ) : (
-          <div
-            className={cls(
-              "min-w-[360px] w-[95%] xl:w-[1200px] mx-auto flex justify-between gap-12 items-center",
-              contentNo === 1 ? "text-white" : "text-black"
-            )}
-          >
-            <div className="text-5xl py-2 font-logo cursor-pointer">Tgle</div>
-            <ul className="flex gap-10 text-lg font-logo">
-              {pages.map((page, i) =>
-                page.isNav ? (
-                  <li key={i}>
-                    <Link to={page.path}>{page.name}</Link>
-                  </li>
-                ) : null
-              )}
-            </ul>
-          </div>
+          <AnimatePresence>
+            {getIsScrolled ? (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className={cls(
+                  "min-w-[360px] w-screen-scroll-double mx-auto flex justify-between gap-12 items-center",
+                  contentNo === 1 ? "text-white" : "text-black"
+                )}
+              >
+                <div className="text-5xl py-2 font-logo cursor-pointer">
+                  Tgle
+                </div>
+                <ul className="flex gap-10 text-lg font-logo">
+                  {Object.values(pages).map((page, i) =>
+                    page.isNav ? (
+                      <li key={i}>
+                        <Link to={page.path}>{page.name}</Link>
+                      </li>
+                    ) : null
+                  )}
+                </ul>
+              </m.div>
+            ) : null}
+          </AnimatePresence>
         )}
       </nav>
       {isSearchVisible ? (
@@ -254,61 +266,57 @@ const Nav = ({
   );
 };
 const Footer = () => {
-  const members = [
-    {
-      name: "임요한",
-      position: "frontend",
-      github: "https://github.com/obov",
-    },
-    {
-      name: "김혁진",
-      position: "frontend",
-      github: "https://github.com/rklskhj",
-    },
-    {
-      name: "이민기",
-      position: "frontend",
-      github: "https://github.com/Pasilda123",
-    },
-    {
-      name: "예지완",
-      position: "backend",
-      github: "https://github.com/kmdet1235",
-    },
-    {
-      name: "박민호",
-      position: "backend",
-      github: "https://github.com/maino96",
-    },
-    {
-      name: "김정환",
-      position: "backend",
-      github: "https://github.com/jeongpal",
-    },
-    { name: "이주연", position: "designer", github: "" },
-  ];
   return (
-    <div className="bg-primary-800 h-96 pt-28 flex">
-      <div className="w-[1200px] h-full mx-auto flex justify-center items-start gap-24 text-white">
-        <div className="flex flex-col items-center">
-          <div className="font-logo text-7xl"> Tgle</div>
-          <div className="mt-4">티켓팅을 즐겁게</div>
-        </div>
-        <div className="flex gap-16">
-          {["frontend", "backend", "designer"].map((position) => (
-            <div key={position} className="flex flex-col items-center">
-              <span className="text-xl inline-block mb-3 capitalize">
-                {position}
-              </span>
-              {members.map((member) =>
-                member.position === position ? (
-                  <div key={member.name} className="flex gap-3">
-                    <div>{member.name}</div>
-                  </div>
-                ) : null
-              )}
+    <div className="bg-primary-800 h-96 pt-20 flex">
+      <div className="w-[1200px] h-full mx-auto flex justify-center items-start gap-24 ">
+        <div className="flex flex-col justify-center items-center">
+          <div className="flex items-center w-[32rem]">
+            <div className="flex items-baseline w-[27rem] h-12 rounded-tl-md pt-1 bg-accent-main gap-2">
+              <p className="font-logo text-black text-3xl ml-4"> Tgle</p>
+              <p className="text-[#e8e8e8] text-sm font-bold">
+                Have Fun Ticketing ♬
+              </p>
             </div>
-          ))}
+            <div className="flex items-center justify-center text-xs font-bold border-l-2 border-dashed rounded-tr-md w-[6.2rem] h-12 bg-accent-main">
+              <p>
+                T<span className="text-[#e8e8e8]">icket</span> Jun
+                <span className="text-[#e8e8e8]">gle</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center w-[32rem] h-44 rounded-b-md bg-white gap-9 shadow-xl shadow-black/80">
+            <div className="flex gap-8">
+              {["frontend", "backend", "designer"].map((position) => (
+                <div
+                  key={position}
+                  className="flex flex-col items-center gap-2"
+                >
+                  <span className="text-lg font-logo inline-block mb-1 capitalize">
+                    {position}
+                  </span>
+                  {members.map((member) =>
+                    member.position === position ? (
+                      <div
+                        title={member.github}
+                        key={member.name}
+                        className="flex gap-3 font-bold cursor-pointer hover:text-accent-main"
+                        onClick={() => window.open(member.github)}
+                      >
+                        <div>{member.name}</div>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center items-center w-14 border-l-2 border-dashed">
+              <img
+                className="h-44 ml-10"
+                alt="barcode"
+                src="https://res.cloudinary.com/dwlshjafv/image/upload/v1669909776/pngegg_3_p83lrn.png"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -316,7 +324,6 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
-  const [getScrollable] = useRecoilState<boolean>(scrollable);
   return (
     <>
       {pathname === "/" ? (
@@ -325,9 +332,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </>
       ) : (
-        <div
-          className={cls("min-h-screen", getScrollable || "overflow-hidden")}
-        >
+        <div className={cls("min-h-screen")}>
           <Nav normal />
           <div className="min-w-[360px] w-[1200px] mx-auto min-h-screen py-4 mt-24">
             {children}
@@ -339,3 +344,36 @@ const Layout = ({ children }: { children: ReactNode }) => {
   );
 };
 export default Layout;
+const members = [
+  {
+    name: "임요한",
+    position: "frontend",
+    github: "https://github.com/obov",
+  },
+  {
+    name: "김혁진",
+    position: "frontend",
+    github: "https://github.com/rklskhj",
+  },
+  {
+    name: "이민기",
+    position: "frontend",
+    github: "https://github.com/Pasilda123",
+  },
+  {
+    name: "예지완",
+    position: "backend",
+    github: "https://github.com/kmdet1235",
+  },
+  {
+    name: "박민호",
+    position: "backend",
+    github: "https://github.com/maino96",
+  },
+  {
+    name: "김정환",
+    position: "backend",
+    github: "https://github.com/jeongpal",
+  },
+  { name: "이주연", position: "designer", github: "" },
+];

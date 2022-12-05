@@ -1,4 +1,5 @@
-import { LoginForm, CommentForm, OptionCreator } from "./types";
+import { activate } from "./apis/instance";
+import { LoginForm, CommentForm, OptionCreator, baseArr } from "./types";
 
 export const cls = (...classes: (string | undefined | boolean)[]) =>
   classes
@@ -52,8 +53,8 @@ export const regOptLogin = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9]{3,10}$/,
-        message: "한글, 숫자를 혼용하여 입력해주세요",
+        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
         value: 3,
@@ -63,6 +64,12 @@ export const regOptLogin = {
         value: 10,
         message: "10자 이하의 닉네임만 사용가능합니다",
       },
+      validate: {
+        doubleCheck: async (v: string) => {
+          const { data } = await activate.get(`/users/userinfo?queryName=${v}`);
+          return data.ok || "닉네임이 중복됩니다!";
+        },
+      },
     },
   ]),
   phoneNumber: optionCreator<LoginForm>([
@@ -70,8 +77,8 @@ export const regOptLogin = {
     {
       required: "연락처를 입력해주세요",
       pattern: {
-        value: /^[0-9\b -]{0,11}$/,
-        message: "숫자 11자 이하만 가능합니다.",
+        value: /^(010|011|016|017|018|019)[0-9\b ]{0,11}$/,
+        message: "'-'없이, 휴대번호 형식만 가능합니다.",
       },
     },
   ]),
@@ -92,7 +99,7 @@ export const regOptComment = {
     },
   ]),
   editcomment: optionCreator<CommentForm>([
-    "editcomment",
+    "comment",
     {
       maxLength: {
         value: 300,
@@ -132,8 +139,6 @@ export const shuffle = (array: any[]) => {
   return array;
 };
 
-type baseArr = any[] | baseArr[];
-
 export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   const arrDim = (Arr: baseArr) => {
     let i = 0;
@@ -151,4 +156,14 @@ export const highDimArr = (Arr: baseArr, indexs: number[]) => {
   if (arrDim(Arr) !== indexs.length) return;
   const iter = indexs[Symbol.iterator]();
   return itering(Arr, iter);
+};
+
+export const filterClassStartwith = (
+  className: string,
+  ...starts: string[]
+) => {
+  return className
+    .split(" ")
+    .filter((cn) => starts.some((st) => cn.startsWith(st)))
+    .join(" ");
 };

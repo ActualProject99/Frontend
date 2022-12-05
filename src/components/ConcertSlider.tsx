@@ -29,20 +29,20 @@ const ConcertSlider = (): JSX.Element => {
     autoplaySpeed: 4000,
     pauseOnHover: true,
     centerPadding: "60px",
-    slidesToShow: 5,
+    slidesToShow: 3,
     slidesToScroll: 1,
     speed: 1000,
     arrows: true,
     prevArrow: (
       <div>
-        <div className="flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-10 absolute left-14 top-[1.25rem;] bg-[#ffffff6b]">
+        <div className="flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-10 absolute left-14 top-[1.25rem;] bg-black/30">
           <img alt="prev" src={Prev} />
         </div>
       </div>
     ),
     nextArrow: (
       <div>
-        <div className=" flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-1 absolute text-right right-16 bg-[#ffffff6b]">
+        <div className=" flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-1 absolute text-right right-16 bg-black/30">
           <img alt="next" src={Next} />
         </div>
       </div>
@@ -50,39 +50,50 @@ const ConcertSlider = (): JSX.Element => {
   };
   return (
     <div className="relative">
-      <div className="flex flex-col w-screen-scroll h-[43rem] absolute left-1/2 -translate-x-1/2 overflow-hidden bg-[#63468f]">
-        <div className="flex justify-center items-center  w-52 h-14  text-2xl font-bold">
-          HOT CONCERT
-        </div>
+      <div className="flex flex-col justify-center w-screen-scroll h-[43rem] absolute left-1/2 -translate-x-1/2 overflow-hidden bg-primary-900">
+        {/* <div className="flex justify-center items-center w-64 h-16 text-3xl text-accent-main font-logo">
+          <p className="ml-5 text-shadow">HOT CONCERT</p>
+        </div> */}
         <Slider {...settings}>
           {concerts &&
             concerts.map((concert) => (
-              <div>
-                <div className="flex flex-col justify-center items-start m-5 gap-2 font-bold">
+              <div key={concert.id}>
+                <div
+                  className="flex flex-col relative overflow-hidden w-[26rem] group m-5 gap-2 font-bold text-white cursor-pointer shadow-lg shadow-black rounded"
+                  onClick={() => navigate(`/concerts/${concert.concertId}`)}
+                >
+                  <div className="flex flex-col justify-between w-full h-[40%] absolute -bottom-full bg-black/80 group-hover:bottom-0 transition-all duration-700 peer z-10 p-4">
+                    <div>
+                      <p className="text-2xl">{concert.title}</p>
+                    </div>
+                    <div className="flex flex-col justify-end items-end gap-x-3">
+                      {concert.buy === "인터파크 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#EF554D]/60 text-white rounded">
+                          인터파크 단독
+                        </div>
+                      ) : null}
+                      {concert.buy === "melon 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#41D26B]/60 text-white rounded">
+                          melon 단독
+                        </div>
+                      ) : null}
+                      {concert.buy === "yse24 단독" ? (
+                        <div className="flex justify-center items-center w-28 bg-[#196ab3]/60 text-white rounded">
+                          yse24 단독
+                        </div>
+                      ) : null}
+                      <p className="text-xl text-accent-main">
+                        {concert.showTimes}
+                      </p>
+                      <p className="text-xl">{concert.location}</p>
+                    </div>
+                  </div>
                   <img
                     title={concert.title}
-                    className="w-full h-[25rem] m-auto transition-all ease-in-out hover:scale-110 shadow-md shadow-white/50"
+                    className="w-[26rem] h-[33rem] m-auto transition-all duration-700 ease-in-out rounded hover:scale-110 peer-hover:scale-110"
                     alt="img"
                     src={concert.posterUrl}
                   />
-                  {concert.title.length < 11 ? (
-                    <p className="flex mt-5 w-72 text-xl">{concert.title}</p>
-                  ) : (
-                    <p
-                      title={concert.title}
-                      className="w-72 mt-5 text-xl overflow-hidden text-ellipsis whitespace-nowrap"
-                    >
-                      {concert.title}
-                    </p>
-                  )}
-                  <p>{concert.showTimes}</p>
-                  <p>{concert.location}</p>
-                  <button
-                    className="w-full h-10 rounded border-none mt-3 shadow-2xl bg-white text-[#7151A1] hover:text-white hover:bg-[#4b208c]"
-                    onClick={() => navigate(`/concerts/${concert.concertId}`)}
-                  >
-                    예매
-                  </button>
                 </div>
               </div>
             ))}

@@ -1,3 +1,109 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.janus {
+  background-image: url("https://bit.ly/3H2hrMK");
+  clip-path: circle(2.5rem at var(--x) var(--y));
+}
+
+@font-face {
+  font-family: "NEON";
+  src: url(./fonts/NEON____.TTF) format("truetype");
+}
+@font-face {
+  font-family: "NeonBines";
+  src: url(./fonts/NeonBines.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Tonight";
+  src: url(./fonts/Tonight.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Clip";
+  src: url(./fonts/Clip.ttf) format("truetype");
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #e9e6f1;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+*::-webkit-scrollbar-track {
+  background-color: #3e344e67;
+  /* border-radius: 10px; */
+  /* box-shadow: inset 0px 0px 5px white; */
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgb(255, 244, 157);
+}
+
+.box-shadow {
+  box-shadow: 0 0 10px rgba(255, 249, 208, 0.817);
+}
+
+.parent {
+  height: 4em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent .child {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.2s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(4em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}
+
+.parent1 {
+  height: 1.5em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent1 .child1 {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.2s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(1.5em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}
+
+.parent2 {
+  height: 5em; /* 애니메이션 높이 */
+  overflow-y: hidden;
+  display: block;
+}
+.parent2 .child2 {
+  line-height: 1;
+  animation-name: grow;
+  animation-duration: 1.5s; /* 애니메이션 시간 */
+}
+/* 키프레임 애니메이션 */
+@keyframes grow {
+  from {
+    transform: translateY(5em);
+  } /* 애니메이션 높이 */
+  to {
+    transform: translateY(0);
+  }
+}

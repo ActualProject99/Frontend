@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ArtistApi from "../../apis/query/ArtistAPI";
-import { IGetArtist } from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistIcon from "./ArtistIcon";
 import { cls } from "../../utils";
+import { IGetArtist } from "../../types";
 
 const PickArtist = (): JSX.Element => {
   const { data: artists } = ArtistApi.GetArtist();

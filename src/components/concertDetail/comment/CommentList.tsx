@@ -1,7 +1,7 @@
+// @ts-nocheck
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { readComments, addComment } from "../../../apis/query/commentApi";
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IgetComment } from "../../../types";
 import Commentfix from "./Commentfix";
@@ -15,6 +15,7 @@ export interface IComments {
 
 const CommentList = () => {
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
       queryClient.invalidateQueries(["allComments"]);
@@ -29,24 +30,9 @@ const CommentList = () => {
     reset,
   } = useForm();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const maxPage = 5;
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    if (currentPage < maxPage) {
-      const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(["allComments", nextPage], () =>
-        readComments(nextPage)
-      );
-    }
-  }, [currentPage, queryClient]);
-
-  /* 다음 페이지를 누르기 전에 다음 페이지 내용을 미리 불러옴. 
-  딜레이 체감 없애기 */
-
   const { isLoading, isError, data } = useQuery<IgetComment[]>(
-    ["allComments", currentPage],
-    () => readComments(currentPage),
+    ["allComments", id],
+    () => readComments(id),
     { staleTime: 2000, keepPreviousData: true, refetchOnWindowFocus: false }
   );
   if (isLoading) {
@@ -55,16 +41,12 @@ const CommentList = () => {
     return <h3 className="p-4">지금은 댓글을 불러올 수 없어요!</h3>;
   }
 
-  /* const { isLoading, isError, data } = useQuery<IgetComment[]>(["allComments"], readComments)
-  if (isLoading) {
-    return <h3 className='p-4'>Loading...</h3>;
-  }
-  if (isError) {
-    return <h3 className='p-4'>지금은 댓글을 불러올 수 없어요!</h3>;
-  } */
-
   const onValid = (data: any) => {
-    addCommentFn({ postId: Number(id), comment: data.comment });
+    const comment = {
+      concertId: id,
+      comment: data,
+    };
+    addCommentFn(comment);
     reset();
   };
 
@@ -90,23 +72,22 @@ const CommentList = () => {
       </form>
 
       <ul className="p-4 w-full max-h-[65rem]">
-        {data
-          ?.filter((concert) => concert.postId === id)
-          .map((comment) => (
-            <Commentfix key={comment.id} comment={comment} />
-          ))}
+        {data.map((comment) => (
+          <Commentfix key={comment.id} comment={comment} />
+        ))}
       </ul>
+
       <div className="flex w-full justify-around">
         <button
-          disabled={currentPage <= 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
+        /* disabled={currentPage <= 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)} */
         >
           <ArrowLeft />
         </button>
-        <span>{currentPage}</span>
+        {/*  <span>{currentPage}</span> */}
         <button
-          disabled={currentPage >= maxPage}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
+        /* disabled={currentPage >= maxPage}
+          onClick={() => setCurrentPage((prev) => prev + 1)} */
         >
           <ArrowRight />
         </button>

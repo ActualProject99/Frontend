@@ -8,16 +8,15 @@ import { Modal } from "../components/Portal";
 import { useRecoilState } from "recoil";
 import {
   isGameDone,
-  IsGameDone,
   isGameSuccess,
-  IsGameSuccess,
-  IsRefreshedValid,
   isRefreshedValid,
 } from "../atoms/mockTicketing";
 import { parseISO } from "date-fns";
 import icons from "../components/icons";
 import useToast from "../hooks/useToast";
 import { getCookieToken } from "../apis/cookie";
+import useTicketPop from "../hooks/useTicketPop";
+import { IsGameDone, IsGameSuccess, IsRefreshedValid } from "../types";
 
 const MockTicketing = () => {
   const { StartBtn } = useMock();
@@ -32,6 +31,20 @@ const MockTicketing = () => {
   const { Toasts, toasted } = useToast("로그인 후 이용 가능합니다!");
 
   const cookie = getCookieToken();
+
+  const { Ticket, poped, userInput } = useTicketPop("안녕하세요", {
+    cacelButton: true,
+    userInputs: {
+      "확인 🤑": true,
+      아니오: null,
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+
+  useEffect(() => {
+    console.log(userInput);
+  }, [userInput]);
 
   const handleClickDate = (i: number) => () => {
     setSelectedDate(i);
@@ -53,7 +66,7 @@ const MockTicketing = () => {
 
   const handleClickStart = () => {
     if (!cookie) {
-      toasted();
+      poped();
     } else {
       sessionStorage.setItem("game", "started");
       setIsCountDownStart(true);
@@ -110,6 +123,14 @@ const MockTicketing = () => {
 
   return (
     <>
+      <Ticket />
+      <button
+        onClick={() => {
+          poped(null, { isToastOnly: false });
+        }}
+      >
+        hihi
+      </button>
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
       >

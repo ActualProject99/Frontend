@@ -1,69 +1,36 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { deactivate } from "../instance";
-
-//콘서트 Interface
-
-// export interface IGetConcert {
-//   id: number;
-//   concertId: number;
-//   posterUrl: string;
-//   title: string;
-//   showTimes: string;
-//   location: string;
-//   runningTime: string;
-//   viewableGrade: string;
-//   genre: string;
-//   latitude: number;
-//   longitude: number;
-//   vendor: number;
-//   like: boolean;
-//   ticketingUrl: [
-//     {
-//       url: string;
-//       title: string;
-//     }
-//   ];
-// }
-
-export interface IGetConcert {
-  concertId: number;
-  categoryId: number;
-  artistId: number;
-  concertName: string;
-  concertImg: string;
-  concertInfo: string;
-  concertDate: string;
-  ticketingDate: string;
-  ticketingUrl: string;
-  locationName: string;
-  playTime: string;
-  ratings: string;
-  createdAt: string;
-  updatedAt: string;
-  calender: string;
-}
-
-interface EditLike {
-  concertId: number;
-}
-
-interface PostSMS {
-  concertId: number;
-}
+import { ConcertLike, IGetConcert, IGetLocation, PostSMS } from "../../types";
+import { activate, deactivate } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concert");
-    console.log("data", data);
+    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+    return data;
+  });
+};
+
+const GetMonthConcerts = (payload: number | Date) => {
+  return useQuery<IGetConcert[]>(["monthConcert", payload], async () => {
+    const { data } = await deactivate.get<IGetConcert[]>(
+      `/concert?month=${payload}`
+    );
+    console.log("요청", data);
+    return data;
+  });
+};
+
+const GetLikeConcert = (payload: number) => {
+  return useQuery(["LikeConcert", payload], async () => {
+    const { data } = await activate.get(`/concertlike/${payload}`);
     return data;
   });
 };
 
 const EditLikeConcerts = () => {
-  return useMutation(async (payload: EditLike) => {
-    const { data } = await deactivate.patch(`/concerts/${payload.concertId}`);
+  return useMutation(async (payload: ConcertLike) => {
+    const { data } = await activate.put(`/concertlike/${payload.concertId}`);
     return data;
   });
 };
@@ -83,11 +50,23 @@ const DeleteConcertSMS = () => {
   });
 };
 
+//공연장 정보 API
+const GetLocation = () => {
+  return useQuery<IGetLocation[]>(["location"], async () => {
+    const { data } = await deactivate.get<IGetLocation[]>("/location");
+    console.log("data", data);
+    return data;
+  });
+};
+
 const ConcertApi = {
   GetConcerts,
   EditLikeConcerts,
   PostConcertSMS,
   DeleteConcertSMS,
+  GetLocation,
+  GetMonthConcerts,
+  GetLikeConcert,
 };
 
 export default ConcertApi;

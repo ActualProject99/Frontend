@@ -1,40 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ArtistLike, IGetArtist, IGetArtistConcert } from "../../types";
 import { deactivate, activate } from "../instance";
-
-export interface IGetArtist {
-  artistName: string;
-  artistId: number;
-  artistImg: string;
-  debutSong: string;
-  debutDate: string;
-  category: string;
-  like: boolean;
-}
-
-export interface IGetArtistConcert {
-  concertId: number;
-  categoryId: number;
-  artistId: number;
-  concertName: string;
-  concertImg: string;
-  concertInfo: string;
-  concertDate: string;
-  ticketingDate: string;
-  ticketingUrl: string;
-  locationName: string;
-  playTime: string;
-  ratings: string;
-  calender: string;
-}
-
-interface DeletePayload {
-  id: number;
-}
-
-interface EditLike {
-  artistId: number;
-}
 
 const GetArtist = () => {
   return useQuery<IGetArtist[]>(
@@ -55,7 +22,6 @@ const GetArtistConcert = () => {
       const { data } = await deactivate.get<IGetArtistConcert[]>(
         `/concert/artist`
       );
-      console.log("data", data);
       return data;
     },
     {
@@ -64,17 +30,15 @@ const GetArtistConcert = () => {
   );
 };
 
-const DeleteArtist = () => {
-  return useMutation(async (payload: DeletePayload) => {
-    const { data } = await axios.delete(
-      `http://localhost:3001/artists/${payload.id}`
-    );
+const GetLikeArtist = (payload: number) => {
+  return useQuery(["LikeArtist", payload], async () => {
+    const { data } = await activate.get(`/artistlike/${payload}`);
     return data;
   });
 };
 
 const EditLikeArtist = () => {
-  return useMutation(async (payload: EditLike) => {
+  return useMutation(async (payload: ArtistLike) => {
     const { data } = await activate.put(`/artistlike/${payload.artistId}`);
     console.log("페이", data);
     return data;
@@ -83,9 +47,9 @@ const EditLikeArtist = () => {
 
 const ArtistApi = {
   GetArtist,
-  DeleteArtist,
   EditLikeArtist,
   GetArtistConcert,
+  GetLikeArtist,
 };
 
 export default ArtistApi;

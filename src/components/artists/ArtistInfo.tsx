@@ -1,30 +1,43 @@
-import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, useCallback } from "react";
-import { deactivate } from "../../apis/instance";
-import ArtistApi, { IGetArtist } from "../../apis/query/ArtistAPI";
+import { useState, useCallback, useEffect } from "react";
+import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import ArtistConcerts from "./ArtistConcerts";
 import { getCookieToken } from "../../apis/cookie";
+import ConcertApi from "../../apis/query/ConcertApi";
+import { useParams } from "react-router-dom";
+import { ArtistInfoProps } from "../../types";
+import useTicket from "../../hooks/useTicketPop";
 
-interface ArtistProps {
-  artist: IGetArtist;
-}
+const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
+  const { data: LikeArtist } = ArtistApi.GetLikeArtist(artist.artistId);
+  console.log("얍", LikeArtist);
+  const [like, setLike] = useState<boolean>(false);
 
-const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
-  console.log("artist", artist);
-  const [like, setLike] = useState<boolean>(artist.like);
-  console.log("좋아요 스테이트", like);
-  console.log("아티스트 서버데이터", artist.like);
   const cookie = getCookieToken();
-  const { data: artistConcerts } = ArtistApi.GetArtistConcert();
-
+  const { id } = useParams();
+  const { data: artistConcerts } = ConcertApi.GetConcerts();
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 
+  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
+    cacelButton: false,
+    userInputs: {
+      확인: {
+        value: () => {
+          console.log("ok");
+        },
+        className: "bg-red-200 text-lime-800",
+      },
+      아니오: null,
+    },
+    toastOnly: true,
+    type: "warn",
+  });
+
   const onEditLike = useCallback(() => {
     if (!cookie) {
-      window.alert("로그인 후 가능해요!");
+      poped();
     } else {
       const payload = {
         artistId: artist.artistId,
@@ -36,8 +49,13 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
     }
   }, [artist.artistId, like, EditLike, queryClient, setLike]);
 
+  useEffect(() => {
+    if (LikeArtist) setLike(LikeArtist?.isLike);
+  }, [LikeArtist, setLike]);
+
   return (
     <>
+      <Ticket />
       <div className="flex justify-between items-center w-[95%] h-52 p-8 border mx-auto my-5 gap-6">
         <div className="flex items-center gap-x-10">
           <div>
@@ -87,12 +105,14 @@ const ArtistInfo = ({ artist }: ArtistProps): JSX.Element => {
       <div className="flex flex-col w-[95%] h-[40rem] p-7 border mx-auto my-2 gap-6 ">
         <div className="flex justify-center items-start flex-wrap w-full h-full  gap-x-10 gap-y-14 overflow-y-scroll scrollbar-hide">
           {artistConcerts &&
-            artistConcerts.map((artistConcert) => (
-              <ArtistConcerts
-                key={artistConcert.artistId}
-                artistConcert={artistConcert}
-              />
-            ))}
+            artistConcerts.map((artistConcert) =>
+              artistConcert.artistId === Number(id) ? (
+                <ArtistConcerts
+                  key={artistConcert.artistId}
+                  artistConcert={artistConcert}
+                />
+              ) : null
+            )}
         </div>
       </div>
     </>
