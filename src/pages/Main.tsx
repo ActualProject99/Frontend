@@ -28,7 +28,6 @@ import { cls } from "../utils";
 import Portal from "../components/Portal";
 import { isScrolled } from "../atoms/isScrolled";
 import { IsScrolled } from "../types";
-import useTimeout from "../hooks/useTimeout";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
@@ -501,7 +500,6 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
     cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
   });
   useEffect(() => {
-    // const check
     const progesslog = () => {
       const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
       const isIntroing = scrollYProgress.get() < 10 / 16;
@@ -554,6 +552,8 @@ const Intro = ({ scrollYProgress }) => {
     [1.2, 1.2, 2.2 + 1.2 * Math.random(), 10]
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
+  const cardWidth = 200 + Math.max(screenWidth - 1200, 0) / 8;
+  const cardHeight = (cardWidth * 3) / 2;
   const centerRandom = (val: number) => Math.random() * val - val / 2;
   const transformValues = (size: number) => {
     const rndValue = centerRandom(size);
@@ -752,13 +752,17 @@ const Intro = ({ scrollYProgress }) => {
           Tgle
         </m.span>
       </m.div>
-      {motionProps.map((prop, i) => (
-        <m.img
-          key={i}
-          {...prop}
-          className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        ></m.img>
-      ))}
+      {motionProps.map((prop, i) => {
+        return (
+          <m.img
+            key={i}
+            {...prop}
+            width={cardWidth}
+            height={cardHeight}
+            className="fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          ></m.img>
+        );
+      })}
     </div>
   );
 };
