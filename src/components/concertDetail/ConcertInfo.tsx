@@ -29,7 +29,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
 
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
-  console.log("라이크데이터", LikeCon);
   const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
@@ -37,7 +36,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
   const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
-  console.log("위치들", locations);
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );

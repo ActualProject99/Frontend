@@ -38,7 +38,7 @@ export interface IgetComment {
   userId?: number;
   commentId : number;
   comment: string;
-  name : string,
+  nickname : string,
   profileImg : string,
   createdAt : string
 }
@@ -239,6 +239,12 @@ export interface CancelButton {
   value: boolean;
   className: string;
 }
+
+export interface CommentTimeCheck {
+  createdAt: string;
+  updateAt: string;
+}
+
 export type IconType = "ckeck" | "warn" | "info" | "only msg";
 export interface PopupOptions {
   userInputs?: UserInput;

@@ -6,8 +6,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
+import { getCookieToken } from "../../../apis/cookie";
 
 const Commentfix = ({ comment }: IComments) => {
+  console.log(comment?.createdAt);
+  console.log((comment?.createdAt.split('T')[0].slice(5)),(comment?.createdAt.split('T')[1].slice(0,11)));
+  const cookie = getCookieToken();
   const commentId = comment.commentId;
   const [isedit, setIsEdit] = useState(false);
   const {
@@ -71,7 +75,7 @@ const Commentfix = ({ comment }: IComments) => {
     <li className="mb-3 w-full m-auto mt-0 pb-3 border-b">
       {isedit ? (
         <>
-          <form onSubmit={handleSubmit(onEdit)} className="flex ">
+          <form onSubmit={handleSubmit(onEdit)} className="flex">
             <textarea
               className="border 1px w-5/6 h-28 placeholder: pb-12 pl-4 rounded-lg rounded-r-none rounded-br-none resize-none"
               {...register(...regOptComment.editcomment())}
@@ -93,17 +97,25 @@ const Commentfix = ({ comment }: IComments) => {
           </span>
         </>
       ) : (
-        <>
-          {comment?.profileImg}
-          {comment?.comment}
-          <p className="text-xs mt-2">{comment?.createdAt}</p>
-          <button className="mt-1 mr-1 text-xs" onClick={showEditMode}>
-            수정
-          </button>
-          <button className="mt-1 mr-1 text-xs" onClick={onDelete}>
-            삭제
-          </button>
-        </>
+        <div className='flex'>
+          <img className="rounded-[50%] w-10 h-10" src={comment?.profileImg} />
+          <div className="ml-3 text-[#999999] font-bold">{comment?.nickname}</div>
+          <div className='w-[80%]'>{comment?.comment}</div>
+          <p className=" ml-1 text-xs mt-2 ">{comment?.createdAt.split('T')[0].slice(5)+comment?.createdAt.split('T')[1].slice(0,11)}</p>
+          <p className="ml-1 text-xs mt-2">{comment?.updatedAt.split('T')[0].slice(5)+comment?.updatedAt.split('T')[1].slice(0,11)}(수정됨)</p>
+          {cookie ? (
+            <>
+              <button className="mt-1 mr-1 text-xs" onClick={showEditMode}>
+                수정 |
+              </button>
+              <button className="mt-1 mr-1 text-xs" onClick={onDelete}>
+                삭제
+              </button>
+            </>
+          ) : 
+            null
+          }
+        </div>
       )}
     </li>
   );

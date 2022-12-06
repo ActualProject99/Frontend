@@ -15,7 +15,7 @@ export const addComment = async (payload: IPayload) => {
 };
 
 export const removeComment = async (payload: IPayload) => {
-  const { data } = await activate.delete(`/comment/detail/${payload}`);
+  const { data } = await activate.delete(`comment/${payload}`);
   return data;
 };
 

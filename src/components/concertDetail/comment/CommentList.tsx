@@ -8,6 +8,7 @@ import Commentfix from "./Commentfix";
 import ArrowLeft from "../../../svg/ArrowLeft";
 import ArrowRight from "../../../svg/ArrowRight";
 import { regOptComment } from "../../../utils";
+import MouseStalker from '../../MouseStalker';
 
 export interface IComments {
   comment?: IgetComment;

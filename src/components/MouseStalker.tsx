@@ -30,10 +30,11 @@ const MouseStalker = () => {
         ) : (
           <>
             <div className="text-white">예매하기</div>
-            <div className="janus absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+            <div className="janus absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
           </>
         )}
       </button>
+      
     </>
   );
 };
