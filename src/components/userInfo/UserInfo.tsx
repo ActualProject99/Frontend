@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import useTicket from "../../hooks/useTicketPop";
+
 import { LoginForm } from "../../types";
 import { regOptLogin } from "../../utils";
 
@@ -24,22 +24,24 @@ const UserInfo = ({ poped }): JSX.Element => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [editNickname, setEditNickname] = useState(userData?.nickname);
+  console.log("변경닉네임", editNickname);
 
-  const onChangeNickname = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setEditNickname(value);
-    },
-    [setEditNickname]
-  );
-
+  // const onChangeNickname = useCallback(
+  //   async (e: ChangeEvent<HTMLInputElement>) => {
+  //     const { value } = e.target;
+  //     setEditNickname(value);
+  //   },
+  //   [setEditNickname]
+  // );
+  const editName = watch("nickname");
+  console.log("뭐야?", editName);
   const onNicknameEdit = useCallback((): void => {
-    if (editNickname === "") {
+    if (editName === "") {
       return poped("입력해주세요!", { newType: "info" });
     }
-    if (!editNickname?.trim()) return;
+    if (!editName?.trim()) return;
     const payload = {
-      nickname: editNickname,
+      nickname: editName,
     };
 
     EditUserName(payload).then(() => {
@@ -48,7 +50,7 @@ const UserInfo = ({ poped }): JSX.Element => {
     });
 
     setIsEdit(false);
-  }, [editNickname, EditUserName, queryClient]);
+  }, [editName, EditUserName, queryClient]);
 
   const [imageSrc, setImageSrc] = useState(userData?.profileImg);
   const onChangeImg = useCallback(

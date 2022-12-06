@@ -32,15 +32,15 @@ export interface CommentForm {
   editcomment: string;
 }
 
-export interface IgetComment { 
+export interface IgetComment {
   concertId?: number;
-  id:number;
+  id: number;
   userId?: number;
-  commentId : number;
+  commentId: number;
   comment: string;
-  name : string,
-  profileImg : string,
-  createdAt : string
+  name: string;
+  profileImg: string;
+  createdAt: string;
 }
 interface Page {
   name: string;
@@ -83,10 +83,16 @@ export interface ArtistLike {
   artistId: number;
 }
 
+export interface likeArtistProps {
+  artistLikeId: number;
+  userId: number;
+  artistId: number;
+}
+
 export interface IPayload {
   concertId: string;
   commentId: number;
-  id:number;
+  id: number;
   userId: number;
   comment: string;
   name: string;
@@ -116,7 +122,17 @@ export interface IGetConcert {
   calender: string;
   month: number;
 }
+
+export interface IConcertProps {
+  concert: IGetConcert;
+}
+
 export interface ConcertLike {
+  concertId: number;
+}
+export interface likeConcertProps {
+  concertLikeId: number;
+  userId: number;
   concertId: number;
 }
 
@@ -222,10 +238,6 @@ export interface IconProps {
 
 export interface ArtistIconProps {
   artist: IGetArtist;
-}
-
-export interface IConcertProps {
-  concert: IGetLikeConcert;
 }
 
 export type UserValue = number | string | boolean | null | (() => void);

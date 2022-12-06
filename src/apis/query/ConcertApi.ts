@@ -21,6 +21,14 @@ const GetMonthConcerts = (payload: number | Date) => {
   });
 };
 
+// 콘서트 좋아요
+const GetLikeConcertList = () => {
+  return useQuery(["LikeConcertList"], async () => {
+    const { data } = await activate.get("/concertlike/mypage");
+    return data;
+  });
+};
+
 const GetLikeConcert = (payload: number) => {
   return useQuery(["LikeConcert", payload], async () => {
     const { data } = await activate.get(`/concertlike/${payload}`);
@@ -39,13 +47,13 @@ const EditLikeConcerts = () => {
 
 const PostConcertSMS = () => {
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await axios.post("url", payload);
+    const { data } = await activate.post("url", payload);
     return data;
   });
 };
 const DeleteConcertSMS = () => {
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await axios.patch("url", payload);
+    const { data } = await activate.post("url", payload);
     return data;
   });
 };
@@ -67,6 +75,7 @@ const ConcertApi = {
   GetLocation,
   GetMonthConcerts,
   GetLikeConcert,
+  GetLikeConcertList,
 };
 
 export default ConcertApi;

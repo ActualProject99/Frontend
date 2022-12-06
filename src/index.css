@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-.janus {
+.janus1 {
   background-image: url("https://bit.ly/3H2hrMK");
+  clip-path: circle(2.5rem at var(--x) var(--y));
+}
+.janus2 {
+  background-image: url("https://bit.ly/3FeC0nD");
+  clip-path: circle(2.5rem at var(--x) var(--y));
+}
+.janus3 {
+  background-image: url("https://bit.ly/3VrmFpE");
   clip-path: circle(2.5rem at var(--x) var(--y));
 }
 
@@ -41,7 +49,10 @@
 }
 
 .text-shadow {
-  text-shadow: 2px 2px 4px rgb(255, 244, 157);
+  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+}
+.text-shadow1 {
+  text-shadow: 1px 1px 1px rgb(0, 0, 0);
 }
 
 .box-shadow {

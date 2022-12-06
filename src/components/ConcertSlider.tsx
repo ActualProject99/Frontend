@@ -33,6 +33,46 @@ const ConcertSlider = (): JSX.Element => {
     slidesToScroll: 1,
     speed: 1000,
     arrows: true,
+    initialSlide: 0,
+    variableWidth: true,
+    // layzLoad: true,
+    responsive: [
+      {
+        breakpoint: 2560,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1920,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 320,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
     prevArrow: (
       <div>
         <div className="flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-10 absolute left-14 top-[1.25rem;] bg-black/30">
@@ -50,10 +90,12 @@ const ConcertSlider = (): JSX.Element => {
   };
   return (
     <div className="relative">
-      <div className="flex flex-col justify-center w-screen-scroll h-[43rem] absolute left-1/2 -translate-x-1/2 overflow-hidden bg-primary-900">
-        {/* <div className="flex justify-center items-center w-64 h-16 text-3xl text-accent-main font-logo">
-          <p className="ml-5 text-shadow">HOT CONCERT</p>
-        </div> */}
+      <div className="flex flex-col justify-center w-screen-scroll h-[43rem] absolute left-1/2 -translate-x-1/2 overflow-hidden bg-primary-900 ">
+        <div className="flex justify-center items-center w-64 h-16 text-3xl text-accent-main font-logo">
+          <p className="ml-5 -mt-5 text-shadow">
+            HOT <span className="text-white text-shadow1">CONCERT</span>
+          </p>
+        </div>
         <Slider {...settings}>
           {concerts &&
             concerts.map((concert) => (

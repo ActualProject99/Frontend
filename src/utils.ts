@@ -67,6 +67,7 @@ export const regOptLogin = {
       validate: {
         doubleCheck: async (v: string) => {
           const { data } = await activate.get(`/users/userinfo?queryName=${v}`);
+          console.log("v", v);
           return data.ok || "닉네임이 중복됩니다!";
         },
       },
