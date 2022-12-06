@@ -1,5 +1,11 @@
 import { activate } from "./apis/instance";
-import { LoginForm, CommentForm, OptionCreator, baseArr } from "./types";
+import {
+  LoginForm,
+  CommentForm,
+  OptionCreator,
+  baseArr,
+  EditNickname,
+} from "./types";
 
 export const cls = (...classes: (string | undefined | boolean)[]) =>
   classes
@@ -64,15 +70,9 @@ export const regOptLogin = {
         value: 10,
         message: "10자 이하의 닉네임만 사용가능합니다",
       },
-      validate: {
-        doubleCheck: async (v: string) => {
-          const { data } = await activate.get(`/users/userinfo?queryName=${v}`);
-          console.log("v", v);
-          return data.ok || "닉네임이 중복됩니다!";
-        },
-      },
     },
   ]),
+
   phoneNumber: optionCreator<LoginForm>([
     "phoneNumber",
     {
@@ -80,6 +80,34 @@ export const regOptLogin = {
       pattern: {
         value: /^(010|011|016|017|018|019)[0-9\b ]{0,11}$/,
         message: "'-'없이, 휴대번호 형식만 가능합니다.",
+      },
+    },
+  ]),
+};
+
+export const regOptEdi = {
+  editNickname: optionCreator<EditNickname>([
+    "nickname",
+    {
+      required: "닉네임을 입력해주세요",
+      pattern: {
+        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        message: "특수문자는 사용이 안됩니다!",
+      },
+      minLength: {
+        value: 3,
+        message: "최소 3자 이상의 닉네임을 입력해주세요",
+      },
+      maxLength: {
+        value: 10,
+        message: "10자 이하의 닉네임만 사용가능합니다",
+      },
+      validate: {
+        doubleCheck: async (v: string) => {
+          const { data } = await activate.get(`/users/signup?nickname=${v}`);
+          console.log("v", v);
+          return data.success || "중복된 닉네임입니다!";
+        },
       },
     },
   ]),

@@ -1,12 +1,25 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ConcertLike, IGetConcert, IGetLocation, PostSMS } from "../../types";
+
+import {
+  ConcertLike,
+  IGetConcert,
+  IGetHotConcert,
+  IGetLocation,
+  PostSMS,
+} from "../../types";
 import { activate, deactivate } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
   return useQuery<IGetConcert[]>(["concert"], async () => {
     const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+    return data;
+  });
+};
+
+const GetHotConcerts = () => {
+  return useQuery<IGetHotConcert[]>(["hotConcert"], async () => {
+    const { data } = await deactivate.get<IGetHotConcert[]>("/hotconcert");
     return data;
   });
 };
@@ -76,6 +89,7 @@ const ConcertApi = {
   GetMonthConcerts,
   GetLikeConcert,
   GetLikeConcertList,
+  GetHotConcerts,
 };
 
 export default ConcertApi;

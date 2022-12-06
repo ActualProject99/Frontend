@@ -27,6 +27,10 @@ export interface LoginForm {
   comfirm: string;
 }
 
+export interface EditNickname {
+  nickname: string;
+}
+
 export interface CommentForm {
   comment: string;
   editcomment: string;
@@ -121,6 +125,16 @@ export interface IGetConcert {
   updatedAt: string;
   calender: string;
   month: number;
+}
+
+export interface IGetHotConcert {
+  hotconcertId: number;
+  concertId: number;
+  posterName: string;
+  posterImg: string;
+  ticketingDate: string;
+  locationName: string;
+  exclusion: string;
 }
 
 export interface IConcertProps {

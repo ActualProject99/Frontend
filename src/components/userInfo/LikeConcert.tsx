@@ -43,7 +43,7 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
     <div className="grid w-56 h-[26rem] group">
       <div className="flex justify-center m-auto w-56 h-[18rem] overflow-hidden ">
         <img
-          className="object-contain cursor-pointer transition-all ease-in-out hover:scale-110"
+          className="object-contain cursor-pointer transition-all ease-in-out duration-700 hover:scale-110"
           alt="poster"
           onClick={() => navigate(`/concerts/${concert.concertId}`)}
           src={concert.concertImg}

@@ -16,7 +16,7 @@ const Cards = ({
     <>
       {concert && vertical ? (
         <div
-          className="p-6 border w-56 h-96 cursor-pointer"
+          className="p-6 border w-56 h-[21rem] cursor-pointer"
           onClick={handleClick}
         >
           <img

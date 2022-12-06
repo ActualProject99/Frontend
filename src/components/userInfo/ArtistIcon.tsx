@@ -43,7 +43,7 @@ const ArtistIcon = ({ artist }: ArtistIconProps): JSX.Element => {
     <>
       <Ticket />
       <div className="grid content-center justify-start justify-items-center items-center">
-        <div className="flex flex-col justify-items-center items-center w-[6.4rem] group">
+        <div className=" w-[6.4rem] group">
           <icons.XIcon
             className="flex flex-row-reverse mb-[-0.5rem] cursor-pointer text-primary-600  transition-all ease-in-out  opacity-0 group-hover:opacity-100"
             onClick={onEditLike}

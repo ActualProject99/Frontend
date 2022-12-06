@@ -154,7 +154,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   return (
     <>
       <Ticket />
-      <div className="flex justify-between m-auto w-full h-full p-5">
+      <div className="flex justify-between m-auto w-full h-full p-5 font-hanna">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
             <Calendar selectedDate={new Date(concert.ticketingDate)} />
