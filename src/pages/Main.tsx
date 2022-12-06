@@ -511,9 +511,6 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
       }));
     };
     snapContainer.current.addEventListener("scroll", progesslog);
-    return () => {
-      snapContainer.current.removeEventListener("scroll", progesslog);
-    };
   }, []);
   return (
     <button
