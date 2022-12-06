@@ -72,7 +72,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
               <div className="">
                 {!like ? (
                   <button
-                    className="flex justify-center items-center border w-40 h-10 rounded-md gap-x-2"
+                    className="flex justify-center items-center border border-[#7151A1] w-40 h-10 rounded-md gap-x-2"
                     onClick={onEditLike}
                   >
                     <span>관심 아티스트</span>
@@ -80,7 +80,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
                   </button>
                 ) : (
                   <button
-                    className="flex justify-center items-center border w-40 h-10 rounded-md gap-x-2"
+                    className="flex justify-center items-center border w-40 h-10 bg-[#7151A1] text-white rounded-md gap-x-2"
                     onClick={onEditLike}
                   >
                     <span>관심 아티스트</span>
@@ -98,7 +98,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
         </div>
       </div>
       <div className="flex justify-center items-center w-full h-10 ">
-        <p className="text-2xl border-b-2 border-purple-500">
+        <p className="text-2xl border-b-2 border-accent-main">
           아티스트의 공연 리스트
         </p>
       </div>

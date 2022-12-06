@@ -37,10 +37,16 @@ const GetLikeArtist = (payload: number) => {
   });
 };
 
+const GetLikeArtistList = () => {
+  return useQuery(["LikeArtistList"], async () => {
+    const { data } = await activate.get("/artistlike/mypage");
+    return data;
+  });
+};
+
 const EditLikeArtist = () => {
   return useMutation(async (payload: ArtistLike) => {
     const { data } = await activate.put(`/artistlike/${payload.artistId}`);
-    console.log("페이", data);
     return data;
   });
 };
@@ -50,6 +56,7 @@ const ArtistApi = {
   EditLikeArtist,
   GetArtistConcert,
   GetLikeArtist,
+  GetLikeArtistList,
 };
 
 export default ArtistApi;

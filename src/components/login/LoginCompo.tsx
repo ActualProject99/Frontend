@@ -9,6 +9,7 @@ import { cls, regOptLogin } from "../../utils";
 import { LoginForm, User } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useTicket from "../../hooks/useTicketPop";
+import FlareLane from "@flarelane/flarelane-web-sdk";
 
 const LoginCompo = (): JSX.Element => {
   const navigate = useNavigate();

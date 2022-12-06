@@ -1,11 +1,11 @@
-import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import useTicket from "../../hooks/useTicketPop";
-import { LoginForm } from "../../types";
-import { regOptLogin } from "../../utils";
+
+import { EditNickname } from "../../types";
+import { regOptEdi } from "../../utils";
 
 //@ts-ignore
 const UserInfo = ({ poped }): JSX.Element => {
@@ -18,37 +18,22 @@ const UserInfo = ({ poped }): JSX.Element => {
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm<LoginForm>({ mode: "onChange" });
+  } = useForm<EditNickname>();
 
   const queryClient = useQueryClient();
-
   const [isEdit, setIsEdit] = useState(false);
-  const [editNickname, setEditNickname] = useState(userData?.nickname);
 
-  const onChangeNickname = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setEditNickname(value);
+  const onNicknameEdit = useCallback(
+    (payload: EditNickname) => {
+      EditUserName(payload).then(() => {
+        poped("닉네임을 변경하시겠어요?", { isToastOnly: true });
+        queryClient.invalidateQueries(["userInfo"]);
+      });
+
+      setIsEdit(false);
     },
-    [setEditNickname]
+    [EditUserName, queryClient]
   );
-
-  const onNicknameEdit = useCallback((): void => {
-    if (editNickname === "") {
-      return poped("입력해주세요!", { newType: "info" });
-    }
-    if (!editNickname?.trim()) return;
-    const payload = {
-      nickname: editNickname,
-    };
-
-    EditUserName(payload).then(() => {
-      poped();
-      queryClient.invalidateQueries(["userInfo"]);
-    });
-
-    setIsEdit(false);
-  }, [editNickname, EditUserName, queryClient]);
 
   const [imageSrc, setImageSrc] = useState(userData?.profileImg);
   const onChangeImg = useCallback(
@@ -87,7 +72,7 @@ const UserInfo = ({ poped }): JSX.Element => {
           />
         </label>
       </div>
-      <div className="flex flex-col items-center justify-center w-96 h-36 gap-y-4 mt-3">
+      <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 mt-3">
         <div className="flex items-center h-11 ">
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
           <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
@@ -111,12 +96,12 @@ const UserInfo = ({ poped }): JSX.Element => {
               onSubmit={handleSubmit(onNicknameEdit)}
             >
               <input
-                className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
+                className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-full p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
-                value={editNickname}
                 autoComplete="auto"
+                defaultValue={userData?.nickname}
                 placeholder="한글, 숫자, 영문 3-10자"
-                {...register(...regOptLogin.nickname())}
+                {...register(...regOptEdi.editNickname())}
               />
               <p className="text-xs text-red-500 ">
                 {errors.nickname?.message as string}

@@ -91,7 +91,7 @@ const Concerts = () => {
   return (
     <>
       <ConcertSlider />
-      <div className="pt-16 mt-[640px] mb-8">
+      <div className="pt-16 mt-[680px] mb-10">
         <div className="px-4 h-full">
           <div className="grid grid-cols-3 h-full relative w-[95%] mx-auto">
             <div className="relative h-[500px]">

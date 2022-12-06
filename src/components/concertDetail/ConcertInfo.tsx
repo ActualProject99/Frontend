@@ -24,37 +24,48 @@ import useDebounce from "../../hooks/useDebounce";
 import { ConcertProps } from "../../types";
 import useTicket from "../../hooks/useTicketPop";
 import { getCookieToken } from "../../apis/cookie";
+import FlareLane from "@flarelane/flarelane-web-sdk";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-
+  console.log("콘서트", concert);
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
-  console.log("라이크데이터", LikeCon);
-  const [like, setLike] = useState<boolean>(false);
-  const [show, setShow] = useState(false);
-  const queryClient = useQueryClient();
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
   const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
-  console.log("위치들", locations);
+  const queryClient = useQueryClient();
+  const [like, setLike] = useState<boolean>(false);
+  const [show, setShow] = useState(false);
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
-  const { Ticket, poped, userInput } = useTicket("로그인 후 이용해주세요!😉", {
-    cacelButton: false,
-    userInputs: {
-      확인: {
-        value: () => {
-          console.log("ok");
-        },
-        className: "bg-red-200 text-lime-800",
-      },
-      아니오: null,
-    },
-    toastOnly: true,
-    type: "warn",
+  const [subscrided, setSubscribed] = useState();
+  FlareLane.getIsSubscribed((isSubscribed) => {
+    setSubscribed(isSubscribed);
   });
+
+  const ticketings = JSON.parse(concert.ticketingUrl);
+  console.log("티켓팅", ticketings);
+
+  const { Ticket, poped, userInput } = useTicket(
+    "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
+    {
+      cacelButton: false,
+      userInputs: {
+        예: {
+          value: () => {
+            FlareLane.setIsSubscribed(true);
+            PostDebounced(concert.concertId);
+          },
+          className: "bg-accent-main text-white",
+        },
+        아니요: null,
+      },
+      toastOnly: false,
+      type: "info",
+    }
+  );
   const cookie = getCookieToken();
   const debouncer = useDebounce(1000);
   const PostDebounced = useRef(
@@ -64,8 +75,16 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     })
   ).current;
   const PostSMS = () => {
-    if (!cookie) return poped();
-    PostDebounced(concert.concertId);
+    if (!cookie) {
+      poped("로그인 후 이용해주세요!😉", {
+        isToastOnly: true,
+        newType: "warn",
+      });
+    } else if (!subscrided) {
+      poped();
+    } else {
+      PostDebounced(concert.concertId);
+    }
   };
 
   const DeleteDebounced = useRef(
@@ -80,7 +99,11 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   };
 
   const onEditLike = useCallback(() => {
-    if (!cookie) return poped();
+    if (!cookie)
+      return poped("로그인 후 이용해주세요!😉", {
+        isToastOnly: true,
+        newType: "warn",
+      });
     const payload = {
       concertId: concert.concertId,
     };
@@ -111,6 +134,13 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     });
   };
 
+  const pos = document.documentElement;
+  const [Janusface, setJanusface] = useState(true);
+  pos.addEventListener("mousemove", (e) => {
+    pos.style.setProperty("--x", e.offsetX + "px");
+    pos.style.setProperty("--y", e.offsetY + "px");
+  });
+
   const { Taps, Viewer } = useTaps(
     0,
     ["상세정보", <MoreInfo concert={concert} />],
@@ -124,7 +154,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   return (
     <>
       <Ticket />
-      <div className="flex justify-between m-auto w-full h-full p-5">
+      <div className="flex justify-between m-auto w-full h-full p-5 font-hanna">
         <div className=" flex gap-10 m-auto">
           <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
             <Calendar selectedDate={new Date(concert.ticketingDate)} />
@@ -141,7 +171,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
             {!show ? (
               <button
                 className="flex items-center justify-center w-56 h-9 rounded-xl mt-3 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
-                onClick={DeleteSMS}
+                onClick={PostSMS}
               >
                 <icons.Bell />
                 <span>공연 알림 설정하기</span>
@@ -149,7 +179,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
             ) : (
               <button
                 className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold text-white bg-[#7151A1] gap-x-2"
-                onClick={PostSMS}
+                onClick={DeleteSMS}
               >
                 <icons.Bell />
                 <span>공연 알림 취소하기</span>
@@ -219,6 +249,76 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <icons.FullHeart className="text-red-500 cursor-pointer " />
                 </button>
               )}
+              <div>
+                {ticketings &&
+                  ticketings.map((ticketting) => (
+                    <div className="flex justify-end gap-3" key={ticketting.id}>
+                      {ticketting.title === "멜론티켓" ? (
+                        <button
+                          onMouseOver={() => {
+                            setJanusface(false);
+                          }}
+                          onMouseOut={() => {
+                            setJanusface(true);
+                          }}
+                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
+                          onClick={() => window.open(ticketting.url)}
+                        >
+                          {Janusface ? (
+                            <div className="text-white">예매하기</div>
+                          ) : (
+                            <>
+                              <div className="text-white">예매하기</div>
+                              <div className="janus1 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                            </>
+                          )}
+                        </button>
+                      ) : null}
+                      {ticketting.title === "인터파크티켓" ? (
+                        <button
+                          onMouseOver={() => {
+                            setJanusface(false);
+                          }}
+                          onMouseOut={() => {
+                            setJanusface(true);
+                          }}
+                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
+                          onClick={() => window.open(ticketting.url)}
+                        >
+                          {Janusface ? (
+                            <div className="text-white">예매하기</div>
+                          ) : (
+                            <>
+                              <div className="text-white">예매하기</div>
+                              <div className="janus2 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                            </>
+                          )}
+                        </button>
+                      ) : null}
+                      {ticketting.title === "yse24티켓" ? (
+                        <button
+                          onMouseOver={() => {
+                            setJanusface(false);
+                          }}
+                          onMouseOut={() => {
+                            setJanusface(true);
+                          }}
+                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
+                          onClick={() => window.open(ticketting.url)}
+                        >
+                          {Janusface ? (
+                            <div className="text-white">예매하기</div>
+                          ) : (
+                            <>
+                              <div className="text-white">예매하기</div>
+                              <div className="janus3 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                            </>
+                          )}
+                        </button>
+                      ) : null}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>

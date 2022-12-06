@@ -24,7 +24,7 @@ export const activate = axios.create({
   // 로그인을 한 상태
   baseURL: isDev ? PROXY_URL : SERVER_URL,
   headers: {
-    authorization: `Bearer ${jwtToken}`,
+    authorization: `Bearer ${myToken}`,
     "Cache-Control": "no-cache",
   },
 });
