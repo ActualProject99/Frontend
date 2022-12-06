@@ -549,8 +549,6 @@ const Intro = ({ scrollYProgress }) => {
     [1.2, 1.2, 2.2 + 1.2 * Math.random(), 10]
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
-  const cardWidth = 200 + Math.max(screenWidth - 1200, 0) / 8;
-  const cardHeight = (cardWidth * 3) / 2;
   const centerRandom = (val: number) => Math.random() * val - val / 2;
   const transformValues = (size: number) => {
     const rndValue = centerRandom(size);
@@ -754,9 +752,7 @@ const Intro = ({ scrollYProgress }) => {
           <m.img
             key={i}
             {...prop}
-            width={cardWidth}
-            height={cardHeight}
-            className="fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="w-[calc(200px_+_8vw)] h-[calc(300px_+_12vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           ></m.img>
         );
       })}
