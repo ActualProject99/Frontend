@@ -135,6 +135,7 @@ const Nav = ({
       }
     });
   }, [pathname]);
+
   return (
     <Portal>
       <Ticket />
@@ -155,9 +156,9 @@ const Nav = ({
                   onClick={() => navigate("/")}
                 >
                   <img
-                    className="w-34 h-12"
+                    className="w-32 h-14"
                     alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670224597/KakaoTalk_20221205_144918151_ivwxck.png"
+                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670314327/fff3_l0r9kt.png"
                   />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">

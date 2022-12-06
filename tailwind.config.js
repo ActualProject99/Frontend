@@ -93,6 +93,13 @@ module.exports = {
         dohyen: ["Do Hyeon"],
         Tonight: ["Tonight"],
         Clip: ["Clip"],
+        hannaAir: ["BMHANNAAir"],
+        hannaPro: ["BMHANNAPro"],
+        nanum: ["NanumSquareNeo-Variable"],
+        mono: ["MonoplexKR-Regular"],
+        hallym: ["HallymGothic-Regular"],
+        welcome: ["OTWelcomeRA"],
+        pretend: ["Pretendard-Regular"],
       },
       colors: {
         primary: {
