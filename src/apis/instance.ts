@@ -29,7 +29,6 @@ export const activate = axios.create({
     "Cache-Control": "no-cache",
   },
 });
-
 //토큰 만료시 인터셉터
 
 activate.interceptors.response.use(

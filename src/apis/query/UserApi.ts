@@ -7,6 +7,7 @@ import {
   IGetUser,
 } from "../../types";
 import { activate } from "../instance";
+import { getCookieToken } from "../cookie";
 
 //유저Info API
 const GetUserInfo = () => {
