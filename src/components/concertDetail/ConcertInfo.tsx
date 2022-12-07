@@ -53,6 +53,8 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
 
   const ticketings = JSON.parse(concert.ticketingUrl);
   console.log("티켓팅", ticketings);
+  // const moreInfoConcert = JSON.parse(concert.concertInfo);
+  // console.log("작품설명", moreInfoConcert);
 
   const { Ticket, poped, userInput } = useTicket(
     "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
