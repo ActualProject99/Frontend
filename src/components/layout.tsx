@@ -16,6 +16,7 @@ import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
+import { ReactComponent as Logo } from "../image/Logo.svg";
 
 const Search = ({
   viewer,
@@ -148,18 +149,14 @@ const Nav = ({
         )}
       >
         {normal ? (
-          <div className="flex items-center w-screen">
-            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center">
+          <div className="flex items-center w-screen h-16">
+            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center mb-3">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[140px] h-10 rounded ml-10 cursor-pointer"
+                  className="w-[180px] h-10 rounded cursor-pointer"
                   onClick={() => navigate("/")}
                 >
-                  <img
-                    className="w-32 h-14"
-                    alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670314327/fff3_l0r9kt.png"
-                  />
+                  <Logo width="11rem" height="3.5rem" />
                 </div>
                 <ul className="flex gap-4 xl:gap-10 font-logo self-end">
                   {Object.values(pages).map((page, i) =>

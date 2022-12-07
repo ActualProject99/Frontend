@@ -2,14 +2,10 @@ import Calendar from "../components/Calendar";
 import { useEffect, useState } from "react";
 import { cls } from "../utils";
 import Cards from "../components/Cards";
-import {
-  concertsDatesFiltered,
-  dateAllConcerts,
-  dateSelected,
-} from "../atoms/date";
+import { dateSelected } from "../atoms/date";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
-import { datedConcerts, showingConcerts } from "../atoms/concert";
+
 import ConcertSlider from "../components/ConcertSlider";
 import { Concert, IGetConcert } from "../types";
 import ConcertApi from "../apis/query/ConcertApi";
@@ -31,7 +27,8 @@ const groups = [
 const Concerts = () => {
   const payload = useRecoilValue(monthConcerts);
   const { data: concerts } = ConcertApi.GetMonthConcerts(payload);
-  console.log("야생의 데이터다!", concerts);
+  const { data: hotConcerts } = ConcertApi.GetHotConcerts();
+  console.log("핫콘", hotConcerts);
 
   const ticketingDates = concerts?.map((concert) => {
     return new Date(concert.ticketingDate);
@@ -90,7 +87,7 @@ const Concerts = () => {
   }, [getDateSelected, selectedCategory]);
   return (
     <>
-      <ConcertSlider />
+      <ConcertSlider hotConcerts={hotConcerts} />
       <div className="pt-16 mt-[680px] mb-10">
         <div className="px-4 h-full">
           <div className="grid grid-cols-3 h-full relative w-[95%] mx-auto">

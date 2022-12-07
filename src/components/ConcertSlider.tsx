@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Slider from "react-slick";
-import UserApi from "../apis/query/UserApi";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -9,13 +8,24 @@ import Next from "../image/Next.png";
 import Prev from "../image/Prev.png";
 import { useNavigate } from "react-router-dom";
 import ConcertApi from "../apis/query/ConcertApi";
+import { IGetHotConcert } from "../types";
 
-const ConcertSlider = (): JSX.Element => {
-  const { data: concerts } = UserApi.GetLikeConcert();
-  const { data: hotConcerts } = ConcertApi.GetHotConcerts();
-  console.log("핫콘", hotConcerts);
+interface hotConcertProps {
+  hotConcerts: IGetHotConcert[] | undefined;
+}
+
+const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
   const navigate = useNavigate();
 
+  const [dragging, setDragging] = useState<boolean>(false);
+
+  const handleBeforeChange = useCallback(() => {
+    setDragging(true);
+  }, []);
+
+  const handleAfterChange = useCallback((i: number) => {
+    setDragging(false);
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       document
@@ -31,20 +41,21 @@ const ConcertSlider = (): JSX.Element => {
     autoplay: true,
     autoplaySpeed: 4000,
     pauseOnHover: true,
-    centerPadding: "60px",
-    slidesToShow: 3,
+    // centerPadding: "60px",
+    slidesToShow: 5,
     slidesToScroll: 1,
     speed: 1000,
     arrows: true,
-    initialSlide: 0,
     variableWidth: true,
-    // layzLoad: true,
+    touchThreshold: 100,
+    beforeChange: handleBeforeChange,
+    afterChange: handleAfterChange,
     responsive: [
       {
         breakpoint: 2560,
         settings: {
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 3,
         },
       },
       {
@@ -101,7 +112,7 @@ const ConcertSlider = (): JSX.Element => {
         </div>
         <Slider {...settings}>
           {hotConcerts &&
-            hotConcerts.map((hotConcert) => (
+            hotConcerts?.map((hotConcert) => (
               <div key={hotConcert.concertId}>
                 <div
                   className="flex flex-col relative overflow-hidden w-[26rem] group m-5 gap-2 font-bold text-white cursor-pointer shadow-lg shadow-black rounded"
