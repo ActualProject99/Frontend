@@ -25,6 +25,8 @@ import { ConcertProps } from "../../types";
 import useTicket from "../../hooks/useTicketPop";
 import { getCookieToken } from "../../apis/cookie";
 import FlareLane from "@flarelane/flarelane-web-sdk";
+import Countdown from "./Countdown";
+import ShowCountDown from "./ShowCountDown";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
@@ -37,6 +39,8 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
+  const [dday, setDday] = useState<Date>(new Date(concert?.ticketingDate));
+  console.log("dday", dday);
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
@@ -113,20 +117,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     setLike((prev) => !prev);
   }, [concert.concertId, like, EditLike, queryClient]);
 
-  // kakao SDK import 하기
   const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
-
-  // kakao SDK 초기화하기
-  // status가 변경될 때마다 실행되며, status가 ready일 때 초기화를 시도합니다.
-  useEffect(() => {
-    if (status === "ready" && window.Kakao) {
-      // 중복 initialization 방지
-      if (!window.Kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-        window.Kakao.init("5cc25d2c25e1fd715bd1018b2c9ad8ac");
-      }
-    }
-  }, [status]);
 
   const handleKakaoButton = () => {
     window.Kakao.Link.sendScrap({
@@ -142,11 +133,20 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   });
 
   const { Taps, Viewer } = useTaps(
-    0,
+    1,
     ["상세정보", <MoreInfo concert={concert} />],
     ["공연장정보", <NaverMap location={location} />],
     ["기대평", <CommentList />]
   );
+
+  useEffect(() => {
+    if (status === "ready" && window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init("5cc25d2c25e1fd715bd1018b2c9ad8ac");
+      }
+    }
+  }, [status]);
+
   useEffect(() => {
     if (LikeCon) setLike(LikeCon?.isLike);
   }, [LikeCon, setLike]);
@@ -156,36 +156,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
       <Ticket />
       <div className="flex justify-between m-auto w-full h-full p-5 font-hanna">
         <div className=" flex gap-10 m-auto">
-          <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
-            <Calendar selectedDate={new Date(concert.ticketingDate)} />
-            <div className="flex flex-col gap-y-3 mt-3">
-              <div className="flex justify-between w-56 text-xs font-bold">
-                <span className="text-accent-main">티켓팅 시작일</span>
-                <span>{concert.ticketingDate} - 마감시</span>
-              </div>
-              <div className="flex justify-between w-56 text-xs font-bold">
-                <span className="text-purple-700">공연 기간</span>
-                <span>{concert.concertDate}</span>
-              </div>
-            </div>
-            {!show ? (
-              <button
-                className="flex items-center justify-center w-56 h-9 rounded-xl mt-3 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
-                onClick={PostSMS}
-              >
-                <icons.Bell />
-                <span>공연 알림 설정하기</span>
-              </button>
-            ) : (
-              <button
-                className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold text-white bg-[#7151A1] gap-x-2"
-                onClick={DeleteSMS}
-              >
-                <icons.Bell />
-                <span>공연 알림 취소하기</span>
-              </button>
-            )}
-          </div>
           <div className="flex flex-col gap-2 w-72">
             <img className="w-72 h-96" alt="poster" src={concert.concertImg} />
             <div className="flex gap-5 justify-center items-center my-4">
@@ -225,13 +195,29 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </p>
             </div>
             <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070]">
-              <div className="flex items-center">
-                티켓팅기간 &nbsp; {concert.ticketingDate}&nbsp;
+              <div className="flex gap-x-8">
+                <div className="flex flex-col gap-y-3 font-bold">
+                  <p>티켓팅기간</p>
+                  <p>관람시간</p>
+                  <p>관람등급</p>
+                  <p>장르</p>
+                  <p>공연장</p>
+                </div>
+                <div className="flex flex-col gap-y-3 ">
+                  <div className="flex gap-3">
+                    <p className="font-bold text-accent-main">
+                      {concert.ticketingDate}
+                    </p>
+                    <ShowCountDown dday={dday} />
+                  </div>
+
+                  <p>{concert.playTime}</p>
+                  <p>{concert.ratings}</p>
+                  <p>콘서트</p>
+                  <p>{concert.locationName}</p>
+                </div>
               </div>
-              <p>관람시간 &nbsp; {concert.playTime}</p>
-              <p>장르 &nbsp; 콘서트</p>
-              <p>관람등급 &nbsp; {concert.ratings}</p>
-              <p>공연장 &nbsp; {concert.locationName}</p>
+
               {!like ? (
                 <button
                   className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
@@ -246,13 +232,13 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   onClick={onEditLike}
                 >
                   <span>관심 공연</span>
-                  <icons.FullHeart className="text-red-500 cursor-pointer " />
+                  <icons.FullHeart className="text-red-500 cursor-pointer" />
                 </button>
               )}
-              <div>
+              <div className="flex flex-col items-end h-44 gap-3">
                 {ticketings &&
                   ticketings.map((ticketting) => (
-                    <div className="flex justify-end gap-3" key={ticketting.id}>
+                    <div key={ticketting.id}>
                       {ticketting.title === "멜론티켓" ? (
                         <button
                           onMouseOver={() => {
@@ -274,7 +260,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                           )}
                         </button>
                       ) : null}
-                      {ticketting.title === "인터파크티켓" ? (
+                      {ticketting.title === "인터파크" ? (
                         <button
                           onMouseOver={() => {
                             setJanusface(false);
@@ -295,7 +281,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                           )}
                         </button>
                       ) : null}
-                      {ticketting.title === "yse24티켓" ? (
+                      {ticketting.title === "yes24" ? (
                         <button
                           onMouseOver={() => {
                             setJanusface(false);
@@ -320,6 +306,36 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   ))}
               </div>
             </div>
+          </div>
+          <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
+            <Calendar selectedDate={new Date(concert.ticketingDate)} />
+            <div className="flex flex-col gap-y-3 mt-3">
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span className="text-accent-main">티켓팅 시작일</span>
+                <span>{concert.ticketingDate} - 마감시</span>
+              </div>
+              <div className="flex justify-between w-56 text-xs font-bold">
+                <span className="text-purple-700">공연 기간</span>
+                <span>{concert.concertDate}</span>
+              </div>
+            </div>
+            {!show ? (
+              <button
+                className="flex items-center justify-center w-56 h-9 rounded-xl mt-3 text-xs font-bold border border-[#7151A1] text-[#7151A1] gap-x-2"
+                onClick={PostSMS}
+              >
+                <icons.Bell />
+                <span>공연 알림 설정하기</span>
+              </button>
+            ) : (
+              <button
+                className="flex items-center justify-center w-56 h-9 rounded-xl mt-4 text-xs font-bold text-white bg-[#7151A1] gap-x-2"
+                onClick={DeleteSMS}
+              >
+                <icons.Bell />
+                <span>공연 알림 취소하기</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

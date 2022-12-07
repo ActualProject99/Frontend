@@ -14,7 +14,7 @@ const Signup = () => {
 };
 const MyPick = () => {
   const { Taps, Viewer } = useTaps(
-    0,
+    1,
     ["좋아요 공연", <LikeConcerts />],
     ["작성한 댓글", <MyComments />],
     ["채팅 테스트", <Chatting />]
