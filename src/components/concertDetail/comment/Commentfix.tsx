@@ -6,14 +6,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
-import UserApi from '../../../apis/query/UserApi';
+import UserApi from "../../../apis/query/UserApi";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 dayjs.locale("ko");
 
 const Commentfix = ({ comment }: IComments) => {
-  const {data: user} = UserApi.GetUserInfo(); 
+  const { data: user } = UserApi.GetUserInfo();
   const commentId = comment.commentId;
+  console.log("댓글", comment?.profileImg);
   const [isedit, setIsEdit] = useState(false);
   const {
     register,
@@ -120,19 +121,17 @@ const Commentfix = ({ comment }: IComments) => {
           )}{" "}
           {user?.userId === comment?.userId ? (
             <>
-          <div className="flex flex-[1.3] font-bold text-[0.9rem] leading-[1.25rem]">
-            <button className="mr-3" onClick={showEditMode}>
-              수정
-            </button>
-            <div className="border-r-[0.14rem] border-r-[black]" />
-            <button className="ml-3" onClick={onDelete}>
-              삭제
-            </button>
-          </div>
-          </>
-          ) : 
-            null
-          }
+              <div className="flex flex-[1.3] font-bold text-[0.9rem] leading-[1.25rem]">
+                <button className="mr-3" onClick={showEditMode}>
+                  수정
+                </button>
+                <div className="border-r-[0.14rem] border-r-[black]" />
+                <button className="ml-3" onClick={onDelete}>
+                  삭제
+                </button>
+              </div>
+            </>
+          ) : null}
         </div>
       )}
     </li>

@@ -8,10 +8,10 @@ const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
 
   return (
     <>
-      <div className="grid w-56 h-[23rem] border group overflow-y-scroll scrollbar-hide relative">
+      <div className="grid w-56 h-[23rem] border overflow-y-scroll scrollbar-hide relative">
         <div className="flex justify-center items-center w-56 h-[18rem] overflow-hidden">
           <img
-            className="object-contain w-56 cursor-pointer transition-all ease-in-out duration-700 hover:scale-110"
+            className="object-contain w-56 cursor-pointer "
             alt="poster"
             onClick={() => navigate(`/concerts/${artistConcert.concertId}`)}
             src={artistConcert.concertImg}
