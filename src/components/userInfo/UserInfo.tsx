@@ -8,11 +8,11 @@ import { EditNickname } from "../../types";
 import { regOptEdi } from "../../utils";
 
 //@ts-ignore
-const UserInfo = ({ poped }): JSX.Element => {
+const UserInfo = ({ deletePoped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
+  console.log("유데", userData);
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
-
   const {
     register,
     handleSubmit,
@@ -26,8 +26,8 @@ const UserInfo = ({ poped }): JSX.Element => {
   const onNicknameEdit = useCallback(
     (payload: EditNickname) => {
       EditUserName(payload).then(() => {
-        poped("닉네임을 변경하시겠어요?", { isToastOnly: true });
         queryClient.invalidateQueries(["userInfo"]);
+        deletePoped("닉네임이 변경되었습니다", { isToastOnly: true });
       });
 
       setIsEdit(false);
@@ -48,12 +48,16 @@ const UserInfo = ({ poped }): JSX.Element => {
 
       EditUserImg(payload).then(() => {
         queryClient.invalidateQueries(["userInfo"]);
-        poped("프로필 사진 변경 완료!💾", { isToastOnly: true });
+        deletePoped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
       console.log("뭐야?");
     },
-    [EditUserImg, queryClient, poped]
+    [EditUserImg, queryClient, deletePoped]
   );
+
+  const deleteUser = () => {
+    deletePoped();
+  };
 
   return (
     <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
@@ -77,7 +81,7 @@ const UserInfo = ({ poped }): JSX.Element => {
           <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
           <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           {!isEdit ? (
             <div className="flex flex-col items-center gap-y-2 h-28">
               <p className="text-2xl mb-[1rem] mt-[-0.2rem] ">
@@ -111,6 +115,14 @@ const UserInfo = ({ poped }): JSX.Element => {
               </button>
             </form>
           )}
+        </div>
+        <div className="flex justify-end w-full -mt-6 mb-3">
+          <button
+            className="flex justify-center items-center w-20 h-7 text-sm border rounded-md"
+            onClick={deleteUser}
+          >
+            회원탈퇴
+          </button>
         </div>
       </div>
     </div>

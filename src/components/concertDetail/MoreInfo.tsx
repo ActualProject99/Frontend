@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
+  console.log("콘서트", concert);
   const navigate = useNavigate();
 
   return (
@@ -44,7 +45,7 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        <img alt="concertInfo" src={concert.concertInfo} className="pl-1"></img>
+        {/* <img alt="concertInfo" src={concert.concertInfo} className="pl-1"></img> */}
       </div>
     </div>
   );
