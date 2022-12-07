@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 const Concert = () => {
   const { data: concerts } = ConcertApi.GetConcerts();
   const { id } = useParams();
- 
 
   return (
     <>

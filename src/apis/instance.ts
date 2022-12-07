@@ -4,6 +4,7 @@ import { getCookieToken } from "./cookie";
 const isDev = ["localhost:3000", "127.0.0.1:3000"].includes(
   window.location.host
 );
+console.log("host", window.location.host);
 
 const jwtToken = localStorage.getItem("AccessToken");
 console.log(jwtToken);
@@ -11,7 +12,7 @@ console.log(jwtToken);
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const PROXY_URL = process.env.REACT_APP_PROXY_URL;
-
+console.log("url", PROXY_URL, SERVER_URL);
 const myToken = getCookieToken();
 
 export const deactivate = axios.create({

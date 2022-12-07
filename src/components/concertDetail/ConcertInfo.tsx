@@ -27,6 +27,8 @@ import { getCookieToken } from "../../apis/cookie";
 import FlareLane from "@flarelane/flarelane-web-sdk";
 import Countdown from "./Countdown";
 import ShowCountDown from "./ShowCountDown";
+import { cls } from "../../utils";
+import Janusface from "../Janusface";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
@@ -124,12 +126,17 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     });
   };
 
-  const pos = document.documentElement;
-  const [Janusface, setJanusface] = useState(true);
-  pos.addEventListener("mousemove", (e) => {
-    pos.style.setProperty("--x", e.offsetX + "px");
-    pos.style.setProperty("--y", e.offsetY + "px");
-  });
+  useEffect(() => {
+    const pos = document.documentElement;
+    const mouseTracker = (e) => {
+      pos.style.setProperty("--x", e.offsetX + "px");
+      pos.style.setProperty("--y", e.offsetY + "px");
+    };
+    pos.addEventListener("mousemove", mouseTracker);
+    return () => {
+      pos.removeEventListener("mousemove", mouseTracker);
+    };
+  }, []);
 
   const { Taps, Viewer } = useTaps(
     1,
@@ -153,11 +160,17 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   return (
     <>
       <Ticket />
+      <img
+        className="w-full h-[580px] absolute top-20 left-0 -z-10 object-cover blur-xl"
+        alt="poster"
+        src={concert.concertImg}
+      />
+      <div className="w-full h-[630px] absolute top-20 left-0 -z-10 bg-gradient-to-b from-white/10 to-white/90" />
       <div className="flex justify-between m-auto w-full h-full p-5 font-hanna">
-        <div className=" flex gap-10 m-auto">
+        <div className="flex gap-2 m-auto">
           <div className="flex flex-col gap-2 w-72">
             <img className="w-72 h-96" alt="poster" src={concert.concertImg} />
-            <div className="flex gap-5 justify-center items-center my-4">
+            <div className="flex gap-5 justify-center items-center my-4 rounded-3xl bg-white/20 py-3">
               <FacebookMessengerShareButton url={currentUrl} appId={""}>
                 <FacebookIcon size={48} round={true} borderRadius={24} />
               </FacebookMessengerShareButton>
@@ -187,16 +200,16 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-y-10 w-[30rem]">
-            <div className="w-[100%] h-8 mb-3">
+          <div className="w-[34rem] bg-white/20 p-3 rounded-xl">
+            <div className="w-full h-12 bg-white/50 p-2 rounded-md mb-4 flex items-center">
               <p className="text-xl text-black font-bold">
                 {concert.concertName}
               </p>
             </div>
-            <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070]">
-              <div className="flex gap-x-8">
+            <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070] ">
+              <div className="flex gap-x-8 bg-white/50 p-2 rounded-md relative">
                 <div className="flex flex-col gap-y-3 font-bold">
-                  <p>티켓팅기간</p>
+                  <p>티켓팅날짜</p>
                   <p>관람시간</p>
                   <p>관람등급</p>
                   <p>장르</p>
@@ -215,99 +228,47 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <p>콘서트</p>
                   <p>{concert.locationName}</p>
                 </div>
+                <button
+                  className={cls(
+                    "flex justify-center items-center border-2 w-44 h-10 rounded-md gap-x-2 absolute bottom-3 right-3",
+                    like ? "bg-[#7151A1] text-white" : "border-[#7151A1]"
+                  )}
+                  onClick={onEditLike}
+                >
+                  <span className="font-bold">관심 공연</span>
+                  {like ? (
+                    <icons.FullHeart
+                      className="text-red-500 cursor-pointer"
+                      iconClassName="fill-red-500 w-6 h-6"
+                    />
+                  ) : (
+                    <icons.EmptyHeart
+                      className="text-red-500 cursor-pointer "
+                      strokeWidth={3}
+                    />
+                  )}
+                </button>
               </div>
-
-              {!like ? (
-                <button
-                  className="flex justify-center items-center border border-[#7151A1] w-44 h-10 rounded-md gap-x-2"
-                  onClick={onEditLike}
-                >
-                  <span>관심 공연</span>
-                  <icons.EmptyHeart className="text-red-500 cursor-pointer " />
-                </button>
-              ) : (
-                <button
-                  className="flex justify-center items-center border bg-[#7151A1] text-white w-44 h-10 rounded-md gap-x-2"
-                  onClick={onEditLike}
-                >
-                  <span>관심 공연</span>
-                  <icons.FullHeart className="text-red-500 cursor-pointer" />
-                </button>
-              )}
-              <div className="flex flex-col items-end h-44 gap-3">
-                {ticketings &&
-                  ticketings.map((ticketting) => (
-                    <div key={ticketting.id}>
-                      {ticketting.title === "멜론티켓" ? (
-                        <button
-                          onMouseOver={() => {
-                            setJanusface(false);
-                          }}
-                          onMouseOut={() => {
-                            setJanusface(true);
-                          }}
-                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
-                          onClick={() => window.open(ticketting.url)}
-                        >
-                          {Janusface ? (
-                            <div className="text-white">예매하기</div>
-                          ) : (
-                            <>
-                              <div className="text-white">예매하기</div>
-                              <div className="janus1 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
-                            </>
-                          )}
-                        </button>
-                      ) : null}
-                      {ticketting.title === "인터파크" ? (
-                        <button
-                          onMouseOver={() => {
-                            setJanusface(false);
-                          }}
-                          onMouseOut={() => {
-                            setJanusface(true);
-                          }}
-                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
-                          onClick={() => window.open(ticketting.url)}
-                        >
-                          {Janusface ? (
-                            <div className="text-white">예매하기</div>
-                          ) : (
-                            <>
-                              <div className="text-white">예매하기</div>
-                              <div className="janus2 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
-                            </>
-                          )}
-                        </button>
-                      ) : null}
-                      {ticketting.title === "yes24" ? (
-                        <button
-                          onMouseOver={() => {
-                            setJanusface(false);
-                          }}
-                          onMouseOut={() => {
-                            setJanusface(true);
-                          }}
-                          className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
-                          onClick={() => window.open(ticketting.url)}
-                        >
-                          {Janusface ? (
-                            <div className="text-white">예매하기</div>
-                          ) : (
-                            <>
-                              <div className="text-white">예매하기</div>
-                              <div className="janus3 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
-                            </>
-                          )}
-                        </button>
-                      ) : null}
-                    </div>
-                  ))}
+              <div className="bg-white/50 p-2 rounded-md">
+                <p>예매하기</p>
+                <div className="flex gap-3">
+                  {ticketings &&
+                    ticketings.map((ticketing) => (
+                      <Janusface
+                        key={ticketing.id}
+                        title={ticketing.title}
+                        url={ticketing.url}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center border w-72 h-[95%] rounded-md p-5">
-            <Calendar selectedDate={new Date(concert.ticketingDate)} />
+          <div className="flex flex-col items-center w-72 h-[95%] rounded-md p-5 bg-white/20">
+            <Calendar
+              selectedDate={new Date(concert.ticketingDate)}
+              showingMonth={new Date(concert.ticketingDate)}
+            />
             <div className="flex flex-col gap-y-3 mt-3">
               <div className="flex justify-between w-56 text-xs font-bold">
                 <span className="text-accent-main">티켓팅 시작일</span>

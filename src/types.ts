@@ -231,6 +231,7 @@ export interface CalendarProps {
   className?: string;
   selectable?: boolean;
   selectedDate?: Date;
+  showingMonth?: Date;
 }
 
 export interface Concert {

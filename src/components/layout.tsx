@@ -176,7 +176,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
+              <div className="w-60 h-18 flex items-center justify-between">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
@@ -194,7 +194,7 @@ const Nav = ({
                   {cookie ? (
                     <>
                       <div
-                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
+                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:-translate-x-12 hover:-translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
                         onClick={handleClickLogout}
                       >
                         log
