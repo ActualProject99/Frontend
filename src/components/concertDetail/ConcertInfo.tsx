@@ -32,7 +32,6 @@ import Janusface from "../Janusface";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  console.log("콘서트", concert);
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
@@ -42,7 +41,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [dday, setDday] = useState<Date>(new Date(concert?.ticketingDate));
-  console.log("dday", dday);
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
@@ -52,7 +50,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   });
 
   const ticketings = JSON.parse(concert.ticketingUrl);
-  console.log("티켓팅", ticketings);
 
   const { Ticket, poped, userInput } = useTicket(
     "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
@@ -167,7 +164,10 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
         src={concert.concertImg}
       />
       <div className="w-full h-[630px] absolute top-20 left-0 -z-10 bg-gradient-to-b from-white/10 to-white/90" />
-      <div className="flex justify-between m-auto w-full h-full p-5 font-hanna">
+      <div className="w-fit px-3 ml-4 h-12 p-2 rounded-md flex items-center bg-white/30">
+        <p className="text-2xl text-black font-bold">{concert.concertName}</p>
+      </div>
+      <div className="w-full h-screen p-5 font-hanna mb-12">
         <div className="flex gap-2 m-auto">
           <div className="flex flex-col gap-2 w-72">
             <img className="w-72 h-96" alt="poster" src={concert.concertImg} />
@@ -202,14 +202,14 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
             </div>
           </div>
           <div className="w-[34rem] bg-white/20 p-3 rounded-xl">
-            <div className="w-full h-12 bg-white/50 p-2 rounded-md mb-4 flex items-center">
-              <p className="text-xl text-black font-bold">
-                {concert.concertName}
-              </p>
-            </div>
             <div className="flex flex-wrap w-full flex-col gap-y-4 text-[#707070] ">
-              <div className="flex gap-x-8 bg-white/50 p-2 rounded-md relative">
-                <div className="flex flex-col gap-y-3 font-bold">
+              <div className="grid grid-rows-4 bg-white/50 p-2 rounded-md relative">
+                <DataSlice name="티켓팅날짜" value={concert.ticketingDate} />
+                <DataSlice name="관람시간" value={concert.playTime} />
+                <DataSlice name="관람등급" value={concert.ratings} />
+                <DataSlice name="공연장" value={concert.locationName} />
+                <ShowCountDown dday={dday} />
+                {/* <div className="flex flex-col gap-y-3 font-bold">
                   <p>티켓팅날짜</p>
                   <p>관람시간</p>
                   <p>관람등급</p>
@@ -228,7 +228,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                   <p>{concert.ratings}</p>
                   <p>콘서트</p>
                   <p>{concert.locationName}</p>
-                </div>
+                </div> */}
                 <button
                   className={cls(
                     "flex justify-center items-center border-2 w-44 h-10 rounded-md gap-x-2 absolute bottom-3 right-3",
@@ -251,7 +251,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                 </button>
               </div>
               <div className="bg-white/50 p-2 rounded-md">
-                <p>예매하기</p>
+                <p className="font-black font-welcome ml-3">예매하기</p>
                 <div className="flex gap-3">
                   {ticketings &&
                     ticketings.map((ticketing) => (
@@ -265,7 +265,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center w-72 h-[95%] rounded-md p-5 bg-white/20">
+          <div className="flex flex-col items-center w-72 rounded-xl p-5 bg-white/20">
             <Calendar
               selectedDate={new Date(concert.ticketingDate)}
               showingMonth={new Date(concert.ticketingDate)}
@@ -304,6 +304,17 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
       <Viewer />
       <Chat />
     </>
+  );
+};
+
+const DataSlice = ({ name, value }: { name: string; value: string }) => {
+  return (
+    <div className="flex w-64 items-end">
+      <div className="w-24 text-base font-bold">{name}</div>
+      <div className="w-40 text-lg truncate " title={value}>
+        {value}
+      </div>
+    </div>
   );
 };
 
