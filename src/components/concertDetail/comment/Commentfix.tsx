@@ -98,41 +98,45 @@ const Commentfix = ({ comment }: IComments) => {
           </span>
         </>
       ) : (
-        <div className="flex w-full justify-start items-end">
+        <div className="flex w-full">
           <img
-            className="rounded-[50%] w-[3.125rem] h-[3.125rem] object-cover"
+            className="rounded-[50%] w-[6.25rem] h-[6.25rem] object-cover"
             src={comment?.profileImg}
           />
-          <div className="flex ml-3 text-[#999999] font-bold">
+          
+          <div className="flex bg-red-500 ml-10 text-[#999999] font-bold">
             {comment?.nickname}
           </div>
-          <div className="w-[80%] p-[0.5rem] text-base flex-[7]">
+          <div className='flex-col'>
+          <div className="p-[0.5rem] text-base flex-[7]">
             {comment?.comment}
           </div>
           {comment && comment.createdAt === comment.updatedAt ? (
-            <p className="text-sm flex-[1.5] text-[#999999]">
+            <p className="text-sm text-[#999999]">
               {dayjs(comment?.createdAt).format("YY.MM.DD A HH:MM")}
             </p>
           ) : (
-            <p className="text-xs flex-[1.7] text-[#999999]">
+            <p className="text-xs text-[#999999]">
               {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:MM")}(수정됨)
             </p>
           )}{" "}
           {user?.userId === comment?.userId ? (
             <>
-          <div className="flex flex-[1.3] font-bold text-[0.9rem] leading-[1.25rem]">
-            <button className="mr-3" onClick={showEditMode}>
+          <div className="flex font-bold text-[0.9rem] leading-[1.25rem] text-[#AAAAAA]">
+            <button className="mr-3 " onClick={showEditMode}>
               수정
             </button>
-            <div className="border-r-[0.14rem] border-r-[black]" />
+            <div className="border-r-[0.1rem] h-3 my-auto border-r-[#AAAAAA]" />
             <button className="ml-3" onClick={onDelete}>
               삭제
             </button>
+            
           </div>
           </>
           ) : 
             null
           }
+          </div>
         </div>
       )}
     </li>

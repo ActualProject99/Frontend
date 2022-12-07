@@ -95,27 +95,29 @@ const CommentList = () => {
         </span>
       </form>
 
-      <ul className="p-4 w-full max-h-[65rem]">
+      <div className='mt-5 w-[98.5%] max-h-[32.5rem] overflow-auto'>
+      <ul className="p-4 w-full">
         {data.map((comment) => (
           <Commentfix key={comment.id} comment={comment} />
         ))}
       </ul>
+      </div>
 
-      <div className="flex w-full justify-around">
+      {/* <div className="flex w-full justify-around">
         <button
-        /* disabled={currentPage <= 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)} */
+         disabled={currentPage <= 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)} 
         >
           <ArrowLeft />
         </button>
-        {/*  <span>{currentPage}</span> */}
+         <span>{currentPage}</span>
         <button
-        /* disabled={currentPage >= maxPage}
-          onClick={() => setCurrentPage((prev) => prev + 1)} */
+         disabled={currentPage >= maxPage}
+          onClick={() => setCurrentPage((prev) => prev + 1)} 
         >
           <ArrowRight />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
