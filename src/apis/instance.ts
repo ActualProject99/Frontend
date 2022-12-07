@@ -15,6 +15,8 @@ const PROXY_URL = process.env.REACT_APP_PROXY_URL;
 console.log("url", PROXY_URL, SERVER_URL);
 const myToken = getCookieToken();
 
+console.log("토큰", myToken);
+
 export const deactivate = axios.create({
   // 로그인을 안한 상태
   baseURL: isDev ? PROXY_URL : SERVER_URL,
@@ -30,22 +32,33 @@ export const activate = axios.create({
   },
 });
 
+export const instance = (token: string) =>
+  axios.create({
+    // 로그인을 한 상태
+    baseURL: isDev ? PROXY_URL : SERVER_URL,
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+    },
+  });
+
 //토큰 만료시 인터셉터
 
-activate.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    if (error.response.status === 401) {
-      try {
-        const { data } = await activate.get(`/validate`);
-        if (data.data.validate === 1) {
-          // window.location.href = '/login'
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-);
+// activate.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   async (error) => {
+//     if (error.response.status === 401) {
+//       try {
+//         const { data } = await activate.get(`/validate`);
+//         if (data.data.validate === 1) {
+//           // window.location.href = '/login'
+//         }
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//   }
+// );

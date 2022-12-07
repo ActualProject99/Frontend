@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { ArtistProps } from "../../types";
 
 const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
+  console.log("윤하", artistConcert);
   const navigate = useNavigate();
 
   return (
     <>
-      <div className="grid w-56 h-[24rem] border group overflow-y-scroll scrollbar-hide">
-        <div className="flex justify-center items-center w-56 h-[18rem] overflow-hidden ">
+      <div className="grid w-56 h-[23rem] border group overflow-y-scroll scrollbar-hide relative">
+        <div className="flex justify-center items-center w-56 h-[18rem] overflow-hidden">
           <img
             className="object-contain w-56 cursor-pointer transition-all ease-in-out duration-700 hover:scale-110"
             alt="poster"
@@ -28,6 +29,15 @@ const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
           )}
           <p className="text-sm">{artistConcert.playTime}</p>
           <p className="text-sm font-bold">{artistConcert.locationName}</p>
+          {artistConcert.saleDone === "판매완료" ? (
+            <p className="flex items-center justify-center absolute top-2 right-0 w-16 h-5 text-sm text-white font-bold rounded bg-slate-500 mr-2">
+              {artistConcert.saleDone}
+            </p>
+          ) : (
+            <p className="flex items-center justify-center absolute top-2 right-0 w-16 h-5 text-sm text-white font-bold rounded bg-accent-main mr-2">
+              {artistConcert.saleDone}
+            </p>
+          )}
         </div>
       </div>
     </>

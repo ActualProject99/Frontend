@@ -86,6 +86,7 @@ export interface IGetArtistConcert {
   playTime: string;
   ratings: string;
   calender: string;
+  saleDone: string;
 }
 
 export interface ArtistLike {
@@ -130,6 +131,7 @@ export interface IGetConcert {
   updatedAt: string;
   calender: string;
   month: number;
+  saleDone: string;
 }
 
 export interface IGetHotConcert {
@@ -231,7 +233,6 @@ export interface CalendarProps {
   className?: string;
   selectable?: boolean;
   selectedDate?: Date;
-  showingMonth?: Date;
 }
 
 export interface Concert {
