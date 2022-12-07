@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const MouseStalker = () => {
@@ -23,7 +24,7 @@ const MouseStalker = () => {
         onMouseOut={() => {
           setJanusface(true);
         }}
-        className="w-[11.8rem] h-[3rem] rounded-3xl flex justify-center items-center bg-[#7151a1]"
+        className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
       >
         {Janusface ? (
           <div className="text-white">예매하기</div>

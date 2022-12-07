@@ -8,7 +8,6 @@ import Commentfix from "./Commentfix";
 import ArrowLeft from "../../../svg/ArrowLeft";
 import ArrowRight from "../../../svg/ArrowRight";
 import { regOptComment } from "../../../utils";
-import MouseStalker from '../../MouseStalker';
 import { getCookieToken } from "../../../apis/cookie";
 import useTicket from "../../../hooks/useTicketPop";
 

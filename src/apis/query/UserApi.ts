@@ -22,6 +22,10 @@ const EditUserName = () => {
     return data;
   });
 };
+const readMyComments = async ( userId : number) => {
+  const { data } = await activate.get(`/comment/user/${userId}`);
+  return data;
+};
 
 const EditUserImg = () => {
   return useMutation(async (payload: EditImgPayload) => {
@@ -44,11 +48,13 @@ const GetLikeConcert = () => {
     return data;
   });
 };
+
 const UserApi = {
   GetUserInfo,
   EditUserName,
   EditUserImg,
   GetLikeConcert,
+  readMyComments
 };
 
 export default UserApi;

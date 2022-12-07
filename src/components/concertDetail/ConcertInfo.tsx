@@ -28,7 +28,6 @@ import FlareLane from "@flarelane/flarelane-web-sdk";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  console.log("콘서트", concert);
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
@@ -269,7 +268,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                           ) : (
                             <>
                               <div className="text-white">예매하기</div>
-                              <div className="janus1 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                              <div className="janus1 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
                             </>
                           )}
                         </button>
@@ -290,12 +289,12 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                           ) : (
                             <>
                               <div className="text-white">예매하기</div>
-                              <div className="janus2 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                              <div className="janus2 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
                             </>
                           )}
                         </button>
                       ) : null}
-                      {ticketting.title === "yse24티켓" ? (
+                      {ticketting.title === "yes24티켓" ? (
                         <button
                           onMouseOver={() => {
                             setJanusface(false);
@@ -311,7 +310,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
                           ) : (
                             <>
                               <div className="text-white">예매하기</div>
-                              <div className="janus3 absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+                              <div className="janus3 absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
                             </>
                           )}
                         </button>

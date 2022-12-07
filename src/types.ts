@@ -46,6 +46,11 @@ export interface IgetComment {
   profileImg : string;
   createdAt : string;
 }
+
+export interface IgetMyComment {
+  userId?: number;
+}
+
 interface Page {
   name: string;
   path: string;

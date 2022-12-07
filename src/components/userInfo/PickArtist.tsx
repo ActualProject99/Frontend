@@ -14,8 +14,6 @@ const PickArtist = (): JSX.Element => {
   const { data: artistLike } = ArtistApi.GetLikeArtistList();
   const { data: userData } = UserApi.GetUserInfo();
 
-  console.log("유져", userData);
-
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
 
@@ -32,10 +30,6 @@ const PickArtist = (): JSX.Element => {
     setInputValue(e.target.value);
   };
   useEffect(() => {
-    console.log(
-      "얍",
-      artists?.filter((artist) => artist.artistName.includes(inputValue))
-    );
   }, [inputValue, artists]);
 
   return (

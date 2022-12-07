@@ -6,12 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
-import { getCookieToken } from "../../../apis/cookie";
+import UserApi from '../../../apis/query/UserApi';
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+dayjs.locale("ko");
 
 const Commentfix = ({ comment }: IComments) => {
-  console.log(comment?.createdAt);
-  console.log((comment?.createdAt.split('T')[0].slice(5)),(comment?.createdAt.split('T')[1].slice(0,11)));
-  const cookie = getCookieToken();
+  const {data: user} = UserApi.GetUserInfo(); 
   const commentId = comment.commentId;
   const [isedit, setIsEdit] = useState(false);
   const {
@@ -97,21 +98,38 @@ const Commentfix = ({ comment }: IComments) => {
           </span>
         </>
       ) : (
-        <div className='flex'>
-          <img className="rounded-[50%] w-10 h-10" src={comment?.profileImg} />
-          <div className="ml-3 text-[#999999] font-bold">{comment?.nickname}</div>
-          <div className='w-[80%]'>{comment?.comment}</div>
-          <p className=" ml-1 text-xs mt-2 ">{comment?.createdAt.split('T')[0].slice(5)+comment?.createdAt.split('T')[1].slice(0,11)}</p>
-          <p className="ml-1 text-xs mt-2">{comment?.updatedAt.split('T')[0].slice(5)+comment?.updatedAt.split('T')[1].slice(0,11)}(수정됨)</p>
-          {cookie ? (
+        <div className="flex w-full justify-start items-end">
+          <img
+            className="rounded-[50%] w-[3.125rem] h-[3.125rem] object-cover"
+            src={comment?.profileImg}
+          />
+          <div className="flex ml-3 text-[#999999] font-bold">
+            {comment?.nickname}
+          </div>
+          <div className="w-[80%] p-[0.5rem] text-base flex-[7]">
+            {comment?.comment}
+          </div>
+          {comment && comment.createdAt === comment.updatedAt ? (
+            <p className="text-sm flex-[1.5] text-[#999999]">
+              {dayjs(comment?.createdAt).format("YY.MM.DD A HH:MM")}
+            </p>
+          ) : (
+            <p className="text-xs flex-[1.7] text-[#999999]">
+              {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:MM")}(수정됨)
+            </p>
+          )}{" "}
+          {user?.userId === comment?.userId ? (
             <>
-              <button className="mt-1 mr-1 text-xs" onClick={showEditMode}>
-                수정 |
-              </button>
-              <button className="mt-1 mr-1 text-xs" onClick={onDelete}>
-                삭제
-              </button>
-            </>
+          <div className="flex flex-[1.3] font-bold text-[0.9rem] leading-[1.25rem]">
+            <button className="mr-3" onClick={showEditMode}>
+              수정
+            </button>
+            <div className="border-r-[0.14rem] border-r-[black]" />
+            <button className="ml-3" onClick={onDelete}>
+              삭제
+            </button>
+          </div>
+          </>
           ) : 
             null
           }
