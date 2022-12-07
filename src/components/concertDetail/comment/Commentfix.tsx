@@ -9,6 +9,7 @@ import { IComments } from "../../../types";
 
 const Commentfix = ({ comment }: IComments) => {
   const commentId = comment.commentId;
+  console.log("댓글", comment?.profileImg);
   const [isedit, setIsEdit] = useState(false);
   const {
     register,
@@ -94,7 +95,11 @@ const Commentfix = ({ comment }: IComments) => {
         </>
       ) : (
         <>
-          {comment?.profileImg}
+          <img
+            className="w-6 h-6 rounded-[50%]"
+            alt="프로필"
+            src={comment?.profileImg}
+          />
           {comment?.comment}
           <p className="text-xs mt-2">{comment?.createdAt}</p>
           <button className="mt-1 mr-1 text-xs" onClick={showEditMode}>

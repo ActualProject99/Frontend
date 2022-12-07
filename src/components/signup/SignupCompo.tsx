@@ -130,7 +130,7 @@ const SignupCompo = (): JSX.Element => {
                 type="text"
                 className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
                 autoComplete="auto"
-                placeholder="한글, 숫자, 영문 3-10자"
+                placeholder="한글, 숫자, 영문 3-6자"
                 {...register(...regOptLogin.nickname())}
               />
               <p className="text-xs text-red-500 ">

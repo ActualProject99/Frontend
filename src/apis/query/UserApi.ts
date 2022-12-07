@@ -19,12 +19,12 @@ const GetUserInfo = () => {
       const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
       console.log("data", data);
       return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
-    // {
-    //   enabled: !!getCookieToken(),
-    //   refetchOnMount: false,
-    //   refetchOnWindowFocus: false,
-    // }
   );
 };
 

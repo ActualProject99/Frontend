@@ -59,7 +59,7 @@ export const regOptLogin = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        value: /^[가-힣0-9A-Za-z]{3,6}$/,
         message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
@@ -67,8 +67,8 @@ export const regOptLogin = {
         message: "최소 3자 이상의 닉네임을 입력해주세요",
       },
       maxLength: {
-        value: 10,
-        message: "10자 이하의 닉네임만 사용가능합니다",
+        value: 6,
+        message: "6자 이하의 닉네임만 사용가능합니다",
       },
     },
   ]),
@@ -91,7 +91,7 @@ export const regOptEdi = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        value: /^[가-힣0-9A-Za-z]{3,6}$/,
         message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
@@ -99,8 +99,8 @@ export const regOptEdi = {
         message: "최소 3자 이상의 닉네임을 입력해주세요",
       },
       maxLength: {
-        value: 10,
-        message: "10자 이하의 닉네임만 사용가능합니다",
+        value: 6,
+        message: "6자 이하의 닉네임만 사용가능합니다",
       },
       validate: {
         doubleCheck: async (v: string) => {
