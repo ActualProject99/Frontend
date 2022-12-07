@@ -19,11 +19,21 @@ const MoreInfo = ({ concert }: ConcertProps) => {
                 onClick={() => navigate(`/artist/${artist.artistId}`)}
               >
                 <img
+                  title={artist.artistName}
                   className="w-24 h-24 rounded-[50%]"
                   alt="artist"
                   src={artist.artistImg}
                 />
-                <p className="font-bold">{artist.artistName}</p>
+                {artist.artistName.length < 20 ? (
+                  <p className="font-bold ">{artist.artistName}</p>
+                ) : (
+                  <p
+                    title={artist.artistName}
+                    className="w-32 font-bold overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
+                    {artist.artistName}
+                  </p>
+                )}
               </div>
             ) : null
           )}

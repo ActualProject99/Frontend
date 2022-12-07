@@ -80,7 +80,7 @@ const UserInfo = ({ poped }): JSX.Element => {
         <div className="flex items-center">
           {!isEdit ? (
             <div className="flex flex-col items-center gap-y-2 h-28">
-              <p className="text-2xl mb-[0.5rem] mt-[-0.25rem] ">
+              <p className="text-2xl mb-[1rem] mt-[-0.2rem] ">
                 {userData?.nickname}
               </p>
               <button
