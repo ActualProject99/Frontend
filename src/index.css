@@ -8,11 +8,11 @@
 }
 .janus2 {
   background-image: url("https://bit.ly/3FeC0nD");
-  clip-path: circle(2.5rem at var(--x) var(--y));
+  clip-path: circle(1rem at var(--x) var(--y));
 }
 .janus3 {
   background-image: url("https://bit.ly/3VrmFpE");
-  clip-path: circle(2.5rem at var(--x) var(--y));
+  clip-path: circle(1rem at var(--x) var(--y));
 }
 
 @font-face {
