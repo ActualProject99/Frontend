@@ -23,7 +23,7 @@ const CommentList = () => {
   const { mutate: addCommentFn } = useMutation(addComment, {
     onSuccess: (data, variable, context) => {
       queryClient.invalidateQueries(["allComments"]);
-      window.alert("댓글을 추가했습니다.");
+      poped("댓글이 추가되었습니다.", { isToastOnly: true, newType: "ckeck" });
     },
   });
   const { Ticket, poped, userInput } = useTicket(

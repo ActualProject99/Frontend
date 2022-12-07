@@ -6,14 +6,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { regOptComment } from "../../../utils";
 import { IComments } from "../../../types";
-import UserApi from '../../../apis/query/UserApi';
+import UserApi from "../../../apis/query/UserApi";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 dayjs.locale("ko");
 
 const Commentfix = ({ comment }: IComments) => {
-  const {data: user} = UserApi.GetUserInfo(); 
+  const { data: user } = UserApi.GetUserInfo();
   const commentId = comment.commentId;
+  console.log("댓글", comment?.profileImg);
   const [isedit, setIsEdit] = useState(false);
   const {
     register,
