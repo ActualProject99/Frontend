@@ -29,7 +29,6 @@ const GetMonthConcerts = (payload: number | Date) => {
     const { data } = await deactivate.get<IGetConcert[]>(
       `/concert?month=${payload}`
     );
-    console.log("요청", data);
     return data;
   });
 };
@@ -75,7 +74,6 @@ const DeleteConcertSMS = () => {
 const GetLocation = () => {
   return useQuery<IGetLocation[]>(["location"], async () => {
     const { data } = await deactivate.get<IGetLocation[]>("/location");
-    console.log("data", data);
     return data;
   });
 };

@@ -34,6 +34,10 @@ const EditUserName = () => {
     return data;
   });
 };
+const readMyComments = async ( userId : number) => {
+  const { data } = await activate.get(`/comment/user/${userId}`);
+  return data;
+};
 
 const EditUserImg = () => {
   return useMutation(async (payload: EditImgPayload) => {

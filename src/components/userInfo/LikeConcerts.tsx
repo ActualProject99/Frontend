@@ -7,7 +7,6 @@ import { IGetConcert, likeConcertProps } from "../../types";
 const LikeConcerts = (): JSX.Element => {
   const { data: concerts } = ConcertApi.GetConcerts();
   const { data: concertLike } = ConcertApi.GetLikeConcertList();
-  console.log("data333", concerts);
 
   const likeConcerts = useMemo(() => {
     return (

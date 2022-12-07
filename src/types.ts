@@ -42,10 +42,15 @@ export interface IgetComment {
   userId?: number;
   commentId: number;
   comment: string;
-  name: string;
-  profileImg: string;
-  createdAt: string;
+  nickname : string;
+  profileImg : string;
+  createdAt : string;
 }
+
+export interface IgetMyComment {
+  userId?: number;
+}
+
 interface Page {
   name: string;
   path: string;
@@ -267,6 +272,12 @@ export interface CancelButton {
   value: boolean;
   className: string;
 }
+
+export interface CommentTimeCheck {
+  createdAt: string;
+  updateAt: string;
+}
+
 export type IconType = "ckeck" | "warn" | "info" | "only msg";
 export interface PopupOptions {
   userInputs?: UserInput;

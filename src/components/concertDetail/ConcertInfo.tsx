@@ -32,7 +32,6 @@ import Janusface from "../Janusface";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
-  console.log("콘서트", concert);
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();

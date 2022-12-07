@@ -1,8 +1,6 @@
 import { deactivate, activate } from "../instance";
 import { IPayload } from '../../types';
 
-
-
 export const readComments = async ( concertId: IPayload) => {
   const { data } = await deactivate.get(`comment/${concertId}`);
   return data;
@@ -17,7 +15,7 @@ export const addComment = async (payload: IPayload) => {
 };
 
 export const removeComment = async (payload: IPayload) => {
-  const { data } = await activate.delete(`/comment/detail/${payload}`);
+  const { data } = await activate.delete(`comment/${payload}`);
   return data;
 };
 
