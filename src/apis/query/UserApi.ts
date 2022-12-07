@@ -1,3 +1,4 @@
+import { activateNew } from "./../instance";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
@@ -7,11 +8,15 @@ import {
   IGetUser,
 } from "../../types";
 import { activate } from "../instance";
+import { getCookieToken } from "../cookie";
 
 //유저Info API
 const GetUserInfo = () => {
+  const myToken = getCookieToken();
   return useQuery<IGetUser>(["userInfo"], async () => {
-    const { data } = await activate.get<IGetUser>("/users/userinfo");
+    const { data } = await activateNew(myToken).get<IGetUser>(
+      "/users/userinfo"
+    );
     return data;
   });
 };

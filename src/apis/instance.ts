@@ -28,7 +28,15 @@ export const activate = axios.create({
     "Cache-Control": "no-cache",
   },
 });
-
+export const activateNew = (token: string) =>
+  axios.create({
+    // 로그인을 한 상태
+    baseURL: isDev ? PROXY_URL : SERVER_URL,
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Cache-Control": "no-cache",
+    },
+  });
 //토큰 만료시 인터셉터
 
 activate.interceptors.response.use(
