@@ -48,7 +48,12 @@ export interface IgetComment {
 }
 
 export interface IgetMyComment {
-  userId?: number;
+  id: number;
+  userId: number;
+  concertName: string;
+  concertId: number;
+  createdAt : string;
+  updatedAt: string;
 }
 
 interface Page {
@@ -175,6 +180,7 @@ export interface IGetLocation {
 //유저 Info Interface
 export interface IGetUser {
   id: number;
+  userId: number;
   email: any;
   nickname: string;
   phone: string;

@@ -41,7 +41,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   const [like, setLike] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [dday, setDday] = useState<Date>(new Date(concert?.ticketingDate));
-  console.log("dday", dday);
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
@@ -51,7 +50,6 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
   });
 
   const ticketings = JSON.parse(concert.ticketingUrl);
-  console.log("티켓팅", ticketings);
 
   const { Ticket, poped, userInput } = useTicket(
     "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
@@ -302,6 +300,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
       <Taps />
       <Viewer />
       <Chat />
+     
     </>
   );
 };
