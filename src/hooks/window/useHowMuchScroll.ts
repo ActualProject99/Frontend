@@ -17,9 +17,6 @@ const useIsScrolled = ({
         setIsScrolled(ref?.scrollTop > value);
       };
       ref?.addEventListener("scroll", logging);
-      return () => {
-        ref?.removeEventListener("scroll", logging);
-      };
     }
   }, [ref]);
   return { getIsScrolled };

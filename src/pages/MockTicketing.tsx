@@ -124,13 +124,6 @@ const MockTicketing = () => {
   return (
     <>
       <Ticket />
-      <button
-        onClick={() => {
-          poped(null, { isToastOnly: false });
-        }}
-      >
-        hihi
-      </button>
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
       >

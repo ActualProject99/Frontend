@@ -17,6 +17,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
   const cookie = getCookieToken();
   const { id } = useParams();
   const { data: artistConcerts } = ConcertApi.GetConcerts();
+  console.log("아콘", artistConcerts);
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 
@@ -68,7 +69,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
           </div>
           <div className="flex flex-col items-start w-[40rem] max-h-40 gap-y-6">
             <div className="flex justify-center items-center gap-x-5">
-              <p className="text-2xl">{artist.artistName}</p>
+              <p className="text-2xl font-bold">{artist.artistName}</p>
               <div className="">
                 {!like ? (
                   <button
@@ -84,15 +85,25 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
                     onClick={onEditLike}
                   >
                     <span>관심 아티스트</span>
-                    <icons.FullHeart className="text-red-500 cursor-pointer " />
+                    <icons.FullHeart
+                      iconClassName="fill-red-500 w-6 h-6"
+                      className="text-red-500 cursor-pointer"
+                    />
                   </button>
                 )}
               </div>
             </div>
-            <div className="flex flex-col flex-wrap h-24 gap-x-32 gap-y-2">
-              <p>장르 {artist.category}</p>
-              <p>데뷔 {artist.debutDate}</p>
-              <p>데뷔곡 {artist.debutSong}</p>
+            <div className="flex flex-col flex-wrap h-24 gap-x-10 gap-y-2">
+              <div className="flex flex-col gap-2 font-bold">
+                <p>장르 </p>
+                <p>데뷔 </p>
+                <p>데뷔곡 </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p>{artist.category}</p>
+                <p>{artist.debutDate}</p>
+                <p>{artist.debutSong}</p>
+              </div>
             </div>
           </div>
         </div>

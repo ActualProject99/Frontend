@@ -3,16 +3,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-
+import CameraIcon from "../../image/Camera-icon.png";
+import { ReactComponent as Logo2 } from "../../image/Logo2.svg";
 import { EditNickname } from "../../types";
 import { regOptEdi } from "../../utils";
 
 //@ts-ignore
-const UserInfo = ({ poped }): JSX.Element => {
+const UserInfo = ({ deletePoped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
+  console.log("유데", userData);
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
-
   const {
     register,
     handleSubmit,
@@ -26,8 +27,8 @@ const UserInfo = ({ poped }): JSX.Element => {
   const onNicknameEdit = useCallback(
     (payload: EditNickname) => {
       EditUserName(payload).then(() => {
-        poped("닉네임을 변경하시겠어요?", { isToastOnly: true });
         queryClient.invalidateQueries(["userInfo"]);
+        deletePoped("닉네임이 변경되었습니다", { isToastOnly: true });
       });
 
       setIsEdit(false);
@@ -48,12 +49,16 @@ const UserInfo = ({ poped }): JSX.Element => {
 
       EditUserImg(payload).then(() => {
         queryClient.invalidateQueries(["userInfo"]);
-        poped("프로필 사진 변경 완료!💾", { isToastOnly: true });
+        deletePoped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
       console.log("뭐야?");
     },
-    [EditUserImg, queryClient, poped]
+    [EditUserImg, queryClient, deletePoped]
   );
+
+  const deleteUser = () => {
+    deletePoped();
+  };
 
   return (
     <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
@@ -65,8 +70,13 @@ const UserInfo = ({ poped }): JSX.Element => {
           src={imageSrc}
         />
         <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
+          <img
+            className="absolute w-10 h-10 top-[6.3rem] left-[6.2rem] z-0"
+            alt="camera"
+            src={CameraIcon}
+          />
           <input
-            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden"
+            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden z-10"
             type="file"
             onChange={onChangeImg}
           />
@@ -74,17 +84,17 @@ const UserInfo = ({ poped }): JSX.Element => {
       </div>
       <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 mt-3">
         <div className="flex items-center h-11 ">
-          <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
-          <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
+          {/* <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} /> */}
+          <span className="text-xl ml-3 h-10 mt-4">{userData?.email}</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           {!isEdit ? (
             <div className="flex flex-col items-center gap-y-2 h-28">
               <p className="text-2xl mb-[1rem] mt-[-0.2rem] ">
                 {userData?.nickname}
               </p>
               <button
-                className="flex justify-center items-center w-28 h-10 border rounded-md"
+                className="flex justify-center items-center bg-[#7151A1] text-white w-28 h-10 rounded-md"
                 onClick={() => setIsEdit((prev) => !prev)}
               >
                 닉네임 수정
@@ -100,7 +110,7 @@ const UserInfo = ({ poped }): JSX.Element => {
                 type="text"
                 autoComplete="auto"
                 defaultValue={userData?.nickname}
-                placeholder="한글, 숫자, 영문 3-10자"
+                placeholder="한글, 숫자, 영문 3-6자"
                 {...register(...regOptEdi.editNickname())}
               />
               <p className="text-xs text-red-500 ">
@@ -111,6 +121,14 @@ const UserInfo = ({ poped }): JSX.Element => {
               </button>
             </form>
           )}
+        </div>
+        <div className="flex justify-end w-full -mt-6 mb-3">
+          <button
+            className="flex justify-center items-center w-20 h-7 border-[#707070] text-[#707070] text-sm border rounded-md"
+            onClick={deleteUser}
+          >
+            회원탈퇴
+          </button>
         </div>
       </div>
     </div>

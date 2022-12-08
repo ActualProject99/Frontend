@@ -2,9 +2,11 @@ import React from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import { ConcertProps } from "../../types";
 import { useNavigate } from "react-router-dom";
+import classNames from "classnames";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
+  const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
 
   return (
@@ -44,7 +46,11 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        <img alt="concertInfo" src={concert.concertInfo} className="pl-1"></img>
+        {moreInfoConcert.map((moreInfo: { url: string }) => (
+          <div className="flex justify-center items-center">
+            <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
+          </div>
+        ))}
       </div>
     </div>
   );

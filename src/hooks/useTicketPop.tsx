@@ -91,9 +91,15 @@ const useTicket = (
   const Ticket = () => {
     useWindowKeyboard("Escape", () => {
       setIsPoped(false);
+      if (getAfterToasted) {
+        getAfterToasted();
+      }
     });
     const handleClickModalBack = () => {
       setIsPoped(false);
+      if (getAfterToasted) {
+        getAfterToasted();
+      }
     };
     const handleAnimationEnd = () => {
       if (getToastOnly) {

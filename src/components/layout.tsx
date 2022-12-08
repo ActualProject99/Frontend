@@ -17,6 +17,8 @@ import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/Logo.svg";
+import { useQueryClient } from "@tanstack/react-query";
+import ConcertApi from "../apis/query/ConcertApi";
 
 const Search = ({
   viewer,
@@ -76,7 +78,8 @@ const Nav = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
-
+  const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
+  const queryClient = useQueryClient();
   const { Ticket, poped, userInput } = useTicketPop(
     "정말 로그아웃 하시겠어요?",
     {
@@ -84,6 +87,9 @@ const Nav = ({
       userInputs: {
         예: {
           value: () => {
+            poped(user?.nickname + "님 다음에 또 만나요!👋", {
+              isToastOnly: true,
+            });
             removeCookieToken();
             navigate("/concerts");
           },
@@ -95,7 +101,34 @@ const Nav = ({
       type: "info",
     }
   );
-  const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
+  const {
+    Ticket: DelTicket,
+    poped: deletePoped,
+    userInput: delInput,
+  } = useTicketPop("정말 회원탈퇴를 하시겠어요?🥹", {
+    cacelButton: false,
+    userInputs: {
+      예: {
+        value: () => {
+          DeleteUser().then(() => {
+            queryClient.invalidateQueries(["userInfo"]);
+          });
+          removeCookieToken();
+          navigate("/concerts");
+          toggler();
+          poped("회원탈퇴가 되었습니다!", { isToastOnly: true });
+        },
+        className: "bg-accent-main text-white",
+      },
+      아니요: null,
+    },
+    toastOnly: false,
+    type: "info",
+  });
+  const { toggler, ModalContent } = useModal(
+    "sm",
+    <UserInfo deletePoped={deletePoped} />
+  );
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
       return poped("로그인 후 이용해주세요!😉", {
@@ -140,7 +173,7 @@ const Nav = ({
   return (
     <Portal>
       <Ticket />
-
+      <DelTicket />
       <nav
         id="nav"
         className={cls(
@@ -176,7 +209,7 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 flex items-center justify-between">
+              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
                 <div
                   onClick={handleClickSearchOn}
                   className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
@@ -194,7 +227,7 @@ const Nav = ({
                   {cookie ? (
                     <>
                       <div
-                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:-translate-x-12 hover:-translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
+                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
                         onClick={handleClickLogout}
                       >
                         log
@@ -322,6 +355,8 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
+
+  ConcertApi.GetConcerts();
   return (
     <>
       {pathname === "/" ? (

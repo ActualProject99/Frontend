@@ -59,7 +59,7 @@ export const regOptLogin = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        value: /^[가-힣0-9A-Za-z]{3,6}$/,
         message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
@@ -67,8 +67,8 @@ export const regOptLogin = {
         message: "최소 3자 이상의 닉네임을 입력해주세요",
       },
       maxLength: {
-        value: 10,
-        message: "10자 이하의 닉네임만 사용가능합니다",
+        value: 6,
+        message: "6자 이하의 닉네임만 사용가능합니다",
       },
     },
   ]),
@@ -91,7 +91,7 @@ export const regOptEdi = {
     {
       required: "닉네임을 입력해주세요",
       pattern: {
-        value: /^[가-힣0-9A-Za-z]{3,10}$/,
+        value: /^[가-힣0-9A-Za-z]{3,6}$/,
         message: "특수문자는 사용이 안됩니다!",
       },
       minLength: {
@@ -99,8 +99,8 @@ export const regOptEdi = {
         message: "최소 3자 이상의 닉네임을 입력해주세요",
       },
       maxLength: {
-        value: 10,
-        message: "10자 이하의 닉네임만 사용가능합니다",
+        value: 6,
+        message: "6자 이하의 닉네임만 사용가능합니다",
       },
       validate: {
         doubleCheck: async (v: string) => {
@@ -196,3 +196,30 @@ export const filterClassStartwith = (
     .filter((cn) => starts.some((st) => cn.startsWith(st)))
     .join(" ");
 };
+export function cme_scrollToY(
+  y: number,
+  duration: number = 0,
+  element: Element | null = document.scrollingElement
+) {
+  // cancel if already on target position
+  if (!element) return new Error("there is no scrollElement or element is");
+  if (element.scrollTop === y) return;
+
+  const cosParameter = (element.scrollTop - y) / 2;
+  let scrollCount = 0,
+    oldTimestamp: number | null = null;
+
+  function step(newTimestamp: number) {
+    if (!element) return;
+    if (oldTimestamp !== null) {
+      // if duration is 0 scrollCount will be Infinity
+      scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
+      if (scrollCount >= Math.PI) return (element.scrollTop = y);
+      element.scrollTop =
+        cosParameter + y + cosParameter * Math.cos(scrollCount);
+    }
+    oldTimestamp = newTimestamp;
+    window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+}

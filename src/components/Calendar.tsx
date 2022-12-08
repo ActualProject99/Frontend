@@ -33,13 +33,10 @@ const Calendar = ({
   className,
   selectable,
   selectedDate,
-  showingMonth,
 }: CalendarProps) => {
   let today = startOfToday();
   let [dateChosen, setdateChosen] = useState<Date | null>(null);
-  let [currentMonth, setCurrentMonth] = useState(
-    showingMonth ? format(showingMonth, "MMM-yyyy") : format(today, "MMM-yyyy")
-  );
+  let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [, setDateSelected] = useRecoilState(dateSelected);
   let days = eachDayOfInterval({
@@ -75,7 +72,7 @@ const Calendar = ({
       setDateSelected(null);
     }
   };
-  console.log("showingMonth", showingMonth);
+
   return (
     <div className={cls(className)}>
       <div className="flex items-center border-b-[4px] border-dotted pb-3">

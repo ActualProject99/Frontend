@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import {
   EditImgPayload,
@@ -6,15 +6,24 @@ import {
   IGetLikeConcert,
   IGetUser,
 } from "../../types";
-import { activate } from "../instance";
 import { getCookieToken } from "../cookie";
+import { activate, instance } from "../instance";
 
 //유저Info API
 const GetUserInfo = () => {
-  return useQuery<IGetUser>(["userInfo"], async () => {
-    const { data } = await activate.get<IGetUser>("/users/userinfo");
-    return data;
-  });
+  const myToken = getCookieToken();
+  return useQuery<IGetUser>(
+    ["userInfo"],
+    async () => {
+      const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 };
 
 const EditUserName = () => {
@@ -22,6 +31,10 @@ const EditUserName = () => {
     const { data } = await activate.put("/users/userinfo", payload);
     return data;
   });
+};
+const readMyComments = async (userId: number) => {
+  const { data } = await activate.get(`/comment/user/${userId}`);
+  return data;
 };
 
 const EditUserImg = () => {
@@ -35,21 +48,18 @@ const EditUserImg = () => {
   });
 };
 
-//유저 좋아요 concerts
-
-const GetLikeConcert = () => {
-  return useQuery<IGetLikeConcert[]>(["likeConcert"], async () => {
-    const { data } = await axios.get<IGetLikeConcert[]>(
-      "http://localhost:3001/concerts"
-    );
+const DeleteUser = () => {
+  return useMutation(async () => {
+    const { data } = await activate.delete("/users/delete");
     return data;
   });
 };
+
 const UserApi = {
   GetUserInfo,
   EditUserName,
   EditUserImg,
-  GetLikeConcert,
+  DeleteUser,
 };
 
 export default UserApi;

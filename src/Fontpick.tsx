@@ -11,13 +11,10 @@ const Fontpick = () => {
     프리: "Pretendard-Regular",
   };
   const handleClickFont = (e: any) => () => {
-    console.log("욥", e);
-
     document
       .querySelector("body")
       ?.setAttribute("style", `font-family: ${fontname[e]}, sans-serif`);
   };
-  console.log(process.env.NODE_ENV);
   return process.env.NODE_ENV === "development" ? (
     <div className="flex flex-col fixed left-0 bottom-20 gap-2">
       {Object.keys(fontname).map((e: string) => (

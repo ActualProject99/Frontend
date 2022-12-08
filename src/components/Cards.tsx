@@ -16,7 +16,7 @@ const Cards = ({
     <>
       {concert && vertical ? (
         <div
-          className="p-6 border w-56 h-[21rem] cursor-pointer"
+          className="p-6 border w-56 h-[22rem] cursor-pointer relative"
           onClick={handleClick}
         >
           <img
@@ -33,6 +33,15 @@ const Cards = ({
           format(parseISO(data.startDatetime), "yyyy-MM-dd")}
       </p> */}
           <p className="text-xs">{data.locationName}</p>
+          {data.saleDone === "판매완료" ? (
+            <p className="flex items-center justify-center absolute top-7 right-5 w-16 h-5 text-sm text-white font-bold rounded bg-slate-500 mr-2">
+              {data.saleDone}
+            </p>
+          ) : (
+            <p className="flex items-center justify-center absolute top-7 right-5 w-16 h-5 text-sm text-white font-bold rounded bg-accent-main mr-2">
+              {data.saleDone}
+            </p>
+          )}
         </div>
       ) : null}
       {concert && horizontal ? (
@@ -54,6 +63,17 @@ const Cards = ({
           format(parseISO(data.startDatetime), "yyyy-MM-dd")}
       </p> */}
           <p className="text-xs">{data.locationName}</p>
+          <div className="flex justify-end">
+            {data.saleDone === "판매완료" ? (
+              <p className="flex items-center justify-center w-16 h-5 text-sm text-white font-bold rounded bg-slate-500 mr-2">
+                {data.saleDone}
+              </p>
+            ) : (
+              <p className="flex items-center justify-center w-16 h-5 text-sm text-white font-bold rounded bg-accent-main mr-2">
+                {data.saleDone}
+              </p>
+            )}
+          </div>
         </div>
       ) : null}
     </>
