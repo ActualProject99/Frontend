@@ -91,6 +91,9 @@ const useTicket = (
   const Ticket = () => {
     useWindowKeyboard("Escape", () => {
       setIsPoped(false);
+      if (getAfterToasted) {
+        getAfterToasted();
+      }
     });
     const handleClickModalBack = () => {
       setIsPoped(false);
