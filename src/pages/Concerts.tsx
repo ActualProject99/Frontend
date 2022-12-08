@@ -30,9 +30,11 @@ const Concerts = () => {
   const { data: hotConcerts } = ConcertApi.GetHotConcerts();
 
   const [groupedConcerts, setGroupedConcerts] = useState<IGetConcert[]>([]);
-  const ticketingDates = groupedConcerts?.map((concert) => {
+  const [CalendarConcerts, setCalendarConcerts] = useState<IGetConcert[]>([]);
+  const ticketingDates = CalendarConcerts?.map((concert) => {
     return new Date(concert.ticketingDate);
   });
+
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [filteredGroup, setFilteredGroup] = useState(groups);
   const [, setIsVisible] = useState(false);
@@ -94,6 +96,15 @@ const Concerts = () => {
     }
   }, [concerts]);
 
+  useEffect(() => {
+    if (concerts) {
+      setCalendarConcerts(
+        concerts?.filter((concert) => {
+          return !selectedCategory || concert.categoryId === selectedCategory;
+        })
+      );
+    }
+  }, [selectedCategory, groupedConcerts]);
   return (
     <>
       <ConcertSlider hotConcerts={hotConcerts} />

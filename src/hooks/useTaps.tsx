@@ -25,7 +25,7 @@ const useTaps = (styleNo: number, ...taps: Tap[]) => {
     ],
     [
       "flex justify-center items-center h-10 gap-x-32 border border-x-0 border-solid",
-      "cursor-pointer text-[#c2c3c5] border-b-2 hover:border-b-2 hover:border-accent-main hover:text-[#222222]",
+      "cursor-pointer text-[#c2c3c5] border-b-2 hover:border-b-2 hover:border-accent-main hover:text-[#222222] duration-700",
       "border-b-2 border-b-2 border-accent-main text-[#222222]",
     ],
   ];
