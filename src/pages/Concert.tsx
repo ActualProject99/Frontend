@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 
 const Concert = () => {
   const { data: concerts } = ConcertApi.GetConcerts();
+
+  const { data: locations } = ConcertApi.GetLocation();
+
   const { id } = useParams();
 
   return (

@@ -18,6 +18,20 @@ const GetConcerts = () => {
   });
 };
 
+const GetDetailConcerts = (payload: number) => {
+  return useQuery<IGetConcert>(
+    ["detailConcert", payload],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert>(`/concert/${payload}`);
+      return data;
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+};
+
 const GetHotConcerts = () => {
   return useQuery<IGetHotConcert[]>(["hotConcert"], async () => {
     const { data } = await deactivate.get<IGetHotConcert[]>("/hotconcert");
@@ -93,6 +107,7 @@ const ConcertApi = {
   GetLikeConcert,
   GetLikeConcertList,
   GetHotConcerts,
+  GetDetailConcerts,
 };
 
 export default ConcertApi;

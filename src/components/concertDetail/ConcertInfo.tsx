@@ -28,7 +28,7 @@ import FlareLane from "@flarelane/flarelane-web-sdk";
 import ShowCountDown from "./ShowCountDown";
 import { cls } from "../../utils";
 import Janusface from "../Janusface";
-import { motion } from "framer-motion";
+
 import useFixoluteBox from "../../hooks/useFixsolute";
 
 const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
