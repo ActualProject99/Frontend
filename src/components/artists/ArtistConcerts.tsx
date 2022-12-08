@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ArtistProps } from "../../types";
 
 const ArtistConcerts = ({ artistConcert }: ArtistProps): JSX.Element => {
-  console.log("윤하", artistConcert);
   const navigate = useNavigate();
 
   return (
