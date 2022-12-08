@@ -19,8 +19,14 @@ const Selector = ({
 const useTaps = (styleNo: number, ...taps: Tap[]) => {
   const styles = [
     [
-      "flex justify-center items-center h-10 gap-x-28 border border-x-0 border-solid",
-      "cursor-pointer",
+      "flex justify-center items-center h-10 gap-x-28 border border-x-0 border-solid", //탭을 감싸는 영역의 css
+      "cursor-pointer", //탭의 기본 css
+      "bg-slate-200", //선택된 탭의 css
+    ],
+    [
+      "flex justify-center items-center h-10 gap-x-32 border border-x-0 border-solid",
+      "cursor-pointer text-[#c2c3c5] border-b-2 hover:border-b-2 hover:border-accent-main hover:text-[#222222] duration-700",
+      "border-b-2 border-b-2 border-accent-main text-[#222222]",
     ],
   ];
   const [index, setIndex] = useState(0);
@@ -33,7 +39,7 @@ const useTaps = (styleNo: number, ...taps: Tap[]) => {
         {taps.map((tap, i) => (
           <Selector
             key={i}
-            className={styles[styleNo][1]}
+            className={i === index ? styles[styleNo][2] : styles[styleNo][1]}
             onClick={handleClick(i)}
             name={tap[0]}
           />

@@ -27,21 +27,30 @@ export interface LoginForm {
   comfirm: string;
 }
 
+export interface EditNickname {
+  nickname: string;
+}
+
 export interface CommentForm {
   comment: string;
   editcomment: string;
 }
 
-export interface IgetComment { 
+export interface IgetComment {
   concertId?: number;
-  id:number;
+  id: number;
   userId?: number;
-  commentId : number;
+  commentId: number;
   comment: string;
-  name : string,
-  profileImg : string,
-  createdAt : string
+  nickname: string;
+  profileImg: string;
+  createdAt: string;
 }
+
+export interface IgetMyComment {
+  userId?: number;
+}
+
 interface Page {
   name: string;
   path: string;
@@ -77,16 +86,23 @@ export interface IGetArtistConcert {
   playTime: string;
   ratings: string;
   calender: string;
+  saleDone: string;
 }
 
 export interface ArtistLike {
   artistId: number;
 }
 
+export interface likeArtistProps {
+  artistLikeId: number;
+  userId: number;
+  artistId: number;
+}
+
 export interface IPayload {
   concertId: string;
   commentId: number;
-  id:number;
+  id: number;
   userId: number;
   comment: string;
   name: string;
@@ -109,14 +125,36 @@ export interface IGetConcert {
   ticketingDate: string;
   ticketingUrl: string;
   locationName: string;
+  locationId: number;
   playTime: string;
   ratings: string;
   createdAt: string;
   updatedAt: string;
   calender: string;
   month: number;
+  saleDone: string;
 }
+
+export interface IGetHotConcert {
+  hotconcertId: number;
+  concertId: number;
+  posterName: string;
+  posterImg: string;
+  ticketingDate: string;
+  locationName: string;
+  exclusion: string;
+}
+
+export interface IConcertProps {
+  concert: IGetConcert;
+}
+
 export interface ConcertLike {
+  concertId: number;
+}
+export interface likeConcertProps {
+  concertLikeId: number;
+  userId: number;
   concertId: number;
 }
 
@@ -224,10 +262,6 @@ export interface ArtistIconProps {
   artist: IGetArtist;
 }
 
-export interface IConcertProps {
-  concert: IGetLikeConcert;
-}
-
 export type UserValue = number | string | boolean | null | (() => void);
 
 export interface UserInput {
@@ -239,6 +273,12 @@ export interface CancelButton {
   value: boolean;
   className: string;
 }
+
+export interface CommentTimeCheck {
+  createdAt: string;
+  updateAt: string;
+}
+
 export type IconType = "ckeck" | "warn" | "info" | "only msg";
 export interface PopupOptions {
   userInputs?: UserInput;

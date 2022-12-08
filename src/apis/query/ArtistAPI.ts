@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArtistLike, IGetArtist, IGetArtistConcert } from "../../types";
-import { deactivate, activate } from "../instance";
+import { getCookieToken } from "../cookie";
+import { deactivate, activate, instance } from "../instance";
 
 const GetArtist = () => {
   return useQuery<IGetArtist[]>(
@@ -12,6 +13,9 @@ const GetArtist = () => {
     },
     {
       cacheTime: Infinity,
+      enabled: !!getCookieToken(),
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
   );
 };
@@ -37,10 +41,20 @@ const GetLikeArtist = (payload: number) => {
   });
 };
 
+const GetLikeArtistList = () => {
+  const myToken = getCookieToken();
+  return useQuery(["LikeArtistList"], async () => {
+    const { data } = await instance(myToken).get("/artistlike/mypage");
+    return data;
+  });
+};
+
 const EditLikeArtist = () => {
+  const myToken = getCookieToken();
   return useMutation(async (payload: ArtistLike) => {
-    const { data } = await activate.put(`/artistlike/${payload.artistId}`);
-    console.log("페이", data);
+    const { data } = await instance(myToken).put(
+      `/artistlike/${payload.artistId}`
+    );
     return data;
   });
 };
@@ -50,6 +64,7 @@ const ArtistApi = {
   EditLikeArtist,
   GetArtistConcert,
   GetLikeArtist,
+  GetLikeArtistList,
 };
 
 export default ArtistApi;

@@ -10,7 +10,12 @@ import {
 } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
-import { MainContent, mainContent, mainScrollRef } from "../atoms/mainContent";
+import {
+  isMainsSrollUp,
+  MainContent,
+  mainContent,
+  mainScrollRef,
+} from "../atoms/mainContent";
 import {
   AnimatePresence,
   motion as m,
@@ -24,11 +29,10 @@ import main3 from "../image/main3.png";
 import main4 from "../image/main4.png";
 import main5 from "../image/main5.png";
 import main6 from "../image/main6.png";
-import { cls } from "../utils";
+import { cls, cme_scrollToY } from "../utils";
 import Portal from "../components/Portal";
 import { isScrolled } from "../atoms/isScrolled";
 import { IsScrolled } from "../types";
-import useTimeout from "../hooks/useTimeout";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
@@ -59,11 +63,7 @@ const ScrollTop = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
   const [getMainScrollRef] = useRecoilState(mainScrollRef);
   const handleClick = () => {
-    getMainScrollRef?.scrollTo({
-      left: 0,
-      top: 0,
-      behavior: "smooth",
-    });
+    cme_scrollToY(0, 1200, getMainScrollRef);
   };
   return (
     <Portal>
@@ -470,28 +470,30 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
     isGoingUpOrStoped: true,
     isIntroing: true,
   });
+  const [getIsMainsSrollUp, setIsMainsSrollUp] =
+    useRecoilState<boolean>(isMainsSrollUp);
   const { innerHeight: screenHeight } = window;
-  function cme_scrollToY(y, duration = 0, element = document.scrollingElement) {
-    // cancel if already on target position
-    if (element.scrollTop === y) return;
+  // function cme_scrollToY(y, duration = 0, element = document.scrollingElement) {
+  //   // cancel if already on target position
+  //   if (element.scrollTop === y) return;
 
-    const cosParameter = (element.scrollTop - y) / 2;
-    let scrollCount = 0,
-      oldTimestamp = null;
+  //   const cosParameter = (element.scrollTop - y) / 2;
+  //   let scrollCount = 0,
+  //     oldTimestamp = null;
 
-    function step(newTimestamp) {
-      if (oldTimestamp !== null) {
-        // if duration is 0 scrollCount will be Infinity
-        scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
-        if (scrollCount >= Math.PI) return (element.scrollTop = y);
-        element.scrollTop =
-          cosParameter + y + cosParameter * Math.cos(scrollCount);
-      }
-      oldTimestamp = newTimestamp;
-      window.requestAnimationFrame(step);
-    }
-    window.requestAnimationFrame(step);
-  }
+  //   function step(newTimestamp) {
+  //     if (oldTimestamp !== null) {
+  //       // if duration is 0 scrollCount will be Infinity
+  //       scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
+  //       if (scrollCount >= Math.PI) return (element.scrollTop = y);
+  //       element.scrollTop =
+  //         cosParameter + y + cosParameter * Math.cos(scrollCount);
+  //     }
+  //     oldTimestamp = newTimestamp;
+  //     window.requestAnimationFrame(step);
+  //   }
+  //   window.requestAnimationFrame(step);
+  // }
   const handleClick = () => {
     const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
     cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
@@ -501,7 +503,6 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
     cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
   });
   useEffect(() => {
-    // const check
     const progesslog = () => {
       const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
       const isIntroing = scrollYProgress.get() < 10 / 16;
@@ -511,9 +512,6 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
       }));
     };
     snapContainer.current.addEventListener("scroll", progesslog);
-    return () => {
-      snapContainer.current.removeEventListener("scroll", progesslog);
-    };
   }, []);
   return (
     <button
@@ -752,13 +750,15 @@ const Intro = ({ scrollYProgress }) => {
           Tgle
         </m.span>
       </m.div>
-      {motionProps.map((prop, i) => (
-        <m.img
-          key={i}
-          {...prop}
-          className="w-[200px] h-[300px] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        ></m.img>
-      ))}
+      {motionProps.map((prop, i) => {
+        return (
+          <m.img
+            key={i}
+            {...prop}
+            className="w-[calc(200px_+_8vw)] h-[calc(300px_+_12vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          ></m.img>
+        );
+      })}
     </div>
   );
 };

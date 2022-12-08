@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
@@ -16,6 +17,10 @@ import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
+import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
+import { useQueryClient, QueryClient } from "@tanstack/react-query";
+import ConcertApi from "../apis/query/ConcertApi";
+import { deactivate } from "../apis/instance";
 
 const Search = ({
   viewer,
@@ -23,9 +28,15 @@ const Search = ({
   viewer: { on: () => void; off: () => void };
 }) => {
   const { register, handleSubmit, reset, setFocus } = useForm();
-  const onValid = () => {
+  const [payload, setPayload] = useState("");
+  const { data: searchedData } = ConcertApi.GetSearchData(payload);
+  const [artists, concerts] = searchedData ? searchedData : [[], []];
+  console.log("데이터", searchedData);
+  const onValid = async ({ query }) => {
+    setPayload(query);
     reset();
   };
+
   useEffect(() => {
     setFocus("search");
   }, [setFocus]);
@@ -44,7 +55,7 @@ const Search = ({
               spellCheck="false"
               className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
               autoComplete="off"
-              {...register("search")}
+              {...register("query")}
             />
             <button className="w-1 h-1 overflow-hidden">search</button>
           </div>
@@ -55,6 +66,8 @@ const Search = ({
             esc
           </div>
         </div>
+        <div>{artists?.map((artist) => artist.artistName)}</div>
+        <div>{concerts?.map((concert) => concert.concertName)}</div>
       </form>
     </Modal>
   );
@@ -75,7 +88,8 @@ const Nav = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
-
+  const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
+  const queryClient = useQueryClient();
   const { Ticket, poped, userInput } = useTicketPop(
     "정말 로그아웃 하시겠어요?",
     {
@@ -94,14 +108,41 @@ const Nav = ({
       type: "info",
     }
   );
-  const { toggler, ModalContent } = useModal("sm", <UserInfo poped={poped} />);
+  const {
+    Ticket: DelTicket,
+    poped: deletePoped,
+    userInput: delInput,
+  } = useTicketPop("정말 회원탈퇴를 하시겠어요?🥹", {
+    cacelButton: false,
+    userInputs: {
+      예: {
+        value: () => {
+          DeleteUser().then(() => {
+            queryClient.invalidateQueries(["userInfo"]);
+          });
+          removeCookieToken();
+          navigate("/concerts");
+          toggler();
+          poped("회원탈퇴가 되었습니다!", { isToastOnly: true });
+        },
+        className: "bg-accent-main text-white",
+      },
+      아니요: null,
+    },
+    toastOnly: false,
+    type: "info",
+  });
+  const { toggler, ModalContent } = useModal(
+    "sm",
+    <UserInfo deletePoped={deletePoped} />
+  );
   const handleClickPage = (path: string) => () => {
     if (pathname !== "user/mypick" && path === "user/mypick" && !cookie)
       return poped("로그인 후 이용해주세요!😉", {
         isToastOnly: true,
         newType: "warn",
       });
-    if (!pathname.includes(path)) return navigate(path);
+    if (pathname !== "/" + path) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
@@ -135,32 +176,29 @@ const Nav = ({
       }
     });
   }, [pathname]);
+
   return (
     <Portal>
       <Ticket />
-
+      <DelTicket />
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 ",
           pathname === "/" ? "" : "bg-white"
         )}
       >
         {normal ? (
-          <div className="flex items-center">
-            <div className="min-w-[360px] w-screen mx-auto flex justify-between items-center">
+          <div className="flex items-center w-screen h-16 ">
+            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[140px] h-10 rounded ml-10 cursor-pointer"
+                  className="w-[180px] h-10 rounded cursor-pointer mb-2"
                   onClick={() => navigate("/")}
                 >
-                  <img
-                    className="w-34 h-12"
-                    alt="logo"
-                    src="https://res.cloudinary.com/dwlshjafv/image/upload/v1670224597/KakaoTalk_20221205_144918151_ivwxck.png"
-                  />
+                  <Logo width="11rem" height="3.5rem" />
                 </div>
-                <ul className="flex gap-4 xl:gap-10 font-logo self-end">
+                <ul className="flex gap-4 xl:gap-10 font-bold text-xl self-end">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li
@@ -178,10 +216,10 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
-                <div
+              <div className="w-60 h-18 flex items-center justify-between">
+                <button
                   onClick={handleClickSearchOn}
-                  className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
+                  className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full transition-all overflow-hidden"
                 >
                   <div className="w-28 flex justify-between items-center">
                     <div className="w-10 h-10 flex justify-center items-center">
@@ -191,18 +229,18 @@ const Nav = ({
                       Ctrl Shift F
                     </div>
                   </div>
-                </div>
-                <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
+                </button>
+                <div className="relative group w-16 pl-4 h-12 font-bold flex justify-center items-center ">
                   {cookie ? (
                     <>
-                      <div
-                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
+                      <button
+                        className="text-xs flex justify-center items-center absolute group-hover:-translate-x-12 hover:-translate-x-12 transition-all bg-primary-50 w-10 h-10 rounded-full leading-3"
                         onClick={handleClickLogout}
                       >
                         log
                         <br />
                         out
-                      </div>
+                      </button>
                       <img
                         alt="profile"
                         src={user?.profileImg}
@@ -236,10 +274,8 @@ const Nav = ({
                   contentNo === 1 ? "text-white" : "text-black"
                 )}
               >
-                <div className="text-5xl py-2 font-logo cursor-pointer">
-                  Tgle
-                </div>
-                <ul className="flex gap-10 text-lg font-logo">
+                <div className="text-5xl py-2  cursor-pointer">Tgle</div>
+                <ul className="flex gap-10 text-lg ">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li key={i}>
@@ -272,7 +308,7 @@ const Footer = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="flex items-center w-[32rem]">
             <div className="flex items-baseline w-[27rem] h-12 rounded-tl-md pt-1 bg-accent-main gap-2">
-              <p className="font-logo text-black text-3xl ml-4"> Tgle</p>
+              <p className="font-bold text-black text-3xl ml-4"> Tgle</p>
               <p className="text-[#e8e8e8] text-sm font-bold">
                 Have Fun Ticketing ♬
               </p>
@@ -291,7 +327,7 @@ const Footer = () => {
                   key={position}
                   className="flex flex-col items-center gap-2"
                 >
-                  <span className="text-lg font-logo inline-block mb-1 capitalize">
+                  <span className="text-lg font-bold inline-block mb-1 capitalize">
                     {position}
                   </span>
                   {members.map((member) =>
@@ -324,6 +360,12 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
+
+  const { data: concerts } = ConcertApi.GetConcerts();
+
+  console.log("콘서트", concerts);
+  const queryClient = useQueryClient();
+  console.log("쿼리", queryClient);
   return (
     <>
       {pathname === "/" ? (

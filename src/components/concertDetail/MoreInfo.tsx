@@ -1,10 +1,10 @@
-import React from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import { ConcertProps } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
+  const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
 
   return (
@@ -19,22 +19,36 @@ const MoreInfo = ({ concert }: ConcertProps) => {
                 onClick={() => navigate(`/artist/${artist.artistId}`)}
               >
                 <img
+                  title={artist.artistName}
                   className="w-24 h-24 rounded-[50%]"
                   alt="artist"
                   src={artist.artistImg}
                 />
-                <p className="font-bold">{artist.artistName}</p>
+                {artist.artistName.length < 20 ? (
+                  <p className="font-bold ">{artist.artistName}</p>
+                ) : (
+                  <p
+                    title={artist.artistName}
+                    className="w-32 font-bold overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
+                    {artist.artistName}
+                  </p>
+                )}
               </div>
             ) : null
           )}
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">공연기간</p>
-        <p className="pl-1 font-bold">{concert.concertDate}</p>
+        <p className="pl-1 font-bold">{concert?.concertDate}</p>
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        <img alt="concertInfo" src={concert.concertInfo} className="pl-1"></img>
+        {moreInfoConcert.map((moreInfo: { url: string }) => (
+          <div className="flex justify-center items-center">
+            <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
+          </div>
+        ))}
       </div>
     </div>
   );

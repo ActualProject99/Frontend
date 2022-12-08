@@ -86,7 +86,7 @@ export const NaverMap = ({ location }: ConcertProps) => {
             src={location.locationImg}
           />
           <div className="flex flex-wrap flex-col  gap-y-3 py-2">
-            <p className="text-xl mb-3">{location.locationName}</p>
+            <p className="text-xl mb-3 font-bold">{location.locationName}</p>
             <p>{location.locationAddress}</p>
             <p>{location.locationCall}</p>
             <p
@@ -98,7 +98,7 @@ export const NaverMap = ({ location }: ConcertProps) => {
           </div>
         </div>
         <div>
-          <p className="flex items-center justify-start text-xl w-60 h-20 pl-1">
+          <p className="flex items-center justify-start text-accent-main font-bold text-xl w-60 h-20 pl-1">
             공연장 위치
           </p>
           <div id="map" className="relative z-0" style={mapStyle}></div>

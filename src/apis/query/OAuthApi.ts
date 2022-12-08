@@ -6,7 +6,7 @@ export const OAuthAPI = {
     return await deactivate
       .get(`/users/oauth/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
       .then((data) => {
-        console.log("토큰", data);
+        console.log("data", data);
         setAccessToken("data.headers.authorization");
       })
       .then(() => {

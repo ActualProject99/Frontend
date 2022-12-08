@@ -1,54 +1,41 @@
-import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
-import useTicket from "../../hooks/useTicketPop";
-import { LoginForm } from "../../types";
-import { regOptLogin } from "../../utils";
+import CameraIcon from "../../image/Camera-icon.png";
+import { ReactComponent as Logo2 } from "../../image/Logo2.svg";
+import { EditNickname } from "../../types";
+import { regOptEdi } from "../../utils";
+import { motion } from "framer-motion";
 
 //@ts-ignore
-const UserInfo = ({ poped }): JSX.Element => {
+const UserInfo = ({ deletePoped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
+  console.log("유데", userData);
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
-
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm<LoginForm>({ mode: "onChange" });
+  } = useForm<EditNickname>();
 
   const queryClient = useQueryClient();
-
   const [isEdit, setIsEdit] = useState(false);
-  const [editNickname, setEditNickname] = useState(userData?.nickname);
 
-  const onChangeNickname = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setEditNickname(value);
+  const onNicknameEdit = useCallback(
+    (payload: EditNickname) => {
+      EditUserName(payload).then(() => {
+        queryClient.invalidateQueries(["userInfo"]);
+        deletePoped("닉네임이 변경되었습니다", { isToastOnly: true });
+      });
+
+      setIsEdit(false);
     },
-    [setEditNickname]
+    [EditUserName, queryClient]
   );
-
-  const onNicknameEdit = useCallback((): void => {
-    if (editNickname === "") {
-      return poped("입력해주세요!", { newType: "info" });
-    }
-    if (!editNickname?.trim()) return;
-    const payload = {
-      nickname: editNickname,
-    };
-
-    EditUserName(payload).then(() => {
-      poped();
-      queryClient.invalidateQueries(["userInfo"]);
-    });
-
-    setIsEdit(false);
-  }, [editNickname, EditUserName, queryClient]);
 
   const [imageSrc, setImageSrc] = useState(userData?.profileImg);
   const onChangeImg = useCallback(
@@ -63,15 +50,24 @@ const UserInfo = ({ poped }): JSX.Element => {
 
       EditUserImg(payload).then(() => {
         queryClient.invalidateQueries(["userInfo"]);
-        poped("프로필 사진 변경 완료!💾", { isToastOnly: true });
+        deletePoped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
       console.log("뭐야?");
     },
-    [EditUserImg, queryClient, poped]
+    [EditUserImg, queryClient, deletePoped]
   );
 
+  const deleteUser = () => {
+    deletePoped();
+  };
+
   return (
-    <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6"
+    >
       <div className="w-36 h-36 relative">
         <img
           id="uploadedimage"
@@ -80,26 +76,31 @@ const UserInfo = ({ poped }): JSX.Element => {
           src={imageSrc}
         />
         <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
+          <img
+            className="absolute w-10 h-10 top-[6.3rem] left-[6.2rem] z-0"
+            alt="camera"
+            src={CameraIcon}
+          />
           <input
-            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden"
+            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden z-10"
             type="file"
             onChange={onChangeImg}
           />
         </label>
       </div>
-      <div className="flex flex-col items-center justify-center w-96 h-36 gap-y-4 mt-3">
+      <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 mt-3">
         <div className="flex items-center h-11 ">
-          <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
-          <span className="text-2xl ml-3 h-10 ">{userData?.email}</span>
+          {/* <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} /> */}
+          <span className="text-xl ml-3 h-10 mt-4">{userData?.email}</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           {!isEdit ? (
             <div className="flex flex-col items-center gap-y-2 h-28">
-              <p className="text-2xl mb-[0.5rem] mt-[-0.25rem] ">
+              <p className="text-2xl mb-[1rem] mt-[-0.2rem] ">
                 {userData?.nickname}
               </p>
               <button
-                className="flex justify-center items-center w-28 h-10 border rounded-md"
+                className="flex justify-center items-center bg-[#7151A1] text-white w-28 h-10 rounded-md"
                 onClick={() => setIsEdit((prev) => !prev)}
               >
                 닉네임 수정
@@ -111,12 +112,12 @@ const UserInfo = ({ poped }): JSX.Element => {
               onSubmit={handleSubmit(onNicknameEdit)}
             >
               <input
-                className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-1/2 p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
+                className="text-2xl border-x-0 border-t-0 border-b-1 border-primary-500 h-12 w-full p-0 -mt-3 focus:border-purple-500 focus:ring-transparent"
                 type="text"
-                value={editNickname}
                 autoComplete="auto"
-                placeholder="한글, 숫자, 영문 3-10자"
-                {...register(...regOptLogin.nickname())}
+                defaultValue={userData?.nickname}
+                placeholder="한글, 숫자, 영문 3-6자"
+                {...register(...regOptEdi.editNickname())}
               />
               <p className="text-xs text-red-500 ">
                 {errors.nickname?.message as string}
@@ -127,8 +128,16 @@ const UserInfo = ({ poped }): JSX.Element => {
             </form>
           )}
         </div>
+        <div className="flex justify-end w-full -mt-6 mb-3">
+          <button
+            className="flex justify-center items-center w-20 h-7 border-[#707070] text-[#707070] text-sm border rounded-md"
+            onClick={deleteUser}
+          >
+            회원탈퇴
+          </button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

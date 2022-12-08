@@ -1,12 +1,49 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ConcertLike, IGetConcert, IGetLocation, PostSMS } from "../../types";
-import { activate, deactivate } from "../instance";
+
+import {
+  ConcertLike,
+  IGetConcert,
+  IGetHotConcert,
+  IGetLocation,
+  PostSMS,
+} from "../../types";
+import { getCookieToken } from "../cookie";
+import { activate, deactivate, instance } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
-  return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+  return useQuery<IGetConcert[]>(
+    ["concert"],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+      return data;
+    },
+    {
+      staleTime: 5000,
+      cacheTime: Infinity,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+};
+
+const GetDetailConcerts = (payload: number) => {
+  return useQuery<IGetConcert>(
+    ["detailConcert", payload],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert>(`/concert/${payload}`);
+      return data;
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+};
+
+const GetHotConcerts = () => {
+  return useQuery<IGetHotConcert[]>(["hotConcert"], async () => {
+    const { data } = await deactivate.get<IGetHotConcert[]>("/hotconcert");
     return data;
   });
 };
@@ -16,7 +53,21 @@ const GetMonthConcerts = (payload: number | Date) => {
     const { data } = await deactivate.get<IGetConcert[]>(
       `/concert?month=${payload}`
     );
-    console.log("요청", data);
+    return data;
+  });
+};
+
+const GetSearchData = (payload: string) => {
+  return useQuery(["searchData", payload], async () => {
+    const { data } = await deactivate.get(`/search?searchQuery=${payload}`);
+    return data;
+  });
+};
+// 콘서트 좋아요
+const GetLikeConcertList = () => {
+  const myToken = getCookieToken();
+  return useQuery(["LikeConcertList"], async () => {
+    const { data } = await instance(myToken).get("/concertlike/mypage");
     return data;
   });
 };
@@ -29,8 +80,11 @@ const GetLikeConcert = (payload: number) => {
 };
 
 const EditLikeConcerts = () => {
+  const myToken = getCookieToken();
   return useMutation(async (payload: ConcertLike) => {
-    const { data } = await activate.put(`/concertlike/${payload.concertId}`);
+    const { data } = await instance(myToken).put(
+      `/concertlike/${payload.concertId}`
+    );
     return data;
   });
 };
@@ -39,13 +93,13 @@ const EditLikeConcerts = () => {
 
 const PostConcertSMS = () => {
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await axios.post("url", payload);
+    const { data } = await activate.post("url", payload);
     return data;
   });
 };
 const DeleteConcertSMS = () => {
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await axios.patch("url", payload);
+    const { data } = await activate.post("url", payload);
     return data;
   });
 };
@@ -54,7 +108,6 @@ const DeleteConcertSMS = () => {
 const GetLocation = () => {
   return useQuery<IGetLocation[]>(["location"], async () => {
     const { data } = await deactivate.get<IGetLocation[]>("/location");
-    console.log("data", data);
     return data;
   });
 };
@@ -67,6 +120,10 @@ const ConcertApi = {
   GetLocation,
   GetMonthConcerts,
   GetLikeConcert,
+  GetLikeConcertList,
+  GetHotConcerts,
+  GetDetailConcerts,
+  GetSearchData,
 };
 
 export default ConcertApi;

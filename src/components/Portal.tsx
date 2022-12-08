@@ -27,7 +27,7 @@ export const Modal = ({
         id="modal"
         onClick={onClick}
         {...rest}
-        className="fixed w-screen h-screen backdrop-blur-sm backdrop-saturate-200 top-0 left-0"
+        className="fixed w-screen h-screen backdrop-blur-sm backdrop-brightness-90 top-0 left-0"
       />
       {children}
     </Portal>
@@ -46,9 +46,9 @@ export const useModal = (size: "md" | "sm", content: ReactNode) => {
         <Modal onClick={toggler}>
           <div
             className={cls(
-              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20",
+              "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20",
               size === "md" && "w-1/2 h-3/4",
-              size === "sm" && "w-1/4 h-1/2"
+              size === "sm" && "w-1/35 h-1/2"
             )}
           >
             <div
