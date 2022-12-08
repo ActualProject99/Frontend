@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const MouseStalker = () => {
@@ -23,17 +24,18 @@ const MouseStalker = () => {
         onMouseOut={() => {
           setJanusface(true);
         }}
-        className="w-[11.8rem] h-[3rem] rounded-3xl flex justify-center items-center bg-[#7151a1]"
+        className="w-[11.8rem] h-[3rem] rounded-md flex justify-center items-center bg-[#7151a1]"
       >
         {Janusface ? (
           <div className="text-white">예매하기</div>
         ) : (
           <>
             <div className="text-white">예매하기</div>
-            <div className="janus absolute bg-no-repeat bg-contain w-[8rem] h-[1.5rem] bg-[#7151a1]" />
+            <div className="janus absolute bg-no-repeat bg-contain w-[10rem] h-[2rem] bg-[#7151a1]" />
           </>
         )}
       </button>
+      
     </>
   );
 };
