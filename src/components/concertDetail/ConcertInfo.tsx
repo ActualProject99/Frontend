@@ -162,7 +162,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
     fixoluteStyle,
   } = useFixoluteBox(
     80,
-    screenWidth < 1200 ? screenWidth - 1200 + 28 : (screenWidth - 1200) / 2 + 32
+    screenWidth < 1200 ? screenWidth - 1200 + 26 : (screenWidth - 1200) / 2 + 31
   );
 
   return (
@@ -178,7 +178,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
         <p className="text-2xl text-black font-bold">{concert.concertName}</p>
       </div>
       <div ref={limit}>
-        <div className="w-full h-[740px] p-5 font-hanna mb-12">
+        <div className="w-full h-[740px] px-5 my-5 font-hanna mb-12">
           <div className="flex gap-2 m-auto relative">
             <div className="flex flex-col gap-2 w-[31rem]">
               <img
