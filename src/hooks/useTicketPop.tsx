@@ -94,6 +94,9 @@ const useTicket = (
     });
     const handleClickModalBack = () => {
       setIsPoped(false);
+      if (getAfterToasted) {
+        getAfterToasted();
+      }
     };
     const handleAnimationEnd = () => {
       if (getToastOnly) {
