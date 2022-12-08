@@ -26,6 +26,7 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
     setDragging(false);
   }, []);
   useEffect(() => {
+    console.log("dd", document.querySelector(".slick-prev"));
     setTimeout(() => {
       document
         .querySelector(".slick-prev")
