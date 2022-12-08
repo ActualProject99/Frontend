@@ -6,9 +6,7 @@ import classNames from "classnames";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
-  console.log("콘서트", concert);
   const moreInfoConcert = JSON.parse(concert.concertInfo);
-  console.log("작품설명", moreInfoConcert);
   const navigate = useNavigate();
 
   return (

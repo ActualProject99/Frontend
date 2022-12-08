@@ -12,12 +12,10 @@ import { activate, instance } from "../instance";
 //유저Info API
 const GetUserInfo = () => {
   const myToken = getCookieToken();
-  console.log("마이", myToken);
   return useQuery<IGetUser>(
     ["userInfo"],
     async () => {
       const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
-      console.log("data", data);
       return data;
     },
     {
@@ -34,7 +32,7 @@ const EditUserName = () => {
     return data;
   });
 };
-const readMyComments = async ( userId : number) => {
+const readMyComments = async (userId: number) => {
   const { data } = await activate.get(`/comment/user/${userId}`);
   return data;
 };
