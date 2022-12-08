@@ -27,11 +27,6 @@ const Cards = ({
           <p className="whitespace-nowrap overflow-hidden text-ellipsis text-base font-bold">
             {data.concertName}
           </p>
-          {/* <p className="text-xs">
-        {format(parseISO(data.startDatetime), "yyyy-MM-dd") +
-          " ~ " +
-          format(parseISO(data.startDatetime), "yyyy-MM-dd")}
-      </p> */}
           <p className="text-xs">{data.locationName}</p>
           {data.saleDone === "판매완료" ? (
             <p className="flex items-center justify-center absolute top-7 right-5 w-16 h-5 text-sm text-white font-bold rounded bg-slate-500 mr-2">

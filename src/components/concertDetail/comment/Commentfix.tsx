@@ -14,7 +14,6 @@ dayjs.locale("ko");
 const Commentfix = ({ comment }: IComments) => {
   const { data: user } = UserApi.GetUserInfo();
   const commentId = comment.commentId;
-  console.log("댓글", comment?.profileImg);
   const [isedit, setIsEdit] = useState(false);
   const {
     register,

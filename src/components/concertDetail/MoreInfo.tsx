@@ -1,13 +1,10 @@
-import React from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import { ConcertProps } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
-  console.log("콘서트", concert);
-  // const moreInfoConcert = JSON.parse(concert?.concertInfo);
-  // console.log("작품설명", moreInfoConcert);
+  const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
 
   return (
@@ -47,11 +44,11 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        {/* {moreInfoConcert.map((moreInfo: { url: string }) => (
+        {moreInfoConcert.map((moreInfo: { url: string }) => (
           <div className="flex justify-center items-center">
             <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
           </div>
-        ))} */}
+        ))}
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import PickArtist from "../components/userInfo/PickArtist";
 import useTaps from "../hooks/useTaps";
 import LoginCompo from "../components/login/LoginCompo";
 import SignupCompo from "../components/signup/SignupCompo";
-import Chatting from "../components/concertDetail/Chatting";
 import { motion } from "framer-motion";
 
 const Login = () => {
@@ -33,8 +32,7 @@ const MyPick = () => {
   const { Taps, Viewer } = useTaps(
     1,
     ["좋아요 공연", <LikeConcerts />],
-    ["작성한 댓글", <MyComments />],
-    ["채팅 테스트", <Chatting />]
+    ["작성한 댓글", <MyComments />]
   );
 
   return (

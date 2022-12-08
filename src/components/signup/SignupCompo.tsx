@@ -38,7 +38,6 @@ const SignupCompo = (): JSX.Element => {
         nickname,
         phoneNumber,
       });
-      console.log("리스폰스", response);
       if (response.status === 201) {
         poped("가입을 축하드려요!🎉", {
           afterToasted: () => {

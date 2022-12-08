@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, memo } from "react";
 import {
   FacebookIcon,
   FacebookMessengerShareButton,
@@ -11,10 +11,8 @@ import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
 import ConcertApi from "../../apis/query/ConcertApi";
-import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
 import { NaverMap } from "./NaverMap";
-
 import useTaps from "../../hooks/useTaps";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -31,7 +29,7 @@ import Janusface from "../Janusface";
 
 import useFixoluteBox from "../../hooks/useFixsolute";
 
-const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
+const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
@@ -300,7 +298,7 @@ const ConcertInfo = ({ concert }: ConcertProps): JSX.Element => {
       </div>
     </>
   );
-};
+});
 
 const DataSlice = ({ name, value }: { name: string; value: string }) => {
   return (

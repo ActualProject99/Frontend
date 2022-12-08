@@ -7,12 +7,10 @@ import { activate, instance } from "../instance";
 //유저Info API
 const GetUserInfo = () => {
   const myToken = getCookieToken();
-  console.log("마이", myToken);
   return useQuery<IGetUser>(
     ["userInfo"],
     async () => {
       const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
-      console.log("data", data);
       return data;
     },
     {

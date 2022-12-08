@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import { setAccessToken, getCookieToken } from "../../apis/cookie";
-import { activate, deactivate } from "../../apis/instance";
-import { userState } from "../../atoms/user";
+import { deactivate } from "../../apis/instance";
 import { cls, regOptLogin } from "../../utils";
-import { LoginForm, User } from "../../types";
+import { LoginForm } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useTicket from "../../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../../image/Logo.svg";
@@ -20,10 +18,7 @@ const LoginCompo = (): JSX.Element => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginForm>({ mode: "onChange" });
-
-  const [user, setUser] = useRecoilState<User>(userState);
-
-  const { Ticket, poped, userInput } = useTicket(
+  const { Ticket, poped } = useTicket(
     "로그인 실패..!\n아이디와 패스워드를 확인해주세요😢",
     {
       cacelButton: false,
@@ -49,8 +44,6 @@ const LoginCompo = (): JSX.Element => {
         },
         newType: "ckeck",
       });
-
-      setUser(() => ({ isLoggedin: true, id: 1, email: data.email }));
     } catch (error) {
       poped();
       console.log(error);
@@ -58,7 +51,6 @@ const LoginCompo = (): JSX.Element => {
   };
   const kakaoBtn = () => {
     const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
-    console.log("리다이렉트", REDIRECT_URL);
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
