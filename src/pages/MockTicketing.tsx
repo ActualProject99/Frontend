@@ -122,7 +122,11 @@ const MockTicketing = () => {
   }, []);
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <Ticket />
       <div
         className={cls("flex justify-center ", isGaming ? "block" : "hidden")}
@@ -388,7 +392,7 @@ const MockTicketing = () => {
           </div>
         </Modal>
       ) : null}
-    </>
+    </motion.div>
   );
 };
 

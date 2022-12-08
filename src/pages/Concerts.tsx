@@ -11,6 +11,7 @@ import { Concert, IGetConcert } from "../types";
 import ConcertApi from "../apis/query/ConcertApi";
 import { monthConcerts } from "../atoms/date";
 import { format } from "date-fns";
+import { motion } from "framer-motion";
 
 const groups = [
   "전체",
@@ -107,55 +108,62 @@ const Concerts = () => {
   }, [selectedCategory, groupedConcerts]);
   return (
     <>
-      <ConcertSlider hotConcerts={hotConcerts} />
-      <div className="pt-16 mt-[680px] mb-10">
-        <div className="px-4 h-full">
-          <div className="grid grid-cols-3 h-full relative w-[95%] mx-auto">
-            <div className="relative h-[500px]">
-              <div
-                ref={fixsolute}
-                style={fixoluteStyle}
-                className="w-[340px] flex flex-col items-center gap-6"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <ConcertSlider hotConcerts={hotConcerts} />
+        <div className="pt-16 mt-[620px] mb-10">
+          <div className="px-4 h-full">
+            <div className="grid grid-cols-3 h-full relative w-[95%] mx-auto">
+              <div className="relative h-[500px]">
+                <div
+                  ref={fixsolute}
+                  style={fixoluteStyle}
+                  className="w-[340px] flex flex-col items-center gap-6"
+                >
+                  <Calendar
+                    selectable
+                    checkedDates={ticketingDates as Date[]}
+                    className="w-[95%]"
+                  />
+                  <ul className="flex justify-center gap-3 flex-wrap">
+                    {filteredGroup.map((group, i) => (
+                      <li
+                        key={group}
+                        className={cls(
+                          "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
+                          i ===
+                            filteredGroup.indexOf(groups[selectedCategory]) &&
+                            "bg-primary-main text-white"
+                        )}
+                        onClick={handleClick(group)}
+                      >
+                        {group}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <section
+                ref={limit}
+                className="md:pl-8 flex flex-col min-h-[540px] justify-center items-center gap-10 md:col-span-2"
               >
-                <Calendar
-                  selectable
-                  checkedDates={ticketingDates as Date[]}
-                  className="w-[95%]"
-                />
-                <ul className="flex justify-center gap-3 flex-wrap">
-                  {filteredGroup.map((group, i) => (
-                    <li
-                      key={group}
-                      className={cls(
-                        "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                        i === filteredGroup.indexOf(groups[selectedCategory]) &&
-                          "bg-primary-main text-white"
-                      )}
-                      onClick={handleClick(group)}
-                    >
-                      {group}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <div className="flex gap-4 justify-center flex-wrap">
+                  {groupedConcerts.length > 0 ? (
+                    groupedConcerts?.map((consert, i) => (
+                      <Cards key={i} vertical concert data={consert} />
+                    ))
+                  ) : (
+                    <p>해당 날짜에 공연이 없어요!</p>
+                  )}
+                </div>
+              </section>
             </div>
-            <section
-              ref={limit}
-              className="md:pl-8 flex flex-col min-h-[540px] justify-center items-center gap-10 md:col-span-2"
-            >
-              <div className="flex gap-4 justify-center flex-wrap">
-                {groupedConcerts.length > 0 ? (
-                  groupedConcerts?.map((consert, i) => (
-                    <Cards key={i} vertical concert data={consert} />
-                  ))
-                ) : (
-                  <p>해당 날짜에 공연이 없어요!</p>
-                )}
-              </div>
-            </section>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

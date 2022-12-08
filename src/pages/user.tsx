@@ -5,12 +5,29 @@ import useTaps from "../hooks/useTaps";
 import LoginCompo from "../components/login/LoginCompo";
 import SignupCompo from "../components/signup/SignupCompo";
 import Chatting from "../components/concertDetail/Chatting";
+import { motion } from "framer-motion";
 
 const Login = () => {
-  return <LoginCompo />;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <LoginCompo />
+    </motion.div>
+  );
 };
 const Signup = () => {
-  return <SignupCompo />;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <SignupCompo />;
+    </motion.div>
+  );
 };
 const MyPick = () => {
   const { Taps, Viewer } = useTaps(
@@ -21,11 +38,15 @@ const MyPick = () => {
   );
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <PickArtist />
       <Taps />
       <Viewer />
-    </div>
+    </motion.div>
   );
 };
 const user = {
