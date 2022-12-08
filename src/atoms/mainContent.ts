@@ -13,3 +13,7 @@ export const mainScrollRef = atom<MainScrollRef>({
   key: "mainScrollRef",
   default: initRef,
 });
+export const isMainsSrollUp = atom<boolean>({
+  key: "isMainScrollup",
+  default: true,
+});
