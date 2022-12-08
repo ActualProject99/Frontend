@@ -7,6 +7,7 @@ import CameraIcon from "../../image/Camera-icon.png";
 import { ReactComponent as Logo2 } from "../../image/Logo2.svg";
 import { EditNickname } from "../../types";
 import { regOptEdi } from "../../utils";
+import { motion } from "framer-motion";
 
 //@ts-ignore
 const UserInfo = ({ deletePoped }): JSX.Element => {
@@ -61,7 +62,12 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6"
+    >
       <div className="w-36 h-36 relative">
         <img
           id="uploadedimage"
@@ -131,7 +137,7 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

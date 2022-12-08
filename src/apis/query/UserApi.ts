@@ -1,11 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  EditImgPayload,
-  EditNamePayload,
-  IGetLikeConcert,
-  IGetUser,
-} from "../../types";
+import { EditImgPayload, EditNamePayload, IGetUser } from "../../types";
 import { getCookieToken } from "../cookie";
 import { activate, instance } from "../instance";
 

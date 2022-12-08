@@ -40,7 +40,7 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">공연기간</p>
-        <p className="pl-1 font-bold">{concert.concertDate}</p>
+        <p className="pl-1 font-bold">{concert?.concertDate}</p>
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>

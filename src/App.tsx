@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Layout from "./components/layout";
 import Concerts from "./pages/Concerts";
 import Concert from "./pages/Concert";
@@ -17,21 +18,23 @@ function App() {
   const { isLoggedin } = useUser();
   return (
     <Layout>
-      <Routes>
-        <Route index element={<Main />} />
-        <Route path="concerts">
-          <Route index element={<Concerts />} />
-          <Route path=":id" element={<Concert />} />
-        </Route>
-        <Route path="user">
-          <Route path="login" element={<user.Login />} />
-          <Route path="signup" element={<user.Signup />} />
-          <Route path="mypick" element={<user.MyPick />} />
-        </Route>
-        <Route path="/users/kakao" element={<OAuthKakao />} />
-        <Route path="artist/:id" element={<Artist />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AnimatePresence>
+        <Routes>
+          <Route index element={<Main />} />
+          <Route path="concerts">
+            <Route index element={<Concerts />} />
+            <Route path=":id" element={<Concert />} />
+          </Route>
+          <Route path="user">
+            <Route path="login" element={<user.Login />} />
+            <Route path="signup" element={<user.Signup />} />
+            <Route path="mypick" element={<user.MyPick />} />
+          </Route>
+          <Route path="/users/kakao" element={<OAuthKakao />} />
+          <Route path="artist/:id" element={<Artist />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AnimatePresence>
     </Layout>
   );
 }

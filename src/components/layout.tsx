@@ -87,9 +87,6 @@ const Nav = ({
       userInputs: {
         예: {
           value: () => {
-            poped(user?.nickname + "님 다음에 또 만나요!👋", {
-              isToastOnly: true,
-            });
             removeCookieToken();
             navigate("/concerts");
           },
