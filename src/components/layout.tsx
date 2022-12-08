@@ -135,7 +135,7 @@ const Nav = ({
         isToastOnly: true,
         newType: "warn",
       });
-    if (!pathname.includes(path)) return navigate(path);
+    if (pathname !== "/" + path) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
