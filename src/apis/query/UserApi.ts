@@ -1,12 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  EditImgPayload,
-  EditNamePayload,
-  IGetLikeConcert,
-  IgetMyComment,
-  IGetUser,
-} from "../../types";
+import { EditImgPayload, EditNamePayload, IGetUser } from "../../types";
 import { getCookieToken } from "../cookie";
 import { activate, instance } from "../instance";
 
@@ -33,7 +27,7 @@ const EditUserName = () => {
     return data;
   });
 };
-const readMyComments = async ( userId : number ) => {
+const readMyComments = async (userId: number) => {
   const { data } = await activate.get(`/comment/user/${userId}`);
   return data;
 };

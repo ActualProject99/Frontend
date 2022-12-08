@@ -18,7 +18,6 @@ import { dateSelected, monthConcerts } from "../atoms/date";
 import icons from "../components/icons";
 import { CalendarProps } from "../types";
 import { cls } from "../utils";
-import ConcertApi from "../apis/query/ConcertApi";
 
 export const CalendarDrawer = () => {
   return (

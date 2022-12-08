@@ -42,9 +42,9 @@ export interface IgetComment {
   userId?: number;
   commentId: number;
   comment: string;
-  nickname : string;
-  profileImg : string;
-  createdAt : string;
+  nickname: string;
+  profileImg: string;
+  createdAt: string;
 }
 
 export interface IgetMyComment {
@@ -130,6 +130,7 @@ export interface IGetConcert {
   ticketingDate: string;
   ticketingUrl: string;
   locationName: string;
+  locationId: number;
   playTime: string;
   ratings: string;
   createdAt: string;

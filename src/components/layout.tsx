@@ -16,8 +16,9 @@ import useIsScrolled from "../hooks/window/useHowMuchScroll";
 import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
-import { ReactComponent as Logo } from "../image/Logo.svg";
+import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
 import { useQueryClient } from "@tanstack/react-query";
+import ConcertApi from "../apis/query/ConcertApi";
 
 const Search = ({
   viewer,
@@ -86,9 +87,6 @@ const Nav = ({
       userInputs: {
         예: {
           value: () => {
-            poped(user?.nickname + "님 다음에 또 만나요!👋", {
-              isToastOnly: true,
-            });
             removeCookieToken();
             navigate("/concerts");
           },
@@ -134,7 +132,7 @@ const Nav = ({
         isToastOnly: true,
         newType: "warn",
       });
-    if (!pathname.includes(path)) return navigate(path);
+    if (pathname !== "/" + path) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
@@ -176,16 +174,16 @@ const Nav = ({
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 py-2 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 font-base",
           pathname === "/" ? "" : "bg-white"
         )}
       >
         {normal ? (
-          <div className="flex items-center w-screen h-16">
-            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center mb-3">
+          <div className="flex items-center w-screen h-16 ">
+            <div className="min-w-[360px] w-[1200px] mx-auto flex justify-between items-center">
               <div className="flex items-center gap-10">
                 <div
-                  className="w-[180px] h-10 rounded cursor-pointer"
+                  className="w-[180px] h-10 rounded cursor-pointer mb-2"
                   onClick={() => navigate("/")}
                 >
                   <Logo width="11rem" height="3.5rem" />
@@ -208,10 +206,10 @@ const Nav = ({
                   )}
                 </ul>
               </div>
-              <div className="w-60 h-18 mr-10 flex items-center justify-between pr-12">
-                <div
+              <div className="w-60 h-18 flex items-center justify-between">
+                <button
                   onClick={handleClickSearchOn}
-                  className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full cursor-pointer transition-all overflow-hidden"
+                  className="w-10 h-10 hover:w-36 group bg-primary-50 rounded-full transition-all overflow-hidden"
                 >
                   <div className="w-28 flex justify-between items-center">
                     <div className="w-10 h-10 flex justify-center items-center">
@@ -221,18 +219,18 @@ const Nav = ({
                       Ctrl Shift F
                     </div>
                   </div>
-                </div>
-                <div className="relative group w-12 pr-2 h-12 font-bold flex justify-center items-center ">
+                </button>
+                <div className="relative group w-16 pl-4 h-12 font-bold flex justify-center items-center ">
                   {cookie ? (
                     <>
-                      <div
-                        className="cursor-pointer text-xs flex justify-center items-center absolute group-hover:translate-x-12 hover:translate-x-12 transition-all bg-gray-300 w-10 h-10 rounded-full leading-3"
+                      <button
+                        className="text-xs flex justify-center items-center absolute group-hover:-translate-x-12 hover:-translate-x-12 transition-all bg-primary-50 w-10 h-10 rounded-full leading-3"
                         onClick={handleClickLogout}
                       >
                         log
                         <br />
                         out
-                      </div>
+                      </button>
                       <img
                         alt="profile"
                         src={user?.profileImg}
@@ -354,6 +352,8 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
+
+  ConcertApi.GetConcerts();
   return (
     <>
       {pathname === "/" ? (

@@ -196,3 +196,30 @@ export const filterClassStartwith = (
     .filter((cn) => starts.some((st) => cn.startsWith(st)))
     .join(" ");
 };
+export function cme_scrollToY(
+  y: number,
+  duration: number = 0,
+  element: Element | null = document.scrollingElement
+) {
+  // cancel if already on target position
+  if (!element) return new Error("there is no scrollElement or element is");
+  if (element.scrollTop === y) return;
+
+  const cosParameter = (element.scrollTop - y) / 2;
+  let scrollCount = 0,
+    oldTimestamp: number | null = null;
+
+  function step(newTimestamp: number) {
+    if (!element) return;
+    if (oldTimestamp !== null) {
+      // if duration is 0 scrollCount will be Infinity
+      scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
+      if (scrollCount >= Math.PI) return (element.scrollTop = y);
+      element.scrollTop =
+        cosParameter + y + cosParameter * Math.cos(scrollCount);
+    }
+    oldTimestamp = newTimestamp;
+    window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+}

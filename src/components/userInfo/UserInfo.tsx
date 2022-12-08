@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import CameraIcon from "../../image/Camera-icon.png";
-
+import { ReactComponent as Logo2 } from "../../image/Logo2.svg";
 import { EditNickname } from "../../types";
 import { regOptEdi } from "../../utils";
+import { motion } from "framer-motion";
 
 //@ts-ignore
 const UserInfo = ({ deletePoped }): JSX.Element => {
@@ -61,7 +62,12 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6"
+    >
       <div className="w-36 h-36 relative">
         <img
           id="uploadedimage"
@@ -84,7 +90,7 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
       </div>
       <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 mt-3">
         <div className="flex items-center h-11 ">
-          <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} />
+          {/* <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} /> */}
           <span className="text-xl ml-3 h-10 mt-4">{userData?.email}</span>
         </div>
         <div className="flex items-center justify-center">
@@ -94,7 +100,7 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
                 {userData?.nickname}
               </p>
               <button
-                className="flex justify-center items-center w-28 h-10 border rounded-md"
+                className="flex justify-center items-center bg-[#7151A1] text-white w-28 h-10 rounded-md"
                 onClick={() => setIsEdit((prev) => !prev)}
               >
                 닉네임 수정
@@ -124,14 +130,14 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
         </div>
         <div className="flex justify-end w-full -mt-6 mb-3">
           <button
-            className="flex justify-center items-center w-20 h-7 text-sm border rounded-md"
+            className="flex justify-center items-center w-20 h-7 border-[#707070] text-[#707070] text-sm border rounded-md"
             onClick={deleteUser}
           >
             회원탈퇴
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
