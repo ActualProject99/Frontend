@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { setAccessToken, getCookieToken } from "../../apis/cookie";
-import { deactivate } from "../../apis/instance";
+import { activate, deactivate } from "../../apis/instance";
 import { userState } from "../../atoms/user";
 import { cls, regOptLogin } from "../../utils";
 import { LoginForm, User } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useTicket from "../../hooks/useTicketPop";
-import FlareLane from "@flarelane/flarelane-web-sdk";
+import { ReactComponent as Logo } from "../../image/Logo.svg";
 
 const LoginCompo = (): JSX.Element => {
   const navigate = useNavigate();
@@ -39,10 +39,13 @@ const LoginCompo = (): JSX.Element => {
     try {
       const response = await deactivate.post("/users/login", data);
       setAccessToken(response.data.jwt);
-      // const AccessToken = response.data.jwt;
-      // localStorage.setItem("AccessToken", AccessToken);
+      const AccessToken = response.data.jwt;
+      localStorage.setItem("AccessToken", AccessToken);
       poped(response.data.nickname + "님 환영합니다!🎉", {
-        afterToasted: () => navigate("/concerts"),
+        afterToasted: () => {
+          navigate("/concerts");
+          // window.location.reload();
+        },
         newType: "ckeck",
       });
 
@@ -72,18 +75,11 @@ const LoginCompo = (): JSX.Element => {
   return (
     <div className="flex justify-center items-center w-full h-[35rem]">
       <div className="flex flex-col justify-center items-center w-[50%] h-[30rem]">
-        <div className="flex flex-col justify-center items-center gap-1 mb-4">
+        <div className="flex flex-col justify-center items-center gap-1 mb-8">
           <div className="parent w-60">
-            <p className="child flex flex-col justify-center items-center text-5xl font-logo font-bold">
-              Tgle
-            </p>
-          </div>
-          <div className=" parent1 w-60">
-            <p className="child1 flex justify-center items-center font-bold">
-              <span className="text-accent-main">T</span>
-              <span>icket Jun</span>
-              <span className="text-accent-main">gle</span>
-            </p>
+            <div className="child flex justify-start items-center">
+              <Logo width="14rem" height="4rem" />
+            </div>
           </div>
         </div>
         <Ticket />

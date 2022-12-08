@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { deactivate } from "../../apis/instance";
-import { LoginForm } from "../../types";
+import { LoginForm, AfterToasted } from "../../types";
 import { cls, regOptLogin } from "../../utils";
 import useTicket from "../../hooks/useTicketPop";
 
@@ -39,8 +39,11 @@ const SignupCompo = (): JSX.Element => {
       });
       console.log("리스폰스", response);
       if (response.status === 201) {
-        poped();
-        navigate("/user/login");
+        poped("가입을 축하드려요!🎉", {
+          afterToasted: () => {
+            navigate("/user/login");
+          },
+        });
       } else if (response.status === 401) {
         window.alert(response.data.message);
       }
@@ -127,7 +130,7 @@ const SignupCompo = (): JSX.Element => {
                 type="text"
                 className="h-7 border-b-2 border-x-0 border-t-0 border-gray-300 pl-1 text-xs  focus:outline-none focus:ring-transparent focus:border-b-2 focus:border-purple-700"
                 autoComplete="auto"
-                placeholder="한글, 숫자, 영문 3-10자"
+                placeholder="한글, 숫자, 영문 3-6자"
                 {...register(...regOptLogin.nickname())}
               />
               <p className="text-xs text-red-500 ">

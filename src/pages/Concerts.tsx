@@ -28,23 +28,23 @@ const Concerts = () => {
   const payload = useRecoilValue(monthConcerts);
   const { data: concerts } = ConcertApi.GetMonthConcerts(payload);
   const { data: hotConcerts } = ConcertApi.GetHotConcerts();
-  console.log("핫콘", hotConcerts);
 
-  const ticketingDates = concerts?.map((concert) => {
+  const [groupedConcerts, setGroupedConcerts] = useState<IGetConcert[]>([]);
+  const [CalendarConcerts, setCalendarConcerts] = useState<IGetConcert[]>([]);
+  const ticketingDates = CalendarConcerts?.map((concert) => {
     return new Date(concert.ticketingDate);
   });
-  console.log("티켓데이트", ticketingDates);
-  const [groupedConcerts, setGroupedConcerts] = useState<IGetConcert[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState(0);
 
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [filteredGroup, setFilteredGroup] = useState(groups);
   const [, setIsVisible] = useState(false);
   const {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox(80);
   const [getDateSelected] = useRecoilState<Date | null>(dateSelected);
-  const handleClick = (i: number) => () => {
-    setSelectedCategory(i);
+  const handleClick = (group: string) => () => {
+    setSelectedCategory(groups.indexOf(group));
   };
   useEffect(() => {
     setIsVisible(false);
@@ -85,6 +85,26 @@ const Concerts = () => {
       }
     }
   }, [getDateSelected, selectedCategory]);
+
+  useEffect(() => {
+    if (concerts) {
+      const categorys = Array.from(
+        new Set(concerts.map((concert) => concert.categoryId))
+      );
+      setFilteredGroup(groups.filter((_, i) => !i || categorys.includes(i)));
+      setSelectedCategory(0);
+    }
+  }, [concerts]);
+
+  useEffect(() => {
+    if (concerts) {
+      setCalendarConcerts(
+        concerts?.filter((concert) => {
+          return !selectedCategory || concert.categoryId === selectedCategory;
+        })
+      );
+    }
+  }, [selectedCategory, groupedConcerts]);
   return (
     <>
       <ConcertSlider hotConcerts={hotConcerts} />
@@ -103,14 +123,15 @@ const Concerts = () => {
                   className="w-[95%]"
                 />
                 <ul className="flex justify-center gap-3 flex-wrap">
-                  {groups.map((group, i) => (
+                  {filteredGroup.map((group, i) => (
                     <li
                       key={group}
                       className={cls(
                         "px-3 py-1 rounded-full cursor-pointer flex items-center justify-center font-bold border transition-colors",
-                        i === selectedCategory && "bg-primary-main text-white"
+                        i === filteredGroup.indexOf(groups[selectedCategory]) &&
+                          "bg-primary-main text-white"
                       )}
-                      onClick={handleClick(i)}
+                      onClick={handleClick(group)}
                     >
                       {group}
                     </li>

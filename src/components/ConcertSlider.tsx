@@ -41,12 +41,12 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
     autoplay: true,
     autoplaySpeed: 4000,
     pauseOnHover: true,
-    // centerPadding: "60px",
+    centerPadding: "60px",
     slidesToShow: 5,
     slidesToScroll: 1,
     speed: 1000,
     arrows: true,
-    variableWidth: true,
+    variableWidth: false,
     touchThreshold: 100,
     beforeChange: handleBeforeChange,
     afterChange: handleAfterChange,
@@ -115,7 +115,7 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
             hotConcerts?.map((hotConcert) => (
               <div key={hotConcert.concertId}>
                 <div
-                  className="flex flex-col relative overflow-hidden w-[26rem] group m-5 gap-2 font-bold text-white cursor-pointer shadow-lg shadow-black rounded"
+                  className="flex flex-col relative overflow-hidden w-[26rem] group m-5 font-bold text-white cursor-pointer shadow-lg shadow-black rounded"
                   onClick={() => navigate(`/concerts/${hotConcert.concertId}`)}
                 >
                   <div className="flex flex-col justify-between w-full h-[40%] absolute -bottom-full bg-black/80 group-hover:bottom-0 transition-all duration-700 peer z-10 p-4">

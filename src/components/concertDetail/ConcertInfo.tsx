@@ -25,7 +25,6 @@ import { ConcertProps } from "../../types";
 import useTicket from "../../hooks/useTicketPop";
 import { getCookieToken } from "../../apis/cookie";
 import FlareLane from "@flarelane/flarelane-web-sdk";
-import Countdown from "./Countdown";
 import ShowCountDown from "./ShowCountDown";
 import { cls } from "../../utils";
 import Janusface from "../Janusface";

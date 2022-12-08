@@ -7,7 +7,8 @@ import {
   IGetLocation,
   PostSMS,
 } from "../../types";
-import { activate, deactivate } from "../instance";
+import { getCookieToken } from "../cookie";
+import { activate, deactivate, instance } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
@@ -29,15 +30,15 @@ const GetMonthConcerts = (payload: number | Date) => {
     const { data } = await deactivate.get<IGetConcert[]>(
       `/concert?month=${payload}`
     );
-    console.log("요청", data);
     return data;
   });
 };
 
 // 콘서트 좋아요
 const GetLikeConcertList = () => {
+  const myToken = getCookieToken();
   return useQuery(["LikeConcertList"], async () => {
-    const { data } = await activate.get("/concertlike/mypage");
+    const { data } = await instance(myToken).get("/concertlike/mypage");
     return data;
   });
 };
@@ -50,8 +51,11 @@ const GetLikeConcert = (payload: number) => {
 };
 
 const EditLikeConcerts = () => {
+  const myToken = getCookieToken();
   return useMutation(async (payload: ConcertLike) => {
-    const { data } = await activate.put(`/concertlike/${payload.concertId}`);
+    const { data } = await instance(myToken).put(
+      `/concertlike/${payload.concertId}`
+    );
     return data;
   });
 };
@@ -75,7 +79,6 @@ const DeleteConcertSMS = () => {
 const GetLocation = () => {
   return useQuery<IGetLocation[]>(["location"], async () => {
     const { data } = await deactivate.get<IGetLocation[]>("/location");
-    console.log("data", data);
     return data;
   });
 };
