@@ -1,6 +1,9 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
-const useFixoluteBox = (marginTop: number) => {
+const useFixoluteBox = (
+  marginTop: number,
+  marginRight: number | undefined = undefined
+) => {
   const [isFixed, setIsFixed] = useState(false);
   const [isSecondAbsolute, setIsSecondAbsolute] = useState(false);
   const fixsolute = useRef<HTMLDivElement | null>(null);
@@ -10,7 +13,7 @@ const useFixoluteBox = (marginTop: number) => {
         position: "absolute",
       }
     : !isSecondAbsolute
-    ? { position: "fixed", top: marginTop }
+    ? { position: "fixed", top: marginTop, right: marginRight }
     : {
         position: "absolute",
         top:
