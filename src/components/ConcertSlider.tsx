@@ -30,7 +30,7 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
       document
         .querySelector(".slick-prev")
         ?.setAttribute("style", "z-index: 1");
-    }, 100);
+    }, 300);
   }, []);
 
   const settings = {

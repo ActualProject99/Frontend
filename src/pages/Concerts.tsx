@@ -57,33 +57,32 @@ const Concerts = () => {
   }, [concerts]);
 
   useEffect(() => {
-    if (concerts) {
-      if (getDateSelected) {
-        if (selectedCategory) {
-          setGroupedConcerts(
-            concerts
-              ?.filter(
-                (concert) =>
-                  concert.ticketingDate ===
-                  format(getDateSelected, "yyyy.MM.dd")
-              )
-              .filter((concert) => concert.categoryId === selectedCategory)
-          );
-        } else {
-          setGroupedConcerts(
-            concerts?.filter(
-              (concert) =>
-                concert.ticketingDate === format(getDateSelected, "yyyy.MM.dd")
-            )
-          );
-        }
-      } else if (selectedCategory) {
-        setGroupedConcerts(
-          concerts?.filter((concert) => concert.categoryId === selectedCategory)
-        );
-      } else {
-        setGroupedConcerts(concerts);
-      }
+    if (!concerts) return;
+    if (getDateSelected && selectedCategory) {
+      setGroupedConcerts(
+        concerts
+          ?.filter(
+            (concert) =>
+              concert.ticketingDate === format(getDateSelected, "yyyy.MM.dd")
+          )
+          .filter((concert) => concert.categoryId === selectedCategory)
+      );
+    }
+    if (getDateSelected && !selectedCategory) {
+      setGroupedConcerts(
+        concerts?.filter(
+          (concert) =>
+            concert.ticketingDate === format(getDateSelected, "yyyy.MM.dd")
+        )
+      );
+    }
+    if (!getDateSelected && selectedCategory) {
+      setGroupedConcerts(
+        concerts?.filter((concert) => concert.categoryId === selectedCategory)
+      );
+    }
+    if (!getDateSelected && !selectedCategory) {
+      setGroupedConcerts(concerts);
     }
   }, [getDateSelected, selectedCategory]);
 
