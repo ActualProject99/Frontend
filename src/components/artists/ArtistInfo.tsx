@@ -11,13 +11,11 @@ import useTicket from "../../hooks/useTicketPop";
 
 const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
   const { data: LikeArtist } = ArtistApi.GetLikeArtist(artist.artistId);
-  console.log("얍", LikeArtist);
   const [like, setLike] = useState<boolean>(false);
 
   const cookie = getCookieToken();
   const { id } = useParams();
   const { data: artistConcerts } = ConcertApi.GetConcerts();
-  console.log("아콘", artistConcerts);
   const queryClient = useQueryClient();
   const { mutateAsync: EditLike } = ArtistApi.EditLikeArtist();
 

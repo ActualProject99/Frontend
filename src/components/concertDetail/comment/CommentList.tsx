@@ -102,17 +102,10 @@ const CommentList = () => {
       </ul>
 
       <div className="flex w-full justify-around">
-        <button
-        /* disabled={currentPage <= 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)} */
-        >
+        <button>
           <ArrowLeft />
         </button>
-        {/*  <span>{currentPage}</span> */}
-        <button
-        /* disabled={currentPage >= maxPage}
-          onClick={() => setCurrentPage((prev) => prev + 1)} */
-        >
+        <button>
           <ArrowRight />
         </button>
       </div>
