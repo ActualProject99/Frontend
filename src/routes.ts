@@ -9,16 +9,9 @@ export const pages: Pages = {
     isNeedLogin: false,
   },
   Concert: {
-    name: "Concert",
+    name: "Concerts",
     path: "concerts",
     title: "Concert | Tgle",
-    isNav: true,
-    isNeedLogin: false,
-  },
-  Game: {
-    name: "Game",
-    path: "game",
-    title: "Play Ticketing | Tgle",
     isNav: true,
     isNeedLogin: false,
   },

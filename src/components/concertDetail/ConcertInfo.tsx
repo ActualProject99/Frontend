@@ -11,7 +11,6 @@ import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
 import ConcertApi from "../../apis/query/ConcertApi";
-import Chat from "./Chat";
 import MoreInfo from "./MoreInfo";
 import { NaverMap } from "./NaverMap";
 import useTaps from "../../hooks/useTaps";
