@@ -18,6 +18,7 @@ import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/Logo.svg";
 import { useQueryClient } from "@tanstack/react-query";
+import ConcertApi from "../apis/query/ConcertApi";
 
 const Search = ({
   viewer,
@@ -134,7 +135,7 @@ const Nav = ({
         isToastOnly: true,
         newType: "warn",
       });
-    if (!pathname.includes(path)) return navigate(path);
+    if (pathname !== "/" + path) return navigate(path);
   };
   const handleClickProfile = () => {
     toggler();
@@ -354,6 +355,8 @@ const Footer = () => {
 };
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
+
+  ConcertApi.GetConcerts();
   return (
     <>
       {pathname === "/" ? (
