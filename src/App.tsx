@@ -3,7 +3,6 @@ import Layout from "./components/layout";
 import Concerts from "./pages/Concerts";
 import Concert from "./pages/Concert";
 import Main from "./pages/Main";
-import MockTicketing from "./pages/MockTicketing";
 import user from "./pages/user";
 import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
@@ -30,7 +29,6 @@ function App() {
           <Route path="mypick" element={<user.MyPick />} />
         </Route>
         <Route path="/users/kakao" element={<OAuthKakao />} />
-        <Route path="game" element={<MockTicketing />} />
         <Route path="artist/:id" element={<Artist />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
