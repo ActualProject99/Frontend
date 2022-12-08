@@ -41,7 +41,7 @@ const Concerts = () => {
   const {
     refs: { fixsolute, limit },
     fixoluteStyle,
-  } = useFixoluteBox(60);
+  } = useFixoluteBox(80);
   const [getDateSelected] = useRecoilState<Date | null>(dateSelected);
   const handleClick = (group: string) => () => {
     setSelectedCategory(groups.indexOf(group));
