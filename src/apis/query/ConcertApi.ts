@@ -19,8 +19,6 @@ const GetConcerts = () => {
       return data;
     },
     {
-      staleTime: 5000,
-      cacheTime: Infinity,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }

@@ -6,28 +6,30 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
-import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
-import ConcertApi from "../../apis/query/ConcertApi";
-import MoreInfo from "./MoreInfo";
-import { NaverMap } from "./NaverMap";
-import useTaps from "../../hooks/useTaps";
-import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
-import CommentList from "./comment/CommentList";
-import Calendar from "../Calendar";
-import useDebounce from "../../hooks/useDebounce";
-import { ConcertProps } from "../../types";
-import useTicket from "../../hooks/useTicketPop";
+import ConcertApi from "../../apis/query/ConcertApi";
 import { getCookieToken } from "../../apis/cookie";
-import FlareLane from "@flarelane/flarelane-web-sdk";
-import ShowCountDown from "./ShowCountDown";
-import { cls } from "../../utils";
-import Janusface from "../Janusface";
-
+import useDebounce from "../../hooks/useDebounce";
+import useTicket from "../../hooks/useTicketPop";
+import { useScript } from "../../hooks/KaKaoShare";
+import useTaps from "../../hooks/useTaps";
 import useFixoluteBox from "../../hooks/useFixsolute";
+
+import FlareLane from "@flarelane/flarelane-web-sdk";
+import CopyToClipboard from "react-copy-to-clipboard";
+
+import { ConcertProps } from "../../types";
+import { NaverMap } from "./NaverMap";
+import { cls } from "../../utils";
+import Calendar from "../Calendar";
+import CommentList from "./comment/CommentList";
+import ShowCountDown from "./ShowCountDown";
+import Janusface from "../Janusface";
+import MoreInfo from "./MoreInfo";
+
+import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
+import icons from "../icons";
 
 const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
@@ -47,8 +49,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   FlareLane.getIsSubscribed((isSubscribed) => {
     setSubscribed(isSubscribed);
   });
+  console.log("dd", concert);
 
-  // const ticketings = JSON.parse(concert.ticketingUrl);
+  const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
     "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
@@ -168,7 +171,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
       <img
         className="w-full h-[900px] absolute top-20 left-0 -z-10 object-cover blur-xl"
         alt="poster"
-        src={concert.concertImg}
+        src={concert?.concertImg}
       />
       <div className="w-full h-[950px] absolute top-20 left-0 -z-10 bg-gradient-to-b from-transparent to-white" />
       <div className="w-fit px-3 ml-4 h-12 p-2 rounded-md flex items-center bg-white/30">
@@ -226,14 +229,14 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
                 <div className="bg-white/50 p-2 rounded-md">
                   <p className="font-black font-welcome ml-3">예매하기</p>
                   <div className="flex gap-3 flex-col">
-                    {/* {ticketings &&
+                    {ticketings &&
                       ticketings.map((ticketing) => (
                         <Janusface
                           key={ticketing.id}
                           title={ticketing.title}
                           url={ticketing.url}
                         />
-                      ))} */}
+                      ))}
                   </div>
                 </div>
               </div>

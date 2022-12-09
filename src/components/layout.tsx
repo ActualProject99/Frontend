@@ -33,6 +33,8 @@ const Search = ({
   const [payload, setPayload] = useState("");
   const [isShowRecent, setIsShowRecent] = useState(false);
   const { data: searchedData } = ConcertApi.GetSearchData(payload);
+  console.log("dd", searchedData);
+  console.log("ww", payload);
   const [artists, concerts]: [IGetArtist[], IGetArtistConcert[]] = searchedData
     ? searchedData
     : [[], []];
@@ -257,6 +259,7 @@ const Nav = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
+
   const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
   const queryClient = useQueryClient();
   const { Ticket, poped, userInput } = useTicketPop(
@@ -532,9 +535,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   const { data: concerts } = ConcertApi.GetConcerts();
 
-  console.log("콘서트", concerts);
-  const queryClient = useQueryClient();
-  console.log("쿼리", queryClient);
   return (
     <>
       {pathname === "/" ? (

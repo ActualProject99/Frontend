@@ -35,8 +35,8 @@ const LoginCompo = (): JSX.Element => {
     try {
       const response = await deactivate.post("/users/login", data);
       setAccessToken(response.data.jwt);
-      const AccessToken = response.data.jwt;
-      localStorage.setItem("AccessToken", AccessToken);
+      // const AccessToken = response.data.jwt;
+      // localStorage.setItem("AccessToken", AccessToken);
       poped(response.data.nickname + "님 환영합니다!🎉", {
         afterToasted: () => {
           navigate("/concerts");
@@ -49,13 +49,13 @@ const LoginCompo = (): JSX.Element => {
       console.log(error);
     }
   };
-  const kakaoBtn = () => {
-    const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
-    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-    const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
-    window.location.href = url;
-  };
-
+  // const kakaoBtn = () => {
+  //   const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
+  //   console.log("hh", REDIRECT_URL);
+  //   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
+  //   const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+  //   window.location.href = url;
+  // };
   useEffect(() => {
     if (cookie) {
       poped("이미 로그인 되었습니다!", {
@@ -141,7 +141,11 @@ const LoginCompo = (): JSX.Element => {
           <div className="flex flex-col justify-center ">
             <button
               className="flex items-center justify-center w-72 h-10 bg-[#FDDC3F] rounded"
-              onClick={kakaoBtn}
+              onClick={() =>
+                poped(
+                  "죄송합니다! 현재 복구중입니다\n이메일로 회원가입 부탁드립니다😢"
+                )
+              }
             >
               <img
                 className="w-6 h-6 ml-[-5.5rem] mr-[4.2rem]"
@@ -157,8 +161,8 @@ const LoginCompo = (): JSX.Element => {
         <div className="">
           <div className="flex justify-center w-full text-xs font-bold gap-x-2 ">
             <span className="text-[#707070]">
-              아직 <span className="font-logo text-accent-main">Tgle</span>{" "}
-              회원이 아니신가요?
+              아직 <span className="text-accent-main">Tgle</span> 회원이
+              아니신가요?
             </span>
             <span
               className="text-purple-700 cursor-pointer"
