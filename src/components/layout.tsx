@@ -65,6 +65,7 @@ const Search = ({
               query
             ),
         };
+      return JSON.parse(todayQueries);
     };
     window.localStorage.setItem(
       "search_query",
@@ -86,7 +87,7 @@ const Search = ({
     reset();
     /* 최근검색어 */
     recentQeury(query); // 검색어 로컬에 저장
-    getLocalQuery();
+    window.setTimeout(() => getLocalQuery(), 200);
     buttonRef.current?.focus();
   };
   const handleClickRecent = (query: string) => () => {
@@ -96,6 +97,9 @@ const Search = ({
   };
   const handleFocusSearch = () => {
     setIsShowRecent(true);
+  };
+  const handleBlurSearch = () => {
+    window.setTimeout(() => setIsShowRecent(false), 100);
   };
   useEffect(() => {
     setFocus("search");
@@ -114,26 +118,25 @@ const Search = ({
       >
         <div className="pt-4 px-4 flex justify-between relative">
           <div className="flex items-center w-full relative h-16">
-            <div onClick={() => console.log("hi")}>
+            <label className="flex items-center">
               <icons.Search />
-            </div>
-            <input
-              type="text"
-              spellCheck="false"
-              className="peer w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
-              autoComplete="off"
-              {...register("query")}
-              onFocus={handleFocusSearch}
-            />
+              <input
+                type="text"
+                spellCheck="false"
+                className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
+                autoComplete="off"
+                {...register("query")}
+                onFocus={handleFocusSearch}
+                onBlur={handleBlurSearch}
+              />
+            </label>
             <div
               className={cls(
-                "absolute top-12 left-3",
+                "absolute top-12 left-3 bg-white/50 px-2 pb-2 rounded-lg",
                 isShowRecent || "hidden"
               )}
             >
-              <div className="text-xs ml-6 " onClick={() => console.log("hi")}>
-                최근검색어
-              </div>
+              <div className="text-xs ml-6 ">최근검색어</div>
               <div className="bg-primary-50 rounded-lg px-4 py-1 flex flex-col gap-1">
                 {recent.map((query) => (
                   <div className="flex gap-3 items-center">
@@ -164,13 +167,25 @@ const Search = ({
           </div>
           <div
             onClick={viewer.off}
-            className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
+            className="absolute -top-2 text-xs -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-3"
           >
             esc
           </div>
         </div>
-        <div>{artists?.map((artist) => artist.artistName)}</div>
-        <div>{concerts?.map((concert) => concert.concertName)}</div>
+        <div className="px-3">
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit">
+            가수
+          </div>
+          <div className={cls("mb-2", artists && "bg-primary-50")}>
+            {artists?.map((artist) => artist.artistName)}
+          </div>
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit">
+            공연
+          </div>
+          <div className={cls("", concerts && "bg-primary-50")}>
+            {concerts?.map((concert) => concert.concertName)}
+          </div>
+        </div>
       </form>
     </Modal>
   );
