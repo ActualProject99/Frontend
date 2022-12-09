@@ -62,6 +62,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
           value: () => {
             FlareLane.setIsSubscribed(true);
             PostDebounced(concert.concertId);
+            setShow(!show);
           },
           className: "bg-accent-main text-white",
         },
@@ -89,12 +90,13 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
       poped();
     } else {
       PostDebounced(concert.concertId);
+      setShow(!show);
     }
   };
 
   const DeleteDebounced = useRef(
     debouncer(({ concertId }: { concertId: number }) => {
-      DeleteConcertSMS({ concertId });
+      // DeleteConcertSMS({ concertId });
       setShow(!show);
     })
   ).current;
