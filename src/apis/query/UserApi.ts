@@ -55,6 +55,7 @@ const UserApi = {
   EditUserName,
   EditUserImg,
   DeleteUser,
+  readMyComments
 };
 
 export default UserApi;

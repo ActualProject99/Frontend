@@ -296,6 +296,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
           <Viewer />
         </div>
       </div>
+      <Taps />
+      <Viewer />
+      <Chat />
     </>
   );
 });
