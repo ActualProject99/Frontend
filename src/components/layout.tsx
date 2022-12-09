@@ -586,5 +586,4 @@ const members = [
     position: "backend",
     github: "https://github.com/jeongpal",
   },
-  { name: "이주연", position: "designer", github: "" },
 ];
