@@ -56,16 +56,6 @@ const LoginCompo = (): JSX.Element => {
     const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     window.location.href = url;
   };
-  const kakaoTest = async () => {
-    window.open("https://www.tgle.ml/users/kakao");
-    try {
-      const res = await deactivate.get("users/kakao/callback");
-      console.log("dddd", res);
-    } catch (err) {
-      console.log("실패", err);
-    }
-  };
-
   useEffect(() => {
     if (cookie) {
       poped("이미 로그인 되었습니다!", {
@@ -162,7 +152,6 @@ const LoginCompo = (): JSX.Element => {
                 카카오 로그인
               </span>
             </button>
-            <button onClick={kakaoTest}>카카오테스트</button>
           </div>
         </div>
         <div className="">
