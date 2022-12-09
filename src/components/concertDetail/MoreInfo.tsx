@@ -6,7 +6,6 @@ const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
   const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
-
   return (
     <div className="px-5 py-8">
       <p className="text-2xl mb-7 text-accent-main font-bold">출연진</p>

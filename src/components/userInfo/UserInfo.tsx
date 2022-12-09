@@ -52,7 +52,6 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
         queryClient.invalidateQueries(["userInfo"]);
         deletePoped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
-      console.log("뭐야?");
     },
     [EditUserImg, queryClient, deletePoped]
   );

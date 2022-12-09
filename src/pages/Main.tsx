@@ -264,7 +264,7 @@ const Main = () => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 * i }}
                       className={cls(
-                        i === 4 && "text-secondary-main font-logo"
+                        i === 4 && "text-secondary-main font-bold"
                       )}
                     >
                       {e}
@@ -289,7 +289,7 @@ const Main = () => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 * i }}
                       className={cls(
-                        i === 4 && "text-secondary-main font-logo"
+                        i === 4 && "text-secondary-main font-bold"
                       )}
                     >
                       {e}
@@ -311,15 +311,16 @@ const Main = () => {
             main={
               <>
                 콘서트 일일이 찾아봐? <br />
-                <span className="font-logo">Tgle</span>엔 다 있어!
+                <span className="font-bold text-accent-main">Tgle</span>엔 다
+                있어!
               </>
             }
             sub={
               <>
                 콘서트 정보 여기저기 퍼져있어서 찾기 힘드셨죠? <br />
                 앞으론 그럴 필요 없습니다.
-                <br /> <span className="font-logo">Tgle</span>이 편리하게 당신을
-                도와줄겁니다.
+                <br /> <span className="font-bold text-purple-600">Tgle</span>이
+                편리하게 당신을 도와줄겁니다.
               </>
             }
           />
@@ -337,7 +338,8 @@ const Main = () => {
             main={
               <>
                 티켓팅 놓쳤다고 <br /> 울지마세요! <br />
-                앞으로는 <span className="font-logo">Tgle</span>과 함께!
+                앞으로는 <span className="font-bold text-purple-600">Tgle</span>
+                과 함께!
               </>
             }
             sub={
@@ -361,7 +363,8 @@ const Main = () => {
             main={
               <>
                 관심 설정해 놓은 <br /> 공연들을 <br />
-                <span className="font-logo">Tgle</span>이 알려드려요!
+                <span className="font-bold text-secondary-main">Tgle</span>이
+                알려드려요!
               </>
             }
             sub={
@@ -449,7 +452,7 @@ const Main = () => {
                       <p className="font-black text-7xl  text-gray-800 translate-y-40">
                         <span className="text-black">티켓팅을 즐겁게</span>
                         <br />
-                        <span className="text-primary-main text-9xl font-logo">
+                        <span className="text-primary-main text-9xl font-bold">
                           Tgle
                         </span>
                       </p>
