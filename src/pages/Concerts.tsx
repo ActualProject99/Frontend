@@ -5,9 +5,8 @@ import Cards from "../components/Cards";
 import { dateSelected } from "../atoms/date";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useFixoluteBox from "../hooks/useFixsolute";
-
 import ConcertSlider from "../components/ConcertSlider";
-import { Concert, IGetConcert } from "../types";
+import { IGetConcert } from "../types";
 import ConcertApi from "../apis/query/ConcertApi";
 import { monthConcerts } from "../atoms/date";
 import { format } from "date-fns";
@@ -39,10 +38,12 @@ const Concerts = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [filteredGroup, setFilteredGroup] = useState(groups);
   const [, setIsVisible] = useState(false);
+
   const {
     refs: { fixsolute, limit },
     fixoluteStyle,
   } = useFixoluteBox(80);
+
   const [getDateSelected] = useRecoilState<Date | null>(dateSelected);
   const handleClick = (group: string) => () => {
     setSelectedCategory(groups.indexOf(group));
@@ -50,10 +51,10 @@ const Concerts = () => {
   useEffect(() => {
     setIsVisible(false);
   }, [selectedCategory, getDateSelected]);
+
   useEffect(() => {
-    if (concerts) {
-      setGroupedConcerts(concerts);
-    }
+    if (!concerts) return;
+    setGroupedConcerts(concerts);
   }, [concerts]);
 
   useEffect(() => {
@@ -87,23 +88,21 @@ const Concerts = () => {
   }, [getDateSelected, selectedCategory]);
 
   useEffect(() => {
-    if (concerts) {
-      const categorys = Array.from(
-        new Set(concerts.map((concert) => concert.categoryId))
-      );
-      setFilteredGroup(groups.filter((_, i) => !i || categorys.includes(i)));
-      setSelectedCategory(0);
-    }
+    if (!concerts) return;
+    const categorys = Array.from(
+      new Set(concerts.map((concert) => concert.categoryId))
+    );
+    setFilteredGroup(groups.filter((_, i) => !i || categorys.includes(i)));
+    setSelectedCategory(0);
   }, [concerts]);
 
   useEffect(() => {
-    if (concerts) {
-      setCalendarConcerts(
-        concerts?.filter((concert) => {
-          return !selectedCategory || concert.categoryId === selectedCategory;
-        })
-      );
-    }
+    if (!concerts) return;
+    setCalendarConcerts(
+      concerts?.filter((concert) => {
+        return !selectedCategory || concert.categoryId === selectedCategory;
+      })
+    );
   }, [selectedCategory, groupedConcerts]);
   return (
     <>
