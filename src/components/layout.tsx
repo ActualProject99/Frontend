@@ -82,10 +82,14 @@ const Search = ({
     }
   };
   const onValid: SubmitHandler<FieldValues> = async ({ query }) => {
+    query = query.trim();
+    if (query.length === 0) {
+      reset();
+      return;
+    }
     setPayload(query);
     reset();
-    /* 최근검색어 */
-    recentQeury(query); // 검색어 로컬에 저장
+    recentQeury(query);
     window.setTimeout(() => getLocalQuery(), 200);
     buttonRef.current?.focus();
   };
@@ -144,7 +148,7 @@ const Search = ({
               )}
             >
               <div className="text-xs ml-6 ">최근검색어</div>
-              <div className="bg-primary-50 rounded-lg px-4 py-1 flex flex-col gap-1">
+              <div className="bg-secondary-50 rounded-lg px-4 py-1 flex flex-col gap-1">
                 {recent.map((query) => (
                   <div className="flex gap-3 items-center">
                     <div className="text-xs" key={query.date}>
@@ -153,7 +157,7 @@ const Search = ({
                     <div className="flex gap-2">
                       {query.queries.map((q) => (
                         <div
-                          className="bg-primary-100 rounded-full px-1 flex-wrap cursor-pointer"
+                          className="bg-secondary-200 rounded-full px-1 flex-wrap cursor-pointer"
                           key={q}
                           onClick={handleClickRecent(q)}
                         >
