@@ -1,11 +1,11 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
 import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 import UserInfo from "./userInfo/UserInfo";
@@ -17,22 +17,93 @@ import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, QueryClient } from "@tanstack/react-query";
 import ConcertApi from "../apis/query/ConcertApi";
+import { deactivate } from "../apis/instance";
+import { IGetArtist, IGetArtistConcert } from "../types";
+import { format } from "date-fns";
 
 const Search = ({
   viewer,
 }: {
   viewer: { on: () => void; off: () => void };
 }) => {
-  const { register, handleSubmit, reset, setFocus } = useForm();
-  const onValid = () => {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const { register, handleSubmit, reset, setFocus, setValue } = useForm();
+  const [payload, setPayload] = useState("");
+  const [isShowRecent, setIsShowRecent] = useState(false);
+  const { data: searchedData } = ConcertApi.GetSearchData(payload);
+  const [artists, concerts]: [IGetArtist[], IGetArtistConcert[]] = searchedData
+    ? searchedData
+    : [[], []];
+  const [recent, setRecent] = useState<{ date: string; queries: string[] }[]>(
+    []
+  );
+  const recentQeury = (query: string) => {
+    const todayQueries = window.localStorage.getItem("search_query");
+    const queriesOnDates = (todayQueries: string | null) => {
+      if (!todayQueries)
+        return {
+          [format(new Date(), "yyyy.MM.dd")]: [query],
+        };
+      if (!JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")])
+        return {
+          ...JSON.parse(todayQueries),
+          [format(new Date(), "yyyy.MM.dd")]: [query],
+        };
+      if (
+        !JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")].includes(
+          query
+        )
+      )
+        return {
+          ...JSON.parse(todayQueries),
+          [format(new Date(), "yyyy.MM.dd")]:
+            JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")].concat(
+              query
+            ),
+        };
+    };
+    window.localStorage.setItem(
+      "search_query",
+      JSON.stringify(queriesOnDates(todayQueries))
+    );
+  };
+  const getLocalQuery = () => {
+    const searchQueries = localStorage.getItem("search_query");
+    if (searchQueries) {
+      const parsedQueries = JSON.parse(searchQueries);
+      const dates = Object.keys(parsedQueries);
+      const queries = Object.values(parsedQueries);
+      //@ts-ignore
+      setRecent(dates.map((date, i) => ({ date, queries: queries[i] })));
+    }
+  };
+  const onValid: SubmitHandler<FieldValues> = async ({ query }) => {
+    setPayload(query);
     reset();
+    /* 최근검색어 */
+    recentQeury(query); // 검색어 로컬에 저장
+    getLocalQuery();
+    buttonRef.current?.focus();
+  };
+  const handleClickRecent = (query: string) => () => {
+    setValue("query", query);
+    setFocus("query");
+    setIsShowRecent(false);
+  };
+  const handleFocusSearch = () => {
+    setIsShowRecent(true);
   };
   useEffect(() => {
     setFocus("search");
   }, [setFocus]);
   useWindowKeyboard("Escape", viewer.off);
+
+  useEffect(() => {
+    getLocalQuery();
+  }, []);
+
   return (
     <Modal onClick={viewer.off}>
       <form
@@ -40,16 +111,54 @@ const Search = ({
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20"
       >
         <div className="pt-4 px-4 flex justify-between relative">
-          <div className="flex items-center w-full">
-            <icons.Search />
+          <div className="flex items-center w-full relative h-16">
+            <div onClick={() => console.log("hi")}>
+              <icons.Search />
+            </div>
             <input
               type="text"
               spellCheck="false"
-              className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
+              className="peer w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
               autoComplete="off"
-              {...register("search")}
+              {...register("query")}
+              onFocus={handleFocusSearch}
             />
-            <button className="w-1 h-1 overflow-hidden">search</button>
+            <div
+              className={cls(
+                "absolute top-12 left-3",
+                isShowRecent || "hidden"
+              )}
+            >
+              <div className="text-xs ml-6 " onClick={() => console.log("hi")}>
+                최근검색어
+              </div>
+              <div className="bg-primary-50 rounded-lg px-4 py-1 flex flex-col gap-1">
+                {recent.map((query) => (
+                  <div className="flex gap-3 items-center">
+                    <div className="text-xs" key={query.date}>
+                      {query.date}
+                    </div>
+                    <div className="flex gap-2">
+                      {query.queries.map((q) => (
+                        <div
+                          className="bg-primary-100 rounded-full px-1 flex-wrap cursor-pointer"
+                          key={q}
+                          onClick={handleClickRecent(q)}
+                        >
+                          {q}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              ref={buttonRef}
+              className="w-1 h-1 overflow-hidden focus:ring-0 focus:ring-offset-0 border-none focus:outline-none"
+            >
+              search
+            </button>
           </div>
           <div
             onClick={viewer.off}
@@ -58,6 +167,8 @@ const Search = ({
             esc
           </div>
         </div>
+        <div>{artists?.map((artist) => artist.artistName)}</div>
+        <div>{concerts?.map((concert) => concert.concertName)}</div>
       </form>
     </Modal>
   );
@@ -174,7 +285,7 @@ const Nav = ({
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 ",
           pathname === "/" ? "" : "bg-white"
         )}
       >
@@ -188,7 +299,7 @@ const Nav = ({
                 >
                   <Logo width="11rem" height="3.5rem" />
                 </div>
-                <ul className="flex gap-4 xl:gap-10 font-logo self-end">
+                <ul className="flex gap-4 xl:gap-10 font-bold text-xl self-end">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li
@@ -264,10 +375,8 @@ const Nav = ({
                   contentNo === 1 ? "text-white" : "text-black"
                 )}
               >
-                <div className="text-5xl py-2 font-logo cursor-pointer">
-                  Tgle
-                </div>
-                <ul className="flex gap-10 text-lg font-logo">
+                <div className="text-5xl py-2  cursor-pointer">Tgle</div>
+                <ul className="flex gap-10 text-lg ">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li key={i}>
@@ -300,7 +409,7 @@ const Footer = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="flex items-center w-[32rem]">
             <div className="flex items-baseline w-[27rem] h-12 rounded-tl-md pt-1 bg-accent-main gap-2">
-              <p className="font-logo text-black text-3xl ml-4"> Tgle</p>
+              <p className="font-bold text-black text-3xl ml-4"> Tgle</p>
               <p className="text-[#e8e8e8] text-sm font-bold">
                 Have Fun Ticketing ♬
               </p>
@@ -319,7 +428,7 @@ const Footer = () => {
                   key={position}
                   className="flex flex-col items-center gap-2"
                 >
-                  <span className="text-lg font-logo inline-block mb-1 capitalize">
+                  <span className="text-lg font-bold inline-block mb-1 capitalize">
                     {position}
                   </span>
                   {members.map((member) =>
@@ -353,7 +462,11 @@ const Footer = () => {
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
 
-  ConcertApi.GetConcerts();
+  const { data: concerts } = ConcertApi.GetConcerts();
+
+  console.log("콘서트", concerts);
+  const queryClient = useQueryClient();
+  console.log("쿼리", queryClient);
   return (
     <>
       {pathname === "/" ? (

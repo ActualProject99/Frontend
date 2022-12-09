@@ -12,10 +12,19 @@ import { activate, deactivate, instance } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
-  return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
-    return data;
-  });
+  return useQuery<IGetConcert[]>(
+    ["concert"],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+      return data;
+    },
+    {
+      staleTime: 5000,
+      cacheTime: Infinity,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 };
 
 const GetDetailConcerts = (payload: number) => {
@@ -48,6 +57,12 @@ const GetMonthConcerts = (payload: number | Date) => {
   });
 };
 
+const GetSearchData = (payload: string) => {
+  return useQuery(["searchData", payload], async () => {
+    const { data } = await deactivate.get(`/search?searchQuery=${payload}`);
+    return data;
+  });
+};
 // 콘서트 좋아요
 const GetLikeConcertList = () => {
   const myToken = getCookieToken();
@@ -108,6 +123,7 @@ const ConcertApi = {
   GetLikeConcertList,
   GetHotConcerts,
   GetDetailConcerts,
+  GetSearchData,
 };
 
 export default ConcertApi;
