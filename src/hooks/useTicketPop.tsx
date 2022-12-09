@@ -148,9 +148,7 @@ const useTicket = (
           <div className="absolute right-[15%] top-16">
             <div className="w-[372px] h-64">
               <div
-                className={cls(
-                  "text-base font-logo  text-right pb-1 pr-3 text-slate-600"
-                )}
+                className={cls("text-base text-right pb-1 pr-3 text-slate-600")}
               >
                 Tgle
               </div>
