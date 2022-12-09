@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
-  const moreInfoConcert = JSON.parse(concert.concertInfo);
+  // const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
-  console.log("at", artists);
   return (
     <div className="px-5 py-8">
       <p className="text-2xl mb-7 text-accent-main font-bold">출연진</p>
@@ -44,11 +43,11 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        {moreInfoConcert.map((moreInfo: { url: string }) => (
+        {/* {moreInfoConcert.map((moreInfo: { url: string }) => (
           <div className="flex justify-center items-center">
             <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );

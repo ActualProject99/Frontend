@@ -48,7 +48,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     setSubscribed(isSubscribed);
   });
 
-  const ticketings = JSON.parse(concert.ticketingUrl);
+  // const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
     "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
@@ -226,14 +226,14 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
                 <div className="bg-white/50 p-2 rounded-md">
                   <p className="font-black font-welcome ml-3">예매하기</p>
                   <div className="flex gap-3 flex-col">
-                    {ticketings &&
+                    {/* {ticketings &&
                       ticketings.map((ticketing) => (
                         <Janusface
                           key={ticketing.id}
                           title={ticketing.title}
                           url={ticketing.url}
                         />
-                      ))}
+                      ))} */}
                   </div>
                 </div>
               </div>
@@ -296,8 +296,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
           <Viewer />
         </div>
       </div>
-      <Taps />
-      <Viewer />
     </>
   );
 });

@@ -70,6 +70,7 @@ const Search = ({
       JSON.stringify(queriesOnDates(todayQueries))
     );
   };
+  const navigate = useNavigate();
   const getLocalQuery = () => {
     const searchQueries = localStorage.getItem("search_query");
     if (searchQueries) {
@@ -98,6 +99,14 @@ const Search = ({
   };
   const handleBlurSearch = () => {
     window.setTimeout(() => setIsShowRecent(false), 100);
+  };
+  const handleClickArtist = (artistId: number) => () => {
+    navigate("artist/" + artistId);
+    viewer.off();
+  };
+  const handleClickConcert = (concertId: number) => () => {
+    navigate(pages.Concert.path + "/" + concertId);
+    viewer.off();
   };
   useEffect(() => {
     setFocus("search");
@@ -171,17 +180,57 @@ const Search = ({
           </div>
         </div>
         <div className="px-3">
-          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit">
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit mb-1">
             가수
           </div>
-          <div className={cls("mb-2", artists && "bg-primary-50")}>
-            {artists?.map((artist) => artist.artistName)}
+          <div
+            className={cls(
+              "mb-2",
+              artists && artists?.length > 0 && "bg-primary-50 p-1 px-1"
+            )}
+          >
+            {artists?.map((artist) => (
+              <div className="flex items-center gap-2 p-1">
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={artist.artistImg}
+                  alt=""
+                />
+                <div
+                  key={artist.artistId}
+                  className="cursor-pointer"
+                  onClick={handleClickArtist(artist.artistId)}
+                >
+                  {artist.artistName}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit">
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit mb-1">
             공연
           </div>
-          <div className={cls("", concerts && "bg-primary-50")}>
-            {concerts?.map((concert) => concert.concertName)}
+          <div
+            className={cls(
+              "",
+              concerts && concerts?.length > 0 && "bg-primary-50 p-1 px-1"
+            )}
+          >
+            {concerts?.map((concert) => (
+              <div className="flex items-center gap-2 p-1">
+                <img
+                  className="w-12 h-18 rounded-sm"
+                  src={concert.concertImg}
+                  alt=""
+                />
+                <div
+                  key={concert.concertId}
+                  className="cursor-pointer"
+                  onClick={handleClickConcert(concert.concertId)}
+                >
+                  {concert.concertName}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </form>
