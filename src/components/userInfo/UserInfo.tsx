@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import CameraIcon from "../../image/Camera-icon.png";
-import { ReactComponent as Logo2 } from "../../image/Logo2.svg";
+
 import { EditNickname } from "../../types";
 import { regOptEdi } from "../../utils";
 import { motion } from "framer-motion";

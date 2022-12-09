@@ -92,7 +92,7 @@ const CommentList = () => {
 
           <div className="flex justify-center items-center">
             <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
-            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[50rem]  bg-[#7151A1] hover:bg-primary-500 text-white">
+            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[30rem]  bg-[#7151A1] hover:bg-primary-500 text-white">
               등록
             </button>
           </div>

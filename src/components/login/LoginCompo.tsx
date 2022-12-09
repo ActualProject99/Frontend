@@ -35,8 +35,8 @@ const LoginCompo = (): JSX.Element => {
     try {
       const response = await deactivate.post("/users/login", data);
       setAccessToken(response.data.jwt);
-      const AccessToken = response.data.jwt;
-      localStorage.setItem("AccessToken", AccessToken);
+      // const AccessToken = response.data.jwt;
+      // localStorage.setItem("AccessToken", AccessToken);
       poped(response.data.nickname + "님 환영합니다!🎉", {
         afterToasted: () => {
           navigate("/concerts");

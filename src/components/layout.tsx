@@ -88,6 +88,7 @@ const Nav = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
+
   const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
   const queryClient = useQueryClient();
   const { Ticket, poped, userInput } = useTicketPop(
