@@ -13,7 +13,6 @@ const GetArtist = () => {
     },
     {
       cacheTime: Infinity,
-      enabled: !!getCookieToken(),
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }
