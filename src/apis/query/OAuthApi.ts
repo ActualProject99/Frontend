@@ -6,8 +6,8 @@ import axios from "axios";
 export const OAuthAPI = {
   loginWithKakao: async (kakaoToken: string) => {
     console.log("여기옴?", kakaoToken);
-    await deactivate
-      .get(`oauth/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
+    await axios
+      .get(`http://localhost:3000/users/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
       .then((data) => {
         console.log("뭐주냐?", data);
         setAccessToken(data.headers.authorization);

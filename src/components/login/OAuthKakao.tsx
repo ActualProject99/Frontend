@@ -13,6 +13,8 @@ const OAuthKakao = () => {
         OAuthAPI.loginWithKakao(kakaoToken);
       }
     } catch (err) {
+      console.log("실패");
+      console.log(err);
       // window.location.href = "/";
       return;
     }

@@ -19,6 +19,7 @@ const Fontpick = () => {
     <div className="flex flex-col fixed left-0 bottom-20 gap-2">
       {Object.keys(fontname).map((e: string) => (
         <button
+          key={e}
           className="w-20 h-10 font-bold bg-accent-main hover:bg-white hover:border hover:border-accent-main rounded"
           onClick={handleClickFont(e)}
         >
