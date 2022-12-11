@@ -7,18 +7,10 @@ import { activate, instance } from "../instance";
 //유저Info API
 const GetUserInfo = () => {
   const myToken = getCookieToken();
-  return useQuery<IGetUser>(
-    ["userInfo"],
-    async () => {
-      const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
-      return data;
-    },
-    {
-      enabled: !!getCookieToken(),
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  return useQuery<IGetUser>(["userInfo"], async () => {
+    const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
+    return data;
+  });
 };
 
 const EditUserName = () => {
@@ -55,7 +47,7 @@ const UserApi = {
   EditUserName,
   EditUserImg,
   DeleteUser,
-  readMyComments
+  readMyComments,
 };
 
 export default UserApi;

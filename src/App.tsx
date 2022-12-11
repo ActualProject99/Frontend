@@ -30,7 +30,7 @@ function App() {
             <Route path="signup" element={<user.Signup />} />
             <Route path="mypick" element={<user.MyPick />} />
           </Route>
-          <Route path="/users/kakao" element={<OAuthKakao />} />
+          <Route path="/users/oauth/kakao/callback" element={<OAuthKakao />} />
           <Route path="artist/:id" element={<Artist />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

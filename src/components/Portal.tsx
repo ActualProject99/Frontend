@@ -53,7 +53,7 @@ export const useModal = (size: "md" | "sm", content: ReactNode) => {
           >
             <div
               onClick={toggler}
-              className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
+              className="absolute -top-2 text-xs -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-3"
             >
               esc
             </div>
