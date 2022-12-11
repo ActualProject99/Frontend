@@ -19,6 +19,7 @@ const Commentfix = ({ comment }: IComments) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     setValue,
   } = useForm();
   const queryClient = useQueryClient();
@@ -43,6 +44,7 @@ const Commentfix = ({ comment }: IComments) => {
   };
 
   const onEdit = (data: any) => {
+    if (!data.comment.trim()) return;
     const { comment } = data;
     const askConfirm = window.confirm("작성하신 댓글로 변경하시겠습니까?");
     if (askConfirm) {
@@ -72,6 +74,10 @@ const Commentfix = ({ comment }: IComments) => {
     }
   }, [isedit, comment?.comment, setValue]);
 
+  useEffect(() => {
+    watch("comment");
+  }, [watch]);
+
   return (
     <li className="mb-3 w-full m-auto mt-0 pb-3 border-b">
       {isedit ? (
@@ -80,6 +86,17 @@ const Commentfix = ({ comment }: IComments) => {
             onSubmit={handleSubmit(onEdit)}
             className="px-[10px] py-[30px] font-normal"
           >
+            <div className="block absolute top-32 left-[86%]">
+              {watch("comment.length") === 300 ? (
+                <span className="font-bold text-red-600">
+                  {watch("comment.length")} / 300
+                </span>
+              ) : (
+                <span className="font-bold">
+                  {watch("comment.length")} / 300
+                </span>
+              )}
+            </div>
             <textarea
               className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
               {...register(...regOptComment.editcomment())}
@@ -91,7 +108,7 @@ const Commentfix = ({ comment }: IComments) => {
             </span>
             <div className="flex justify-center items-center">
               <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
-              <button className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#7151A1] hover:bg-primary-500 border-[10px] border-[#fff] z-[10] ml-[35rem] text-white">
+              <button className="relative w-[10.5rem] h-[4rem] rounded-2xl bg-[#7151A1] hover:bg-primary-500 border-[10px] border-[#fff] z-[10] ml-[35rem] text-white">
                 등록
               </button>
               <button
@@ -114,7 +131,9 @@ const Commentfix = ({ comment }: IComments) => {
           </div>
 
           <div className="flex-col flex-[7]">
-            <div className="p-[0.5rem] text-base">{comment?.comment}</div>
+            <div className="p-[0.5rem] text-base w-[650px] break-words">
+              {comment?.comment}
+            </div>
             {comment && comment.createdAt === comment.updatedAt ? (
               <p className="mt-[1rem] ml-[0.5rem] text-sm text-[#999999]">
                 {dayjs(comment?.createdAt).format("YY.MM.DD A HH:MM")}

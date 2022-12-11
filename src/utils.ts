@@ -118,10 +118,6 @@ export const regOptComment = {
     "comment",
     {
       required: "내용을 입력해주세요", 
-      pattern: {
-        value: /^\s$/,
-        message: "서두의 공백은 인정되지 않습니다.",
-      },
       maxLength: {
         value: 300,
         message: "",

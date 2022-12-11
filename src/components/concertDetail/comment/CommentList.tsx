@@ -8,6 +8,7 @@ import Commentfix from "./Commentfix";
 import { regOptComment } from "../../../utils";
 import { getCookieToken } from "../../../apis/cookie";
 import useTicket from "../../../hooks/useTicketPop";
+import { useEffect } from "react";
 
 export interface IComments {
   comment?: IgetComment;
@@ -46,8 +47,13 @@ const CommentList = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    watch("comment");
+  }, [watch]);
 
   const { isLoading, isError, data } = useQuery<IgetComment[]>(
     ["allComments", id],
@@ -61,6 +67,7 @@ const CommentList = () => {
   }
 
   const onValid = (data: any) => {
+    if (!data.comment.trim()) return;
     if (!cookie) return poped();
     const comment = {
       concertId: id,
@@ -79,6 +86,26 @@ const CommentList = () => {
           className="px-[10px] py-[30px] font-normal"
           onSubmit={handleSubmit(onValid)}
         >
+          {/* <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 0 ? 
+              <span className="font-bold">0 / 300</span>
+             : (watch("comment.length") === 300) ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div> */}
+          <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 300 ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div>
           <textarea
             className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
             {...register(...regOptComment.comment())}
