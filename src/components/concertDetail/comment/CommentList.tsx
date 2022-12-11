@@ -86,13 +86,13 @@ const CommentList = () => {
             disabled={!cookie ? true : false}
             placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 댓글 입력)"
           />
-          <span className="font-bold text-sm text-red-600">
+          <span className="pl-5 font-bold text-sm text-red-600">
             {errors.comment?.message as string}
           </span>
 
           <div className="flex justify-center items-center">
             <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
-            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[50rem]  bg-[#7151A1] hover:bg-primary-500 text-white">
+            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[30rem] bg-[#7151A1] hover:bg-primary-500 text-white">
               등록
             </button>
           </div>

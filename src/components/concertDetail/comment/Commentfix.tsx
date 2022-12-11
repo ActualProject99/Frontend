@@ -76,29 +76,32 @@ const Commentfix = ({ comment }: IComments) => {
     <li className="mb-3 w-full m-auto mt-0 pb-3 border-b">
       {isedit ? (
         <div className="relative w-[95%] h-[17rem] m-[0_auto] rounded-[0.3125rem] shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)]">
-          <form onSubmit={handleSubmit(onEdit)} className="px-[10px] py-[30px] font-normal">
+          <form
+            onSubmit={handleSubmit(onEdit)}
+            className="px-[10px] py-[30px] font-normal"
+          >
             <textarea
               className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
               {...register(...regOptComment.editcomment())}
               maxLength={300}
               placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 수정된 댓글 입력)"
             />
+            <span className="pl-5 font-bold w-full text-sm text-red-600">
+              {errors.comment?.message as string}
+            </span>
             <div className="flex justify-center items-center">
               <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
-            <button className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#7151A1] hover:bg-primary-500 border-[10px] border-[#fff] z-[10] ml-[35rem] text-white">
-              등록
-            </button>
-            <button
-              className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#b1a89f] hover:bg-[#c1b9b1] border-[10px] border-[#fff] z-[10] text-white ml-5"
-              onClick={hideEditMode}
-            >
-              취소
-            </button>
+              <button className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#7151A1] hover:bg-primary-500 border-[10px] border-[#fff] z-[10] ml-[35rem] text-white">
+                등록
+              </button>
+              <button
+                className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#b1a89f] hover:bg-[#c1b9b1] border-[10px] border-[#fff] z-[10] text-white ml-5"
+                onClick={hideEditMode}
+              >
+                취소
+              </button>
             </div>
           </form>
-          <span className="font-bold w-full text-sm text-red-600">
-            {errors.editcomment?.message as string}
-          </span>
         </div>
       ) : (
         <div className="flex w-full">

@@ -26,7 +26,6 @@ import FlareLane from "@flarelane/flarelane-web-sdk";
 import ShowCountDown from "./ShowCountDown";
 import { cls } from "../../utils";
 import Janusface from "../Janusface";
-
 import useFixoluteBox from "../../hooks/useFixsolute";
 
 const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
@@ -296,9 +295,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
           <Viewer />
         </div>
       </div>
-      <Taps />
-      <Viewer />
-      <Chat />
     </>
   );
 });
