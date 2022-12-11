@@ -84,7 +84,7 @@ const Commentfix = ({ comment }: IComments) => {
         <div className="relative w-[95%] h-[17rem] m-[0_auto] rounded-[0.3125rem] shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)]">
           <form
             onSubmit={handleSubmit(onEdit)}
-            className="px-[10px] py-[30px] font-normal"
+            className="px-[0.625rem] py-[1.875rem] font-normal"
           >
             <div className="block absolute top-32 left-[86%]">
               {watch("comment.length") === 300 ? (
@@ -112,7 +112,7 @@ const Commentfix = ({ comment }: IComments) => {
                 등록
               </button>
               <button
-                className="relative w-[10.5rem] h-[4rem] rounded-2xl   bg-[#b1a89f] hover:bg-[#c1b9b1] border-[10px] border-[#fff] z-[10] text-white ml-5"
+                className="relative w-[10.5rem] h-[4rem] rounded-2xl bg-[#b1a89f] hover:bg-[#c1b9b1] border-[10px] border-[#fff] z-[10] text-white ml-5"
                 onClick={hideEditMode}
               >
                 취소
@@ -131,7 +131,7 @@ const Commentfix = ({ comment }: IComments) => {
           </div>
 
           <div className="flex-col flex-[7]">
-            <div className="p-[0.5rem] text-base w-[650px] break-words">
+            <div className="p-[0.5rem] text-base w-[40.625rem] break-words">
               {comment?.comment}
             </div>
             {comment && comment.createdAt === comment.updatedAt ? (
