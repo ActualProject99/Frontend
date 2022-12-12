@@ -98,7 +98,7 @@ const Commentfix = ({ comment }: IComments) => {
               )}
             </div>
             <textarea
-              className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
+              className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 resize-none focus:ring-0"
               {...register(...regOptComment.editcomment())}
               maxLength={300}
               placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 수정된 댓글 입력)"
@@ -136,11 +136,11 @@ const Commentfix = ({ comment }: IComments) => {
             </div>
             {comment && comment.createdAt === comment.updatedAt ? (
               <p className="mt-[1rem] ml-[0.5rem] text-sm text-[#999999]">
-                {dayjs(comment?.createdAt).format("YY.MM.DD A HH:MM")}
+                {dayjs(comment?.createdAt).format("YY.MM.DD A HH:mm")}
               </p>
             ) : (
               <p className="mt-[1rem] ml-[0.5rem] text-xs text-[#999999]">
-                {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:MM")}(수정됨)
+                {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:mm")}(수정됨)
               </p>
             )}{" "}
             {user?.userId === comment?.userId ? (
