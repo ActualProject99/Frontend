@@ -136,11 +136,11 @@ const Commentfix = ({ comment }: IComments) => {
             </div>
             {comment && comment.createdAt === comment.updatedAt ? (
               <p className="mt-[1rem] ml-[0.5rem] text-sm text-[#999999]">
-                {dayjs(comment?.createdAt).format("YY.MM.DD A HH:MM")}
+                {dayjs(comment?.createdAt).format("YY.MM.DD A HH:mm")}
               </p>
             ) : (
               <p className="mt-[1rem] ml-[0.5rem] text-xs text-[#999999]">
-                {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:MM")}(수정됨)
+                {dayjs(comment?.updatedAt).format("YY.MM.DD A HH:mm")}(수정됨)
               </p>
             )}{" "}
             {user?.userId === comment?.userId ? (
