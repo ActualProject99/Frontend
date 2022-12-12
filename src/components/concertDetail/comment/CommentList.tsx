@@ -107,7 +107,7 @@ const CommentList = () => {
             )}
           </div>
           <textarea
-            className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
+            className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 resize-none focus:ring-0"
             {...register(...regOptComment.comment())}
             maxLength={300}
             disabled={!cookie ? true : false}
