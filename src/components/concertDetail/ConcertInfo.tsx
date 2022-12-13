@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { getCookieToken } from "../../apis/cookie";
-import useDebounce from "../../hooks/useDebounce";
+
 import useTicket from "../../hooks/useTicketPop";
 import { useScript } from "../../hooks/KaKaoShare";
 import useTaps from "../../hooks/useTaps";
@@ -118,7 +118,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
       });
     }
   }, [PostConcertSMS, concert.concertId, cookie, poped, queryClient]);
-
 
   const onEditLike = useCallback(() => {
     if (!cookie)
