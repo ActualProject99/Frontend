@@ -8,6 +8,7 @@ import Commentfix from "./Commentfix";
 import { regOptComment } from "../../../utils";
 import { getCookieToken } from "../../../apis/cookie";
 import useTicket from "../../../hooks/useTicketPop";
+import { useEffect } from "react";
 
 export interface IComments {
   comment?: IgetComment;
@@ -46,8 +47,13 @@ const CommentList = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    watch("comment");
+  }, [watch]);
 
   const { isLoading, isError, data } = useQuery<IgetComment[]>(
     ["allComments", id],
@@ -61,6 +67,7 @@ const CommentList = () => {
   }
 
   const onValid = (data: any) => {
+    if (!data.comment.trim()) return;
     if (!cookie) return poped();
     const comment = {
       concertId: id,
@@ -79,20 +86,40 @@ const CommentList = () => {
           className="px-[10px] py-[30px] font-normal"
           onSubmit={handleSubmit(onValid)}
         >
+          {/* <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 0 ? 
+              <span className="font-bold">0 / 300</span>
+             : (watch("comment.length") === 300) ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div> */}
+          <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 300 ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div>
           <textarea
-            className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 outline-0 resize-none focus:ring-0"
+            className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 resize-none focus:ring-0"
             {...register(...regOptComment.comment())}
             maxLength={300}
             disabled={!cookie ? true : false}
             placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 댓글 입력)"
           />
-          <span className="font-bold text-sm text-red-600">
+          <span className="pl-5 font-bold text-sm text-red-600">
             {errors.comment?.message as string}
           </span>
 
           <div className="flex justify-center items-center">
             <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
-            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[30rem]  bg-[#7151A1] hover:bg-primary-500 text-white">
+            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[30rem] bg-[#7151A1] hover:bg-primary-500 text-white">
               등록
             </button>
           </div>
