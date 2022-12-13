@@ -23,9 +23,7 @@ const ArtistInfo = ({ artist }: ArtistInfoProps): JSX.Element => {
     cacelButton: false,
     userInputs: {
       확인: {
-        value: () => {
-          console.log("ok");
-        },
+        value: () => {},
         className: "bg-red-200 text-lime-800",
       },
       아니오: null,

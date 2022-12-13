@@ -12,7 +12,6 @@ import { motion } from "framer-motion";
 //@ts-ignore
 const UserInfo = ({ deletePoped }): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
-  console.log("유데", userData);
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();
   const {
