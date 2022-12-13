@@ -119,6 +119,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   }, [PostConcertSMS, concert.concertId, cookie, poped, queryClient]);
 
+
   const onEditLike = useCallback(() => {
     if (!cookie)
       return poped("로그인 후 이용해주세요!😉", {
