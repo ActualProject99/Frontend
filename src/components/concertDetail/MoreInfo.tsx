@@ -43,8 +43,8 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        {moreInfoConcert.map((moreInfo: { url: string }) => (
-          <div className="flex justify-center items-center">
+        {moreInfoConcert.map((moreInfo: { url: string; id: number }) => (
+          <div key={moreInfo.id} className="flex justify-center items-center">
             <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
           </div>
         ))}
