@@ -17,7 +17,7 @@ import UserApi from "../apis/query/UserApi";
 import { MainContent, MainScrollRef } from "../types";
 import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
-import { useQueryClient, QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import ConcertApi from "../apis/query/ConcertApi";
 import { deactivate } from "../apis/instance";
 import { IGetArtist, IGetArtistConcert } from "../types";
@@ -259,9 +259,9 @@ const Nav = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [getMainScrollRef] = useRecoilState<MainScrollRef>(mainScrollRef);
   const { data: user } = UserApi.GetUserInfo();
-
   const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
   const queryClient = useQueryClient();
+
   const { Ticket, poped, userInput } = useTicketPop(
     "정말 로그아웃 하시겠어요?",
     {
@@ -414,7 +414,7 @@ const Nav = ({
                         out
                       </button>
                       <img
-                        alt="profile"
+                        alt=""
                         src={user?.profileImg}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
