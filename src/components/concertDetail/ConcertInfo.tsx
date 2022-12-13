@@ -56,15 +56,16 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
-    "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
+    `${concert.concertName}\n 공연의 알림을 받으시겠어요?`,
     {
       cacelButton: false,
       userInputs: {
         예: {
           value: () => {
-            FlareLane.setIsSubscribed(true);
-            PostDebounced(concert.concertId);
-            setShow(!show);
+            PostConcertSMS(payload).then(() => {
+              queryClient.invalidateQueries(["concert"]);
+            });
+            setShow((prev) => !prev);
           },
           className: "bg-accent-main text-white",
         },
@@ -75,6 +76,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   );
   const cookie = getCookieToken();
+  //FlareLane.setIsSubscribed(true);
+  // PostDebounced(concert.concertId);
+
   // const debouncer = useDebounce(1000);
   // const PostDebounced = useRef(
   //   debouncer((payload: { concertId: number }) => {
@@ -105,10 +109,14 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     const payload = {
       concertId: concert.concertId,
     };
-    PostConcertSMS(payload).then(() => {
-      queryClient.invalidateQueries(["concert"]);
-    });
-    setShow((prev) => !prev);
+    if (show === false) {
+      poped();
+    } else {
+      PostConcertSMS(payload).then(() => {
+        queryClient.invalidateQueries(["concert"]);
+        setShow((prev) => !prev);
+      });
+    }
   }, [PostConcertSMS, concert.concertId, cookie, poped, queryClient]);
 
   const onEditLike = useCallback(() => {
@@ -122,6 +130,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     };
     EditLike(payload).then(() => {
       queryClient.invalidateQueries(["concert"]);
+      setShow((prev) => !prev);
     });
     setLike((prev) => !prev);
   }, [concert.concertId, like, EditLike, queryClient]);
