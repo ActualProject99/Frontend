@@ -23,7 +23,8 @@ const OAuthKakao = () => {
         const token = kakaoResult.data.access_token;
         console.log("토큰", token);
         const response = await axios.post(
-          `https://kapi.kakao.com/v2/user/me`,
+          `https://tgle.ml/users/oauth/kakao/callback`,
+
           kakaoResult.data,
           {
             headers: {
@@ -42,10 +43,10 @@ const OAuthKakao = () => {
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
         if (currentPage) {
-          return console.log("res", response);
-          // window.location.replace(`/${currentPage}`);
+          return window.location.replace(`/${currentPage}`);
         } else {
-          return;
+          return (window.location.href = "/");
+
           // window.location.replace("/concerts");
         }
       } catch (e) {
@@ -74,3 +75,5 @@ export default OAuthKakao;
 // }
 // }, [kakaoToken]);
 // return <></>;
+
+//es

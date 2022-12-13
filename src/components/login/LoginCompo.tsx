@@ -8,7 +8,7 @@ import { LoginForm } from "../../types";
 import kakaoLogo from "../../image/kakaoLogo.png";
 import useTicket from "../../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../../image/Logo.svg";
-import { motion } from "framer-motion";
+import axios from "axios";
 
 const LoginCompo = (): JSX.Element => {
   const navigate = useNavigate();
@@ -34,13 +34,13 @@ const LoginCompo = (): JSX.Element => {
   const onValid = async (data: LoginForm) => {
     try {
       const response = await deactivate.post("/users/login", data);
-      setAccessToken(response.data.jwt);
+      console.log("res", response);
+      setAccessToken(response.data.access_token);
       // const AccessToken = response.data.jwt;
       // localStorage.setItem("AccessToken", AccessToken);
       poped(response.data.nickname + "님 환영합니다!🎉", {
         afterToasted: () => {
-          navigate("/concerts");
-          // window.location.reload();
+          window.location.replace("/concerts");
         },
         newType: "ckeck",
       });
@@ -49,13 +49,16 @@ const LoginCompo = (): JSX.Element => {
       console.log(error);
     }
   };
-  // const kakaoBtn = () => {
-  //   const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
-  //   console.log("hh", REDIRECT_URL);
-  //   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-  //   const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
-  //   window.location.href = url;
-  // };
+
+  const kakaoBtn = () => {
+    const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
+    console.log("hh", REDIRECT_URL);
+    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
+    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}`;
+
+    window.location.href = url;
+  };
+
   useEffect(() => {
     if (cookie) {
       poped("이미 로그인 되었습니다!", {
@@ -141,11 +144,7 @@ const LoginCompo = (): JSX.Element => {
           <div className="flex flex-col justify-center ">
             <button
               className="flex items-center justify-center w-72 h-10 bg-[#FDDC3F] rounded"
-              onClick={() =>
-                poped(
-                  "죄송합니다! 현재 복구중입니다\n이메일로 회원가입 부탁드립니다😢"
-                )
-              }
+              onClick={kakaoBtn}
             >
               <img
                 className="w-6 h-6 ml-[-5.5rem] mr-[4.2rem]"

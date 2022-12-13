@@ -88,16 +88,27 @@ const EditLikeConcerts = () => {
 };
 
 //공연 SMS 알림 API
-
-const PostConcertSMS = () => {
-  return useMutation(async (payload: PostSMS) => {
-    const { data } = await activate.post("url", payload);
+const GetAlarmConcertList = () => {
+  const myToken = getCookieToken();
+  return useQuery(["AlarmConcertList"], async () => {
+    const { data } = await instance(myToken).get("/alarm/mypage");
     return data;
   });
 };
-const DeleteConcertSMS = () => {
+
+const GetAlarmConcert = (payload: number) => {
+  return useQuery(["AlarmConcert", payload], async () => {
+    const { data } = await activate.get(`/alarm/${payload}`);
+    return data;
+  });
+};
+
+const PostConcertSMS = () => {
+  const myToken = getCookieToken();
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await activate.post("url", payload);
+    console.log("payload", payload);
+    const { data } = await instance(myToken).put(`/alarm/${payload.concertId}`);
+    console.log("data", data);
     return data;
   });
 };
@@ -114,7 +125,6 @@ const ConcertApi = {
   GetConcerts,
   EditLikeConcerts,
   PostConcertSMS,
-  DeleteConcertSMS,
   GetLocation,
   GetMonthConcerts,
   GetLikeConcert,
@@ -122,6 +132,8 @@ const ConcertApi = {
   GetHotConcerts,
   GetDetailConcerts,
   GetSearchData,
+  GetAlarmConcertList,
+  GetAlarmConcert,
 };
 
 export default ConcertApi;

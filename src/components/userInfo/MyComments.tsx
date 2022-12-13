@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IgetMyComment } from "../../types";
 import UserApi from "../../apis/query/UserApi";
@@ -32,7 +31,7 @@ const MyComments = (): JSX.Element => {
         </div>
         개
       </div>
-      <ul>
+      <ul className='mb-5'>
         {comment?.map((comments) => (
           <li
             key={comments.id}
