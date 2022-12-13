@@ -62,6 +62,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
       userInputs: {
         예: {
           value: () => {
+            const payload = {
+              concertId: concert.concertId,
+            };
             PostConcertSMS(payload).then(() => {
               queryClient.invalidateQueries(["concert"]);
             });
@@ -106,9 +109,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
         isToastOnly: true,
         newType: "warn",
       });
-    const payload = {
-      concertId: concert.concertId,
-    };
+
     if (show === false) {
       poped();
     } else {

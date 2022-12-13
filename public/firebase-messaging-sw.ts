@@ -1,3 +1,4 @@
+//@ts-nocheck
 /* eslint-disable no-undef */
 /* eslint-disable no-restricted-globals */
 
@@ -29,7 +30,7 @@ self.addEventListener("push", function (e) {
 
 self.addEventListener("notificationclick", function (event) {
   console.log("notification click");
-  const url = "/";
+  const url = "/concerts";
   event.notification.close();
   event.waitUntil(clients.openWindow(url));
 });
