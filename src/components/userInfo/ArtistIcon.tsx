@@ -22,7 +22,6 @@ const ArtistIcon = ({ artist }: ArtistIconProps): JSX.Element => {
               artistId: artist.artistId,
             };
             EditLike(payload).then(() => {
-              console.log("pay", payload);
               queryClient.invalidateQueries(["LikeArtistList"]);
             });
           },

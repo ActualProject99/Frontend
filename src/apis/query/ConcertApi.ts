@@ -71,10 +71,16 @@ const GetLikeConcertList = () => {
 };
 
 const GetLikeConcert = (payload: number) => {
-  return useQuery(["LikeConcert", payload], async () => {
-    const { data } = await activate.get(`/concertlike/${payload}`);
-    return data;
-  });
+  return useQuery(
+    ["LikeConcert", payload],
+    async () => {
+      const { data } = await activate.get(`/concertlike/${payload}`);
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+    }
+  );
 };
 
 const EditLikeConcerts = () => {
@@ -97,18 +103,22 @@ const GetAlarmConcertList = () => {
 };
 
 const GetAlarmConcert = (payload: number) => {
-  return useQuery(["AlarmConcert", payload], async () => {
-    const { data } = await activate.get(`/alarm/${payload}`);
-    return data;
-  });
+  return useQuery(
+    ["AlarmConcert", payload],
+    async () => {
+      const { data } = await activate.get(`/alarm/${payload}`);
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+    }
+  );
 };
 
 const PostConcertSMS = () => {
   const myToken = getCookieToken();
   return useMutation(async (payload: PostSMS) => {
-    console.log("payload", payload);
     const { data } = await instance(myToken).put(`/alarm/${payload.concertId}`);
-    console.log("data", data);
     return data;
   });
 };
