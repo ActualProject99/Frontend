@@ -24,10 +24,11 @@ const OAuthKakao = () => {
         console.log("토큰", token);
         const response = await axios.post(
           `https://tgle.ml/users/oauth/kakao/callback`,
+
           kakaoResult.data,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-from-urlencoded",
             },
           }
