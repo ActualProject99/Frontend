@@ -16,7 +16,6 @@ import { useScript } from "../../hooks/KaKaoShare";
 import useTaps from "../../hooks/useTaps";
 import useFixoluteBox from "../../hooks/useFixsolute";
 
-import FlareLane from "@flarelane/flarelane-web-sdk";
 import CopyToClipboard from "react-copy-to-clipboard";
 
 import { ConcertProps } from "../../types";
@@ -46,13 +45,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
-  const [subscrided, setSubscribed] = useState();
-  FlareLane.getIsSubscribed((isSubscribed) => {
-    setSubscribed(isSubscribed);
-  });
 
-  console.log("알람", AlarmCon);
-  console.log("알람2", show);
   const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
@@ -79,29 +72,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   );
   const cookie = getCookieToken();
-  //FlareLane.setIsSubscribed(true);
-  // PostDebounced(concert.concertId);
-
-  // const debouncer = useDebounce(1000);
-  // const PostDebounced = useRef(
-  //   debouncer((payload: { concertId: number }) => {
-  //     PostConcertSMS(payload);
-  //     setShow(!show);
-  //   })
-  // ).current;
-  // const PostSMS = () => {
-  //   if (!cookie) {
-  //     poped("로그인 후 이용해주세요!😉", {
-  //       isToastOnly: true,
-  //       newType: "warn",
-  //     });
-  //   } else if (!subscrided) {
-  //     poped();
-  //   } else {
-  //     PostDebounced(concert.concertId);
-  //     setShow(!show);
-  //   }
-  // };
 
   const PostSMS = useCallback(() => {
     if (!cookie)
@@ -113,12 +83,15 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     if (show === false) {
       poped();
     } else {
+      const payload = {
+        concertId: concert.concertId,
+      };
       PostConcertSMS(payload).then(() => {
         queryClient.invalidateQueries(["concert"]);
         setShow((prev) => !prev);
       });
     }
-  }, [PostConcertSMS, concert.concertId, cookie, poped, queryClient]);
+  }, [PostConcertSMS, show, queryClient]);
 
   const onEditLike = useCallback(() => {
     if (!cookie)
@@ -131,10 +104,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     };
     EditLike(payload).then(() => {
       queryClient.invalidateQueries(["concert"]);
-      setShow((prev) => !prev);
+      setLike((prev) => !prev);
     });
-    setLike((prev) => !prev);
-  }, [concert.concertId, like, EditLike, queryClient]);
+  }, [like, EditLike, queryClient]);
 
   const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
 
