@@ -52,7 +52,7 @@ export interface IgetMyComment {
   userId: number;
   concertName: string;
   concertId: number;
-  createdAt : string;
+  createdAt: string;
   updatedAt: string;
 }
 
@@ -159,6 +159,11 @@ export interface ConcertLike {
 }
 export interface likeConcertProps {
   concertLikeId: number;
+  userId: number;
+  concertId: number;
+}
+export interface alarmConcertProps {
+  alarmId: number;
   userId: number;
   concertId: number;
 }

@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { getCookieToken } from "../../apis/cookie";
-import useDebounce from "../../hooks/useDebounce";
+
 import useTicket from "../../hooks/useTicketPop";
 import { useScript } from "../../hooks/KaKaoShare";
 import useTaps from "../../hooks/useTaps";
@@ -34,13 +34,14 @@ import icons from "../icons";
 const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
+  const { data: AlarmCon } = ConcertApi.GetAlarmConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
-  const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
+
   const queryClient = useQueryClient();
   const [like, setLike] = useState<boolean>(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
   const [dday, setDday] = useState<Date>(new Date(concert?.ticketingDate));
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
@@ -49,19 +50,25 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   FlareLane.getIsSubscribed((isSubscribed) => {
     setSubscribed(isSubscribed);
   });
-  console.log("dd", concert);
 
+  console.log("알람", AlarmCon);
+  console.log("알람2", show);
   const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
-    "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
+    `${concert.concertName}\n 공연의 알림을 받으시겠어요?`,
     {
       cacelButton: false,
       userInputs: {
         예: {
           value: () => {
-            FlareLane.setIsSubscribed(true);
-            PostDebounced(concert.concertId);
+            const payload = {
+              concertId: concert.concertId,
+            };
+            PostConcertSMS(payload).then(() => {
+              queryClient.invalidateQueries(["concert"]);
+            });
+            setShow((prev) => !prev);
           },
           className: "bg-accent-main text-white",
         },
@@ -72,36 +79,46 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   );
   const cookie = getCookieToken();
-  const debouncer = useDebounce(1000);
-  const PostDebounced = useRef(
-    debouncer(({ concertId }: { concertId: number }) => {
-      PostConcertSMS({ concertId });
-      setShow(!show);
-    })
-  ).current;
-  const PostSMS = () => {
-    if (!cookie) {
-      poped("로그인 후 이용해주세요!😉", {
+  //FlareLane.setIsSubscribed(true);
+  // PostDebounced(concert.concertId);
+
+  // const debouncer = useDebounce(1000);
+  // const PostDebounced = useRef(
+  //   debouncer((payload: { concertId: number }) => {
+  //     PostConcertSMS(payload);
+  //     setShow(!show);
+  //   })
+  // ).current;
+  // const PostSMS = () => {
+  //   if (!cookie) {
+  //     poped("로그인 후 이용해주세요!😉", {
+  //       isToastOnly: true,
+  //       newType: "warn",
+  //     });
+  //   } else if (!subscrided) {
+  //     poped();
+  //   } else {
+  //     PostDebounced(concert.concertId);
+  //     setShow(!show);
+  //   }
+  // };
+
+  const PostSMS = useCallback(() => {
+    if (!cookie)
+      return poped("로그인 후 이용해주세요!😉", {
         isToastOnly: true,
         newType: "warn",
       });
-    } else if (!subscrided) {
+
+    if (show === false) {
       poped();
     } else {
-      PostDebounced(concert.concertId);
+      PostConcertSMS(payload).then(() => {
+        queryClient.invalidateQueries(["concert"]);
+        setShow((prev) => !prev);
+      });
     }
-  };
-
-  const DeleteDebounced = useRef(
-    debouncer(({ concertId }: { concertId: number }) => {
-      DeleteConcertSMS({ concertId });
-      setShow(!show);
-    })
-  ).current;
-  const DeleteSMS = () => {
-    if (!cookie) return poped();
-    DeleteDebounced(concert.concertId);
-  };
+  }, [PostConcertSMS, concert.concertId, cookie, poped, queryClient]);
 
   const onEditLike = useCallback(() => {
     if (!cookie)
@@ -114,6 +131,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     };
     EditLike(payload).then(() => {
       queryClient.invalidateQueries(["concert"]);
+      setShow((prev) => !prev);
     });
     setLike((prev) => !prev);
   }, [concert.concertId, like, EditLike, queryClient]);
@@ -153,9 +171,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (LikeCon) setLike(LikeCon?.isLike);
-  }, [LikeCon, setLike]);
   const { innerWidth: screenWidth } = window;
   const {
     refs: { fixsolute, limit },
@@ -164,7 +179,12 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     80,
     screenWidth < 1200 ? screenWidth - 1200 + 26 : (screenWidth - 1200) / 2 + 31
   );
-
+  useEffect(() => {
+    if (LikeCon) setLike(LikeCon?.isLike);
+  }, [LikeCon, setLike]);
+  useEffect(() => {
+    if (AlarmCon) setShow(AlarmCon?.isLike);
+  }, [AlarmCon, setShow]);
   return (
     <>
       <Ticket />

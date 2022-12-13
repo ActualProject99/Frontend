@@ -9,6 +9,8 @@ import Artist from "./pages/Artist";
 import OAuthKakao from "./components/login/OAuthKakao";
 import useUser from "./hooks/useUser";
 import NotFound from "./pages/404";
+import "./firebase-messaging-sw";
+
 if (process.env.NODE_ENV === "production") {
   console.log = function no_console() {};
   console.warn = function no_console() {};

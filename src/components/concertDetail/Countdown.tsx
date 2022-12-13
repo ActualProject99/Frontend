@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import useInterval from "../../hooks/useInterval";
 
 const Countdown = (targetDate: Date): string[] => {
   const countDownDate = new Date(targetDate).getTime();

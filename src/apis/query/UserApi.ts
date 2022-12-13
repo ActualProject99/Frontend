@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
 import { EditImgPayload, EditNamePayload, IGetUser } from "../../types";
 import { getCookieToken } from "../cookie";
 import { activate, instance } from "../instance";
@@ -7,10 +7,16 @@ import { activate, instance } from "../instance";
 //유저Info API
 const GetUserInfo = () => {
   const myToken = getCookieToken();
-  return useQuery<IGetUser>(["userInfo"], async () => {
-    const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
-    return data;
-  });
+  return useQuery<IGetUser>(
+    ["userInfo"],
+    async () => {
+      const { data } = await instance(myToken).get<IGetUser>("/users/userinfo");
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+    }
+  );
 };
 
 const EditUserName = () => {
