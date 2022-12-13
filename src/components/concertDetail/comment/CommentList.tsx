@@ -86,17 +86,6 @@ const CommentList = () => {
           className="px-[10px] py-[30px] font-normal"
           onSubmit={handleSubmit(onValid)}
         >
-          {/* <div className="block absolute top-32 left-[86%]">
-            {watch("comment.length") === 0 ? 
-              <span className="font-bold">0 / 300</span>
-             : (watch("comment.length") === 300) ? (
-              <span className="font-bold text-red-600">
-                {watch("comment.length")} / 300
-              </span>
-            ) : (
-              <span className="font-bold">{watch("comment.length")} / 300</span>
-            )}
-          </div> */}
           <div className="block absolute top-32 left-[86%]">
             {watch("comment.length") === 300 ? (
               <span className="font-bold text-red-600">
