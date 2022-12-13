@@ -10,7 +10,7 @@ import { RecoilRoot } from "recoil";
 import FlareLane from "@flarelane/flarelane-web-sdk";
 import Fontpick from "./Fontpick";
 
-FlareLane.initialize({ projectId: "a201b475-fab4-47e3-94e7-dcb905e8afa4" });
+FlareLane.initialize({ projectId: "43565281-b5e5-48ed-9b57-83e70d343652" });
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

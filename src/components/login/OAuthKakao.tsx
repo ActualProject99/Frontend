@@ -6,6 +6,7 @@ import { deactivate } from "../../apis/instance";
 
 const OAuthKakao = () => {
   const kakaoToken = new URL(window.location.href).searchParams.get("code");
+  console.log("인가코드", kakaoToken);
   useEffect(() => {
     (async () => {
       try {
@@ -21,12 +22,13 @@ const OAuthKakao = () => {
         if (kakaoResult.status !== 200) return;
         const token = kakaoResult.data.access_token;
         console.log("토큰", token);
-        const response = await deactivate.post(
-          `users/oauth/kakao`,
+        const response = await axios.post(
+          `https://tgle.ml/users/oauth/kakao/callback`,
+
           kakaoResult.data,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-from-urlencoded",
             },
           }
@@ -41,10 +43,10 @@ const OAuthKakao = () => {
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
         if (currentPage) {
-          return console.log("res", response);
-          // window.location.replace(`/${currentPage}`);
+          return window.location.replace(`/${currentPage}`);
         } else {
-          return;
+          return (window.location.href = "/");
+
           // window.location.replace("/concerts");
         }
       } catch (e) {
@@ -73,3 +75,5 @@ export default OAuthKakao;
 // }
 // }, [kakaoToken]);
 // return <></>;
+
+//es

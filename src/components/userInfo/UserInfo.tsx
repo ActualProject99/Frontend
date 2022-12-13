@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import UserApi from "../../apis/query/UserApi";
-import kakaoLogo from "../../image/kakaoLogo.png";
+
 import CameraIcon from "../../image/Camera-icon.png";
 
 import { EditNickname } from "../../types";
@@ -53,7 +53,7 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
         deletePoped("프로필 사진 변경 완료!💾", { isToastOnly: true });
       });
     },
-    [EditUserImg, queryClient, deletePoped]
+    [EditUserImg, queryClient]
   );
 
   const deleteUser = () => {
@@ -67,29 +67,30 @@ const UserInfo = ({ deletePoped }): JSX.Element => {
       exit={{ opacity: 0 }}
       className="flex flex-col justify-center items-center w-[95%] h-full p-5 mx-auto my-5 gap-6"
     >
-      <div className="w-36 h-36 relative">
-        <img
-          id="uploadedimage"
-          className="w-36 h-36 rounded-[50%] absolute"
-          alt="userImg"
-          src={imageSrc}
-        />
-        <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
+      <div>
+        <div className="w-36 h-36 relative">
           <img
-            className="absolute w-10 h-10 top-[6.3rem] left-[6.2rem] z-0"
-            alt="camera"
-            src={CameraIcon}
+            id="uploadedimage"
+            className="w-36 h-36 rounded-[50%] absolute"
+            alt=""
+            src={imageSrc}
           />
-          <input
-            className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden z-10"
-            type="file"
-            onChange={onChangeImg}
-          />
-        </label>
+          <label className="absolute cursor-pointer w-36 h-36 rounded-[50%]  hover:bg-[#1f1e1f16]">
+            <img
+              className="absolute w-10 h-10 top-[6.3rem] left-[6.2rem] z-0"
+              alt="camera"
+              src={CameraIcon}
+            />
+            <input
+              className="w-[0px] h=[0px] p-0 border-[0] overflow-hidden z-10"
+              type="file"
+              onChange={onChangeImg}
+            />
+          </label>
+        </div>
       </div>
-      <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 mt-3">
+      <div className="flex flex-col items-center justify-center w-96 h-52 gap-y-4 ">
         <div className="flex items-center h-11 ">
-          {/* <img className="w-7 h-7" alt="emailImg" src={kakaoLogo} /> */}
           <span className="text-xl ml-3 h-10 mt-4">{userData?.email}</span>
         </div>
         <div className="flex items-center justify-center">
