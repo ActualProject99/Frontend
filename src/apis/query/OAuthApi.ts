@@ -5,11 +5,9 @@ import axios from "axios";
 
 export const OAuthAPI = {
   loginWithKakao: async (kakaoToken: string) => {
-    console.log("여기옴?", kakaoToken);
     await axios
-      .get(`http://localhost:3000/users/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
+      .get(`http://localhost:3000/users/kakao/callback?code=${kakaoToken}`)
       .then((data) => {
-        console.log("뭐주냐?", data);
         setAccessToken(data.headers.authorization);
       })
       .then((res) => {

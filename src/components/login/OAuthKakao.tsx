@@ -6,7 +6,6 @@ import { deactivate } from "../../apis/instance";
 
 const OAuthKakao = () => {
   const kakaoToken = new URL(window.location.href).searchParams.get("code");
-  console.log("인가코드", kakaoToken);
   useEffect(() => {
     (async () => {
       try {
@@ -18,12 +17,10 @@ const OAuthKakao = () => {
             },
           }
         );
-        console.log("카카오답변", kakaoResult);
         if (kakaoResult.status !== 200) return;
         const token = kakaoResult.data.access_token;
-        console.log("토큰", token);
         const response = await axios.post(
-          `https://tgle.ml/users/oauth/kakao/callback`,
+          `https://tgle.ml/users/kakao`,
 
           kakaoResult.data,
           {
@@ -31,29 +28,22 @@ const OAuthKakao = () => {
               authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-from-urlencoded",
             },
+            // withCredentials: true,
           }
         );
-
         const {
           status,
-          data: { accessToken, refreshToken, currentPage },
+          data: { accessToken, refreshToken },
         } = response;
         console.log("res", response);
         if (status !== 200) return;
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
-        if (currentPage) {
-          return window.location.replace(`/${currentPage}`);
-        } else {
-          return (window.location.href = "/");
-
-          // window.location.replace("/concerts");
-        }
+        window.location.replace("/concerts");
       } catch (e) {
         console.log("에러");
         console.error(e);
-        // window.location.replace("/");
-        //알러트
+        window.location.replace("/");
       }
     })();
   }, [kakaoToken]);

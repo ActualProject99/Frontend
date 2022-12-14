@@ -16,12 +16,6 @@ const MyComments = (): JSX.Element => {
     { staleTime: 2000, keepPreviousData: true, refetchOnWindowFocus: false }
   );
 
-
-  console.log("userInfo", user);
-  console.log("addComments", comment);
-  console.log("comcertInfo", concert);
-
-
   return (
     <div className="flex flex-col w-[95%] max-h-[32.5rem] overflow-auto p-7 border mx-auto my-5 gap-6 ">
       <div className="ml-2 text-2xl font-bold mt-5 flex flex-row">
@@ -31,13 +25,12 @@ const MyComments = (): JSX.Element => {
         </div>
         개
       </div>
-      <ul className='mb-5'>
+      <ul className="mb-5">
         {comment?.map((comments) => (
           <li
             key={comments.id}
             className="mb-3 m-auto mt-0 pb-3 border-b w-[98.5%]"
           >
-            
             <div>{comments.comment}</div>
             {comments && comments.createdAt === comments.updatedAt ? (
               <p className="mt-4 text-sm text-[#999999]">

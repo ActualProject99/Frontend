@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { onBackgroundMessage } from "firebase/messaging/sw";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -26,16 +27,14 @@ async function requestPermission() {
   console.log("알림 권한이 허용됨");
 
   const VAPID_KEY = process.env.REACT_APP_VAPID_KEY;
-  console.log("VK", VAPID_KEY);
 
   const token = await getToken(messaging, {
     vapidKey: VAPID_KEY,
   });
-  console.log("token", token);
 
   if (token) console.log("token: ", token);
   else console.log("Can not get Token");
-  console.log("여기 옴?22");
+
   onMessage(messaging, (payload) => {
     console.log("메시지가 도착했습니다.", payload);
   });
