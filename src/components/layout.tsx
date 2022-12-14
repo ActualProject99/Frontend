@@ -363,7 +363,7 @@ const Nav = ({
               <div className="flex items-center gap-10">
                 <div
                   className="w-[180px] h-10 rounded cursor-pointer mb-2"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/", { state: { isVisited: true } })}
                 >
                   <Logo width="11rem" height="3.5rem" />
                 </div>

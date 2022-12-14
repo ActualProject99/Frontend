@@ -11,10 +11,10 @@ import useUser from "./hooks/useUser";
 import NotFound from "./pages/404";
 import "./firebase-messaging-sw";
 
-if (process.env.NODE_ENV === "production") {
-  console.log = function no_console() {};
-  console.warn = function no_console() {};
-}
+// if (process.env.NODE_ENV === "production") {
+//   console.log = function no_console() {};
+//   console.warn = function no_console() {};
+// }
 
 function App() {
   const { isLoggedin } = useUser();
