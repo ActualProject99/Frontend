@@ -20,7 +20,7 @@ const OAuthKakao = () => {
         if (kakaoResult.status !== 200) return;
         const token = kakaoResult.data.access_token;
         const response = await axios.post(
-          `https://tgle.ml/users/oauth/kakao/callback`,
+          `https://tgle.ml/users/kakao`,
 
           kakaoResult.data,
           {
@@ -28,27 +28,22 @@ const OAuthKakao = () => {
               authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-from-urlencoded",
             },
+            // withCredentials: true,
           }
         );
         const {
           status,
-          data: { accessToken, refreshToken, currentPage },
+          data: { accessToken, refreshToken },
         } = response;
-        if (status !== 302) return;
+        console.log("res", response);
+        if (status !== 200) return;
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
         window.location.replace("/concerts");
-        if (currentPage) {
-          return window.location.replace(`/${currentPage}`);
-        } else {
-          return (window.location.href = "/");
-
-          // window.location.replace("/concerts");
-        }
       } catch (e) {
         console.log("에러");
         console.error(e);
-        // window.location.replace("/");
+        window.location.replace("/");
       }
     })();
   }, [kakaoToken]);
