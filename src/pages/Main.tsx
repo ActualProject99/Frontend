@@ -178,18 +178,6 @@ const Main = () => {
       setMainScrollRef(null);
     };
   }, [setMainScrollRef]);
-  const Content = forwardRef(
-    ({ children }: { children: ReactNode }, ref: LegacyRef<HTMLDivElement>) => {
-      return (
-        <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
-          ref={ref}
-        >
-          {children}
-        </div>
-      );
-    }
-  );
 
   return (
     <>
@@ -306,7 +294,10 @@ const Main = () => {
             />
           </div>
         </div>
-        <Content ref={content3}>
+        <div
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          ref={content3}
+        >
           <ContentCopy
             no="01"
             main={
@@ -332,8 +323,11 @@ const Main = () => {
               alt=""
             />
           </div>
-        </Content>
-        <Content ref={content4}>
+        </div>
+        <div
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          ref={content4}
+        >
           <ContentCopy
             no="02"
             main={
@@ -357,8 +351,11 @@ const Main = () => {
               alt=""
             />
           </div>
-        </Content>
-        <Content ref={content5}>
+        </div>
+        <div
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          ref={content5}
+        >
           <ContentCopy
             no="03"
             main={
@@ -382,8 +379,11 @@ const Main = () => {
               alt=""
             />
           </div>
-        </Content>
-        <Content ref={content6}>
+        </div>
+        <div
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          ref={content6}
+        >
           <ContentCopy
             no="04"
             main={
@@ -407,8 +407,11 @@ const Main = () => {
               alt=""
             />
           </div>
-        </Content>
-        <div ref={content7}>
+        </div>
+        <div
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          ref={content7}
+        >
           <div
             className="flex justify-center items-center h-screen w-screen relative overflow-hidden"
             style={{ perspective: 300 }}
@@ -474,6 +477,10 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
     isGoingUpOrStoped: true,
     isIntroing: true,
   });
+  const [isScrolling, setIsScrolling] = useState(
+    () => scrollYProgress.getVelocity() > 0.05
+  );
+  const [isIntroEnd, setIsIntroEnd] = useState(scrollYProgress.get() > 9 / 16);
   const [getIsMainsSrollUp, setIsMainsSrollUp] =
     useRecoilState<boolean>(isMainsSrollUp);
   const { innerHeight: screenHeight } = window;
@@ -487,31 +494,79 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
       const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
       cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
     },
-    { isActivate: () => scrollYProgress.get() < 9 / 16 }
+    { isActivate: () => scrollYProgress.get() < 10 / 16 }
   );
   useEffect(() => {
     const progesslog = () => {
       const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
-      const isIntroing = scrollYProgress.get() < 10 / 16;
+      const isIntroing = scrollYProgress.get() < 9 / 16;
       setIsButtonShow((cur) => ({
         isGoingUpOrStoped,
         isIntroing,
       }));
+      const velocity = scrollYProgress.getVelocity() > 0.05;
+      setIsScrolling(() => velocity);
+      setIsIntroEnd(!isIntroing);
     };
     snapContainer.current.addEventListener("scroll", progesslog);
   }, []);
   return (
     <button
       className={cls(
-        "font-Clip text-xl bg-transparent text-white fixed top-[80vh] left-1/2 -translate-x-1/2 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
-        Object.values(isButtonShow).every((e) => e) ? "block" : "hidden"
+        "flex flex-col gap-1 items-center font-Clip text-xl bg-transparent text-white fixed bottom-12 transition-all ease-in-out duration-1000 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
+        Object.values(isButtonShow).every((e) => e)
+          ? "right-1/2 translate-x-1/2"
+          : "right-36 translate-x-1/2",
+        isScrolling ? "opacity-0" : "opacity-100",
+        isIntroEnd ? "hidden" : "block"
       )}
       onClick={handleClick}
     >
-      press Enter
+      <p
+        className={cls(
+          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          Object.values(isButtonShow).every((e) => e)
+            ? "opacity-100"
+            : "opacity-0"
+        )}
+      >
+        &#9663;
+      </p>
+      <p
+        className={cls(
+          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          Object.values(isButtonShow).every((e) => e)
+            ? "opacity-100"
+            : "opacity-0"
+        )}
+      >
+        &#9662;
+      </p>
+      <p className="my-2">press Enter</p>
+      <p
+        className={cls(
+          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          Object.values(isButtonShow).every((e) => e)
+            ? "opacity-100"
+            : "opacity-0"
+        )}
+      >
+        &#9662;
+      </p>
+      <p
+        className={cls(
+          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          Object.values(isButtonShow).every((e) => e)
+            ? "opacity-100"
+            : "opacity-0"
+        )}
+      >
+        &#9663;
+      </p>
     </button>
   );
 });
+
 const Intro = ({ scrollYProgress }) => {
   const scale1 = useTransform(
     scrollYProgress,
