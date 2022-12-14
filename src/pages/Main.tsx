@@ -619,108 +619,149 @@ const Intro = ({ scrollYProgress }) => {
       [rndValue - 150, rndValue - 150, centerRandom(size / 2) - 150],
     ];
   };
+  const transformOpasity = (poster: number) => {
+    return [
+      scrollYProgress,
+      [0, 4 * s - 0.1 * s, 4 * s - poster / 256, k - poster / 256],
+      [0, 0, 1, 0],
+    ];
+  };
   const x1 = useTransform(...transformXValues(screenWidth));
   const y1 = useTransform(...transformYValues(screenHeight));
   const r1 = useTransform(...transformValues(90));
+  // const o1 = useTransform(...transformOpasity(1));
   const x2 = useTransform(...transformXValues(screenWidth));
   const y2 = useTransform(...transformYValues(screenHeight));
   const r2 = useTransform(...transformValues(90));
+  // const o2 = useTransform(...transformOpasity(2));
   const x3 = useTransform(...transformXValues(screenWidth));
   const y3 = useTransform(...transformYValues(screenHeight));
   const r3 = useTransform(...transformValues(90));
+  // const o3 = useTransform(...transformOpasity(3));
   const x4 = useTransform(...transformXValues(screenWidth));
   const y4 = useTransform(...transformYValues(screenHeight));
   const r4 = useTransform(...transformValues(90));
+  // const o4 = useTransform(...transformOpasity(4));
   const x5 = useTransform(...transformXValues(screenWidth));
   const y5 = useTransform(...transformYValues(screenHeight));
   const r5 = useTransform(...transformValues(90));
+  // const o5 = useTransform(...transformOpasity(5));
   const x6 = useTransform(...transformXValues(screenWidth));
   const y6 = useTransform(...transformYValues(screenHeight));
   const r6 = useTransform(...transformValues(90));
+  // const o6 = useTransform(...transformOpasity(6));
   const x7 = useTransform(...transformXValues(screenWidth));
   const y7 = useTransform(...transformYValues(screenHeight));
   const r7 = useTransform(...transformValues(90));
+  // const o7 = useTransform(...transformOpasity(7));
   const x8 = useTransform(...transformXValues(screenWidth));
   const y8 = useTransform(...transformYValues(screenHeight));
   const r8 = useTransform(...transformValues(90));
+  // const o8 = useTransform(...transformOpasity(8));
   const x9 = useTransform(...transformXValues(screenWidth));
   const y9 = useTransform(...transformYValues(screenHeight));
   const r9 = useTransform(...transformValues(90));
+  // const o9 = useTransform(...transformOpasity(9));
   const x10 = useTransform(...transformXValues(screenWidth));
   const y10 = useTransform(...transformYValues(screenHeight));
   const r10 = useTransform(...transformValues(90));
+  const o10 = useTransform(...transformOpasity(10));
   const x11 = useTransform(...transformXValues(screenWidth));
   const y11 = useTransform(...transformYValues(screenHeight));
   const r11 = useTransform(...transformValues(90));
+  const o11 = useTransform(...transformOpasity(11));
   const x12 = useTransform(...transformXValues(screenWidth));
   const y12 = useTransform(...transformYValues(screenHeight));
   const r12 = useTransform(...transformValues(90));
+  const o12 = useTransform(...transformOpasity(12));
   const x13 = useTransform(...transformXValues(screenWidth));
   const y13 = useTransform(...transformYValues(screenHeight));
   const r13 = useTransform(...transformValues(90));
+  const o13 = useTransform(...transformOpasity(13));
   const x14 = useTransform(...transformXValues(screenWidth));
   const y14 = useTransform(...transformYValues(screenHeight));
   const r14 = useTransform(...transformValues(90));
+  const o14 = useTransform(...transformOpasity(14));
   const x15 = useTransform(...transformXValues(screenWidth));
   const y15 = useTransform(...transformYValues(screenHeight));
   const r15 = useTransform(...transformValues(90));
+  const o15 = useTransform(...transformOpasity(15));
   const x16 = useTransform(...transformXValues(screenWidth));
   const y16 = useTransform(...transformYValues(screenHeight));
   const r16 = useTransform(...transformValues(90));
+  const o16 = useTransform(...transformOpasity(16));
   const x17 = useTransform(...transformXValues(screenWidth));
   const y17 = useTransform(...transformYValues(screenHeight));
   const r17 = useTransform(...transformValues(90));
+  const o17 = useTransform(...transformOpasity(17));
   const x18 = useTransform(...transformXValues(screenWidth));
   const y18 = useTransform(...transformYValues(screenHeight));
   const r18 = useTransform(...transformValues(90));
+  const o18 = useTransform(...transformOpasity(18));
   const x19 = useTransform(...transformXValues(screenWidth));
   const y19 = useTransform(...transformYValues(screenHeight));
   const r19 = useTransform(...transformValues(90));
+  const o19 = useTransform(...transformOpasity(19));
   const x20 = useTransform(...transformXValues(screenWidth));
   const y20 = useTransform(...transformYValues(screenHeight));
   const r20 = useTransform(...transformValues(90));
+  const o20 = useTransform(...transformOpasity(20));
   const x21 = useTransform(...transformXValues(screenWidth));
   const y21 = useTransform(...transformYValues(screenHeight));
   const r21 = useTransform(...transformValues(90));
+  const o21 = useTransform(...transformOpasity(21));
   const x22 = useTransform(...transformXValues(screenWidth));
   const y22 = useTransform(...transformYValues(screenHeight));
   const r22 = useTransform(...transformValues(90));
+  const o22 = useTransform(...transformOpasity(22));
   const x23 = useTransform(...transformXValues(screenWidth));
   const y23 = useTransform(...transformYValues(screenHeight));
   const r23 = useTransform(...transformValues(90));
+  const o23 = useTransform(...transformOpasity(23));
   const x24 = useTransform(...transformXValues(screenWidth));
   const y24 = useTransform(...transformYValues(screenHeight));
   const r24 = useTransform(...transformValues(90));
+  const o24 = useTransform(...transformOpasity(24));
   const x25 = useTransform(...transformXValues(screenWidth));
   const y25 = useTransform(...transformYValues(screenHeight));
   const r25 = useTransform(...transformValues(90));
+  const o25 = useTransform(...transformOpasity(25));
   const x26 = useTransform(...transformXValues(screenWidth));
   const y26 = useTransform(...transformYValues(screenHeight));
   const r26 = useTransform(...transformValues(90));
+  const o26 = useTransform(...transformOpasity(26));
   const x27 = useTransform(...transformXValues(screenWidth));
   const y27 = useTransform(...transformYValues(screenHeight));
   const r27 = useTransform(...transformValues(90));
+  const o27 = useTransform(...transformOpasity(27));
   const x28 = useTransform(...transformXValues(screenWidth));
   const y28 = useTransform(...transformYValues(screenHeight));
   const r28 = useTransform(...transformValues(90));
+  const o28 = useTransform(...transformOpasity(28));
   const x29 = useTransform(...transformXValues(screenWidth));
   const y29 = useTransform(...transformYValues(screenHeight));
   const r29 = useTransform(...transformValues(90));
+  const o29 = useTransform(...transformOpasity(29));
   const x30 = useTransform(...transformXValues(screenWidth));
   const y30 = useTransform(...transformYValues(screenHeight));
   const r30 = useTransform(...transformValues(90));
+  const o30 = useTransform(...transformOpasity(30));
   const x31 = useTransform(...transformXValues(screenWidth));
   const y31 = useTransform(...transformYValues(screenHeight));
   const r31 = useTransform(...transformValues(90));
+  const o31 = useTransform(...transformOpasity(31));
   const x32 = useTransform(...transformXValues(screenWidth));
   const y32 = useTransform(...transformYValues(screenHeight));
   const r32 = useTransform(...transformValues(90));
+  const o32 = useTransform(...transformOpasity(32));
   const x33 = useTransform(...transformXValues(screenWidth));
   const y33 = useTransform(...transformYValues(screenHeight));
   const r33 = useTransform(...transformValues(90));
+  const o33 = useTransform(...transformOpasity(33));
   const x34 = useTransform(...transformXValues(screenWidth));
   const y34 = useTransform(...transformYValues(screenHeight));
   const r34 = useTransform(...transformValues(90));
+  const o34 = useTransform(...transformOpasity(34));
   const opacity = useTransform(
     scrollYProgress,
     [0, 4 * s - 0.1 * s, 4 * s, k],
@@ -746,31 +787,31 @@ const Intro = ({ scrollYProgress }) => {
     [x7, y7, scale1, opacity, r7],
     [x8, y8, scale1, opacity, r8],
     [x9, y9, scale1, opacity, r9],
-    [x10, y10, scale1, opacity, r10],
-    [x11, y11, scale1, opacity, r11],
-    [x12, y12, scale1, opacity, r12],
-    [x13, y13, scale2, opacity, r13],
-    [x14, y14, scale2, opacity, r14],
-    [x15, y15, scale3, opacity, r15],
-    [x16, y16, scale3, opacity, r16],
-    [x17, y17, scale3, opacity, r17],
-    [x18, y18, scale4, opacity, r18],
-    [x19, y19, scale4, opacity, r19],
-    [x20, y20, scale4, opacity, r20],
-    [x21, y21, scale4, opacity, r21],
-    [x22, y22, scale4, opacity, r22],
-    [x23, y23, scale4, opacity, r23],
-    [x24, y24, scale4, opacity, r24],
-    [x25, y25, scale4, opacity, r25],
-    [x26, y26, scale4, opacity, r26],
-    [x27, y27, scale5, opacity, r27],
-    [x28, y28, scale5, opacity, r28],
-    [x29, y29, scale5, opacity, r29],
-    [x30, y30, scale5, opacity, r30],
-    [x31, y31, scale5, opacity, r31],
-    [x32, y32, scale5, opacity, r32],
-    [x33, y33, scale5, opacity, r33],
-    [x34, y34, scale5, opacity, r34],
+    [x10, y10, scale1, o10, r10],
+    [x11, y11, scale1, o11, r11],
+    [x12, y12, scale1, o12, r12],
+    [x13, y13, scale2, o13, r13],
+    [x14, y14, scale2, o14, r14],
+    [x15, y15, scale3, o15, r15],
+    [x16, y16, scale3, o16, r16],
+    [x17, y17, scale3, o17, r17],
+    [x18, y18, scale4, o18, r18],
+    [x19, y19, scale4, o19, r19],
+    [x20, y20, scale4, o20, r20],
+    [x21, y21, scale4, o21, r21],
+    [x22, y22, scale4, o22, r22],
+    [x23, y23, scale4, o23, r23],
+    [x24, y24, scale4, o24, r24],
+    [x25, y25, scale4, o25, r25],
+    [x26, y26, scale4, o26, r26],
+    [x27, y27, scale5, o27, r27],
+    [x28, y28, scale5, o28, r28],
+    [x29, y29, scale5, o29, r29],
+    [x30, y30, scale5, o30, r30],
+    [x31, y31, scale5, o31, r31],
+    [x32, y32, scale5, o32, r32],
+    [x33, y33, scale5, o33, r33],
+    [x34, y34, scale5, o34, r34],
   ].map((e, i) => ({
     style: { x: e[0], y: e[1], scale: e[2], opacity: e[3], rotate: e[4] },
     src: posters[i],
@@ -797,7 +838,7 @@ const Intro = ({ scrollYProgress }) => {
           <m.img
             key={i}
             {...prop}
-            className="w-[calc(200px_+_8vw)] h-[calc(300px_+_12vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="w-[calc(200px_+_4vw)] h-[calc(300px_+_6vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           ></m.img>
         );
       })}
