@@ -55,7 +55,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
       userInputs: {
         예: {
           value: () => {
-             const payload = {
+            const payload = {
               concertId: concert.concertId,
             };
             PostConcertSMS(payload).then(() => {
@@ -79,6 +79,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
         isToastOnly: true,
         newType: "warn",
       });
+
     if (show === false) {
       poped();
     } else {
