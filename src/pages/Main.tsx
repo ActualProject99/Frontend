@@ -7,6 +7,7 @@ import {
   LegacyRef,
   useState,
   useMemo,
+  memo,
 } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
@@ -468,7 +469,7 @@ const Main = () => {
     </>
   );
 };
-const EnterButton = ({ scrollYProgress, snapContainer }) => {
+const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
   const [isButtonShow, setIsButtonShow] = useState({
     isGoingUpOrStoped: true,
     isIntroing: true,
@@ -476,35 +477,18 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
   const [getIsMainsSrollUp, setIsMainsSrollUp] =
     useRecoilState<boolean>(isMainsSrollUp);
   const { innerHeight: screenHeight } = window;
-  // function cme_scrollToY(y, duration = 0, element = document.scrollingElement) {
-  //   // cancel if already on target position
-  //   if (element.scrollTop === y) return;
-
-  //   const cosParameter = (element.scrollTop - y) / 2;
-  //   let scrollCount = 0,
-  //     oldTimestamp = null;
-
-  //   function step(newTimestamp) {
-  //     if (oldTimestamp !== null) {
-  //       // if duration is 0 scrollCount will be Infinity
-  //       scrollCount += (Math.PI * (newTimestamp - oldTimestamp)) / duration;
-  //       if (scrollCount >= Math.PI) return (element.scrollTop = y);
-  //       element.scrollTop =
-  //         cosParameter + y + cosParameter * Math.cos(scrollCount);
-  //     }
-  //     oldTimestamp = newTimestamp;
-  //     window.requestAnimationFrame(step);
-  //   }
-  //   window.requestAnimationFrame(step);
-  // }
   const handleClick = () => {
     const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
     cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
   };
-  useWindowKeyboard("Enter", () => {
-    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
-    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
-  });
+  useWindowKeyboard(
+    "Enter",
+    () => {
+      const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+      cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+    },
+    { isActivate: () => scrollYProgress.get() < 9 / 16 }
+  );
   useEffect(() => {
     const progesslog = () => {
       const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
@@ -527,7 +511,7 @@ const EnterButton = ({ scrollYProgress, snapContainer }) => {
       press Enter
     </button>
   );
-};
+});
 const Intro = ({ scrollYProgress }) => {
   const scale1 = useTransform(
     scrollYProgress,
