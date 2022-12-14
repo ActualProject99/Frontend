@@ -6,59 +6,62 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { useScript } from "../../hooks/KaKaoShare";
 import { useEffect } from "react";
-import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
-import ConcertApi from "../../apis/query/ConcertApi";
-import MoreInfo from "./MoreInfo";
-import { NaverMap } from "./NaverMap";
-import useTaps from "../../hooks/useTaps";
-import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";
-import CommentList from "./comment/CommentList";
-import Calendar from "../Calendar";
-import useDebounce from "../../hooks/useDebounce";
-import { ConcertProps } from "../../types";
-import useTicket from "../../hooks/useTicketPop";
+import ConcertApi from "../../apis/query/ConcertApi";
 import { getCookieToken } from "../../apis/cookie";
-import FlareLane from "@flarelane/flarelane-web-sdk";
-import ShowCountDown from "./ShowCountDown";
-import { cls } from "../../utils";
-import Janusface from "../Janusface";
-import { motion } from "framer-motion";
+
+import useTicket from "../../hooks/useTicketPop";
+import { useScript } from "../../hooks/KaKaoShare";
+import useTaps from "../../hooks/useTaps";
 import useFixoluteBox from "../../hooks/useFixsolute";
+
+import CopyToClipboard from "react-copy-to-clipboard";
+
+import { ConcertProps } from "../../types";
+import { NaverMap } from "./NaverMap";
+import { cls } from "../../utils";
+import Calendar from "../Calendar";
+import CommentList from "./comment/CommentList";
+import ShowCountDown from "./ShowCountDown";
+import Janusface from "../Janusface";
+import MoreInfo from "./MoreInfo";
+
+import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
+import icons from "../icons";
 
 const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
   const { data: LikeCon } = ConcertApi.GetLikeConcert(concert.concertId);
+  const { data: AlarmCon } = ConcertApi.GetAlarmConcert(concert.concertId);
   const { data: locations } = ConcertApi.GetLocation();
   const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
   const { mutateAsync: PostConcertSMS } = ConcertApi.PostConcertSMS();
-  const { mutateAsync: DeleteConcertSMS } = ConcertApi.DeleteConcertSMS();
+
   const queryClient = useQueryClient();
   const [like, setLike] = useState<boolean>(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
   const [dday, setDday] = useState<Date>(new Date(concert?.ticketingDate));
   const location = locations?.find(
     (location) => location.locationId === concert.locationId
   );
-  const [subscrided, setSubscribed] = useState();
-  FlareLane.getIsSubscribed((isSubscribed) => {
-    setSubscribed(isSubscribed);
-  });
 
   const ticketings = JSON.parse(concert.ticketingUrl);
 
   const { Ticket, poped, userInput } = useTicket(
-    "알림 구독을 해주셔야합니다!\n알림 구독을 하시겠어요?",
+    `${concert.concertName}\n 공연의 알림을 받으시겠어요?`,
     {
       cacelButton: false,
       userInputs: {
         예: {
           value: () => {
-            FlareLane.setIsSubscribed(true);
-            PostDebounced(concert.concertId);
+            const payload = {
+              concertId: concert.concertId,
+            };
+            PostConcertSMS(payload).then(() => {
+              queryClient.invalidateQueries(["concert"]);
+            });
+            setShow((prev) => !prev);
           },
           className: "bg-accent-main text-white",
         },
@@ -69,36 +72,26 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   );
   const cookie = getCookieToken();
-  const debouncer = useDebounce(1000);
-  const PostDebounced = useRef(
-    debouncer(({ concertId }: { concertId: number }) => {
-      PostConcertSMS({ concertId });
-      setShow(!show);
-    })
-  ).current;
-  const PostSMS = () => {
-    if (!cookie) {
-      poped("로그인 후 이용해주세요!😉", {
+
+  const PostSMS = useCallback(() => {
+    if (!cookie)
+      return poped("로그인 후 이용해주세요!😉", {
         isToastOnly: true,
         newType: "warn",
       });
-    } else if (!subscrided) {
+
+    if (show === false) {
       poped();
     } else {
-      PostDebounced(concert.concertId);
+      const payload = {
+        concertId: concert.concertId,
+      };
+      PostConcertSMS(payload).then(() => {
+        queryClient.invalidateQueries(["concert"]);
+        setShow((prev) => !prev);
+      });
     }
-  };
-
-  const DeleteDebounced = useRef(
-    debouncer(({ concertId }: { concertId: number }) => {
-      DeleteConcertSMS({ concertId });
-      setShow(!show);
-    })
-  ).current;
-  const DeleteSMS = () => {
-    if (!cookie) return poped();
-    DeleteDebounced(concert.concertId);
-  };
+  }, [PostConcertSMS, show, queryClient]);
 
   const onEditLike = useCallback(() => {
     if (!cookie)
@@ -111,9 +104,9 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     };
     EditLike(payload).then(() => {
       queryClient.invalidateQueries(["concert"]);
+      setLike((prev) => !prev);
     });
-    setLike((prev) => !prev);
-  }, [concert.concertId, like, EditLike, queryClient]);
+  }, [like, EditLike, queryClient]);
 
   const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
 
@@ -150,9 +143,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (LikeCon) setLike(LikeCon?.isLike);
-  }, [LikeCon, setLike]);
   const { innerWidth: screenWidth } = window;
   const {
     refs: { fixsolute, limit },
@@ -161,14 +151,19 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
     80,
     screenWidth < 1200 ? screenWidth - 1200 + 26 : (screenWidth - 1200) / 2 + 31
   );
-
+  useEffect(() => {
+    if (LikeCon) setLike(LikeCon?.isLike);
+  }, [LikeCon, setLike]);
+  useEffect(() => {
+    if (AlarmCon) setShow(AlarmCon?.isLike);
+  }, [AlarmCon, setShow]);
   return (
     <>
       <Ticket />
       <img
         className="w-full h-[900px] absolute top-20 left-0 -z-10 object-cover blur-xl"
         alt="poster"
-        src={concert.concertImg}
+        src={concert?.concertImg}
       />
       <div className="w-full h-[950px] absolute top-20 left-0 -z-10 bg-gradient-to-b from-transparent to-white" />
       <div className="w-fit px-3 ml-4 h-12 p-2 rounded-md flex items-center bg-white/30">

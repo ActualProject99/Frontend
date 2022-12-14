@@ -6,7 +6,6 @@ const MoreInfo = ({ concert }: ConcertProps) => {
   const { data: artists } = ArtistApi.GetArtist();
   const moreInfoConcert = JSON.parse(concert.concertInfo);
   const navigate = useNavigate();
-
   return (
     <div className="px-5 py-8">
       <p className="text-2xl mb-7 text-accent-main font-bold">출연진</p>
@@ -40,12 +39,12 @@ const MoreInfo = ({ concert }: ConcertProps) => {
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">공연기간</p>
-        <p className="pl-1 font-bold">{concert.concertDate}</p>
+        <p className="pl-1 font-bold">{concert?.concertDate}</p>
       </div>
       <div className="mb-10">
         <p className="text-2xl mb-5 text-accent-main font-bold">작품설명</p>
-        {moreInfoConcert.map((moreInfo: { url: string }) => (
-          <div className="flex justify-center items-center">
+        {moreInfoConcert.map((moreInfo: { url: string; id: number }) => (
+          <div key={moreInfo.id} className="flex justify-center items-center">
             <img alt="concertInfo" src={moreInfo.url} className="pl-1" />
           </div>
         ))}

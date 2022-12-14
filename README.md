@@ -2,7 +2,7 @@
 
 ### Tgle - 티켓 정글<br/>
 
-### https://da5loh79xj553.cloudfront.net/
+### https://www.tgle.ml/
 
 <br/>
 

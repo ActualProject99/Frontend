@@ -5,11 +5,10 @@ import { readComments, addComment } from "../../../apis/query/commentApi";
 import { useForm } from "react-hook-form";
 import { IgetComment } from "../../../types";
 import Commentfix from "./Commentfix";
-import ArrowLeft from "../../../svg/ArrowLeft";
-import ArrowRight from "../../../svg/ArrowRight";
 import { regOptComment } from "../../../utils";
 import { getCookieToken } from "../../../apis/cookie";
 import useTicket from "../../../hooks/useTicketPop";
+import { useEffect } from "react";
 
 export interface IComments {
   comment?: IgetComment;
@@ -48,8 +47,13 @@ const CommentList = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    watch("comment");
+  }, [watch]);
 
   const { isLoading, isError, data } = useQuery<IgetComment[]>(
     ["allComments", id],
@@ -63,6 +67,7 @@ const CommentList = () => {
   }
 
   const onValid = (data: any) => {
+    if (!data.comment.trim()) return;
     if (!cookie) return poped();
     const comment = {
       concertId: id,
@@ -75,39 +80,61 @@ const CommentList = () => {
   return (
     <div>
       <Ticket />
-      <h1 className="p-4 pl-5 font-bold">Comments</h1>
-      <form
-        className="pl-4 grid grid-cols-[1fr_165px]"
-        onSubmit={handleSubmit(onValid)}
-      >
-        <textarea
-          className="block bg-gray-200 w-full h-28 placeholder: pb-12 pl-4 relative rounded-lg rounded-r-none rounded-br-none resize-none"
-          {...register(...regOptComment.comment())}
-          maxLength={300}
-          disabled={!cookie ? true : false}
-          placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 댓글 입력)"
-        />
-        <button className="border 1px w-[9.3rem] h-28 hover:bg-secondary-main bg-secondary-300 rounded-lg rounded-l-none rounded-bl-none">
-          등록
-        </button>
-        <span className="font-bold text-sm text-white">
-          {errors.comment?.message as string}
-        </span>
-      </form>
+      <h1 className="p-4 pl-5 text-2xl font-bold">Comments</h1>
+      <div className="relative w-[95%] h-[17rem] m-[0_auto] rounded-[0.3125rem] shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)]">
+        <form
+          className="px-[10px] py-[30px] font-normal"
+          onSubmit={handleSubmit(onValid)}
+        >
+          {/* <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 0 ? 
+              <span className="font-bold">0 / 300</span>
+             : (watch("comment.length") === 300) ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div> */}
+          <div className="block absolute top-32 left-[86%]">
+            {watch("comment.length") === 300 ? (
+              <span className="font-bold text-red-600">
+                {watch("comment.length")} / 300
+              </span>
+            ) : (
+              <span className="font-bold">{watch("comment.length")} / 300</span>
+            )}
+          </div>
+          <textarea
+            className="w-full h-[8rem] border-none placeholder: pb-12 pl-4 resize-none focus:ring-0"
+            {...register(...regOptComment.comment())}
+            maxLength={300}
+            disabled={!cookie ? true : false}
+            placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의하세요.&#13;&#10;(최소 3자 이상, 최대 300자 이내 댓글 입력)"
+          />
+          <span className="pl-5 font-bold text-sm text-red-600">
+            {errors.comment?.message as string}
+          </span>
 
-      <ul className="p-4 w-full max-h-[65rem]">
-        {data.map((comment) => (
-          <Commentfix key={comment.id} comment={comment} />
-        ))}
-      </ul>
+          <div className="flex justify-center items-center">
+            <div className="absolute m-[0_auto] w-[95%] border-b-[1px] rounded-full" />
+            <button className="relative w-[5rem] h-[5rem] rounded-[50%] flex justify-center items-center border-[10px] border-[#fff] z-[10] -translate-y-[2.5px] ml-[30rem] bg-[#7151A1] hover:bg-primary-500 text-white">
+              등록
+            </button>
+          </div>
+        </form>
+      </div>
 
-      <div className="flex w-full justify-around">
-        <button>
-          <ArrowLeft />
-        </button>
-        <button>
-          <ArrowRight />
-        </button>
+      <div className="p-4 pl-5 text-xl font-bold mt-5 flex flex-row">
+        등록된 댓글 <div className="mx-1 underline">{data.length}</div>개
+      </div>
+      <div className="border-t-[1px] w-[98.5%] max-h-[32.5rem] overflow-auto">
+        <ul className="p-4 w-full">
+          {data.map((comment) => (
+            <Commentfix key={comment.id} comment={comment} />
+          ))}
+        </ul>
       </div>
     </div>
   );

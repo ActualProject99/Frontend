@@ -12,10 +12,31 @@ import { activate, deactivate, instance } from "../instance";
 
 //콘서트 API
 const GetConcerts = () => {
-  return useQuery<IGetConcert[]>(["concert"], async () => {
-    const { data } = await deactivate.get<IGetConcert[]>("/concerts");
-    return data;
-  });
+  return useQuery<IGetConcert[]>(
+    ["concert"],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert[]>("/concerts");
+      return data;
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+};
+
+const GetDetailConcerts = (payload: number) => {
+  return useQuery<IGetConcert>(
+    ["detailConcert", payload],
+    async () => {
+      const { data } = await deactivate.get<IGetConcert>(`/concert/${payload}`);
+      return data;
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 };
 
 const GetHotConcerts = () => {
@@ -34,6 +55,12 @@ const GetMonthConcerts = (payload: number | Date) => {
   });
 };
 
+const GetSearchData = (payload: string) => {
+  return useQuery(["searchData", payload], async () => {
+    const { data } = await deactivate.get(`/search?searchQuery=${payload}`);
+    return data;
+  });
+};
 // 콘서트 좋아요
 const GetLikeConcertList = () => {
   const myToken = getCookieToken();
@@ -44,10 +71,16 @@ const GetLikeConcertList = () => {
 };
 
 const GetLikeConcert = (payload: number) => {
-  return useQuery(["LikeConcert", payload], async () => {
-    const { data } = await activate.get(`/concertlike/${payload}`);
-    return data;
-  });
+  return useQuery(
+    ["LikeConcert", payload],
+    async () => {
+      const { data } = await activate.get(`/concertlike/${payload}`);
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+    }
+  );
 };
 
 const EditLikeConcerts = () => {
@@ -61,16 +94,31 @@ const EditLikeConcerts = () => {
 };
 
 //공연 SMS 알림 API
-
-const PostConcertSMS = () => {
-  return useMutation(async (payload: PostSMS) => {
-    const { data } = await activate.post("url", payload);
+const GetAlarmConcertList = () => {
+  const myToken = getCookieToken();
+  return useQuery(["AlarmConcertList"], async () => {
+    const { data } = await instance(myToken).get("/alarm/mypage");
     return data;
   });
 };
-const DeleteConcertSMS = () => {
+
+const GetAlarmConcert = (payload: number) => {
+  return useQuery(
+    ["AlarmConcert", payload],
+    async () => {
+      const { data } = await activate.get(`/alarm/${payload}`);
+      return data;
+    },
+    {
+      enabled: !!getCookieToken(),
+    }
+  );
+};
+
+const PostConcertSMS = () => {
+  const myToken = getCookieToken();
   return useMutation(async (payload: PostSMS) => {
-    const { data } = await activate.post("url", payload);
+    const { data } = await instance(myToken).put(`/alarm/${payload.concertId}`);
     return data;
   });
 };
@@ -87,12 +135,15 @@ const ConcertApi = {
   GetConcerts,
   EditLikeConcerts,
   PostConcertSMS,
-  DeleteConcertSMS,
   GetLocation,
   GetMonthConcerts,
   GetLikeConcert,
   GetLikeConcertList,
   GetHotConcerts,
+  GetDetailConcerts,
+  GetSearchData,
+  GetAlarmConcertList,
+  GetAlarmConcert,
 };
 
 export default ConcertApi;

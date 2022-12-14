@@ -6,13 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IConcertProps } from "../../types";
 import useTicket from "../../hooks/useTicketPop";
 
-const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
+const NotifiedConcert = ({ concert }: IConcertProps) => {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
-  const { mutateAsync: EditLike } = ConcertApi.EditLikeConcerts();
+  const { mutateAsync: PostSMS } = ConcertApi.PostConcertSMS();
 
-  const { Ticket, poped, userInput } = useTicket("콘서트를 삭제 하시겠어요?", {
+  const { Ticket, poped, userInput } = useTicket("알림을 취소 하시겠어요?", {
     cacelButton: false,
     userInputs: {
       예: {
@@ -20,9 +20,9 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
           const payload = {
             concertId: concert.concertId,
           };
-          EditLike(payload).then(() => {
+          PostSMS(payload).then(() => {
             console.log("pay", payload);
-            queryClient.invalidateQueries(["LikeConcertList"]);
+            queryClient.invalidateQueries(["AlarmConcertList"]);
           });
         },
         className: "bg-accent-main text-white",
@@ -33,9 +33,9 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
     type: "info",
   });
 
-  const onEditLike = useCallback(() => {
+  const PostSMSHandler = () => {
     poped();
-  }, [poped]);
+  };
 
   return (
     <div className="grid w-56 h-[26rem] group relative">
@@ -62,11 +62,12 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
         )}
         <p className="text-sm">{concert.playTime}</p>
         <p className="text-sm font-bold">{concert.locationName}</p>
-        <div title="눌러서 삭제하기" className="flex justify-end w-[92%] mt-1">
-          <icons.FullHeart
-            iconClassName="fill-rose-600 w-8 h-8"
-            className="text-red-500 cursor-pointer transition-all ease-in-out  opacity-0 group-hover:opacity-100"
-            onClick={onEditLike}
+        <div title="알림 삭제하기" className="flex justify-end w-[92%] mt-1">
+          <icons.Bell
+            className="text-primary-600 cursor-pointer transition-all ease-in-out  opacity-0 group-hover:opacity-100"
+            iconClassName="w-8 h-8 fill-primary-600"
+            strokeWidth={1.5}
+            onClick={PostSMSHandler}
           />
         </div>
         {concert.saleDone === "판매완료" ? (
@@ -83,5 +84,4 @@ const LikeConcert = ({ concert }: IConcertProps): JSX.Element => {
     </div>
   );
 };
-
-export default LikeConcert;
+export default NotifiedConcert;

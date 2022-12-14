@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick-theme.css";
 import Next from "../image/Next.png";
 import Prev from "../image/Prev.png";
 import { useNavigate } from "react-router-dom";
-import ConcertApi from "../apis/query/ConcertApi";
 import { IGetHotConcert } from "../types";
 
 interface hotConcertProps {
@@ -27,11 +26,12 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
     setDragging(false);
   }, []);
   useEffect(() => {
+    console.log("dd", document.querySelector(".slick-prev"));
     setTimeout(() => {
       document
         .querySelector(".slick-prev")
         ?.setAttribute("style", "z-index: 1");
-    }, 100);
+    }, 300);
   }, []);
 
   const settings = {
@@ -97,15 +97,15 @@ const ConcertSlider = ({ hotConcerts }: hotConcertProps): JSX.Element => {
     nextArrow: (
       <div>
         <div className=" flex justify-items-center items-center rounded-[50%] w-14 h-14 leading-8 z-1 absolute text-right right-16 bg-black/30">
-          <img alt="next" src={Next} />
+          <img className="ml-1" alt="next" src={Next} />
         </div>
       </div>
     ),
   };
   return (
     <div className="relative">
-      <div className="flex flex-col justify-center w-screen-scroll h-[43rem] absolute left-1/2 -translate-x-1/2 overflow-hidden bg-primary-900 ">
-        <div className="flex justify-center items-center w-64 h-16 text-3xl text-accent-main font-logo">
+      <div className="flex flex-col justify-center w-screen-scroll h-[43rem] absolute -top-[41.735rem] left-1/2 -translate-x-1/2 overflow-hidden bg-primary-900 ">
+        <div className="flex justify-center items-center w-64 h-16 text-3xl text-accent-main font-bold">
           <p className="ml-5 -mt-5 text-shadow">
             HOT <span className="text-white text-shadow1">CONCERT</span>
           </p>

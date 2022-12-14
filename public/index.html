@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Tgle | 쉽고 재밌는 티켓팅"
-    />
+    <meta name="description" content="Tgle | 쉽고 재밌는 티켓팅" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -31,6 +28,20 @@
       href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Lemon&family=Oswald:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-F18Z1EF8BG"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-F18Z1EF8BG");
+    </script>
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -38,17 +49,13 @@
     <link rel="manifest" href="/site.webmanifest" />
     <title>Home | Tgle</title>
   </head>
-  <script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
-  <script>
-    FlareLane.initialize({ projectId: "a201b475-fab4-47e3-94e7-dcb905e8afa4" });
-  </script>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <div id="portal"></div>
     <script
       type="text/javascript"
-      src="http://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xritvyxo2v&callback=CALLBACK_FUNCTION"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xritvyxo2v&callback=CALLBACK_FUNCTION"
     ></script>
     <!--
       This HTML file is a template.

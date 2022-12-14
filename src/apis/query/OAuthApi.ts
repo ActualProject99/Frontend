@@ -1,15 +1,18 @@
+//@ts-nocheck
 import { setAccessToken } from "../cookie";
 import { activate, deactivate } from "../instance";
+import axios from "axios";
 
 export const OAuthAPI = {
   loginWithKakao: async (kakaoToken: string) => {
-    return await deactivate
-      .get(`/users/oauth/kakao/callback?code=${kakaoToken}`) //백엔드 리다이렉트 주소로 맞추기
+    await axios
+      .get(`http://localhost:3000/users/kakao/callback?code=${kakaoToken}`)
       .then((data) => {
-        setAccessToken("data.headers.authorization");
+        setAccessToken(data.headers.authorization);
       })
-      .then(() => {
-        window.location.href = "/";
+      .then((res) => {
+        console.log("실패", res);
+        // window.location.href = "/";
       });
   },
   //   loginWithNaver: async (naverToken: string, naverState: string) => {

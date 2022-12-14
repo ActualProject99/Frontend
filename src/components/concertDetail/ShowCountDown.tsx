@@ -10,7 +10,7 @@ const ShowCountDown = ({ dday }: CountProps) => {
   const [days, hours, minutes, seconds] = Countdown(dday);
 
   return isPast(dday) ? null : (
-    <div className="flex gap-2 ml-4 ">
+    <div className="flex gap-2">
       <p className="font-bold mr-1">D-day </p>
       <div className="flex items-center gap-1 font-bold text-accent-main">
         <p>{days}</p>

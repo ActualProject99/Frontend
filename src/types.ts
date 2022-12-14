@@ -42,13 +42,18 @@ export interface IgetComment {
   userId?: number;
   commentId: number;
   comment: string;
-  nickname : string;
-  profileImg : string;
-  createdAt : string;
+  nickname: string;
+  profileImg: string;
+  createdAt: string;
 }
 
 export interface IgetMyComment {
-  userId?: number;
+  id: number;
+  userId: number;
+  concertName: string;
+  concertId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Page {
@@ -125,6 +130,7 @@ export interface IGetConcert {
   ticketingDate: string;
   ticketingUrl: string;
   locationName: string;
+  locationId: number;
   playTime: string;
   ratings: string;
   createdAt: string;
@@ -156,6 +162,11 @@ export interface likeConcertProps {
   userId: number;
   concertId: number;
 }
+export interface alarmConcertProps {
+  alarmId: number;
+  userId: number;
+  concertId: number;
+}
 
 export interface PostSMS {
   concertId: number;
@@ -175,6 +186,7 @@ export interface IGetLocation {
 //유저 Info Interface
 export interface IGetUser {
   id: number;
+  userId: number;
   email: any;
   nickname: string;
   phone: string;

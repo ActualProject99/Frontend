@@ -1,11 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import {
-  EditImgPayload,
-  EditNamePayload,
-  IGetLikeConcert,
-  IGetUser,
-} from "../../types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import { EditImgPayload, EditNamePayload, IGetUser } from "../../types";
 import { getCookieToken } from "../cookie";
 import { activate, instance } from "../instance";
 
@@ -20,8 +15,6 @@ const GetUserInfo = () => {
     },
     {
       enabled: !!getCookieToken(),
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
     }
   );
 };
@@ -60,6 +53,7 @@ const UserApi = {
   EditUserName,
   EditUserImg,
   DeleteUser,
+  readMyComments,
 };
 
 export default UserApi;

@@ -1,11 +1,11 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icons from "./icons";
 import { useRecoilState } from "recoil";
 import { cls } from "../utils";
 import { mainContent, mainScrollRef } from "../atoms/mainContent";
 import { Modal, useModal } from "./Portal";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 import UserInfo from "./userInfo/UserInfo";
@@ -19,20 +19,107 @@ import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
 import { useQueryClient } from "@tanstack/react-query";
 import ConcertApi from "../apis/query/ConcertApi";
+import { IGetArtist, IGetArtistConcert } from "../types";
+import { format } from "date-fns";
 
 const Search = ({
   viewer,
 }: {
   viewer: { on: () => void; off: () => void };
 }) => {
-  const { register, handleSubmit, reset, setFocus } = useForm();
-  const onValid = () => {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const { register, handleSubmit, reset, setFocus, setValue } = useForm();
+  const [payload, setPayload] = useState("");
+  const [isShowRecent, setIsShowRecent] = useState(false);
+  const { data: searchedData } = ConcertApi.GetSearchData(payload);
+  const [artists, concerts]: [IGetArtist[], IGetArtistConcert[]] = searchedData
+    ? searchedData
+    : [[], []];
+  const [recent, setRecent] = useState<{ date: string; queries: string[] }[]>(
+    []
+  );
+  const recentQeury = (query: string) => {
+    const todayQueries = window.localStorage.getItem("search_query");
+    const queriesOnDates = (todayQueries: string | null) => {
+      if (!todayQueries)
+        return {
+          [format(new Date(), "yyyy.MM.dd")]: [query],
+        };
+      if (!JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")])
+        return {
+          ...JSON.parse(todayQueries),
+          [format(new Date(), "yyyy.MM.dd")]: [query],
+        };
+      if (
+        !JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")].includes(
+          query
+        )
+      )
+        return {
+          ...JSON.parse(todayQueries),
+          [format(new Date(), "yyyy.MM.dd")]:
+            JSON.parse(todayQueries)[format(new Date(), "yyyy.MM.dd")].concat(
+              query
+            ),
+        };
+      return JSON.parse(todayQueries);
+    };
+    window.localStorage.setItem(
+      "search_query",
+      JSON.stringify(queriesOnDates(todayQueries))
+    );
+  };
+  const navigate = useNavigate();
+  const getLocalQuery = () => {
+    const searchQueries = localStorage.getItem("search_query");
+    if (searchQueries) {
+      const parsedQueries = JSON.parse(searchQueries);
+      const dates = Object.keys(parsedQueries);
+      const queries = Object.values(parsedQueries);
+      //@ts-ignore
+      setRecent(dates.map((date, i) => ({ date, queries: queries[i] })));
+    }
+  };
+  const onValid: SubmitHandler<FieldValues> = async ({ query }) => {
+    query = query.trim();
+    if (query.length === 0) {
+      reset();
+      return;
+    }
+    setPayload(query);
     reset();
+    recentQeury(query);
+    window.setTimeout(() => getLocalQuery(), 200);
+    buttonRef.current?.focus();
+  };
+  const handleClickRecent = (query: string) => () => {
+    setValue("query", query);
+    setFocus("query");
+    setIsShowRecent(false);
+  };
+  const handleFocusSearch = () => {
+    setIsShowRecent(true);
+  };
+  const handleBlurSearch = () => {
+    window.setTimeout(() => setIsShowRecent(false), 100);
+  };
+  const handleClickArtist = (artistId: number) => () => {
+    navigate("artist/" + artistId);
+    viewer.off();
+  };
+  const handleClickConcert = (concertId: number) => () => {
+    navigate(pages.Concert.path + "/" + concertId);
+    viewer.off();
   };
   useEffect(() => {
     setFocus("search");
   }, [setFocus]);
   useWindowKeyboard("Escape", viewer.off);
+
+  useEffect(() => {
+    getLocalQuery();
+  }, []);
+
   return (
     <Modal onClick={viewer.off}>
       <form
@@ -40,22 +127,113 @@ const Search = ({
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[320px] w-1/2 h-3/4 rounded-xl bg-white overflow-hidden shadow-lg shadow-black/20"
       >
         <div className="pt-4 px-4 flex justify-between relative">
-          <div className="flex items-center w-full">
-            <icons.Search />
-            <input
-              type="text"
-              spellCheck="false"
-              className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
-              autoComplete="off"
-              {...register("search")}
-            />
-            <button className="w-1 h-1 overflow-hidden">search</button>
+          <div className="flex items-center w-full relative h-16">
+            <label className="flex items-center">
+              <icons.Search />
+              <input
+                type="text"
+                spellCheck="false"
+                className="w-full selection:bg-primary-200 text-lg font-bold text-primary-700 selection:text-primary-500 border-none focus:ring-0 caret-primary-700"
+                autoComplete="off"
+                {...register("query")}
+                onFocus={handleFocusSearch}
+                onBlur={handleBlurSearch}
+              />
+            </label>
+            <div
+              className={cls(
+                "absolute top-12 left-3 bg-white/50 px-2 pb-2 rounded-lg",
+                isShowRecent || "hidden"
+              )}
+            >
+              <div className="text-xs ml-6 ">최근검색어</div>
+              <div className="bg-secondary-50 rounded-lg px-4 py-1 flex flex-col gap-1">
+                {recent.map((query) => (
+                  <div className="flex gap-3 items-center">
+                    <div className="text-xs" key={query.date}>
+                      {query.date}
+                    </div>
+                    <div className="flex gap-2">
+                      {query.queries.map((q) => (
+                        <div
+                          className="bg-secondary-200 rounded-full px-1 flex-wrap cursor-pointer"
+                          key={q}
+                          onClick={handleClickRecent(q)}
+                        >
+                          {q}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              ref={buttonRef}
+              className="w-1 h-1 overflow-hidden focus:ring-0 focus:ring-offset-0 border-none focus:outline-none"
+            >
+              search
+            </button>
           </div>
           <div
             onClick={viewer.off}
-            className="absolute -top-2 -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-2"
+            className="absolute -top-2 text-xs -right-2 cursor-pointer w-12 h-8 bg-accent-main font-bold text-white rounded-xl leading-8 pl-3"
           >
             esc
+          </div>
+        </div>
+        <div className="px-3">
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit mb-1">
+            가수
+          </div>
+          <div
+            className={cls(
+              "mb-2",
+              artists && artists?.length > 0 && "bg-primary-50 p-1 px-1"
+            )}
+          >
+            {artists?.map((artist) => (
+              <div className="flex items-center gap-2 p-1">
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={artist.artistImg}
+                  alt=""
+                />
+                <div
+                  key={artist.artistId}
+                  className="cursor-pointer"
+                  onClick={handleClickArtist(artist.artistId)}
+                >
+                  {artist.artistName}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-xs bg-primary-800 text-white p-1 px-4 font-bold rounded-lg w-fit mb-1">
+            공연
+          </div>
+          <div
+            className={cls(
+              "",
+              concerts && concerts?.length > 0 && "bg-primary-50 p-1 px-1"
+            )}
+          >
+            {concerts?.map((concert) => (
+              <div className="flex items-center gap-2 p-1">
+                <img
+                  className="w-12 h-18 rounded-sm"
+                  src={concert.concertImg}
+                  alt=""
+                />
+                <div
+                  key={concert.concertId}
+                  className="cursor-pointer"
+                  onClick={handleClickConcert(concert.concertId)}
+                >
+                  {concert.concertName}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </form>
@@ -80,6 +258,7 @@ const Nav = ({
   const { data: user } = UserApi.GetUserInfo();
   const { mutateAsync: DeleteUser } = UserApi.DeleteUser();
   const queryClient = useQueryClient();
+
   const { Ticket, poped, userInput } = useTicketPop(
     "정말 로그아웃 하시겠어요?",
     {
@@ -87,11 +266,8 @@ const Nav = ({
       userInputs: {
         예: {
           value: () => {
-            poped(user?.nickname + "님 다음에 또 만나요!👋", {
-              isToastOnly: true,
-            });
             removeCookieToken();
-            navigate("/concerts");
+            window.location.replace("/concerts");
           },
           className: "bg-accent-main text-white",
         },
@@ -114,7 +290,7 @@ const Nav = ({
             queryClient.invalidateQueries(["userInfo"]);
           });
           removeCookieToken();
-          navigate("/concerts");
+          window.location.replace("/concerts");
           toggler();
           poped("회원탈퇴가 되었습니다!", { isToastOnly: true });
         },
@@ -177,7 +353,7 @@ const Nav = ({
       <nav
         id="nav"
         className={cls(
-          "fixed left-1/2 -translate-x-1/2 top-0 font-base",
+          "fixed left-1/2 -translate-x-1/2 top-0 ",
           pathname === "/" ? "" : "bg-white"
         )}
       >
@@ -191,7 +367,7 @@ const Nav = ({
                 >
                   <Logo width="11rem" height="3.5rem" />
                 </div>
-                <ul className="flex gap-4 xl:gap-10 font-logo self-end">
+                <ul className="flex gap-4 xl:gap-10 font-bold text-xl self-end">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li
@@ -235,7 +411,7 @@ const Nav = ({
                         out
                       </button>
                       <img
-                        alt="profile"
+                        alt=""
                         src={user?.profileImg}
                         className="cursor-pointer relative w-10 h-10 bg-primary-700 flex justify-center items-center rounded-full"
                         onClick={handleClickProfile}
@@ -267,10 +443,8 @@ const Nav = ({
                   contentNo === 1 ? "text-white" : "text-black"
                 )}
               >
-                <div className="text-5xl py-2 font-logo cursor-pointer">
-                  Tgle
-                </div>
-                <ul className="flex gap-10 text-lg font-logo">
+                <div className="text-5xl py-2  cursor-pointer">Tgle</div>
+                <ul className="flex gap-10 text-lg ">
                   {Object.values(pages).map((page, i) =>
                     page.isNav ? (
                       <li key={i}>
@@ -303,7 +477,7 @@ const Footer = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="flex items-center w-[32rem]">
             <div className="flex items-baseline w-[27rem] h-12 rounded-tl-md pt-1 bg-accent-main gap-2">
-              <p className="font-logo text-black text-3xl ml-4"> Tgle</p>
+              <p className="font-bold text-black text-3xl ml-4"> Tgle</p>
               <p className="text-[#e8e8e8] text-sm font-bold">
                 Have Fun Ticketing ♬
               </p>
@@ -322,7 +496,7 @@ const Footer = () => {
                   key={position}
                   className="flex flex-col items-center gap-2"
                 >
-                  <span className="text-lg font-logo inline-block mb-1 capitalize">
+                  <span className="text-lg font-bold inline-block mb-1 capitalize">
                     {position}
                   </span>
                   {members.map((member) =>
@@ -356,7 +530,8 @@ const Footer = () => {
 const Layout = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
 
-  ConcertApi.GetConcerts();
+  const { data: concerts } = ConcertApi.GetConcerts();
+
   return (
     <>
       {pathname === "/" ? (
@@ -408,5 +583,4 @@ const members = [
     position: "backend",
     github: "https://github.com/jeongpal",
   },
-  { name: "이주연", position: "designer", github: "" },
 ];

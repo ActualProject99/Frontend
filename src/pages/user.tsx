@@ -4,26 +4,49 @@ import PickArtist from "../components/userInfo/PickArtist";
 import useTaps from "../hooks/useTaps";
 import LoginCompo from "../components/login/LoginCompo";
 import SignupCompo from "../components/signup/SignupCompo";
+import { motion } from "framer-motion";
+import NotifiedConcerts from "../components/userInfo/NotifiedConcerts";
 
 const Login = () => {
-  return <LoginCompo />;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <LoginCompo />
+    </motion.div>
+  );
 };
 const Signup = () => {
-  return <SignupCompo />;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <SignupCompo />;
+    </motion.div>
+  );
 };
 const MyPick = () => {
   const { Taps, Viewer } = useTaps(
     1,
-    ["좋아요 공연", <LikeConcerts />],
-    ["작성한 댓글", <MyComments />],
+    ["좋아요 공연 List", <LikeConcerts />],
+    ["알림받을 공연 List", <NotifiedConcerts />],
+    ["작성한 댓글 List", <MyComments />]
   );
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <PickArtist />
       <Taps />
       <Viewer />
-    </div>
+    </motion.div>
   );
 };
 const user = {
