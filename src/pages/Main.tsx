@@ -35,6 +35,9 @@ import Portal from "../components/Portal";
 import { isScrolled } from "../atoms/isScrolled";
 import { IsScrolled } from "../types";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
+import useWheelEvent from "../hooks/window/useWheelEvent";
+import { Link } from "react-router-dom";
+import { pages } from "../routes";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
@@ -109,6 +112,7 @@ const ContentCopy = ({
 const s = 0.0625; // === 1/16
 const k = 10 * s - (1 / 2) * s;
 const Main = () => {
+  const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
   const snapContainer = useRef<HTMLDivElement | null>(null);
   const content1 = useRef<HTMLDivElement | null>(null);
   const content2 = useRef<HTMLDivElement | null>(null);
@@ -409,12 +413,12 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-10"
           ref={content7}
         >
           <div
-            className="flex justify-center items-center h-screen w-screen relative overflow-hidden"
-            style={{ perspective: 300 }}
+            className="flex justify-center items-center h-screen w-screen absolute overflow-hidden"
+            style={{ perspective: 200 }}
           >
             {contentNo === 6 && (
               <>
@@ -424,11 +428,11 @@ const Main = () => {
                     opacity: 0,
                   }}
                   animate={{
-                    transform: "rotate3d(3,0,1,20deg)",
+                    transform: "rotate3d(3,0,1,15deg)",
                     opacity: 1,
                   }}
                   transition={{ delay: 0.1 }}
-                  className="grid grid-rows-3 grid-flow-col min-w-[1200px] absolute -translate-y-[98%] scale-125"
+                  className="grid grid-rows-4 grid-flow-col w-[1700px] -top-[300px] -left-48  absolute scale-[3] overflow-hidden"
                 >
                   {posters.map((poster) => (
                     <img
@@ -439,34 +443,64 @@ const Main = () => {
                   ))}
                 </m.div>
                 <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
-                <AnimatePresence>
-                  <>
-                    <m.div
-                      initial={{ backdropFilter: "blur(0px)" }}
-                      animate={{ backdropFilter: "blur(5px)" }}
-                      transition={{ delay: 0.4 }}
-                      className="h-screen w-screen absolute flex justify-center items-center"
-                    ></m.div>
-                    <m.div
-                      initial={{ opacity: 0, x: 0 }}
-                      animate={{ opacity: 1, x: 200 }}
-                      transition={{ delay: 0.7 }}
-                      className="absolute z-50"
-                    >
-                      <p className="font-black text-7xl  text-gray-800 translate-y-40">
-                        <span className="text-black">티켓팅을 즐겁게</span>
-                        <br />
-                        <span className="text-primary-main text-9xl font-bold">
-                          Tgle
-                        </span>
-                      </p>
-                    </m.div>
-                  </>
-                </AnimatePresence>
+
+                <>
+                  <m.div
+                    initial={{ backdropFilter: "blur(0px)" }}
+                    animate={{ backdropFilter: "blur(5px)" }}
+                    transition={{ delay: 0.4 }}
+                    className="h-screen w-screen absolute flex justify-center items-center"
+                  ></m.div>
+                </>
               </>
             )}
           </div>
         </div>
+        <AnimatePresence>
+          {contentNo === 6 && (
+            <m.div
+              variants={{
+                init: {
+                  opacity: 0,
+                  x: screenWidth,
+                },
+                anmate: {
+                  opacity: 1,
+                  x: 200,
+                  transition: {
+                    delay: 0.8,
+                  },
+                },
+                exit: {
+                  opacity: 0,
+                  x: screenWidth,
+                  transition: {
+                    delay: 0,
+                  },
+                },
+              }}
+              initial="init"
+              animate="anmate"
+              exit="exit"
+              transition={{ delay: 0.8 }}
+              className="w-screen bg-white h-40 pl-3 pt-8 flex fixed z-[9999] top-1/2 -translate-y-1/2 gap-10"
+            >
+              <FinishCopy snapContainer={snapContainer} />
+              <p className="font-black text-3xl  text-gray-800">
+                <span className="text-black">티켓팅을 즐겁게</span>
+                <br />
+                <span className="text-primary-main text-9xl font-bold">
+                  Tgle
+                </span>
+              </p>
+              <button className="relative z-10 h-fit font-dohyen text-3xl bg-primary-600 rounded-2xl p-4 text-white flex justify-center items-center hover:bg-primary-700 transition-all ease-in ring-2 ring-primary-600 ring-offset-2  hover:ring-primary-200 focus:outline-none">
+                <Link tabIndex={-1} to={pages.Concert.path}>
+                  티켓팅 가능한 공연 확인하기
+                </Link>
+              </button>
+            </m.div>
+          )}
+        </AnimatePresence>
         <Clipper scrollYProgress={scrollYProgress} />
       </div>
     </>
@@ -511,28 +545,18 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
     snapContainer.current.addEventListener("scroll", progesslog);
   }, []);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    const scrollable = (e) => {
-      cme_scrollToY(
-        Math.sign(e.deltaY) * (snapContainer.current.scrollTop + 400),
-        200,
-        snapContainer.current
-      );
-    };
-    if (buttonRef.current) {
-      buttonRef.current.addEventListener("wheel", scrollable);
-    }
-    return () => {
-      if (buttonRef.current) {
-        buttonRef.current.removeEventListener("wheel", scrollable);
-      }
-    };
-  }, []);
+  useWheelEvent(buttonRef, (e) => {
+    cme_scrollToY(
+      Math.sign(e.deltaY) * (snapContainer.current.scrollTop + 400),
+      200,
+      snapContainer.current
+    );
+  });
   return (
     <button
       ref={buttonRef}
       className={cls(
-        "flex flex-col gap-1 items-center font-Clip text-xl bg-transparent text-white fixed bottom-12 transition-all ease-in-out duration-1000 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
+        "flex flex-col items-center font-Clip text-xl bg-transparent text-white fixed bottom-0 transition-all ease-in-out duration-1000 p-4 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink] hover:[text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink,_0_0_64px_pink,_0_0_128px_pink]",
         Object.values(isButtonShow).every((e) => e)
           ? "right-1/2 translate-x-1/2"
           : "right-36 translate-x-1/2",
@@ -543,7 +567,7 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
     >
       <p
         className={cls(
-          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
           Object.values(isButtonShow).every((e) => e)
             ? "opacity-100"
             : "opacity-0"
@@ -553,7 +577,7 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
       </p>
       <p
         className={cls(
-          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
           Object.values(isButtonShow).every((e) => e)
             ? "opacity-100"
             : "opacity-0"
@@ -561,10 +585,10 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
       >
         &#9662;
       </p>
-      <p className="my-2">press Enter</p>
+      <p className="text-base ">press Enter</p>
       <p
         className={cls(
-          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
           Object.values(isButtonShow).every((e) => e)
             ? "opacity-100"
             : "opacity-0"
@@ -574,7 +598,7 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
       </p>
       <p
         className={cls(
-          "transition-all duration-1000 p-2 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
           Object.values(isButtonShow).every((e) => e)
             ? "opacity-100"
             : "opacity-0"
@@ -585,32 +609,44 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
     </button>
   );
 });
-
+const FinishCopy = ({ snapContainer }) => {
+  const finishRef = useRef(null);
+  useWheelEvent(finishRef, (e) => {
+    cme_scrollToY(
+      snapContainer.current.scrollTop + Math.sign(e.deltaY) * 400,
+      200,
+      snapContainer.current
+    );
+  });
+  return (
+    <div ref={finishRef} className="w-full h-full absolute top-0 left-0"></div>
+  );
+};
 const Intro = ({ scrollYProgress }) => {
   const scale1 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s, k],
-    [1.2, 1.2 + 0.8 * Math.random(), 4.5, 10]
+    [1.2, 1.2 + 0.8 * Math.random(), 4.5, 6]
   );
   const scale2 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s + s / 10, k],
-    [1.2, 1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 10]
+    [1.2, 1.2 + 0.6 * Math.random(), 4.5 - 0.3 * Math.random(), 6]
   );
   const scale3 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s + (s / 10) * 2, k],
-    [1.2, 1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 10]
+    [1.2, 1.2 + 0.4 * Math.random(), 2.2 + 0.6 * Math.random(), 6]
   );
   const scale4 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s + (s / 10) * 3, k],
-    [1.2, 1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 10]
+    [1.2, 1.2 + 0.2 * Math.random(), 2.2 + 0.9 * Math.random(), 6]
   );
   const scale5 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s + (s / 10) * 4, k],
-    [1.2, 1.2, 2.2 + 1.2 * Math.random(), 10]
+    [1.2, 1.2, 2.2 + 1.2 * Math.random(), 6]
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
   const centerRandom = (val: number) => Math.random() * val - val / 2;
@@ -641,7 +677,7 @@ const Intro = ({ scrollYProgress }) => {
   const transformOpasity = (poster: number) => {
     return [
       scrollYProgress,
-      [0, 4 * s - 0.1 * s, 4 * s - poster / 256, k - poster / 256],
+      [0, 4 * s - 0.1 * s, 4 * s - poster / 192, k - poster / 192],
       [0, 0, 1, 0],
     ];
   };
@@ -857,7 +893,7 @@ const Intro = ({ scrollYProgress }) => {
           <m.img
             key={i}
             {...prop}
-            className="w-[calc(200px_+_4vw)] h-[calc(300px_+_6vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="w-[calc(120px_+_10vw)] h-[calc(180px_+_15vw)] fixed -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           ></m.img>
         );
       })}
@@ -904,7 +940,7 @@ const Clipper = ({ scrollYProgress }) => {
       "radial-gradient(circle at 60% 20%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14 * s
       "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 100%,rgba(26, 18, 33,0.2) 100%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //14.5 * s
       "radial-gradient(circle at 30% 80%,rgba(0, 0, 0, 0) 80%,rgba(26, 18, 33,0.2) 80%,rgba(0, 0, 0, 0.6) 100%,rgba(2, 0, 36, 1) 100%)", //15 * s
-      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,#ffffff 10%,#ffffff 100%,rgba(2, 0, 36, 1) 100%)", //1
+      "radial-gradient(circle at 50% 50%,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0) 100%,rgba(2, 0, 36, 1) 100%)", //1
     ]
   );
   return (
