@@ -21,9 +21,9 @@ root.render(
       <RecoilRoot>
         <ScrollToTop />
         <App />
-        <Fontpick />
+        {/* <Fontpick /> */}
       </RecoilRoot>
     </BrowserRouter>
-    <ReactQueryDevtools />
+    {/* <ReactQueryDevtools /> */}
   </QueryClientProvider>
 );
