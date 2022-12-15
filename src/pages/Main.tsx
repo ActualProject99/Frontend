@@ -299,7 +299,7 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 mx-auto relative -z-20"
           ref={content3}
         >
           <ContentCopy
@@ -329,7 +329,7 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 mx-auto relative -z-20"
           ref={content4}
         >
           <ContentCopy
@@ -357,7 +357,7 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 mx-auto relative -z-20"
           ref={content5}
         >
           <ContentCopy
@@ -385,7 +385,7 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-20"
+          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 mx-auto relative -z-20"
           ref={content6}
         >
           <ContentCopy
@@ -413,12 +413,12 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="h-screen flex justify-center gap-3 items-center w-11/12 lg:px-2 lg:w-[970px] mx-auto relative -z-10"
+          className="h-screen w-screen gap-3 relative -z-10 overflow-hidden"
           ref={content7}
         >
           <div
-            className="flex justify-center items-center h-screen w-screen absolute overflow-hidden"
-            style={{ perspective: 200 }}
+            className="flex justify-center relative items-center h-screen w-screen"
+            style={{ perspective: 100 }}
           >
             {contentNo === 6 && (
               <>
@@ -428,30 +428,28 @@ const Main = () => {
                     opacity: 0,
                   }}
                   animate={{
-                    transform: "rotate3d(3,0,1,15deg)",
+                    transform: "rotate3d(3,0,1,2deg)",
                     opacity: 1,
                   }}
                   transition={{ delay: 0.1 }}
-                  className="grid grid-rows-4 grid-flow-col w-[1700px] -top-[300px] -left-48  absolute scale-[3] overflow-hidden"
+                  className="grid grid-rows-4 grid-flow-col w-[calc(1100px+100vw)] absolute -top-[250px] translate-x-[300px] overflow-hidden"
                 >
                   {posters.map((poster) => (
                     <img
-                      className="w-[180px] h-[254px] object-cover"
+                      className="w-[calc(120px+10vw)] h-[calc(180px+15vw)] object-cover"
                       src={poster}
                       alt=""
                     />
                   ))}
                 </m.div>
-                <div className="h-screen w-screen absolute bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
+                <div className="h-screen w-screen absolute left-0 top-0 bg-gradient-to-b from-white via-transparent to-white z-50 flex justify-center items-center"></div>
 
-                <>
-                  <m.div
-                    initial={{ backdropFilter: "blur(0px)" }}
-                    animate={{ backdropFilter: "blur(5px)" }}
-                    transition={{ delay: 0.4 }}
-                    className="h-screen w-screen absolute flex justify-center items-center"
-                  ></m.div>
-                </>
+                <m.div
+                  initial={{ backdropFilter: "blur(0px)" }}
+                  animate={{ backdropFilter: "blur(5px)" }}
+                  transition={{ delay: 0.4 }}
+                  className="h-screen w-screen absolute flex justify-center items-center"
+                ></m.div>
               </>
             )}
           </div>
@@ -464,9 +462,9 @@ const Main = () => {
                   opacity: 0,
                   x: screenWidth,
                 },
-                anmate: {
+                animate: {
                   opacity: 1,
-                  x: 200,
+                  x: screenWidth - 800,
                   transition: {
                     delay: 0.8,
                   },
@@ -480,7 +478,7 @@ const Main = () => {
                 },
               }}
               initial="init"
-              animate="anmate"
+              animate="animate"
               exit="exit"
               transition={{ delay: 0.8 }}
               className="w-screen bg-white h-40 pl-3 pt-8 flex fixed z-[9999] top-1/2 -translate-y-1/2 gap-10"
@@ -817,6 +815,7 @@ const Intro = ({ scrollYProgress }) => {
   const y34 = useTransform(...transformYValues(screenHeight));
   const r34 = useTransform(...transformValues(90));
   const o34 = useTransform(...transformOpasity(34));
+  // 16 screen 9 k 7
   const opacity = useTransform(
     scrollYProgress,
     [0, 4 * s - 0.1 * s, 4 * s, k],
