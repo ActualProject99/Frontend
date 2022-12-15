@@ -1,29 +1,45 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 const useWindowKeyboard = (
   keyName: string,
   callback: () => void,
-  option: { altKey?: boolean; ctrlKey?: boolean; shiftKey?: boolean } = {
+  {
+    altKey = false,
+    ctrlKey = false,
+    shiftKey = false,
+    isActivate = true,
+  }: {
+    altKey?: boolean;
+    ctrlKey?: boolean;
+    shiftKey?: boolean;
+    isActivate?: boolean | (() => boolean);
+  } = {
     altKey: false,
     ctrlKey: false,
     shiftKey: false,
+    isActivate: true,
   }
 ) => {
-  useEffect(() => {
-    const pressKey = (e: globalThis.KeyboardEvent) => {
+  const pressKey = useCallback((e: globalThis.KeyboardEvent) => {
+    const excuter = () => {
       if (
         e.key !== keyName ||
-        e.altKey !== option.altKey ||
-        e.ctrlKey !== option.ctrlKey ||
-        e.shiftKey !== option.shiftKey
+        e.altKey !== altKey ||
+        e.ctrlKey !== ctrlKey ||
+        e.shiftKey !== shiftKey
       )
         return;
       return callback();
     };
+    if (typeof isActivate === "boolean") return isActivate && excuter();
+    return isActivate() && excuter();
+  }, []);
+
+  useEffect(() => {
     window.addEventListener("keydown", pressKey);
     return () => {
       window.addEventListener("keydown", pressKey);
     };
-  }, [callback, keyName, option.altKey, option.ctrlKey, option.shiftKey]);
+  }, []);
 };
 export default useWindowKeyboard;

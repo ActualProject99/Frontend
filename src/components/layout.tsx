@@ -19,7 +19,6 @@ import useTicketPop from "../hooks/useTicketPop";
 import { ReactComponent as Logo } from "../image/tgleLogo1.svg";
 import { useQueryClient } from "@tanstack/react-query";
 import ConcertApi from "../apis/query/ConcertApi";
-import { deactivate } from "../apis/instance";
 import { IGetArtist, IGetArtistConcert } from "../types";
 import { format } from "date-fns";
 
@@ -33,8 +32,6 @@ const Search = ({
   const [payload, setPayload] = useState("");
   const [isShowRecent, setIsShowRecent] = useState(false);
   const { data: searchedData } = ConcertApi.GetSearchData(payload);
-  console.log("dd", searchedData);
-  console.log("ww", payload);
   const [artists, concerts]: [IGetArtist[], IGetArtistConcert[]] = searchedData
     ? searchedData
     : [[], []];
@@ -270,7 +267,7 @@ const Nav = ({
         예: {
           value: () => {
             removeCookieToken();
-            navigate("/concerts");
+            window.location.replace("/concerts");
           },
           className: "bg-accent-main text-white",
         },
@@ -293,7 +290,7 @@ const Nav = ({
             queryClient.invalidateQueries(["userInfo"]);
           });
           removeCookieToken();
-          navigate("/concerts");
+          window.location.replace("/concerts");
           toggler();
           poped("회원탈퇴가 되었습니다!", { isToastOnly: true });
         },
@@ -366,7 +363,7 @@ const Nav = ({
               <div className="flex items-center gap-10">
                 <div
                   className="w-[180px] h-10 rounded cursor-pointer mb-2"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/", { state: { isVisited: true } })}
                 >
                   <Logo width="11rem" height="3.5rem" />
                 </div>
