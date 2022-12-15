@@ -54,7 +54,7 @@ const LoginCompo = (): JSX.Element => {
     const REDIRECT_URL = process.env.REACT_APP_REDIRECT_FRONT;
     console.log("hh", REDIRECT_URL);
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}`;
+    const url = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
 
     window.location.href = url;
   };
