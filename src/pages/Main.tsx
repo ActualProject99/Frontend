@@ -512,20 +512,19 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
   }, []);
   const buttonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    const check = () => {
-      console.log(snapContainer.current.scrollTop);
+    const scrollable = (e) => {
       cme_scrollToY(
-        snapContainer.current.scrollTop + 300,
+        Math.sign(e.deltaY) * (snapContainer.current.scrollTop + 400),
         200,
         snapContainer.current
       );
     };
     if (buttonRef.current) {
-      buttonRef.current.addEventListener("wheel", check);
+      buttonRef.current.addEventListener("wheel", scrollable);
     }
     return () => {
       if (buttonRef.current) {
-        buttonRef.current.removeEventListener("wheel", check);
+        buttonRef.current.removeEventListener("wheel", scrollable);
       }
     };
   }, []);
