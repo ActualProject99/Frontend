@@ -79,7 +79,6 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
         isToastOnly: true,
         newType: "warn",
       });
-
     if (show === false) {
       poped();
     } else {
