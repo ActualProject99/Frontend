@@ -22,6 +22,11 @@ jobs: # Job 설정
           echo "REACT_APP_REDIRECT_FRONT=${{ secrets.REACT_APP_REDIRECT_FRONT }}" >> .env
           echo "REACT_APP_REST_API_KEY=${{ secrets.REACT_APP_REST_API_KEY }}" >> .env
           echo "REACT_APP_PUBLIC_MAP_KEY=${{ secrets.REACT_APP_PUBLIC_MAP_KEY }}" >> .env
+          echo "REACT_APP_VAPID_KEY=${{ secrets.REACT_APP_VAPID_KEY }}" >> .env
+          echo "REACT_APP_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}" >> .env
+          echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> .env
+          echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> .env
+          echo "REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}" >> .env
           cat .env
 
       - name: Build # React Build
