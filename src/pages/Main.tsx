@@ -510,8 +510,28 @@ const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
     };
     snapContainer.current.addEventListener("scroll", progesslog);
   }, []);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const check = () => {
+      console.log(snapContainer.current.scrollTop);
+      cme_scrollToY(
+        snapContainer.current.scrollTop + 300,
+        200,
+        snapContainer.current
+      );
+    };
+    if (buttonRef.current) {
+      buttonRef.current.addEventListener("wheel", check);
+    }
+    return () => {
+      if (buttonRef.current) {
+        buttonRef.current.removeEventListener("wheel", check);
+      }
+    };
+  }, []);
   return (
     <button
+      ref={buttonRef}
       className={cls(
         "flex flex-col gap-1 items-center font-Clip text-xl bg-transparent text-white fixed bottom-12 transition-all ease-in-out duration-1000 p-8 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink]",
         Object.values(isButtonShow).every((e) => e)
