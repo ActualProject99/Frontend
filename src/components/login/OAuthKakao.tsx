@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { setAccessToken } from "../../apis/cookie";
+import { setAccessToken, setRefreshToken } from "../../apis/cookie";
 
 const OAuthKakao = () => {
   const kakaoToken = new URL(window.location.href).searchParams.get("code");
@@ -36,7 +36,7 @@ const OAuthKakao = () => {
         console.log("res", response);
         if (status !== 200) return;
         setAccessToken(accessToken);
-        localStorage.setItem("token", refreshToken);
+        setRefreshToken(refreshToken);
         window.location.replace("/concerts");
       } catch (e) {
         console.log("에러");

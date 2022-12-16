@@ -9,7 +9,11 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import Portal from "./Portal";
 import UserInfo from "./userInfo/UserInfo";
-import { getCookieToken, removeCookieToken } from "../apis/cookie";
+import {
+  getCookieToken,
+  removeCookieToken,
+  removeRefreshCookieToken,
+} from "../apis/cookie";
 import { pages } from "../routes";
 import { motion as m, AnimatePresence } from "framer-motion";
 import useIsScrolled from "../hooks/window/useHowMuchScroll";
@@ -267,6 +271,7 @@ const Nav = ({
         예: {
           value: () => {
             removeCookieToken();
+            removeRefreshCookieToken();
             window.location.replace("/concerts");
           },
           className: "bg-accent-main text-white",
