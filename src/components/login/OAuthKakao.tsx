@@ -37,11 +37,11 @@ const OAuthKakao = () => {
         if (status !== 200) return;
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
-        // window.location.replace("/concerts");
+        window.location.replace("/concerts");
       } catch (e) {
         console.log("에러");
         console.error(e);
-        // window.location.replace("/");
+        window.location.replace("/");
       }
     })();
   }, [kakaoToken]);
