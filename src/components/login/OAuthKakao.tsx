@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import { OAuthAPI } from "../../apis/query/OAuthApi";
 import axios from "axios";
 import { setAccessToken } from "../../apis/cookie";
-import { deactivate } from "../../apis/instance";
 
 const OAuthKakao = () => {
   const kakaoToken = new URL(window.location.href).searchParams.get("code");
@@ -39,11 +37,11 @@ const OAuthKakao = () => {
         if (status !== 200) return;
         setAccessToken(accessToken);
         localStorage.setItem("token", refreshToken);
-        window.location.replace("/concerts");
+        // window.location.replace("/concerts");
       } catch (e) {
         console.log("에러");
         console.error(e);
-        window.location.replace("/");
+        // window.location.replace("/");
       }
     })();
   }, [kakaoToken]);
@@ -51,19 +49,3 @@ const OAuthKakao = () => {
 };
 
 export default OAuthKakao;
-
-// try {
-//   if (kakaoToken) {
-//     console.log("됨?");
-//     OAuthAPI.loginWithKakao(kakaoToken);
-//   }
-// } catch (err) {
-//   console.log("실패")
-//   console.log(err)
-//   // window.location.href = "/";
-//   return;
-// }
-// }, [kakaoToken]);
-// return <></>;
-
-//es
