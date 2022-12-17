@@ -20,7 +20,6 @@ frontend repo 입니다.<br/> [ -> backend repo](https://github.com/ActualProjec
 1. 티켓팅 기본 정보 제공
 2. 티켓팅 사이터 서버시간 확인
 3. 관심 공연 티켓팅 일정 알림
-4. 티켓팅 모의 연습
    <br/><br/>
 
 ## 🗓 프로젝트 기간
