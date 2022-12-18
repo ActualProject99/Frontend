@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import UserApi from "../../apis/query/UserApi";
+import { useMemo } from "react";
 import LikeConcert from "./LikeConcert";
 import ConcertApi from "../../apis/query/ConcertApi";
 import { IGetConcert, likeConcertProps } from "../../types";

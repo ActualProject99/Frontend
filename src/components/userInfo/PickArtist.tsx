@@ -18,7 +18,6 @@ const PickArtist = (): JSX.Element => {
   const [inputValue, setInputValue] = useState("");
 
   const likeArtists = useMemo(() => {
-    //안에 값을 재설정
     return (
       artistLike &&
       artistLike.map((artistList: likeArtistProps) => artistList.artistId)
@@ -29,8 +28,7 @@ const PickArtist = (): JSX.Element => {
     e.preventDefault();
     setInputValue(e.target.value);
   };
-  useEffect(() => {
-  }, [inputValue, artists]);
+  useEffect(() => {}, [inputValue, artists]);
 
   return (
     <>

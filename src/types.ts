@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { RegisterOptions } from "react-hook-form";
 
 // Component Props
@@ -48,6 +49,7 @@ export interface IgetComment {
 }
 
 export interface IgetMyComment {
+  comment: ReactNode;
   id: number;
   userId: number;
   concertName: string;

@@ -1,5 +1,4 @@
 import { isPast } from "date-fns";
-import React from "react";
 import Countdown from "./Countdown";
 
 interface CountProps {

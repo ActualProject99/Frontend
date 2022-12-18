@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import ArtistApi from "../../apis/query/ArtistAPI";
 import icons from "../icons";
 import { useQueryClient } from "@tanstack/react-query";

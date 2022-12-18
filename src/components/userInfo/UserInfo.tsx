@@ -5,12 +5,26 @@ import UserApi from "../../apis/query/UserApi";
 
 import CameraIcon from "../../image/Camera-icon.png";
 
-import { EditNickname } from "../../types";
+import { AfterToasted, EditNickname, IconType } from "../../types";
 import { regOptEdi } from "../../utils";
 import { motion } from "framer-motion";
 
-//@ts-ignore
-const UserInfo = ({ deletePoped }): JSX.Element => {
+const UserInfo = ({
+  deletePoped,
+}: {
+  deletePoped: (
+    newMessege?: string,
+    {
+      newType,
+      afterToasted,
+      isToastOnly,
+    }?: {
+      newType?: IconType;
+      afterToasted?: AfterToasted;
+      isToastOnly?: boolean;
+    }
+  ) => void;
+}): JSX.Element => {
   const { data: userData } = UserApi.GetUserInfo();
   const { mutateAsync: EditUserName } = UserApi.EditUserName();
   const { mutateAsync: EditUserImg } = UserApi.EditUserImg();

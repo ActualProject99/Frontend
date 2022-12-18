@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { deactivate } from "../../apis/instance";
-import { LoginForm, AfterToasted } from "../../types";
+import { LoginForm } from "../../types";
 import { cls, regOptLogin } from "../../utils";
 import useTicket from "../../hooks/useTicketPop";
-import { motion } from "framer-motion";
 
 const SignupCompo = (): JSX.Element => {
   const { Ticket, poped, userInput } = useTicket("가입을 축하드려요!🎉", {

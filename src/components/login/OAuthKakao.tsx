@@ -26,7 +26,6 @@ const OAuthKakao = () => {
               authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-from-urlencoded",
             },
-            // withCredentials: true,
           }
         );
         const {

@@ -79,8 +79,8 @@ const Search = ({
     if (searchQueries) {
       const parsedQueries = JSON.parse(searchQueries);
       const dates = Object.keys(parsedQueries);
-      const queries = Object.values(parsedQueries);
-      //@ts-ignore
+      const queries = Object.values(parsedQueries) as string[][];
+
       setRecent(dates.map((date, i) => ({ date, queries: queries[i] })));
     }
   };

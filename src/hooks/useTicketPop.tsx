@@ -129,7 +129,7 @@ const useTicket = (
         setUserInput(buttonValues[i] as z.infer<typeof userInputSchema>);
       } else if (userInputObjectSchema.safeParse(buttonValues[i]).success) {
         //@ts-ignore
-        setUserInput(buttonValues[i].value);
+        setUserInput(buttonValues[i]?.value);
       }
       setIsPoped(false);
     };

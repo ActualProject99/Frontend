@@ -25,9 +25,11 @@ const EditUserName = () => {
     return data;
   });
 };
-const readMyComments = async (userId: number) => {
-  const { data } = await activate.get(`/comment/user/${userId}`);
-  return data;
+const readMyComments = async (userId: number | undefined) => {
+  if (userId) {
+    const { data } = await activate.get(`/comment/user/${userId}`);
+    return data;
+  }
 };
 
 const EditUserImg = () => {

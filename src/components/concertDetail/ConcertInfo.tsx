@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState, useCallback, useRef, memo } from "react";
 import {
   FacebookIcon,
@@ -29,6 +28,12 @@ import MoreInfo from "./MoreInfo";
 
 import kakaoShareIcon from "../../image/kakaoShareIcon.webp";
 import icons from "../icons";
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
   const currentUrl = window.location.href;
@@ -117,7 +122,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
 
   useEffect(() => {
     const pos = document.documentElement;
-    const mouseTracker = (e) => {
+    const mouseTracker = (e: MouseEvent) => {
       pos.style.setProperty("--x", e.offsetX + "px");
       pos.style.setProperty("--y", e.offsetY + "px");
     };
@@ -221,13 +226,19 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
                   <p className="font-black font-welcome ml-3">예매하기</p>
                   <div className="flex gap-3 flex-col">
                     {ticketings &&
-                      ticketings.map((ticketing) => (
-                        <Janusface
-                          key={ticketing.id}
-                          title={ticketing.title}
-                          url={ticketing.url}
-                        />
-                      ))}
+                      ticketings.map(
+                        (ticketing: {
+                          id: React.Key | null | undefined;
+                          title: string;
+                          url: string;
+                        }) => (
+                          <Janusface
+                            key={ticketing.id}
+                            title={ticketing.title}
+                            url={ticketing.url}
+                          />
+                        )
+                      )}
                   </div>
                 </div>
               </div>
@@ -239,7 +250,7 @@ const ConcertInfo = memo(({ concert }: ConcertProps): JSX.Element => {
             >
               <Calendar
                 selectedDate={new Date(concert.ticketingDate)}
-                showingMonth={new Date(concert.ticketingDate)}
+                // showingMonth={new Date(concert.ticketingDate)}
               />
               <div className="flex flex-col gap-y-3 mt-3">
                 <div className="flex justify-between w-56 text-xs font-bold">

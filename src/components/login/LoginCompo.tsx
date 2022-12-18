@@ -36,8 +36,6 @@ const LoginCompo = (): JSX.Element => {
       const response = await deactivate.post("/users/login", data);
       console.log("res", response);
       setAccessToken(response.data.access_token);
-      // const AccessToken = response.data.jwt;
-      // localStorage.setItem("AccessToken", AccessToken);
       poped(response.data.nickname + "님 환영합니다!🎉", {
         afterToasted: () => {
           window.location.replace("/concerts");

@@ -2,7 +2,7 @@ import { RefObject, useEffect } from "react";
 
 const useWheelEvent = (
   ref: RefObject<HTMLElement | null>,
-  callback: () => void
+  callback: (e: WheelEvent) => void
 ) => {
   useEffect(() => {
     if (ref.current) {

@@ -1,25 +1,15 @@
-//@ts-nocheck
-import {
-  useRef,
-  useEffect,
-  ReactNode,
-  forwardRef,
-  LegacyRef,
-  useState,
-  useMemo,
-  memo,
-} from "react";
+import { useRef, useEffect, ReactNode, useState, memo } from "react";
 import { useRecoilState } from "recoil";
 import createScrollSnap from "scroll-snap";
 import {
   isMainsSrollUp,
-  MainContent,
   mainContent,
   mainScrollRef,
 } from "../atoms/mainContent";
 import {
   AnimatePresence,
   motion as m,
+  MotionValue,
   useScroll,
   useTransform,
 } from "framer-motion";
@@ -33,11 +23,12 @@ import main6 from "../image/main6.png";
 import { cls, cme_scrollToY } from "../utils";
 import Portal from "../components/Portal";
 import { isScrolled } from "../atoms/isScrolled";
-import { IsScrolled } from "../types";
+import { IsScrolled, MainContent } from "../types";
 import useWindowKeyboard from "../hooks/window/useWindowKeyboard";
 import useWheelEvent from "../hooks/window/useWheelEvent";
 import { Link } from "react-router-dom";
 import { pages } from "../routes";
+import { RefObject } from "react";
 const contrastColorNos: (number | null)[] = [1];
 const Indicator = () => {
   const [contentNo] = useRecoilState<MainContent>(mainContent);
@@ -504,123 +495,147 @@ const Main = () => {
     </>
   );
 };
-const EnterButton = memo(({ scrollYProgress, snapContainer }) => {
-  const [isButtonShow, setIsButtonShow] = useState({
-    isGoingUpOrStoped: true,
-    isIntroing: true,
-  });
-  const [isScrolling, setIsScrolling] = useState(
-    () => scrollYProgress.getVelocity() > 0.05
-  );
-  const [isIntroEnd, setIsIntroEnd] = useState(scrollYProgress.get() > 9 / 16);
-  const [getIsMainsSrollUp, setIsMainsSrollUp] =
-    useRecoilState<boolean>(isMainsSrollUp);
-  const { innerHeight: screenHeight } = window;
-  const handleClick = () => {
-    const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
-    cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
-  };
-  useWindowKeyboard(
-    "Enter",
-    () => {
+const EnterButton = memo(
+  ({
+    scrollYProgress,
+    snapContainer,
+  }: {
+    scrollYProgress: MotionValue<number>;
+    snapContainer: RefObject<HTMLDivElement>;
+  }) => {
+    const [isButtonShow, setIsButtonShow] = useState({
+      isGoingUpOrStoped: true,
+      isIntroing: true,
+    });
+    const [isScrolling, setIsScrolling] = useState(
+      () => scrollYProgress.getVelocity() > 0.05
+    );
+    const [isIntroEnd, setIsIntroEnd] = useState(
+      scrollYProgress.get() > 9 / 16
+    );
+    const [getIsMainsSrollUp, setIsMainsSrollUp] =
+      useRecoilState<boolean>(isMainsSrollUp);
+    const { innerHeight: screenHeight } = window;
+    const handleClick = () => {
       const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
       cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
-    },
-    { isActivate: () => scrollYProgress.get() < 10 / 16 }
-  );
-  useEffect(() => {
-    const progesslog = () => {
-      const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
-      const isIntroing = scrollYProgress.get() < 9 / 16;
-      setIsButtonShow((cur) => ({
-        isGoingUpOrStoped,
-        isIntroing,
-      }));
-      const velocity = scrollYProgress.getVelocity() > 0.05;
-      setIsScrolling(() => velocity);
-      setIsIntroEnd(!isIntroing);
     };
-    snapContainer.current.addEventListener("scroll", progesslog);
-  }, []);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  useWheelEvent(buttonRef, (e) => {
-    cme_scrollToY(
-      Math.sign(e.deltaY) * (snapContainer.current.scrollTop + 400),
-      200,
-      snapContainer.current
+    useWindowKeyboard(
+      "Enter",
+      () => {
+        const duration = 8200 * (1 - (16 * scrollYProgress.get()) / 10); // 어디서 눌러도 같은 속도로
+        cme_scrollToY(screenHeight * 10, duration, snapContainer.current);
+      },
+      { isActivate: () => scrollYProgress.get() < 10 / 16 }
     );
-  });
-  return (
-    <button
-      ref={buttonRef}
-      className={cls(
-        "flex flex-col items-center font-Clip text-xl bg-transparent text-white fixed bottom-0 transition-all ease-in-out duration-1000 p-4 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink] hover:[text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink,_0_0_64px_pink,_0_0_128px_pink]",
-        Object.values(isButtonShow).every((e) => e)
-          ? "right-1/2 translate-x-1/2"
-          : "right-36 translate-x-1/2",
-        isScrolling ? "opacity-0" : "opacity-100",
-        isIntroEnd ? "hidden" : "block"
-      )}
-      onClick={handleClick}
-    >
-      <p
+    useEffect(() => {
+      const progesslog = () => {
+        const isGoingUpOrStoped = scrollYProgress.getVelocity() < 0;
+        const isIntroing = scrollYProgress.get() < 9 / 16;
+        setIsButtonShow((cur) => ({
+          isGoingUpOrStoped,
+          isIntroing,
+        }));
+        const velocity = scrollYProgress.getVelocity() > 0.05;
+        setIsScrolling(() => velocity);
+        setIsIntroEnd(!isIntroing);
+      };
+      if (snapContainer.current) {
+        snapContainer.current.addEventListener("scroll", progesslog);
+      }
+    }, []);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    useWheelEvent(buttonRef, (e: WheelEvent) => {
+      if (snapContainer.current) {
+        cme_scrollToY(
+          Math.sign(e.deltaY) * (snapContainer.current.scrollTop + 400),
+          200,
+          snapContainer.current
+        );
+      }
+    });
+    return (
+      <button
+        ref={buttonRef}
         className={cls(
-          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+          "flex flex-col items-center font-Clip text-xl bg-transparent text-white fixed bottom-0 transition-all ease-in-out duration-1000 p-4 [text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink] hover:[text-shadow:_0_0_2px_pink,_0_0_4px_pink,_0_0_8px_pink,_0_0_16px_pink,_0_0_32px_pink,_0_0_64px_pink,_0_0_128px_pink]",
           Object.values(isButtonShow).every((e) => e)
-            ? "opacity-100"
-            : "opacity-0"
+            ? "right-1/2 translate-x-1/2"
+            : "right-36 translate-x-1/2",
+          isScrolling ? "opacity-0" : "opacity-100",
+          isIntroEnd ? "hidden" : "block"
         )}
+        onClick={handleClick}
       >
-        &#9663;
-      </p>
-      <p
-        className={cls(
-          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
-          Object.values(isButtonShow).every((e) => e)
-            ? "opacity-100"
-            : "opacity-0"
-        )}
-      >
-        &#9662;
-      </p>
-      <p className="text-base ">press Enter</p>
-      <p
-        className={cls(
-          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
-          Object.values(isButtonShow).every((e) => e)
-            ? "opacity-100"
-            : "opacity-0"
-        )}
-      >
-        &#9662;
-      </p>
-      <p
-        className={cls(
-          "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
-          Object.values(isButtonShow).every((e) => e)
-            ? "opacity-100"
-            : "opacity-0"
-        )}
-      >
-        &#9663;
-      </p>
-    </button>
-  );
-});
-const FinishCopy = ({ snapContainer }) => {
+        <p
+          className={cls(
+            "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+            Object.values(isButtonShow).every((e) => e)
+              ? "opacity-100"
+              : "opacity-0"
+          )}
+        >
+          &#9663;
+        </p>
+        <p
+          className={cls(
+            "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+            Object.values(isButtonShow).every((e) => e)
+              ? "opacity-100"
+              : "opacity-0"
+          )}
+        >
+          &#9662;
+        </p>
+        <p className="text-base ">press Enter</p>
+        <p
+          className={cls(
+            "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+            Object.values(isButtonShow).every((e) => e)
+              ? "opacity-100"
+              : "opacity-0"
+          )}
+        >
+          &#9662;
+        </p>
+        <p
+          className={cls(
+            "transition-all duration-1000 py-1.5 px-12 hover:opacity-0 scale-105 hover:scale-[2]",
+            Object.values(isButtonShow).every((e) => e)
+              ? "opacity-100"
+              : "opacity-0"
+          )}
+        >
+          &#9663;
+        </p>
+      </button>
+    );
+  }
+);
+const FinishCopy = ({
+  snapContainer,
+}: {
+  snapContainer: RefObject<HTMLDivElement>;
+}) => {
   const finishRef = useRef(null);
   useWheelEvent(finishRef, (e) => {
-    cme_scrollToY(
-      snapContainer.current.scrollTop + Math.sign(e.deltaY) * 400,
-      200,
-      snapContainer.current
-    );
+    if (snapContainer.current) {
+      cme_scrollToY(
+        snapContainer.current.scrollTop + Math.sign(e.deltaY) * 400,
+        200,
+        snapContainer.current
+      );
+    }
   });
   return (
     <div ref={finishRef} className="w-full h-full absolute top-0 left-0"></div>
   );
 };
-const Intro = ({ scrollYProgress }) => {
+const Intro = ({
+  scrollYProgress,
+}: {
+  scrollYProgress: MotionValue<number>;
+}) => {
   const scale1 = useTransform(
     scrollYProgress,
     [0, 4 * s, 9 * s, k],
@@ -648,7 +663,9 @@ const Intro = ({ scrollYProgress }) => {
   );
   const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
   const centerRandom = (val: number) => Math.random() * val - val / 2;
-  const transformValues = (size: number) => {
+  const transformValues = (
+    size: number
+  ): [MotionValue<number>, number[], number[]] => {
     const rndValue = centerRandom(size);
     return [
       scrollYProgress,
@@ -656,7 +673,9 @@ const Intro = ({ scrollYProgress }) => {
       [rndValue, rndValue, centerRandom(size / 2)],
     ];
   };
-  const transformXValues = (size: number) => {
+  const transformXValues = (
+    size: number
+  ): [MotionValue<number>, number[], number[]] => {
     const rndValue = centerRandom(size);
     return [
       scrollYProgress,
@@ -664,7 +683,9 @@ const Intro = ({ scrollYProgress }) => {
       [rndValue - 100, rndValue - 100, centerRandom(size / 2) - 100],
     ];
   };
-  const transformYValues = (size: number) => {
+  const transformYValues = (
+    size: number
+  ): [MotionValue<number>, number[], number[]] => {
     const rndValue = centerRandom(size);
     return [
       scrollYProgress,
@@ -672,7 +693,9 @@ const Intro = ({ scrollYProgress }) => {
       [rndValue - 150, rndValue - 150, centerRandom(size / 2) - 150],
     ];
   };
-  const transformOpasity = (poster: number) => {
+  const transformOpasity = (
+    poster: number
+  ): [MotionValue<number>, number[], number[]] => {
     return [
       scrollYProgress,
       [0, 4 * s - 0.1 * s, 4 * s - poster / 192, k - poster / 192],
@@ -900,7 +923,11 @@ const Intro = ({ scrollYProgress }) => {
   );
 };
 
-const Clipper = ({ scrollYProgress }) => {
+const Clipper = ({
+  scrollYProgress,
+}: {
+  scrollYProgress: MotionValue<number>;
+}) => {
   const background = useTransform(
     scrollYProgress,
     [
