@@ -2,6 +2,8 @@
 
 ### Tgle - 티켓 정글<br/>
 
+<img width="600" alt="1조 원페이지" src="https://user-images.githubusercontent.com/100943412/208229160-cc848319-9a50-4287-b9c4-bdad1b3c2061.png">
+
 ### https://www.tgle.ml/
 
 <br/>
@@ -16,9 +18,9 @@ frontend repo 입니다.<br/> [ -> backend repo](https://github.com/ActualProjec
 > 초조함으로 가득찬 티켓팅을 즐거운 경험으로 만들어 줍니다
 
 1. 티켓팅 기본 정보 제공
-2. 티켓팅 사이터 서버시간 확인
+2. 티켓 예매 업체들의 단독 공연을 한 곳에 제공
+4. 클릭 한번으로 원하는 공연의 예매처로동이동
 3. 관심 공연 티켓팅 일정 알림
-4. 티켓팅 모의 연습
    <br/><br/>
 
 ## 🗓 프로젝트 기간
